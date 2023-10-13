@@ -1,0 +1,90 @@
+{
+    "TOP_NAV_COLOR": "#3c8dbc",
+   
+    "AUDIT_TRAIL_COLUMNS": [
+        "userName",
+        "responseStatus",
+        "ipAddress",
+        "apiUrl",
+        "DateTime",
+        "httpStatus",
+        "log",
+        "requestBody"
+    ],
+   
+    "BRNACH_COLUMNS": [
+        "name"
+    ],
+    "DEPARTMENT_COLUMNS": [
+        "name"
+    ],
+    "ROLE_COLUMNS": [
+        "name",
+        "displayname"
+    ],
+    "EMPLOYEE_COLUMNS": [
+        "emp_code",
+        "firstname",
+        "middlename",
+        "lastname",
+        "active",
+        "department",
+        "branch",
+        "manager"
+    ],
+   
+    "GENDER": [
+        {
+            "value": "Male",
+            "label": "Male"
+        },
+        {
+            "value": "Female",
+            "label": "Female"
+        },
+        {
+            "value": "Other",
+            "label": "Other"
+        }
+    ],
+    
+    "MENU_COLUMNS": [
+        "id",
+        "menuName",
+        "route",
+        "menuIcon",
+        "menuHasChild",
+        "menuParentId",
+        "menuRoles.role.name"
+    ],
+    
+    "DASHBOARD_MASTER_COLUMN": [
+        "name",
+        "apiName",
+        "primaryColumn",
+        "secondaryColumn",
+        "addLink",
+        "updateLink",
+        "listLink",
+        "active",
+        "role"
+    ],
+    
+    "USER_ROLES": {
+        "SUPER_ADMIN": "SUPER_ADMIN",
+        "ADMIN": "ADMIN",
+        "SCIENTIST": "SCIENTIST",
+        "CLIENT": "CLIENT"
+        },
+    
+    "USER_MASTER_COLUMNS":[
+        "emp_code",
+        "firstname",
+        "middlename",
+        "lastname",
+        "manager",
+        "warehouse",
+        "binLocation",
+        "role"
+    ]
+}

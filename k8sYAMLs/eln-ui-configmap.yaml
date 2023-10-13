@@ -1,0 +1,13 @@
+apiVersion: v1
+data:
+  SZ_ENV_NAME: dev
+  SZ_SVC_APP: synzeal/eln-ui
+  SZ_SVC_TYPE: UI
+  SZ_SVC_VER: 0.0.1
+  REACT_APP_SERVICE_BASE_URL: https://eln-api-dev.synzeal.net/
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: manual
+  name: eln-ui
+  namespace: eln

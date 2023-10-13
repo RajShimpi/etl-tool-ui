@@ -1,0 +1,112 @@
+export const getDashboardBuilderData = (itemData) => {
+    return [{
+        col: 2,
+        callback: itemData.callback,
+        disabled: itemData.disabled,
+        groups: [
+            {
+                type: "text",
+                id: "dashboardBuilderName",
+                label: "Dashbaord Name",
+                name: "name",
+                control: "input",
+                isRequired: true,
+                itemVal: itemData.values ? itemData.values["name"] : '',
+            },
+            {
+                type: "text",
+                id: "dashboardBuilderApiName",
+                label: "ApiUrl",
+                name: "apiName",
+                control: "input",
+                isRequired: true,
+                itemVal: itemData.values ? itemData.values["apiName"] : '',
+            },
+            {
+                type: "text",
+                id: "dashboardBuilderPrimaryColumn",
+                label: "Primary Column",
+                name: "primaryColumn",
+                control: "input",
+                isRequired: true,
+                itemVal: itemData.values ? itemData.values["primaryColumn"] : '',
+            },
+            {
+                type: "text",
+                id: "dashboardBuildersecondaryColumn",
+                label: "Secondary Column",
+                name: "secondaryColumn",
+                control: "input",
+                isRequired: false,
+                itemVal: itemData.values ? itemData.values["secondaryColumn"] : '',
+            },
+            {
+                control: "select",
+                label: "Applicable Role",
+                name: "role",
+                id: "dashboardBuilderRole",
+                options: itemData.options[1],
+                isSubmit: itemData.isSubmit,
+                isRequired: true,
+                itemVal: itemData.values ? itemData.values["role"] : '',
+            },
+            {
+                type: "checkbox",
+                id: "dashboardBuilderActive",
+                label: "Active",
+                name: "active",
+                control: "input",
+                isRequired: false,
+                itemVal: itemData.values ? itemData.values["active"] : '',
+            }
+        ]
+    },
+    {
+        col: 3,
+        callback: itemData.callback,
+        disabled: itemData.disabled,
+        groups: [
+            {
+                control: "select",
+                label: "Add Link Url",
+                name: "addLink",
+                id: "dashboardBuilderAddLink",
+                options: itemData.options[0],
+                isSubmit: itemData.isSubmit,
+                isRequired: true,
+                itemVal: itemData.values ? itemData.values["addLink"] : '',
+            },
+            {
+                control: "select",
+                label: "Update Link Url",
+                name: "updateLink",
+                id: "dashboardBuilderUpdateLink",
+                options: itemData.options[0],
+                isSubmit: itemData.isSubmit,
+                isRequired: true,
+                itemVal: itemData.values ? itemData.values["updateLink"] : '',
+            },
+            {
+                control: "select",
+                label: "List Link Url",
+                name: "listLink",
+                id: "dashboardBuilderListLink",
+                options: itemData.options[0],
+                isSubmit: itemData.isSubmit,
+                isRequired: false,
+                itemVal: itemData.values ? itemData.values["listLink"] : '',
+            },
+            {
+                control: "select",
+                label: "Widget Type",
+                name: "widgetType",
+                id: "dashboardBuilderWidgetType",
+                options:itemData.options[2],
+                isSubmit: itemData.isSubmit,
+                isRequired: false,
+                itemVal: itemData.values ? itemData.values["widgetType"] : '',
+            }
+        ]
+    },
+    ];
+}

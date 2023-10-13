@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    kubernetes.io/ingress.class: nginx-ingress
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+  labels:
+    app: eln
+    app.kubernetes.io/managed-by: Manual
+  name: eln-ui-ingress
+  namespace: eln
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: eln-dev.synzeal.net
+    http:
+      paths:
+      - backend:
+          service:
+            name: eln-ui
+            port:
+              number: 5000
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - eln-dev.synzeal.net
+    secretName: wild-sz-dev-secret
