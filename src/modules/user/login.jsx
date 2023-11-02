@@ -89,7 +89,7 @@ const Login = () => {
                                         <div className="logo-login">
                                             <a href="#">
                                                 {/* Company logo */}
-                                                {/* <img src="/assets/images/logo-dark.png" alt="Synzeal-Logo" height="80"></img> */}
+                                                {/* <img src="/assets/images/logo-dark.png" alt="Abhyeti-Logo" height="80"></img> */}
                                             </a>
                                         </div>
                                         <div className="card-body p-4">
@@ -140,7 +140,7 @@ const Login = () => {
                                     </div>
 
                                     <div className="text-center">
-                                        <p>Powered by TODO: DEVELOPED Company <b>Version</b> 1.0.0</p>
+                                        <p>Powered by Abhyeti <b>Version</b> 1.0.0</p>
                                     </div>
 
                                 </div>

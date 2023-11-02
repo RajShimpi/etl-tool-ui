@@ -306,11 +306,6 @@ const RegisterUser = (props) => {
 
                             </div>
                         </div>
-
-                        {/* <div className="text-center">
-                        <p>© Synzeal - Design by <a href="http://divineinfosys.com/" target="blank">Divine Infosys</a></p>
-                    </div> */}
-
                     </div>
                 </div>
             </div>

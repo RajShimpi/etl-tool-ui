@@ -38,16 +38,13 @@ const ComponentWrapper = (props) => {
     <div className="container-fluid">
         <div className="row">
             <div className="col-sm-6">
-             © <a href="https://www.synzeal.com/" rel="noreferrer" target={"_blank"}>Synzeal Research Pvt Ltd </a>.
+             © <a href="https://www.google.com/" rel="noreferrer" target={"_blank"}>Abhyeti Pvt Ltd </a>.
                                 All rights reserved.
                
             </div>
             <div className="col-sm-6">
-                {/* <div className="text-sm-end d-none d-sm-block">
-                    Design by <a href="http://divineinfosys.com/" target="blank">Divine Infosys</a>
-                </div> */}
                     <div className="text-sm-end d-none d-sm-block">
-                        Powered by Feeldevops <b>Version</b> 1.0.0
+                        Powered by Abhyeti <b>Version</b> 1.0.0
                     </div>
                 </div>
             </div>

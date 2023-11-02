@@ -249,9 +249,9 @@ const AdminPanel = () => {
         <aside className="main-sidebar sidebar-dark-primary elevation-4" >
             {/* <!-- Brand Logo --> */}
             <a href="index3.html" className="brand-link">
-                <img src="/synzeal-logo.jpg" alt="Synzeal Logo" className="brand-image elevation-3"
+                <img src="/etl-logo.jpg" alt="ETL" className="brand-image elevation-3"
                     ></img>
-                <span className="brand-text font-weight-light">Synzeal</span>
+                <span className="brand-text font-weight-light">Abhyeti</span>
             </a>
 
             {/* <!-- Sidebar --> */}
