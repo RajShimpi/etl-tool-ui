@@ -37,23 +37,6 @@ export const routeData = (routes) => [
     permissions: true,
     isUserCanView: true, //routes.includes(routeConstant.dashboard)
   },
-  
-    {
-    routeTo: routeConstant.branch,
-    header: "Add/Update Branches",
-    childComp: Branch,
-    data: {},
-    permissions: true,
-    isUserCanView: routes.includes(routeConstant.branch),
-  },
-  {
-    routeTo: routeConstant.department,
-    header: "Add/Update Departments",
-    childComp: Department,
-    data: {},
-    permissions: true,
-    isUserCanView: routes.includes(routeConstant.department),
-  },
   {
     routeTo: routeConstant.roles,
     header: "Add/Update Roles",
@@ -61,14 +44,6 @@ export const routeData = (routes) => [
     data: {},
     permissions: true,
     isUserCanView: routes.includes(routeConstant.roles),
-  },
-  {
-    routeTo: routeConstant.employees,
-    header: "Add/Update Employee Data",
-    childComp: Employees,
-    data: {},
-    permissions: true,
-    isUserCanView: routes.includes(routeConstant.employees),
   },
   {
     routeTo: routeConstant.registerUser,
@@ -112,7 +87,6 @@ export const routeData = (routes) => [
     data: {},
     permissions: true,
     isUserCanView: routes.includes(routeConstant.userMaster),
-
   },
  
   {
