@@ -6,7 +6,7 @@ import _ from "lodash";
 import auth from "../user/auth";
 import axios from "../services/axios";
 import configContext from "../dashboard/config-context";
-import { errorAlert } from "../config/alert";
+import { errorAlert } from "./config/alert";
 import utils from "./utils";
 const CommonFormWithList = (props) => {
   const contextData = useContext(configContext);

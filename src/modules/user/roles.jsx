@@ -1,7 +1,7 @@
 
 import CommonFormWithList from "../components/common-form-with-list";
 import { getRoleFields } from "./roles-data";
-import config from "../config/config.json"
+import config from "../components/config/config.json"
 import { useEffect, useState } from "react";
 import axios from "../services/axios";
 //import baseApiCaller from "../services/baseApiCaller";

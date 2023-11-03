@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import CommonFormWithList from "../components/common-form-with-list";
 import axios from "../services/axios";
-import config from "../config/config.json"
+import config from "../components/config/config.json"
 import { getEmployeeFields } from "./employee-data";
 
 export const Employees = (props) => {
