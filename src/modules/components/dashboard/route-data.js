@@ -1,20 +1,20 @@
 
-import { Branch } from "../hrms/branch";
-import ChangePassword from "../user/change-password";
+import { Branch } from "../../hrms/branch";
+import ChangePassword from "../../user/change-password";
 import DashboardContent from "./dashboard-content";
-import { Department } from "../hrms/department";
-import { Employees } from "../hrms/employee";
+import { Department } from "../../hrms/department";
+import { Employees } from "../../hrms/employee";
 
 
 
-import RegisterUser from "../user/register-user";
-import { Roles } from "../user/roles";
-import AddMenu from "../user/add-menu";
+import RegisterUser from "../../user/register-user";
+import { Roles } from "../../user/roles";
+import AddMenu from "../../user/add-menu";
 import { DashboardBuilder } from "./dashboard-builder";
-import UserMaster from "../masters/user-master";
-import ResetPassword from "../user/reset-password";
-import LeftSide from "../../components/LeftSide";
-import RightSide from "../../components/RightSide";
+import UserMaster from "../../masters/user-master";
+import ResetPassword from "../../user/reset-password";
+import Project from "../Project";
+// import FolderContainer from "../components/FolderCreater";
 
 export const routeConstant = {
   dashboard: "/dashboard",
@@ -28,8 +28,8 @@ export const routeConstant = {
   dashboardBuilder: "/dashboard-builder",
   userMaster: "/user-master",
   resetPassword: "/reset-password",
-  leftSide: "/leftSide",
-  rightSide:'/rightSide',
+  project: "/project",
+  // folderCreater: "/folderCreater"
   
 };
 export const routeData = (routes) => [
@@ -128,20 +128,20 @@ export const routeData = (routes) => [
     isUserCanView: routes.includes(routeConstant.resetPassword),
   },
   {
-    routeTo: routeConstant.leftSide, // LeftSider route
+    routeTo: routeConstant.project, // project route
     header: "Project",
-    childComp: LeftSide,
+    childComp: Project,
     data: {},
     permissions: true,
     isUserCanView: true,
   },
-  {
-    routeTo: routeConstant.rightSide, // RightSide route
-    header: "Right Side",
-    childComp: RightSide,
-    data: {},
-    permissions: true,
-    isUserCanView: true,
-  }
+  // {
+  //   routeTo: routeConstant.folderCreater, // to create new folder 
+  //   header: "Folder Creater",
+  //   childComp: FolderContainer,
+  //   data: {},
+  //   permissions: true,
+  //   isUserCanView: true,
+  // }
 
 ];
