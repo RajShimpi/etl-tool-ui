@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import FolderIcon from '@mui/icons-material/Folder';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+
+
 function FolderDropdown({ folder, onToggleFolder, onToggleFile }) {
   const folderStyle = {
     listStyleType: 'none',
@@ -24,29 +26,28 @@ function FolderDropdown({ folder, onToggleFolder, onToggleFile }) {
     marginLeft: "40px"
   }
 
-
   return (
     <>
-      <div style={{ width: "30vh" }}>
+      <div>
         <div className={`folder ${folder.isOpen ? 'open' : ''}`} style={folderStyle} onClick={onToggleFolder}>
-          {folder.isOpen ? <FolderOpenIcon fontSize='small'/> : <FolderIcon fontSize='small'/>} {folder.folderName}
+          {folder.isOpen ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='small' />} {folder.folderName}
         </div>
         {folder.isOpen && (
           <div>
             <div>
               <div className={`folder ${folder.openFiles.file1 ? 'open' : ''}`} style={insidefileStyle} onClick={() => handleFileToggle('file1')}>
-                {folder.openFiles.file1 ? <FolderOpenIcon fontSize='small'/> : <FolderIcon fontSize='small'/>} {folder.insidefilename}
+                {folder.openFiles.file1 ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='small' />} {folder.insidefilename}
               </div>
               {folder.openFiles.file1 && (
                 <div className="dropdown-content " style={fileStyle}>
                   <a href="#" onClick={() => handleFileToggle('')}>
-                  <InsertDriveFileIcon fontSize='small'/> {folder.filename}
+                    <InsertDriveFileIcon fontSize='small' /> {folder.filename}
                   </a>
                   <a href="#" onClick={() => handleFileToggle('')}>
-                  <InsertDriveFileIcon fontSize='small'/>{folder.filename}
+                    <InsertDriveFileIcon fontSize='small' />{folder.filename}
                   </a>
                   <a href="#" onClick={() => handleFileToggle('')}>
-                  <InsertDriveFileIcon fontSize='small'/>{folder.filename}
+                    <InsertDriveFileIcon fontSize='small' />{folder.filename}
                   </a>
                 </div>
               )}

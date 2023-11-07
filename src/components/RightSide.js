@@ -1,6 +1,22 @@
 import React, { useState } from 'react';
+import './LeftSidebar.css';
+import DensityMediumIcon from '@mui/icons-material/DensityMedium';
+import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 
-const Component = () => {
+function LeftSidebar() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const elementStyle = {
+    color: "white",
+    transition: 'background-color 0.3s',
+    padding: '10px',
+    cursor: 'pointer',
+  };
+
   const [components, setComponents] = useState([
     "Component 1",
     "Component 2",
@@ -18,33 +34,31 @@ const Component = () => {
     event.dataTransfer.setData('text/plain', item);
   };
 
-  const style = {
-    height: "500px",
-    width: "40vh",
-    justifyContent: "center",
-    textAlign: "center",
-    overflow: "hidden",
-    border: '1px solid black',
-    paddingTop: "20px"
-  }
-
   return (
-    <>
-      <h2>Component</h2>
-      <div style={style}>
+    <div className={`sidebar ${isOpen ? 'open' : ''}`} style={{ top: "150px", position: "fixed", textAlign: "right" }}>
+      <div className="logo_details" style={{ textAlign: "center" }}>
+        <DensityMediumIcon className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`} id="btn" style={{ color: "white" }} onClick={toggleSidebar}></DensityMediumIcon>
+      </div>
+      <ul className="nav-list">
         {components.map((component, index) => (
           <div
             key={index}
             className='component'
             draggable
-            style={{ padding: '1px', margin: "2px", backgroundColor: "#d1cfcf" }}
+            style={{ padding: '1px', margin: "2px" }}
             onDragStart={(e) => handleDragStart(e, component)}>
-            {component}
+            <li>
+              <a href="#">
+                <FolderOpenIcon className="bx bx-grid-alt " style={{ elementStyle }}></FolderOpenIcon>
+                <span className="link_name" style={{ marginLeft: '5px' }}>{component}</span>
+              </a>
+              <span className="tooltip">{component}</span>
+            </li>
           </div>
         ))}
-      </div>
-    </>
+      </ul>
+    </div>
   );
-};
+}
 
-export default Component;
+export default LeftSidebar;

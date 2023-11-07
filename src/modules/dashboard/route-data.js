@@ -2,6 +2,7 @@
 import { Branch } from "../hrms/branch";
 import ChangePassword from "../user/change-password";
 import DashboardContent from "./dashboard-content";
+// import Dashboard from "./dashboard";
 import { Department } from "../hrms/department";
 import { Employees } from "../hrms/employee";
 
@@ -14,6 +15,7 @@ import { DashboardBuilder } from "./dashboard-builder";
 import UserMaster from "../masters/user-master";
 import ResetPassword from "../user/reset-password";
 import LeftSide from "../../components/LeftSide";
+import LeftSidebar from "../../components/LeftSidebar";
 import RightSide from "../../components/RightSide";
 
 export const routeConstant = {
@@ -30,6 +32,7 @@ export const routeConstant = {
   resetPassword: "/reset-password",
   leftSide: "/leftSide",
   rightSide:'/rightSide',
+  leftsidebar:"/leftsidebar",
   
 };
 export const routeData = (routes) => [
@@ -142,6 +145,13 @@ export const routeData = (routes) => [
     data: {},
     permissions: true,
     isUserCanView: true,
+  },
+  {
+    routeTo: routeConstant.leftsidebar, // RightSideBar route
+    header: "LeftSidebar",
+    childComp: LeftSidebar,
+    data: {},
+    permissions: true,
+    isUserCanView: true,
   }
-
 ];
