@@ -16,7 +16,6 @@ import UserMaster from "../masters/user-master";
 import ResetPassword from "../user/reset-password";
 import LeftSide from "../../components/LeftSide";
 import LeftSidebar from "../../components/LeftSidebar";
-import RightSide from "../../components/RightSide";
 
 export const routeConstant = {
   dashboard: "/dashboard",
@@ -31,7 +30,6 @@ export const routeConstant = {
   userMaster: "/user-master",
   resetPassword: "/reset-password",
   leftSide: "/leftSide",
-  rightSide:'/rightSide',
   leftsidebar:"/leftsidebar",
   
 };
@@ -132,23 +130,16 @@ export const routeData = (routes) => [
   },
   {
     routeTo: routeConstant.leftSide, // LeftSider route
-    header: "Project",
+    header: "",
     childComp: LeftSide,
     data: {},
     permissions: true,
     isUserCanView: true,
   },
-  {
-    routeTo: routeConstant.rightSide, // RightSide route
-    header: "Right Side",
-    childComp: RightSide,
-    data: {},
-    permissions: true,
-    isUserCanView: true,
-  },
+  
   {
     routeTo: routeConstant.leftsidebar, // RightSideBar route
-    header: "LeftSidebar",
+    header: "",
     childComp: LeftSidebar,
     data: {},
     permissions: true,

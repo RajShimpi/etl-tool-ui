@@ -2,69 +2,51 @@ import React, { useState } from 'react';
 import './LeftSidebar.css';
 import DensityMediumIcon from '@mui/icons-material/DensityMedium';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
+import FolderDropdown from './LeftSide';
 
 function LeftSidebar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [folders, setFolders] = useState([
+    { projectName: 'Project 1', isOpen: false}, // Add more folders as needed
+    { projectName: 'Project 1', isOpen: false},
+  ]);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
 
+  const toggleFolder = (index) => {
+    const updatedFolders = [...folders];
+    updatedFolders[index].isOpen = !updatedFolders[index].isOpen;
+    setFolders(updatedFolders);
+  };
+
+  const toggleFile = (folderIndex, file) => {
+    const updatedFolders = [...folders];
+    updatedFolders[folderIndex].openFiles[file] = !updatedFolders[folderIndex].openFiles[file];
+    setFolders(updatedFolders);
+  };
+
   return (
-    <div className={`sidebar ${isOpen ? 'open' : ''}`} style={{ top: "150px" }}>
-      <div className="logo_details" style={{ textAlign: "center" }}>
+    <div className={`sidebar ${isOpen ? 'open' : ''} projectStruc`} >
+      <div className="logo_details">
+        <div className="logo_name">Project Structer</div>
         <DensityMediumIcon className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`} id="btn" style={{ color: "white" }} onClick={toggleSidebar}></DensityMediumIcon>
       </div>
       <ul className="nav-list">
-        <li>
-          <a href="#">
-            <FolderOpenIcon className="bx bx-grid-alt "   ></FolderOpenIcon>
-            <span className="link_name" style={{ marginLeft: '5px' }} >Project 1</span>
-          </a>
-          <span className="tooltip">Project 1</span>
-        </li>
-        <li>
-          <a href="#">
-            <FolderOpenIcon className="bx bx-grid-alt "   ></FolderOpenIcon>
-            <span className="link_name" style={{ marginLeft: '5px' }} >Project 2</span>
-          </a>
-          <span className="tooltip" style={{ marginLeft: '5px' }} >Project 2</span>
-        </li>
-        <li>
-          <a href="#">
-            <FolderOpenIcon className="bx bx-grid-alt "   ></FolderOpenIcon>
-            <span class="link_name" style={{ marginLeft: '5px' }}>Project 3</span>
-          </a>
-          <span class="tooltip">Project </span>
-        </li>
-        <li>
-          <a href="#">
-            <FolderOpenIcon className="bx bx-grid-alt "   ></FolderOpenIcon>
-            <span class="link_name" style={{ marginLeft: '5px' }}>Project 4</span>
-          </a>
-          <span class="tooltip">Project 4</span>
-        </li>
-        <li>
-          <a href="#">
-            <FolderOpenIcon className="bx bx-grid-alt "   ></FolderOpenIcon>
-            <span class="link_name" style={{ marginLeft: '5px' }}>Project 5</span>
-          </a>
-          <span class="tooltip">Project </span>
-        </li>
-        <li>
-          <a href="#">
-            <FolderOpenIcon className="bx bx-grid-alt "  ></FolderOpenIcon>
-            <span class="link_name" style={{ marginLeft: '5px' }}>Project 6</span>
-          </a>
-          <span class="tooltip">Project 6</span>
-        </li>
-        <li>
-          <a href="#">
-            <FolderOpenIcon className="bx bx-grid-alt "   ></FolderOpenIcon>
-            <span class="link_name" style={{ marginLeft: '5px' }}>Project 7</span>
-          </a>
-          <span class="tooltip">Project 7</span>
-        </li>
+        {folders.map((folder, index) => (
+          <div key={index}>
+            <a href="#" onClick={() => toggleFolder(index)}>
+              <FolderOpenIcon className="bx bx-grid-alt"></FolderOpenIcon>
+              <span className="link_name" style={{ marginLeft: '5px' }} >{folder.projectName}</span>
+            </a>
+            {folder.isOpen && (
+              <div className={`${isOpen ? 'open' : ''}`}>
+                <FolderDropdown folder={folder} onToggleFolder={() => toggleFolder(index)} onToggleFile={(file) => toggleFile(index, file)} />
+              </div>
+            )}
+          </div>
+        ))}
       </ul>
     </div>
   );

@@ -85,9 +85,9 @@ function FolderContainer() {
     setFolders(updatedFolders);
   };
   const style = {
-    height: "500px",
-    paddingTop: "10px",
-    border: '1px solid black',
+    // height: "500px",
+    // paddingTop: "10px",
+    // border: '1px solid black',
     overflow: "hidden"
   }
   return (

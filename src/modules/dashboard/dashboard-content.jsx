@@ -13,11 +13,8 @@ import React, { useEffect, useState } from "react";
 import LeftSidebar from "../../components/LeftSidebar";
 import _ from "lodash";
 import react from "react";
-// import LeftSidebar from "../components/LeftSidebar";
 import MainComponent from "../../components/MainComponent";
-import RightSide from "../../components/RightSide";
-// import RightSidebar from "../../components/RightSidebar";
-import "./Dashboard-container.css"; // Import your custom styles
+import "./Dashboard-container.css"; 
 
 const DashboardContent = (props) => {
   return (
@@ -29,7 +26,6 @@ const DashboardContent = (props) => {
         <MainComponent />
       </div>
       <div className="right-side">
-        <RightSide />
       </div>
     </div>
   );
