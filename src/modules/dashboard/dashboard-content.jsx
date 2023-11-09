@@ -10,22 +10,25 @@ import React, { useEffect, useState } from "react";
 // import Modal from "../components/modal-popup";
 // import WidgetPopup from "./widget-popup";
 // import WidgetTile from "./widget-tile";
-import LeftSidebar from "../../components/ProjectStructure";
 import _ from "lodash";
 import react from "react";
-import MainComponent from "../../components/MainComponent";
-import "./Dashboard-container.css"; 
+// import MainComponent from "../../components/MainComponent";
+// import "./Dashboard-container.css"; 
+import ProjecStructure from "../../components/ProjectStructure";
+import ComponetTool from "../../components/ComponetTool";
+
 
 const DashboardContent = (props) => {
   return (
     <div className="dashboard-container">
       <div className="left-sidebar">
-        {/* <LeftSidebar /> */}
+        <ProjecStructure/>
       </div>
       <div className="main-component">
-        <MainComponent />
+        {/* <MainComponent /> */}
       </div>
       <div className="right-side">
+        <ComponetTool/>
       </div>
     </div>
   );

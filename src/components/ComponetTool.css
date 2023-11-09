@@ -19,7 +19,7 @@
   /* position: fixed; */
   top:0;
   right: 0;
-  overflow-y: auto;
+  /* overflow-y: auto ; */
   /* scrollbar-width: auto; */
   /* overscroll-behavior: auto; */
 }
@@ -178,6 +178,7 @@ h3{
 .sidebar.open li a .link_name{
   opacity: 1;
   pointer-events: auto;
+  margin-right: '100px';
 }
 
 .sidebar li i{

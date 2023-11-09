@@ -50,7 +50,7 @@ function ComponetTool() {
                         <li>
                             <div className="comIcon">
                                 <a href="#">
-                                <FolderOpenIcon className="bx bx-grid-alt componetIcon" ></FolderOpenIcon>
+                                <FolderOpenIcon className="bx bx-grid-alt componetIcon" style={{marginLeft: '100px'}} ></FolderOpenIcon>
                                     <span className="link_name" style={{ marginLeft: '5px' }}><div variant="contained" onClick={() => handleCollapseToggle(index)}>
                                         Componets {component.isCollapseOpen ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
                                     </div></span>

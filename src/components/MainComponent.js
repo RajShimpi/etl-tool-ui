@@ -16,7 +16,7 @@ const MainComponent = () => {
     event.preventDefault();
   };
   const style = {
-    border: '1px solid black',
+    // border: '1px solid black',
     padding: '10px',
     width: "130vh",
     height: "500px",
