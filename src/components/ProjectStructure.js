@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import './LeftSidebar.css';
 import DensityMediumIcon from '@mui/icons-material/DensityMedium';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
-import FolderDropdown from './LeftSide';
+import FolderDropdown from './ProjectFolder';
 
-function LeftSidebar() {
+function ProjecStructure() {
   const [isOpen, setIsOpen] = useState(false);
   const [folders, setFolders] = useState([
     { projectName: 'Project 1', isOpen: false}, // Add more folders as needed
@@ -37,7 +37,7 @@ function LeftSidebar() {
         {folders.map((folder, index) => (
           <div key={index}>
             <a href="#" onClick={() => toggleFolder(index)}>
-              <FolderOpenIcon className="bx bx-grid-alt"></FolderOpenIcon>
+              <FolderOpenIcon className="bx bx-grid-alt "></FolderOpenIcon>
               <span className="link_name" style={{ marginLeft: '5px' }} >{folder.projectName}</span>
             </a>
             {folder.isOpen && (
@@ -52,4 +52,4 @@ function LeftSidebar() {
   );
 }
 
-export default LeftSidebar;
+export default ProjecStructure;

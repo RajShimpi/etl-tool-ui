@@ -14,8 +14,9 @@ import AddMenu from "../user/add-menu";
 import { DashboardBuilder } from "./dashboard-builder";
 import UserMaster from "../masters/user-master";
 import ResetPassword from "../user/reset-password";
-import LeftSide from "../../components/LeftSide";
-import LeftSidebar from "../../components/LeftSidebar";
+import ProjecFolder from "../../components/ProjectFolder";
+import ProjecStructure from "../../components/ProjectStructure";
+import ComponetTool from "../../components/ComponetTool";
 
 export const routeConstant = {
   dashboard: "/dashboard",
@@ -29,9 +30,9 @@ export const routeConstant = {
   dashboardBuilder: "/dashboard-builder",
   userMaster: "/user-master",
   resetPassword: "/reset-password",
-  leftSide: "/leftSide",
-  leftsidebar:"/leftsidebar",
-  
+  projectstructure: "/projectstructure",
+  componettool: "/componettool",
+
 };
 export const routeData = (routes) => [
   {
@@ -42,8 +43,8 @@ export const routeData = (routes) => [
     permissions: true,
     isUserCanView: true, //routes.includes(routeConstant.dashboard)
   },
-  
-    {
+
+  {
     routeTo: routeConstant.branch,
     header: "Add/Update Branches",
     childComp: Branch,
@@ -91,7 +92,7 @@ export const routeData = (routes) => [
     permissions: true,
     isUserCanView: true,
   },
-  
+
   {
     routeTo: routeConstant.addMenu,
     header: "Add Menu",
@@ -100,7 +101,7 @@ export const routeData = (routes) => [
     permissions: true,
     isUserCanView: true,
   },
-  
+
   {
     routeTo: routeConstant.dashboardBuilder,
     header: "Dashboard Builder",
@@ -109,7 +110,7 @@ export const routeData = (routes) => [
     permissions: true,
     isUserCanView: routes.includes(routeConstant.dashboardBuilder),
   },
-  
+
   {
     routeTo: routeConstant.userMaster,
     header: "User Master",
@@ -119,7 +120,7 @@ export const routeData = (routes) => [
     isUserCanView: routes.includes(routeConstant.userMaster),
 
   },
- 
+
   {
     routeTo: routeConstant.resetPassword,
     header: "Reset Password",
@@ -129,18 +130,25 @@ export const routeData = (routes) => [
     isUserCanView: routes.includes(routeConstant.resetPassword),
   },
   {
-    routeTo: routeConstant.leftSide, // LeftSider route
+    routeTo: routeConstant.projecfolder, // ProjecFolder route
     header: "",
-    childComp: LeftSide,
+    childComp: ProjecFolder,
     data: {},
     permissions: true,
     isUserCanView: true,
   },
-  
   {
-    routeTo: routeConstant.leftsidebar, // RightSideBar route
+    routeTo: routeConstant.projectstructure, // ProjecStructure route
     header: "",
-    childComp: LeftSidebar,
+    childComp: ProjecStructure,
+    data: {},
+    permissions: true,
+    isUserCanView: true,
+  },
+  {
+    routeTo: routeConstant.componettool, // ComponetTool route
+    header: "",
+    childComp: ComponetTool,
     data: {},
     permissions: true,
     isUserCanView: true,

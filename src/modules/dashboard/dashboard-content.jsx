@@ -10,7 +10,7 @@ import React, { useEffect, useState } from "react";
 // import Modal from "../components/modal-popup";
 // import WidgetPopup from "./widget-popup";
 // import WidgetTile from "./widget-tile";
-import LeftSidebar from "../../components/LeftSidebar";
+import LeftSidebar from "../../components/ProjectStructure";
 import _ from "lodash";
 import react from "react";
 import MainComponent from "../../components/MainComponent";

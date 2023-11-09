@@ -92,7 +92,6 @@ function FolderContainer() {
   }
   return (
     <div>
-      <h3 style={{ paddingBottom: "5px" }}>Project</h3>
       <div style={style}>
         {folders.map((folder, index) => (
           <FolderDropdown
