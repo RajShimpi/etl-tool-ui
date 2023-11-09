@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import FolderIcon from '@mui/icons-material/Folder';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import './LeftSidebar.css'
 
 
 function FolderDropdown({ folder, onToggleFolder, onToggleFile }) {
@@ -31,15 +32,15 @@ function FolderDropdown({ folder, onToggleFolder, onToggleFile }) {
       <div>
         <div className={`folder ${folder.isOpen ? 'open' : ''}`} style={folderStyle} onClick={onToggleFolder}>
           {folder.isOpen ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='small' />} {folder.folderName}
-        </div>
+        </div> 
         {folder.isOpen && (
           <div>
             <div>
-              <div className={`folder ${folder.openFiles.file1 ? 'open' : ''}`} style={insidefileStyle} onClick={() => handleFileToggle('file1')}>
+              <div className={`folder  ${folder.openFiles.file1 ? 'open' : ''}`} style={insidefileStyle} onClick={() => handleFileToggle('file1')}>
                 {folder.openFiles.file1 ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='small' />} {folder.insidefilename}
               </div>
               {folder.openFiles.file1 && (
-                <div className="dropdown-content " style={fileStyle}>
+                <div className="dropdown-content" style={fileStyle}>
                   <a href="#" onClick={() => handleFileToggle('')}>
                     <InsertDriveFileIcon fontSize='small' /> {folder.filename}
                   </a>
@@ -92,7 +93,7 @@ function FolderContainer() {
   }
   return (
     <div>
-      <h3 style={{ paddingBottom: "5px" }}>Project</h3>
+      
       <div style={style}>
         {folders.map((folder, index) => (
           <FolderDropdown

@@ -4,7 +4,7 @@ import DensityMediumIcon from '@mui/icons-material/DensityMedium';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import FolderDropdown from './LeftSide';
 
-function LeftSidebar() {
+function LeftSidebar() { 
   const [isOpen, setIsOpen] = useState(false);
   const [folders, setFolders] = useState([
     { projectName: 'Project 1', isOpen: false}, // Add more folders as needed
@@ -36,13 +36,13 @@ function LeftSidebar() {
       <ul className="nav-list">
         {folders.map((folder, index) => (
           <div key={index}>
-            <a href="#" onClick={() => toggleFolder(index)}>
-              <FolderOpenIcon className="bx bx-grid-alt"></FolderOpenIcon>
+            <a className='proicon' href="#" onClick={() => toggleFolder(index)}>
+              <FolderOpenIcon className="bx bx-grid-alt "></FolderOpenIcon>
               <span className="link_name" style={{ marginLeft: '5px' }} >{folder.projectName}</span>
             </a>
             {folder.isOpen && (
               <div className={`${isOpen ? 'open' : ''}`}>
-                <FolderDropdown folder={folder} onToggleFolder={() => toggleFolder(index)} onToggleFile={(file) => toggleFile(index, file)} />
+                <FolderDropdown folder={folder}  onToggleFolder={() => toggleFolder(index)} onToggleFile={(file) => toggleFile(index, file)} />
               </div>
             )}
           </div>
