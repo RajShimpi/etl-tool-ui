@@ -14,9 +14,11 @@ import AddMenu from "../user/add-menu";
 import { DashboardBuilder } from "./dashboard-builder";
 import UserMaster from "../masters/user-master";
 import ResetPassword from "../user/reset-password";
-import ProjecFolder from "../../components/ProjectFolder";
-import ProjecStructure from "../../components/ProjectStructure";
-import ComponetTool from "../../components/ComponetTool";
+import ProjecFolder from "../../components/ProjectStrucure/ProjectFolder";
+import ProjecStructure from "../../components/ProjectStrucure/ProjectStructure";
+import ComponetTool from "../../components/ComponentTool/ComponetTool";
+import MainComponent from "../../components/MainComponent";
+import Photo from "../../components/Photo";
 
 export const routeConstant = {
   dashboard: "/dashboard",
@@ -32,6 +34,8 @@ export const routeConstant = {
   resetPassword: "/reset-password",
   projectstructure: "/projectstructure",
   componettool: "/componettool",
+  maincomponent: "/maincomponent",
+  photo: "/photo",
 
 };
 export const routeData = (routes) => [
@@ -149,6 +153,22 @@ export const routeData = (routes) => [
     routeTo: routeConstant.componettool, // ComponetTool route
     header: "",
     childComp: ComponetTool,
+    data: {},
+    permissions: true,
+    isUserCanView: true,
+  },
+  {
+    routeTo: routeConstant.maincomponent, // ComponetTool route
+    header: "",
+    childComp: MainComponent,
+    data: {},
+    permissions: true,
+    isUserCanView: true,
+  },
+  {
+    routeTo: routeConstant.photo, // ComponetTool route
+    header: "",
+    childComp: Photo,
     data: {},
     permissions: true,
     isUserCanView: true,

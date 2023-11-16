@@ -61,7 +61,7 @@ function FolderDropdown({ folder, onToggleFolder, onToggleFile }) {
 
 function FolderContainer() {
   const [folders, setFolders] = useState([
-    createFolder('Folder1', 'File1', 'InsideFile1'), // Add more folders
+    createFolder('Folder1', 'File1', 'InsideFile1','InsideFile1'), // Add more folders
     createFolder('Folder2', 'File2', 'InsideFile2'),
     createFolder('Folder3', 'File2', 'InsideFile3'),
     createFolder('Folder4', 'File2', 'InsideFile4'),

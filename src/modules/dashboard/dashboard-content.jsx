@@ -11,26 +11,11 @@ import React, { useEffect, useState } from "react";
 // import WidgetPopup from "./widget-popup";
 // import WidgetTile from "./widget-tile";
 import _ from "lodash";
-import react from "react";
-// import MainComponent from "../../components/MainComponent";
-// import "./Dashboard-container.css"; 
-import ProjecStructure from "../../components/ProjectStructure";
-import ComponetTool from "../../components/ComponetTool";
-
 
 const DashboardContent = (props) => {
   return (
-    <div className="dashboard-container">
-      <div className="left-sidebar">
-        <ProjecStructure/>
-      </div>
-      <div className="main-component">
-        {/* <MainComponent /> */}
-      </div>
-      <div className="right-side">
-        <ComponetTool/>
-      </div>
-    </div>
+    <>
+    </>
   );
 };
 

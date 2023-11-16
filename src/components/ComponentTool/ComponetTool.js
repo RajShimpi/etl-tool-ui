@@ -3,16 +3,15 @@ import './ComponetTool.css';
 import DensityMediumIcon from '@mui/icons-material/DensityMedium';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import Collapse from '@mui/material/Collapse';
-import Button from '@mui/material/Button';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 function ComponetTool() {
     const [isOpen, setIsOpen] = useState(false);
-
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
     };
+    
 
     const [components, setComponents] = useState([
         { name: "Component 1", isCollapseOpen: false },
@@ -34,10 +33,10 @@ function ComponetTool() {
     };
 
     return (
-        <div className={`sidebar ${isOpen ? 'open' : ''}`}>
+        <div className={`componet-tool ${isOpen ? 'open' : ''} right-sidebar`}>
             <div className="logo_details">
-                <div className="logo_name">Component Tool</div>
-                <DensityMediumIcon className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`} id="btn" style={{ color: "white" }} onClick={toggleSidebar}></DensityMediumIcon>
+            <div className="logo_name">Component Tool</div>
+                <DensityMediumIcon className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`} id="btn" onClick={toggleSidebar}></DensityMediumIcon>
             </div>
             <ul className="nav-list">
                 {components.map((component, index) => (
@@ -48,21 +47,21 @@ function ComponetTool() {
                         style={{ padding: '1px', margin: "2px" }}
                         onDragStart={(e) => handleDragStart(e, component.name)}>
                         <li>
-                            <div className="comIcon">
-                                <a href="#">
-                                <FolderOpenIcon className="bx bx-grid-alt componetIcon" style={{marginLeft: '100px'}} ></FolderOpenIcon>
-                                    <span className="link_name" style={{ marginLeft: '5px' }}><div variant="contained" onClick={() => handleCollapseToggle(index)}>
-                                        Componets {component.isCollapseOpen ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
+                            <div  >
+                                <a href="#"className="comIcon" style={{display:"flex", border:"none"}}>
+                                    <FolderOpenIcon className="bx bx-grid-alt"/>
+                                    <span className="link_name" style={{ marginLeft: '5px'}}><div variant="contained" className='comp' onClick={() => handleCollapseToggle(index)}>
+                                        Componets {component.isCollapseOpen ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                                     </div></span>
                                 </a>
                             </div>
                             <Collapse in={component.isCollapseOpen}>
                                 <div >
-                                    <h3 >Add</h3>                   {/* Add more content here */}
-                                    <h3 >Edit</h3>                   {/* Add more content here */}
-                                    <h3 >Delete</h3>
-                                    <h3 >Kill</h3>
-                                    <h3 >Save</h3>
+                                    <div className='tool' >Add</div>
+                                    <div className='tool' >Edit</div>
+                                    <div className='tool' >Delete</div>
+                                    <div className='tool' >Kill</div>
+                                    <div className='tool' >Save</div>
                                 </div>
                             </Collapse>
                         </li>

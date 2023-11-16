@@ -1,41 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import ComponetTool from "./ComponentTool/ComponetTool";
+import ProjectStructure from "./ProjectStrucure/ProjectStructure";
+import Photo from "./Photo";
+import "./MainComponete.css"
 
 const MainComponent = () => {
-  const [droppedItems, setDroppedItems] = useState([]);
+  const [isProjectStructureOpen, setIsProjectStructureOpen] = useState(false);
+  const [isComponetToolOpen, setIsComponetToolOpen] = useState(false);
 
-  const handleDrop = (event) => {
-    event.preventDefault();
-    const item = event.dataTransfer.getData('text/plain');
+  const handleProjectStructureToggle = () => {
+    setIsProjectStructureOpen(!isProjectStructureOpen);
+  };
 
-    if (!droppedItems.includes(item)) {    // To Check if the Component is already in the droppedItems array
-      setDroppedItems([...droppedItems, item])
+  const handleComponetToolToggle = () => {
+    setIsComponetToolOpen(!isComponetToolOpen);
+  };
+
+  const calculatePhotoWidth = () => {
+    if (isProjectStructureOpen && isComponetToolOpen) {
+      return "70vw";
+    } else if (isProjectStructureOpen || isComponetToolOpen) {
+      return "85vw";
+    } else {
+      return "100vw";
     }
   };
 
-  const handleDragOver = (event) => {
-    event.preventDefault();
-  };
-  const style = {
-    // border: '1px solid black',
-    padding: '10px',
-    width: "130vh",
-    height: "500px",
-    overflow: "hidden",
-    justifyContent: "center",
-    textAlign: "center"
-  }
-
   return (
-    <div>
-      <h2 style={{ textAlign: "center" }}> Drop Component</h2>
-      <div
-        onDrop={(e) => handleDrop(e)}
-        onDragOver={(e) => handleDragOver(e)}
-        style={style}
-      >
-        {droppedItems.map((item, index) => (
-          <div key={index}>{item}</div>
-        ))}
+    <div className="d-flex justify-content-between main" >
+      <div className={`p-2 ${isProjectStructureOpen ? 'open' : ''}`}>
+        <ProjectStructure toggleSidebar={handleProjectStructureToggle} />
+      </div>
+      <div className={`p-2`} style={{ width: calculatePhotoWidth() }}>
+        <Photo />
+      </div>
+      <div className={`p-2 ${isComponetToolOpen ? 'open' : ''}`}>
+        <ComponetTool toggleSidebar={handleComponetToolToggle} />
       </div>
     </div>
   );
