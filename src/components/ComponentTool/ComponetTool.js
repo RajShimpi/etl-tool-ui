@@ -11,7 +11,6 @@ function ComponetTool() {
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
     };
-    
 
     const [components, setComponents] = useState([
         { name: "Component 1", isCollapseOpen: false },
@@ -35,7 +34,7 @@ function ComponetTool() {
     return (
         <div className={`componet-tool ${isOpen ? 'open' : ''} right-sidebar`}>
             <div className="logo_details">
-            <div className="logo_name">Component Tool</div>
+                <div className="logo_name">Component Tool</div>
                 <DensityMediumIcon className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`} id="btn" onClick={toggleSidebar}></DensityMediumIcon>
             </div>
             <ul className="nav-list">
@@ -48,9 +47,9 @@ function ComponetTool() {
                         onDragStart={(e) => handleDragStart(e, component.name)}>
                         <li>
                             <div  >
-                                <a href="#"className="comIcon" style={{display:"flex", border:"none"}}>
-                                    <FolderOpenIcon className="bx bx-grid-alt"/>
-                                    <span className="link_name" style={{ marginLeft: '5px'}}><div variant="contained" className='comp' onClick={() => handleCollapseToggle(index)}>
+                                <a href="#" className="comIcon" style={{ display: "flex", border: "none" }}>
+                                    <FolderOpenIcon className="bx bx-grid-alt" />
+                                    <span className="link_name" style={{ marginLeft: '5px' }}><div variant="contained" className='comp' onClick={() => handleCollapseToggle(index)}>
                                         Componets {component.isCollapseOpen ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                                     </div></span>
                                 </a>

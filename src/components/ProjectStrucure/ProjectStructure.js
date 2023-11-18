@@ -34,41 +34,39 @@ function ProjectStructure() {
 
   return (
     <div>
-    <div className={`sidebar ${isOpen ? 'open' : ''} `}>
-      <div className="logo_details">
-      <div className="logo_name">Project Structure</div>
-        <DensityMediumIcon
-          className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`}
-          id="btn"
-          onClick={toggleSidebar}
-        />
+      <div className={`sidebar ${isOpen ? 'open' : ''} `}>
+        <div className="logo_details">
+          <div className="logo_name">Project Structure</div>
+          <DensityMediumIcon
+            className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`}
+            id="btn"
+            onClick={toggleSidebar}
+          />
+        </div>
+        <ul className="nav-list">
+          {folders.map((folder, index) => (
+            <div key={index}>
+              <li>
+                <a className='proicon' style={{ color: 'white' }} onClick={() => toggleFolder(index)}>
+                  <FolderOpenIcon className="bx bx-grid-alt" />
+                  <span className="link_name" style={{ marginLeft: '5px' }}>
+                    {folder.projectName}
+                  </span>
+                </a>
+                {folder.isOpen && (
+                  <div className={`${isOpen ? 'open' : ''}`}>
+                    <FolderDropdown
+                      folder={folder}
+                      onToggleFolder={() => toggleFolder(index)}
+                      onToggleFile={(file) => toggleFile(index, file)}
+                    />
+                  </div>
+                )}
+              </li>
+            </div>
+          ))}
+        </ul>
       </div>
-      <ul className="nav-list">
-        {folders.map((folder, index) => (
-          <div key={index}>
-            <li>
-            <a className='proicon' style={{color:'white'}} onClick={() => toggleFolder(index)}>
-              <FolderOpenIcon className="bx bx-grid-alt" />
-              <span className="link_name"  style={{ marginLeft: '5px' }}>
-                {folder.projectName}
-              </span>
-              
-            </a>
-            {folder.isOpen && (
-              <div className={`${isOpen ? 'open' : ''}`}>
-                <FolderDropdown
-                  folder={folder}
-                  onToggleFolder={() => toggleFolder(index)}
-                  onToggleFile={(file) => toggleFile(index, file)}
-                />
-              </div>
-            )}
-            </li>
-          </div>
-        ))}
-      </ul>
-     
-    </div>
     </div>
   );
 }
