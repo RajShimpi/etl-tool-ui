@@ -4,7 +4,6 @@ import FolderIcon from '@mui/icons-material/Folder';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import './LeftSidebar.css'
 
-
 function FolderDropdown({ folder, onToggleFolder, onToggleFile }) {
   const folderStyle = {
     listStyleType: 'none',
@@ -34,9 +33,9 @@ function FolderDropdown({ folder, onToggleFolder, onToggleFile }) {
           {folder.isOpen ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='small' />} {folder.folderName}
         </div> 
         {folder.isOpen && (
-          <div>
+          <div className='openf1'>
             <div>
-              <div className={`folder  ${folder.openFiles.file1 ? 'open' : ''}`} style={insidefileStyle} onClick={() => handleFileToggle('file1')}>
+              <div className={`folder   ${folder.openFiles.file1 ? 'open' : ''}`} style={insidefileStyle} onClick={() => handleFileToggle('file1')}>
                 {folder.openFiles.file1 ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='small' />} {folder.insidefilename}
               </div>
               {folder.openFiles.file1 && (
