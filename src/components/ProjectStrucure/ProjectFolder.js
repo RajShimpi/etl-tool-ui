@@ -1,44 +1,66 @@
 import React, { useState } from 'react';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import FolderIcon from '@mui/icons-material/Folder';
-import Folder from './Folder';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import './project.css';
+import Folders from './Folder.js'
 
-function FolderDropdown({ folder, onToggleFolder,}) {
+function FolderDropdown({ folder, onToggleFolder, onToggleFile,textColor }) {
     const folderStyle = {
         listStyleType: 'none',
-        marginLeft: '10px',
+        marginLeft: '20px',
         cursor: 'pointer',
-        color:'white'
+        // color: 'white'
     };
 
-    // const insidefileStyle = {
-    //     marginLeft: '20px',
-    //     cursor: 'pointer',
-    //     color:'white'
-    // };
+    const insideItemStyle = {
+        marginLeft: '20px',
+        cursor: 'pointer',
+        // color: 'white'
+    };
 
-    // const handleFileToggle = (file) => {
-    //     onToggleFile(file);
-    // };
+    const handleItemToggle = (item) => {
+        if (item.type === 'file') {
+            onToggleFile(item);
+        } else {
+            onToggleFolder(item);
+        }
+    };
 
     return (
-        <>
-            <div>
-                <div className={`folder ${folder.isOpen ? 'open' : ''}`} style={folderStyle} onClick={onToggleFolder}>
-                    {folder.isOpen ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='small' />} {folder.folderName}
-                </div>
-                {folder.isOpen && (
-                    <Folder />
-                )}
+        <div  style={folderStyle}>
+            <div className={` ${folder.isOpen ? 'open' : ''}`} style={{textColor}} onClick={() => handleItemToggle(folder)}>
+                {folder.isOpen ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='small' />} {folder.folderName}
             </div>
-        </>
+            {folder.isOpen && (
+                <div style={insideItemStyle} >
+                    {folder.items.map((item, index) => (
+                        <div key={index} className={`folder ${item.isOpen ? 'open' : ''}`} style={{textColor}} onClick={() => handleItemToggle(item)}>
+                            {item.type === 'file' ? (
+                                <>
+                                    <InsertDriveFileIcon style={{ fontSize: '20px' }} /> {item.fileName}
+                                </>
+                            ) : (
+                                <FolderDropdown
+                                    folder={item}
+                                    onToggleFolder={() => handleItemToggle(item)}
+                                    onToggleFile={(file) => onToggleFile(file)}
+                                />
+                            )}
+                        </div>
+                    ))}
+                    <Folders />
+                </div>
+                
+            )}
+        </div>
     );
 }
 
 function FolderContainer() {
     const [folders, setFolders] = useState([
-        createFolder('Folder 1'), // Add more folders
-        createFolder('Folder 2'),
+        createFolder('Folder 1', ['File 1', 'File 2', 'File 3']),
+        createFolder('Folder 2', ['File 4', 'File 5']),
     ]);
 
     const toggleFolder = (index) => {
@@ -74,13 +96,11 @@ function FolderContainer() {
     );
 }
 
-function createFolder(folderName, filename, insidefilename) {
+function createFolder(folderName, files = []) {
     return {
         folderName,
-        filename,
-        insidefilename,
+        items: files.map(file => ({ type: 'file', fileName: file, isOpen: false })),
         isOpen: false,
-        openFiles: { file1: false, file2: false, file3: false },
     };
 }
 

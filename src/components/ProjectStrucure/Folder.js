@@ -4,18 +4,15 @@ import FolderIcon from '@mui/icons-material/Folder';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import './project.css';
 
-function FolderDropdown({ folder, onToggleFolder, onToggleFile }) {
+function FolderDropdown({ folder, onToggleFolder, onToggleFile, textColor }) {
     const folderStyle = {
         listStyleType: 'none',
-        marginLeft: '35px',
-        cursor: 'pointer',
-        color: 'white'
+        cursor: 'pointer'
     };
 
     const insidefileStyle = {
-        marginLeft: '70px',
-        cursor: 'pointer',
-        color: 'white'
+        marginLeft: '20px',
+        cursor: 'pointer'
     };
 
     const handleFileToggle = (file) => {
@@ -23,14 +20,14 @@ function FolderDropdown({ folder, onToggleFolder, onToggleFile }) {
     };
 
     return (
-        <div>
-            <div className={` ${folder.isOpen ? 'open' : ''}`} style={folderStyle} onClick={onToggleFolder}>
+        <div style={folderStyle}>
+            <div className={` ${folder.isOpen ? 'open' : ''}`} style={textColor} onClick={onToggleFolder}>
                 {folder.isOpen ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='small' />} {folder.folderName}
             </div>
             {folder.isOpen && (
-                <div>
+                <div style={insidefileStyle}>
                     {folder.files.map((file, index) => (
-                        <div key={index} className={`folder ${file.isOpen ? 'open' : ''}`} style={insidefileStyle} onClick={() => handleFileToggle(file)}>
+                        <div key={index} className={`folder ${file.isOpen ? 'open' : ''}`} style={textColor} onClick={() => handleFileToggle(file)}>
                             <InsertDriveFileIcon style={{ fontSize: '20px' }} />  {file.fileName}
                         </div>
                     ))}
@@ -40,14 +37,14 @@ function FolderDropdown({ folder, onToggleFolder, onToggleFile }) {
     );
 }
 
-function Folder() {
+function Folders() {
     const [folders, setFolders] = useState([
         createFolder('SubFolder 1', [
             { fileName: 'File 1' },
             { fileName: 'File 2' },
-            { fileName: 'File 2' },
-            { fileName: 'File 2' },
-            { fileName: 'File 2' }
+            { fileName: 'File 3' },
+            { fileName: 'File 4' },
+            { fileName: 'File 5' }
         ]),
         createFolder('SubFolder 2', [
             { fileName: 'File 3' },
@@ -101,4 +98,4 @@ function createFolder(folderName, files = []) {
     };
 }
 
-export default Folder;
+export default Folders;

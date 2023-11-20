@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import ComponetTool from "./ComponentTool/ComponetTool";
 import ProjectStructure from "./ProjectStrucure/ProjectStructure";
 import Photo from "./Photo";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowUp';
+
 import "./MainComponete.css";
 
 const MainComponent = () => {
@@ -34,7 +36,7 @@ const MainComponent = () => {
     {
       name: "green",
       backgroundColor: "#34f205",
-      textColor: "#ffffff",
+      textColor: "#000000",
     },
   ];
 
@@ -52,7 +54,7 @@ const MainComponent = () => {
 
   const handleThemeChange = (index) => {
     setCurrentThemeIndex(index);
-    setIsDropdownOpen(false); // Close the dropdown after selecting a theme
+    // setIsDropdownOpen(false); // Close the dropdown after selecting a theme
   };
 
   const calculatePhotoWidth = () => {
@@ -68,9 +70,9 @@ const MainComponent = () => {
   return (
     <>
       <div className="dropdown">
-        <button className="dropbtn" onClick={handleDropdownToggle}>
-          Select Theme
-        </button>
+        <div className="dropbtn" onClick={handleDropdownToggle}>
+          Select Theme <KeyboardArrowDownIcon /> 
+        </div>
         {isDropdownOpen && (
           <div className="dropdown-content">
             {themes.map((theme, index) => (
@@ -80,6 +82,7 @@ const MainComponent = () => {
                 style={{
                   backgroundColor: theme.backgroundColor,
                   color: theme.textColor,
+
                 }}
               >
                 {theme.name}

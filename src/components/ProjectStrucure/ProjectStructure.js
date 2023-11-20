@@ -5,7 +5,7 @@ import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import FolderDropdown from './ProjectFolder';
 
 
-function ProjectStructure() {
+function ProjectStructure({textColor}) {
   const [isOpen, setIsOpen] = useState(false);
 
   const [folders, setFolders] = useState([
@@ -34,8 +34,8 @@ function ProjectStructure() {
 
   return (
     <div>
-      <div className={`sidebar ${isOpen ? 'open' : ''} `}>
-        <div className="logo_details">
+      <div className={`sidebar ${isOpen ? 'open' : ''} `} >
+        <div className="logo_details" style={{textColor}}>
           <div className="logo_name">Project Structure</div>
           <DensityMediumIcon
             className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`}
@@ -43,16 +43,16 @@ function ProjectStructure() {
             onClick={toggleSidebar}
           />
         </div>
-        <ul className="nav-list">
+        <ul className="nav-list" style={{textColor}}>
           {folders.map((folder, index) => (
-            <div key={index}>
+            <div key={index} >
               <li>
-                <a className='proicon' style={{ color: 'white' }} onClick={() => toggleFolder(index)}>
+                <div className='proicon' onClick={() => toggleFolder(index)}>
                   <FolderOpenIcon className="bx bx-grid-alt" />
-                  <span className="link_name" style={{ marginLeft: '5px' }}>
+                  <span className="link_name" style={{ marginLeft: '5px'}}>
                     {folder.projectName}
                   </span>
-                </a>
+                </div>
                 {folder.isOpen && (
                   <div className={`${isOpen ? 'open' : ''}`}>
                     <FolderDropdown
