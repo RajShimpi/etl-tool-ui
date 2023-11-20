@@ -6,7 +6,7 @@ import Collapse from '@mui/material/Collapse';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
-function ComponetTool() {
+function ComponetTool({textColor}) {
     const [isOpen, setIsOpen] = useState(false);
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
@@ -33,7 +33,7 @@ function ComponetTool() {
 
     return (
         <div className={`componet-tool ${isOpen ? 'open' : ''} right-sidebar`}>
-            <div className="logo_details">
+            <div className="logo_details" style={{textColor}}>
                 <div className="logo_name">Component Tool</div>
                 <DensityMediumIcon className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`} id="btn" onClick={toggleSidebar}></DensityMediumIcon>
             </div>
@@ -47,12 +47,12 @@ function ComponetTool() {
                         onDragStart={(e) => handleDragStart(e, component.name)}>
                         <li>
                             <div  >
-                                <a href="#" className="comIcon" style={{ display: "flex", border: "none" }}>
+                                <div href="#" className="comIcon" style={{ display: "flex", border: "none" }}>
                                     <FolderOpenIcon className="bx bx-grid-alt" />
                                     <span className="link_name" style={{ marginLeft: '5px' }}><div variant="contained" className='comp' onClick={() => handleCollapseToggle(index)}>
                                         Componets {component.isCollapseOpen ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                                     </div></span>
-                                </a>
+                                </div>
                             </div>
                             <Collapse in={component.isCollapseOpen}>
                                 <div >

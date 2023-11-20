@@ -2,7 +2,7 @@
   min-height: 100vh;
   width: 78px;
   padding: 6px 14px;
-  background-color: rgba(95, 94, 94, 0.438);
+  background-color: rgba(116, 113, 113, 0.329);
   transition: all 0.5s ease;
   border-radius: revert;
   top: 0;
@@ -10,7 +10,7 @@
 }
 
 .sidebar.open {
-  width: 200px;
+  width: 220px;
 }
 
 .sidebar .logo_details {
@@ -18,7 +18,8 @@
   display: flex;
   align-items: center;
   position: relative;
-  color: white;
+  cursor: pointer;
+  /* color: white; */
 }
 
 .sidebar .logo_details .icon {
@@ -27,7 +28,7 @@
 }
 
 .sidebar .logo_details .logo_name {
-  color: rgb(0, 0, 0);
+  /* color: rgb(0, 0, 0); */
   font-size: 15px;
   font-weight: 600;
   opacity: 0;
@@ -35,11 +36,12 @@
 }
 
 .sidebar .logo_details .logo_name {
-  color: var(--color-white);
+  /* color: var(--color-white); */
   font-size: 15px;
   font-weight: 600;
   opacity: 0;
   transition: all 0.5s ease;
+  margin-left: 15px;
 }
 .sidebar .link_name {
   display: none;
@@ -69,7 +71,7 @@
 }
 
 .sidebar i {
-  color: rgb(0, 0, 0);
+  /* color: rgb(0, 0, 0); */
   height: 60px;
   line-height: 60px;
   min-width: 50px;
@@ -91,57 +93,59 @@
 }
 .sidebar input {
   font-size: 15px;
-  color: rgb(0, 0, 0);
+  /* color: rgb(0, 0, 0); */
   font-weight: 400;
   outline: none;
   height: 35px;
   width: 35px;
   border: none;
   border-radius: 5px;
-  background-color: rgb(0, 0, 0);
+  /* background-color: rgb(0, 0, 0); */
   transition: all 0.5s ease;
 }
 
-.sidebar input::placeholder {
-  color: rgb(0, 0, 0);
-}
+/* .sidebar input::placeholder {
+  /* color: rgb(0, 0, 0); 
+} */
 
 .sidebar.open input {
   width: 100%;
   padding: 0 20px 0 50px;
 }
 
-.sidebar li a {
+.sidebar li .proicon {
   display: flex;
   height: 100%;
   width: 100%;
   align-items: center;
   text-decoration: none;
-  background-color: rgba(0, 0, 0, 0);
+  /* background-color: rgba(0, 0, 0, 0); */
   position: relative;
   transition: all 0.5s ease;
-  color: black;
+  /* color: black; */
+  margin-top: 20px;
+  cursor: pointer;
 }
 
-.sidebar li a::after {
+.sidebar li .proicon::after {
   content: "";
   position: absolute;
   width: 100%;
   height: 100%;
   transform: scaleX(0);
-  background-color: rgba(212, 209, 209, 0.342);
+  background-color: rgba(116, 113, 113, 0.329);
   border-radius: 5px;
   transition: transform 0.3s ease-in-out;
   transform-origin: left;
 }
 
-.sidebar li a:hover::after {
+.sidebar li .proicon:hover::after {
   transform: scaleX(1);
-  color: rgb(0, 0, 0);
+   color: rgb(0, 0, 0); 
 }
 
-.sidebar li a.link_name {
-  color: rgba(255, 255, 255, 0.425);
+.sidebar li .proicon.link_name {
+  color: rgba(116, 113, 113, 0.329);
   font-size: 15px;
   font-weight: 400;
   white-space: nowrap;
@@ -151,13 +155,13 @@
   opacity: 0;
 }
 
-.sidebar li a:hover .link_name,
-.sidebar li a:hover i {
+/* .sidebar li .proicon:hover .link_name,
+.sidebar li .proicon:hover i {
   transition: all 0.5s ease;
-  color: rgb(0, 0, 0);
-}
+  /* color: rgb(0, 0, 0); 
+} */
 
-.sidebar.open li a .link_name {
+.sidebar.open li .proicon .link_name {
   opacity: 1;
   pointer-events: auto;
 }
@@ -167,8 +171,4 @@
   line-height: 35px;
   font-size: 10px;
   border-radius: 20pxpx;
-}
-.proicon {
-  color: rgb(255, 255, 255);
-  margin-top: 20px;
 }

@@ -34,7 +34,7 @@ const MainComponent = () => {
     {
       name: "green",
       backgroundColor: "#34f205",
-      textColor: "#ffffff",
+      textColor: "#000000",
     },
   ];
 
@@ -52,7 +52,7 @@ const MainComponent = () => {
 
   const handleThemeChange = (index) => {
     setCurrentThemeIndex(index);
-    setIsDropdownOpen(false); // Close the dropdown after selecting a theme
+    // setIsDropdownOpen(false); // Close the dropdown after selecting a theme
   };
 
   const calculatePhotoWidth = () => {
@@ -80,6 +80,7 @@ const MainComponent = () => {
                 style={{
                   backgroundColor: theme.backgroundColor,
                   color: theme.textColor,
+
                 }}
               >
                 {theme.name}
