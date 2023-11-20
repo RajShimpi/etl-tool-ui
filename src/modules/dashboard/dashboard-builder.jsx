@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import CommonFormWithList from "../components/common-form-with-list";
-import config from "../config/config.json"
+import config from "../components/config/config.json"
 import { getDashboardBuilderData } from "./dashboard-builder-data";
 import { routeData } from "./route-data";
 import axios from "../services/axios";

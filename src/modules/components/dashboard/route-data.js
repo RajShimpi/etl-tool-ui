@@ -1,24 +1,20 @@
 
-import { Branch } from "../hrms/branch";
-import ChangePassword from "../user/change-password";
+import { Branch } from "../../hrms/branch";
+import ChangePassword from "../../user/change-password";
 import DashboardContent from "./dashboard-content";
-// import Dashboard from "./dashboard";
-import { Department } from "../hrms/department";
-import { Employees } from "../hrms/employee";
+import { Department } from "../../hrms/department";
+import { Employees } from "../../hrms/employee";
 
 
 
-import RegisterUser from "../user/register-user";
-import { Roles } from "../user/roles";
-import AddMenu from "../user/add-menu";
+import RegisterUser from "../../user/register-user";
+import { Roles } from "../../user/roles";
+import AddMenu from "../../user/add-menu";
 import { DashboardBuilder } from "./dashboard-builder";
-import UserMaster from "../masters/user-master";
-import ResetPassword from "../user/reset-password";
-import ProjecFolder from "../../components/ProjectStrucure/ProjectFolder";
-import ProjecStructure from "../../components/ProjectStrucure/ProjectStructure";
-import ComponetTool from "../../components/ComponentTool/ComponetTool";
-import MainComponent from "../../components/MainComponent";
-import Photo from "../../components/Photo";
+import UserMaster from "../../masters/user-master";
+import ResetPassword from "../../user/reset-password";
+import Project from "../Project";
+// import FolderContainer from "../components/FolderCreater";
 
 export const routeConstant = {
   dashboard: "/dashboard",
@@ -32,11 +28,9 @@ export const routeConstant = {
   dashboardBuilder: "/dashboard-builder",
   userMaster: "/user-master",
   resetPassword: "/reset-password",
-  projectstructure: "/projectstructure",
-  componettool: "/componettool",
-  maincomponent: "/maincomponent",
-  photo: "/photo",
-
+  project: "/project",
+  // folderCreater: "/folderCreater"
+  
 };
 export const routeData = (routes) => [
   {
@@ -47,8 +41,8 @@ export const routeData = (routes) => [
     permissions: true,
     isUserCanView: true, //routes.includes(routeConstant.dashboard)
   },
-
-  {
+  
+    {
     routeTo: routeConstant.branch,
     header: "Add/Update Branches",
     childComp: Branch,
@@ -96,7 +90,7 @@ export const routeData = (routes) => [
     permissions: true,
     isUserCanView: true,
   },
-
+  
   {
     routeTo: routeConstant.addMenu,
     header: "Add Menu",
@@ -105,7 +99,7 @@ export const routeData = (routes) => [
     permissions: true,
     isUserCanView: true,
   },
-
+  
   {
     routeTo: routeConstant.dashboardBuilder,
     header: "Dashboard Builder",
@@ -114,7 +108,7 @@ export const routeData = (routes) => [
     permissions: true,
     isUserCanView: routes.includes(routeConstant.dashboardBuilder),
   },
-
+  
   {
     routeTo: routeConstant.userMaster,
     header: "User Master",
@@ -124,7 +118,7 @@ export const routeData = (routes) => [
     isUserCanView: routes.includes(routeConstant.userMaster),
 
   },
-
+ 
   {
     routeTo: routeConstant.resetPassword,
     header: "Reset Password",
@@ -134,43 +128,20 @@ export const routeData = (routes) => [
     isUserCanView: routes.includes(routeConstant.resetPassword),
   },
   {
-    routeTo: routeConstant.projecfolder, // ProjecFolder route
-    header: "",
-    childComp: ProjecFolder,
+    routeTo: routeConstant.project, // project route
+    header: "Project",
+    childComp: Project,
     data: {},
     permissions: true,
     isUserCanView: true,
   },
-  {
-    routeTo: routeConstant.projectstructure, // ProjecStructure route
-    header: "",
-    childComp: ProjecStructure,
-    data: {},
-    permissions: true,
-    isUserCanView: true,
-  },
-  {
-    routeTo: routeConstant.componettool, // ComponetTool route
-    header: "",
-    childComp: ComponetTool,
-    data: {},
-    permissions: true,
-    isUserCanView: true,
-  },
-  {
-    routeTo: routeConstant.maincomponent, // ComponetTool route
-    header: "",
-    childComp: MainComponent,
-    data: {},
-    permissions: true,
-    isUserCanView: true,
-  },
-  {
-    routeTo: routeConstant.photo, // ComponetTool route
-    header: "",
-    childComp: Photo,
-    data: {},
-    permissions: true,
-    isUserCanView: true,
-  }
+  // {
+  //   routeTo: routeConstant.folderCreater, // to create new folder 
+  //   header: "Folder Creater",
+  //   childComp: FolderContainer,
+  //   data: {},
+  //   permissions: true,
+  //   isUserCanView: true,
+  // }
+
 ];

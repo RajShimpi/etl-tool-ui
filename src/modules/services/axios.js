@@ -1,4 +1,4 @@
-import { errorAlert, successAlert } from '../config/alert';
+import { errorAlert, successAlert } from '../components/config/alert';
 
 import $ from "jquery";
 import auth from '../user/auth';
