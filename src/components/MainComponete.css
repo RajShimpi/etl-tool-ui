@@ -1,0 +1,25 @@
+.no-space-between {
+  justify-content: flex-start !important;
+}
+/* .main{
+    background-color: rgb(28, 36, 63)
+} */
+
+
+.imgcal{
+  width: 100%;
+  height: 100%;
+}
+.btncolr{
+  border-radius: 100%;
+  padding: 10px;
+  border: solid 2px rgb(238, 223, 223);
+  margin-left: 7px;
+}
+.btncolr:hover{
+  
+}
+
+.pcolr{
+  padding: 3px;
+}
