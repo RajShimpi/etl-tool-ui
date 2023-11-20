@@ -38,7 +38,7 @@ function ProjectStructure({textColor}) {
         <div className="logo_details" style={{textColor}}>
           <div className="logo_name">Project Structure</div>
           <DensityMediumIcon
-            className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`}
+            className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}btn1`}
             id="btn"
             onClick={toggleSidebar}
           />
@@ -54,8 +54,8 @@ function ProjectStructure({textColor}) {
                   </span>
                 </div>
                 {folder.isOpen && (
-                  <div className={`${isOpen ? 'open' : ''}`}>
-                    <FolderDropdown
+                  <div className={`openf1 ${isOpen ? 'open' : ''}`}>
+                    <FolderDropdown 
                       folder={folder}
                       onToggleFolder={() => toggleFolder(index)}
                       onToggleFile={(file) => toggleFile(index, file)}

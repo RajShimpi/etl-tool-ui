@@ -1,5 +1,8 @@
 .right-sidebar {
-  min-height: 100vh;
+  overflow-y: scroll; 
+  -ms-overflow-style: none;
+  scrollbar-width: none; 
+  height: 650px;
   width: 78px;
   padding: 6px 14px;
   background-color: rgba(116, 113, 113, 0.329);
@@ -172,4 +175,12 @@
   line-height: 35px;
   font-size: 10px;
   border-radius: 20pxpx;
+}
+
+.right-sidebar .openf1{
+  display: none;
+}
+
+.right-sidebar.open .openf1{
+  display: block;
 }

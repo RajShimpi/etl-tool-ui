@@ -14,30 +14,37 @@ const MainComponent = () => {
 
   const themes = [
     {
-      name: "light",
+      // name: "blue",
+      backgroundColor: "#4842f5",
+      textColor: "#ffffff",
+    },
+    {
+      // name: "light",
       backgroundColor: "#ffffff",
       textColor: "#000000",
     },
     {
-      name: "dark",
+      // name: "dark",
       backgroundColor: "#1f1f1f",
       textColor: "#ffffff",
+
     },
     {
-      name: "yellow",
+      // name: "yellow",
       backgroundColor: "#fcf803",
       textColor: "#000000",
     },
     {
-      name: "red",
+      // name: "red",
       backgroundColor: "#ff0000",
       textColor: "#ffffff",
     },
     {
-      name: "green",
+      // name: "green",
       backgroundColor: "#34f205",
       textColor: "#000000",
     },
+    
   ];
 
   const handleProjectStructureToggle = () => {
@@ -74,9 +81,9 @@ const MainComponent = () => {
           Select Theme <KeyboardArrowDownIcon /> 
         </div>
         {isDropdownOpen && (
-          <div className="dropdown-content">
+          <div className="dropdown-content pcolr">
             {themes.map((theme, index) => (
-              <button
+              <button className="btncolr"
                 key={index}
                 onClick={() => handleThemeChange(index)}
                 style={{
@@ -85,7 +92,7 @@ const MainComponent = () => {
 
                 }}
               >
-                {theme.name}
+                {/* {theme.name} */}
               </button>
             ))}
           </div>
@@ -106,8 +113,8 @@ const MainComponent = () => {
               textColor={themes[currentThemeIndex].textColor}
             />
           </div>
-          <div style={{ width: calculatePhotoWidth() }}>
-            <Photo />
+          <div  style={{ width: calculatePhotoWidth() }}>
+            <Photo/>
           </div>
           <div className={` ${isComponetToolOpen ? "open" : ""}`}>
             <ComponetTool

@@ -55,7 +55,7 @@ function ComponetTool({textColor}) {
                                 </div>
                             </div>
                             <Collapse in={component.isCollapseOpen}>
-                                <div >
+                                <div className='openf1' >
                                     <div className='tool' >Add</div>
                                     <div className='tool' >Edit</div>
                                     <div className='tool' >Delete</div>
