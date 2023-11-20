@@ -44,17 +44,78 @@
 }
 .proicon{
   color: white;
+  margin-top: 20px;
 }
 .proicon:hover{
   color: #121618;
 }
 
-
+.sidebar .openf1{
+  display: none;
+}
+.sidebar.open .openf1{
+  display: block;
+}
+.p1:hover{
+  background-color: crimson;
+}
 
 .nav-list{
   color: rgb(255, 251, 251);
 }
 
+.option1{
+  /* margin-top: -21px; */
+  display: flex;
+  /* margin-left: 43px; */
+}
+#home{
+  color: aliceblue;
+  display: none;
+  border: 1px solid rgb(21, 21, 21);
+  padding: 9px;
+  background-color: rgb(42, 100, 159);
+  margin-left: 30px;
+  margin-top: 4px;
+
+}
+
+
+.logo_details{
+  position: relative;
+}
+
+
+.home {
+  position: absolute;
+  top: 0;
+  top: 0;
+  left: 170px;
+  height: 100vh;
+  width: calc(100% - 250px);
+  background-color: var(--body-color);
+  transition: var(--tran-05);
+  
+  
+}
+.home .text {
+  font-size: 30px;
+  font-weight: 500;
+  color: var(--text-color);
+  padding: 12px 60px;
+ 
+}
+.img1{
+width: 1100px;
+}
+
+
+
+.sidebar.close ~ .home {
+  left: 78px;
+  height: 100vh;
+  width: calc(100% - 78px);
+}
 
 
 
@@ -71,14 +132,6 @@
 .sidebar.open .link_name{
   display: block;
 }
-
-
-
-
-/* .folder.open.nav-list{
-  display: block;
-} */
-
 
 
 .sidebar.open .logo_details .icon,
@@ -114,6 +167,7 @@
 .proicon{
   display: flex;
 }
+
 
 .sidebar .nav-list{
   margin-top: 10px;
