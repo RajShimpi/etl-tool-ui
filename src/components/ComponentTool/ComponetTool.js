@@ -6,7 +6,7 @@ import Collapse from '@mui/material/Collapse';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
-function ComponetTool({textColor}) {
+function ComponetTool({ textColor }) {
     const [isOpen, setIsOpen] = useState(false);
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
@@ -17,13 +17,12 @@ function ComponetTool({textColor}) {
         { name: "Component 2", isCollapseOpen: false },
         { name: "Component 3", isCollapseOpen: false },
         { name: "Component 4", isCollapseOpen: false },
-        { name: "Component 5", isCollapseOpen: false }
-        // ... Add more components
+        { name: "Component 5", isCollapseOpen: false },    // Add more components
     ]);
 
-    const handleDragStart = (event, item) => {
-        event.dataTransfer.setData('text/plain', item);
-    };
+    // const handleDragStart = (event, item) => {
+    //     event.dataTransfer.setData('text/plain', item);
+    // };
 
     const handleCollapseToggle = (index) => {
         const updatedComponents = [...components];
@@ -33,7 +32,7 @@ function ComponetTool({textColor}) {
 
     return (
         <div className={`componet-tool ${isOpen ? 'open' : ''} right-sidebar`}>
-            <div className="logo_details" style={{textColor}}>
+            <div className="logo_details" style={{ textColor }}>
                 <div className="logo_name">Component Tool</div>
                 <DensityMediumIcon className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`} id="btn" onClick={toggleSidebar}></DensityMediumIcon>
             </div>
@@ -43,11 +42,11 @@ function ComponetTool({textColor}) {
                         key={index}
                         className='component'
                         draggable
-                        style={{ padding: '1px', margin: "2px" }}
-                        onDragStart={(e) => handleDragStart(e, component.name)}>
+                    // onDragStart={(e) => handleDragStart(e, component.name)}
+                    >
                         <li>
                             <div  >
-                                <div href="#" className="comIcon" style={{ display: "flex", border: "none" }}>
+                                <div href="#" className="comIcon">
                                     <FolderOpenIcon className="bx bx-grid-alt" />
                                     <span className="link_name" style={{ marginLeft: '5px' }}><div variant="contained" className='comp' onClick={() => handleCollapseToggle(index)}>
                                         Componets {component.isCollapseOpen ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
@@ -55,7 +54,7 @@ function ComponetTool({textColor}) {
                                 </div>
                             </div>
                             <Collapse in={component.isCollapseOpen}>
-                                <div className='openf1' >
+                                <div className='tools' >
                                     <div className='tool' >Add</div>
                                     <div className='tool' >Edit</div>
                                     <div className='tool' >Delete</div>

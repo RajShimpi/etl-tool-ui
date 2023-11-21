@@ -5,27 +5,27 @@ import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import './project.css';
 
 function FolderDropdown({ folder, onToggleFolder, onToggleFile, textColor }) {
-    const folderStyle = {
-        listStyleType: 'none',
-        cursor: 'pointer'
-    };
+    // const folderStyle = {
+    //     listStyleType: 'none',
+    //     cursor: 'pointer'
+    // };
 
-    const insidefileStyle = {
-        marginLeft: '20px',
-        cursor: 'pointer'
-    };
+    // const insidefileStyle = {
+    //     marginLeft: '20px',
+    //     cursor: 'pointer'
+    // };
 
     const handleFileToggle = (file) => {
         onToggleFile(file);
     };
-
+     
     return (
-        <div style={folderStyle}>
+        <div className='folderStyle'>
             <div className={` ${folder.isOpen ? 'open' : ''}`} style={textColor} onClick={onToggleFolder}>
                 {folder.isOpen ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='small' />} {folder.folderName}
             </div>
             {folder.isOpen && (
-                <div style={insidefileStyle}>
+                <div className='insidefileStyle'>
                     {folder.files.map((file, index) => (
                         <div key={index} className={`folder ${file.isOpen ? 'open' : ''}`} style={textColor} onClick={() => handleFileToggle(file)}>
                             <InsertDriveFileIcon style={{ fontSize: '20px' }} />  {file.fileName}
@@ -70,13 +70,13 @@ function Folders() {
         setFolders(updatedFolders);
     };
 
-    const style = {
-        overflow: "hidden"
-    };
+    // const style = {
+    //     overflow: "hidden"
+    // };
 
     return (
         <div>
-            <div style={style}>
+            <div >
                 {folders.map((folder, index) => (
                     <FolderDropdown
                         key={index}

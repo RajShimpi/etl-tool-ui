@@ -15,6 +15,10 @@
   width: 220px;
 }
 
+.component {
+  padding: 1px;
+  margin: 2px;
+}
 .right-sidebar .logo_details {
   height: 60px;
   display: flex;
@@ -124,6 +128,7 @@
   position: relative;
   transition: all 0.5s ease;
   z-index: 12;
+   border: none;
   /* color: rgb(255, 255, 255); */
 }
 
@@ -177,10 +182,10 @@
   border-radius: 20pxpx;
 }
 
-.right-sidebar .openf1{
+.right-sidebar .tools {
   display: none;
 }
 
-.right-sidebar.open .openf1{
+.right-sidebar.open .tools {
   display: block;
 }

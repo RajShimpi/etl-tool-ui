@@ -53,15 +53,25 @@
 }
 .sidebar.open .link_name {
   display: block;
+  margin-left: 5px;
 }
-
 
 .sidebar.open .logo_details .icon,
 .sidebar.open .logo_details .logo_name {
   opacity: 1;
 }
-
-
+.insideItemStyle {
+  margin-left: 20px;
+  cursor: pointer;
+}
+.folderStyle{
+  list-style: none;
+  cursor: pointer;
+}
+.insidefileStyle{
+margin-left: 20px;
+cursor: pointer;
+}
 .sidebar .logo_details #btn {
   position: absolute;
   top: 50%;
@@ -85,7 +95,6 @@
   font-size: 15px;
   text-align: center;
 }
-
 
 .sidebar .nav-list {
   margin-top: 10px;
@@ -148,7 +157,7 @@
 
 .sidebar li .proicon:hover::after {
   transform: scaleX(1);
-   /* color: rgb(0, 0, 0);  */
+  /* color: rgb(0, 0, 0);  */
 }
 
 .sidebar li .proicon.link_name {
@@ -184,9 +193,9 @@
   margin-top: 20px;
 }
 
-.sidebar .openf1{
+.sidebar .openf1 {
   display: none;
 }
-.sidebar.open .openf1{
+.sidebar.open .openf1 {
   display: block;
 }
