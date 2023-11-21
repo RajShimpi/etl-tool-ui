@@ -1,9 +1,9 @@
 .sidebar {
   height: 650px;
   /* overflow-y: scroll; */
-  overflow-y: scroll; 
+  /* overflow-y: scroll; 
   -ms-overflow-style: none;
-  scrollbar-width: none; 
+  scrollbar-width: none;  */
   /* min-height: 100vh; */
   width: 78px;
   padding: 6px 14px;
@@ -148,7 +148,7 @@
 
 .sidebar li .proicon:hover::after {
   transform: scaleX(1);
-   color: rgb(0, 0, 0); 
+   /* color: rgb(0, 0, 0);  */
 }
 
 .sidebar li .proicon.link_name {
@@ -180,7 +180,7 @@
   border-radius: 20pxpx;
 }
 .proicon {
-  color: rgb(255, 255, 255);
+  /* color: rgb(255, 255, 255); */
   margin-top: 20px;
 }
 

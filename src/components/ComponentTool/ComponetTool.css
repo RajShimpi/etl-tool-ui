@@ -1,7 +1,7 @@
 .right-sidebar {
-  overflow-y: scroll; 
+  /* overflow-y: scroll; 
   -ms-overflow-style: none;
-  scrollbar-width: none; 
+  scrollbar-width: none;  */
   height: 650px;
   width: 78px;
   padding: 6px 14px;

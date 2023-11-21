@@ -43,9 +43,9 @@ function ProjectStructure({textColor}) {
             onClick={toggleSidebar}
           />
         </div>
-        <ul className="nav-list" style={{textColor}}>
+        <ul className="nav-list">
           {folders.map((folder, index) => (
-            <div key={index} >
+            <div key={index} style={{textColor}} >
               <li>
                 <div className='proicon' onClick={() => toggleFolder(index)}>
                   <FolderOpenIcon className="bx bx-grid-alt" />
