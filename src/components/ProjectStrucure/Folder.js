@@ -18,7 +18,7 @@ function FolderDropdown({ folder, onToggleFolder, onToggleFile, textColor }) {
     const handleFileToggle = (file) => {
         onToggleFile(file);
     };
-     
+
     return (
         <div className='folderStyle'>
             <div className={` ${folder.isOpen ? 'open' : ''}`} style={textColor} onClick={onToggleFolder}>

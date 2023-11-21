@@ -25,7 +25,7 @@ const MainComponent = () => {
     },
     {
       // name: "dark",
-      backgroundColor: "#1f1f1f",
+      backgroundColor: "#000000",
       textColor: "#ffffff",
 
     },
@@ -44,7 +44,11 @@ const MainComponent = () => {
       backgroundColor: "#34f205",
       textColor: "#000000",
     },
-
+    {
+      // name: "yellow",
+      backgroundColor: "#dd07f5",
+      textColor: "#ffffff",
+    },
   ];
 
   const handleProjectStructureToggle = () => {
@@ -77,7 +81,7 @@ const MainComponent = () => {
   return (
     <>
       <div className="dropdown">
-        <div className="dropbtn"onClick={handleDropdownToggle}>
+        <div className="dropbtn" onClick={handleDropdownToggle}>
           Select Theme <KeyboardArrowDownIcon />
         </div>
         {isDropdownOpen && (
@@ -111,7 +115,7 @@ const MainComponent = () => {
               textColor={themes[currentThemeIndex].textColor}
             />
           </div>
-           <div style={{ width: calculatePhotoWidth() }}>  {/* Add the Components inside the div only for display responsive Components  */}
+          <div style={{ width: calculatePhotoWidth() }}>  {/* Add the Components inside the div only for display responsive Components  */}
             <Photo />
           </div>
           <div className={` ${isComponetToolOpen ? "open" : ""}`}>

@@ -2,10 +2,10 @@
   /* overflow-y: scroll; 
   -ms-overflow-style: none;
   scrollbar-width: none;  */
-  height: 650px;
+  height: 600px;
   width: 78px;
   padding: 6px 14px;
-  background-color: rgba(116, 113, 113, 0.329);
+  background-color: rgba(116, 113, 113, 0.123);
   transition: all 0.5s ease;
   top: 0;
   right: 0;
@@ -100,6 +100,7 @@
 /* .right-sidebar input::placeholder {
   color: rgb(0, 0, 0);
 } */
+
 .right-sidebar .comp {
   display: none;
 }
@@ -128,7 +129,7 @@
   position: relative;
   transition: all 0.5s ease;
   z-index: 12;
-   border: none;
+  border: none;
   /* color: rgb(255, 255, 255); */
 }
 
@@ -149,12 +150,13 @@
   transform: scaleX(1);
   /* color: rgb(0, 0, 0); */
 }
+
 /* .icon {
   color:rgb(0, 0, 0);
 } */
 
 .right-sidebar li .comIcon.link_name {
-  color: rgba(116, 113, 113, 0.329);
+  color: rgba(116, 113, 113, 0.123);
   font-size: 15px;
   font-weight: 400;
   white-space: nowrap;

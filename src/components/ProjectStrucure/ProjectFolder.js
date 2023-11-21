@@ -6,12 +6,12 @@ import './project.css';
 import Folders from './Folder.js'
 
 function FolderDropdown({ folder, onToggleFolder, onToggleFile, textColor }) {
-    const folderStyle = {
-        listStyleType: 'none',
-        marginLeft: '20px',
-        cursor: 'pointer',
-        // color: 'white'
-    };
+    // const folderStyle = {
+    //     // listStyleType: 'none',
+    //     // marginLeft: '20px',
+    //     // cursor: 'pointer',
+    //     // color: 'white'
+    // };
 
     // const insideItemStyle = {
     //     marginLeft: '20px',
@@ -28,7 +28,7 @@ function FolderDropdown({ folder, onToggleFolder, onToggleFile, textColor }) {
     };
 
     return (
-        <div style={folderStyle}>
+        <div className="folderstyle">
             <div className={` ${folder.isOpen ? 'open' : ''}`} style={{ textColor }} onClick={() => handleItemToggle(folder)}>
                 {folder.isOpen ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='small' />} {folder.folderName}
             </div>
@@ -74,7 +74,7 @@ function FolderContainer() {
         updatedFolders[folderIndex].openFiles[file] = !updatedFolders[folderIndex].openFiles[file];
         setFolders(updatedFolders);
     };
-    
+
     return (
         <div>
             <div >

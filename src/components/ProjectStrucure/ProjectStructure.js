@@ -41,7 +41,7 @@ function ProjectStructure({ textColor }) {
             className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`}
             id="btn"
             onClick={toggleSidebar}
-          />
+          />      
         </div>
         <ul className="nav-list">
           {folders.map((folder, index) => (

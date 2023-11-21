@@ -34,7 +34,11 @@ function ComponetTool({ textColor }) {
         <div className={`componet-tool ${isOpen ? 'open' : ''} right-sidebar`}>
             <div className="logo_details" style={{ textColor }}>
                 <div className="logo_name">Component Tool</div>
-                <DensityMediumIcon className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`} id="btn" onClick={toggleSidebar}></DensityMediumIcon>
+                <DensityMediumIcon 
+                className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`} 
+                id="btn" 
+                onClick={toggleSidebar}
+                ></DensityMediumIcon>
             </div>
             <ul className="nav-list">
                 {components.map((component, index) => (
