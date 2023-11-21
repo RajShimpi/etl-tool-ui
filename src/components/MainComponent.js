@@ -77,7 +77,7 @@ const MainComponent = () => {
   return (
     <>
       <div className="dropdown">
-        <div className="dropbtn" onClick={handleDropdownToggle}>
+        <div className="dropbtn" style={{cursor:'pointer'}} onClick={handleDropdownToggle}>
           Select Theme <KeyboardArrowDownIcon /> 
         </div>
         {isDropdownOpen && (
