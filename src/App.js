@@ -37,20 +37,17 @@ const App = () => {
     },
   ];
 
-  const handleDropdownToggle = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
-
-  const handleThemeChange = (index) => {
-    setCurrentThemeIndex(index);
-    // setIsDropdownOpen(false); // Close the dropdown after selecting a theme
-  };
+ 
+  // const handleThemeChange = (index) => {
+  //   setCurrentThemeIndex(index);
+  //   // setIsDropdownOpen(false); // Close the dropdown after selecting a theme
+  // };
 
   const selectedTheme = themes[currentThemeIndex];
 
   return (
     <>
-    <div
+    {/* <div
         className="dropdown mt-200"
         style={{
           backgroundColor: selectedTheme.backgroundColor,
@@ -76,7 +73,7 @@ const App = () => {
             ))}
           </div>
         )}
-      </div>
+      </div> */}
       <ToastContainer />
       <BrowserRouter>
         <Routes>

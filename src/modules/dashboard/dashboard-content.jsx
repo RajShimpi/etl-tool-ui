@@ -11,10 +11,23 @@ import React, { useEffect, useState } from "react";
 // import WidgetPopup from "./widget-popup";
 // import WidgetTile from "./widget-tile";
 import _ from "lodash";
-
+import Flow from "./drag-drop/components/flow";
 const DashboardContent = (props) => {
+  
+  const defaultStyle = {
+    position: "absolute",
+    width: "50%",
+    height: "200px",
+    color: "lightgray",
+    overflow: "inherit",
+    border: "2px solid lightgray",
+  };
+
+
+  
   return (
-    <>
+    <>    
+      <Flow />
     </>
   );
 };

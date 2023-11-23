@@ -83,7 +83,7 @@ const MainComponent = () => {
         {isDropdownOpen && (
           <div className="dropdown-content pcolr">
             {themes.map((theme, index) => (
-              <button className="btncolr"
+              <button className="btncolr" 
                 key={index}
                 onClick={() => handleThemeChange(index)}
                 style={{
