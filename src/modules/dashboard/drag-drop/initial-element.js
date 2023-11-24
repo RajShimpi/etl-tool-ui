@@ -22,6 +22,7 @@ export const nodes = [
     data: { heading: "Send Message", content: "click to edit text",img:"https://icones.pro/wp-content/uploads/2021/06/icone-fichier-document-rouge.png" },
     position: { x: 500, y: 100 }
   }
+  
 ];
 
 export const edges = [
@@ -33,7 +34,8 @@ export const edges = [
     label: "ok",
     markerEnd: {
       type: MarkerType.ArrowClosed
-    }
+    },
+    style: { stroke: getlabelColor("ok") }
   },
   {
     id: "e1-3",
@@ -43,7 +45,8 @@ export const edges = [
     label: "error",
     markerEnd: {
       type: MarkerType.ArrowClosed
-    }
+    },
+    style: { stroke: getlabelColor("error") }
   },
   {
     id: "e2-3",
@@ -53,7 +56,11 @@ export const edges = [
     label: "ok",
     markerEnd: {
       type: MarkerType.ArrowClosed
-    }
+    },
+    style: { stroke: getlabelColor("ok") }
   }
- 
+
 ];
+function getlabelColor(label) {
+  return label === "ok" ? "green" : label === "error" ?"red" : "black";
+}

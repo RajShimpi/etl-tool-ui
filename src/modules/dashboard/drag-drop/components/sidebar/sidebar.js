@@ -2,48 +2,43 @@ import React from "react";
 import EditMessage from "../sidebar/edit-message";
 
 export default ({ isSelected, textRef, nodeName, setNodeName }) => {
-  const onDragStart = (event, nodeType, content,img) => {
+  const onDragStart = (event, nodeType, content, img) => {
     event.dataTransfer.setData("application/reactflow", nodeType);
     event.dataTransfer.setData("content", content);
-    event.dataTransfer.setData("img", img);
+    event.dataTransfer.setData("img", img || "https://www.nicepng.com/png/full/139-1394852_download-for-free-at-icons8-view-document-icon.png");
     event.dataTransfer.effectAllowed = "move";
   };
 
   return (
     <aside>
-    <div className="row">
+      <div className="row">
         <div className="col-md-12">
-        {isSelected && 
+          {isSelected && 
             <EditMessage
-            textRef={textRef}
-            nodeName={nodeName}
-            setNodeName={setNodeName}
+              textRef={textRef}
+              nodeName={nodeName}
+              setNodeName={setNodeName}
             />}
-            </div>
-            <div className="col-md-12">
-            <div
+        </div>
+        <div className="col-md-12">
+          <div
             className="dndnode input"
-            onDragStart={(event,img) => onDragStart(event, "node", "Click to Edit message",img)}
+            onDragStart={(event) => onDragStart(event, "node", "Click to Edit message")}
             draggable
-            >
+          >
             Add Node
-            </div>
-            
           </div>
-          <div className="col-md-12">
-            <div
+        </div>
+        <div className="col-md-12">
+          <div
             className="dndnode input"
-            onDragStart={(event,img) => onDragStart(event, "node", "Click to Edit message",img)}
+            onDragStart={(event) => onDragStart(event, "node", "Click to Edit message")}
             draggable
-            >
+          >
             Add Node
-            </div>
-            
           </div>
-          </div>
+        </div>
+      </div>
     </aside>
-    
-       
-    
   );
 };
