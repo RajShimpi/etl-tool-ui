@@ -18,6 +18,8 @@ import ProjecStructure from "../../components/ProjectStrucure/ProjectStructure";
 import ComponetTool from "../../components/ComponentTool/ComponetTool";
 import MainComponent from "../../components/MainComponent";
 import Photo from "../../components/Photo";
+import Client from "../masters/client";
+
 
 export const routeConstant = {
   dashboard: "/dashboard",
@@ -35,6 +37,7 @@ export const routeConstant = {
   componettool: "/componettool",
   maincomponent: "/maincomponent",
   photo: "/photo",
+  client:"/client"
 
 };
 export const routeData = (routes) => [
@@ -52,7 +55,7 @@ export const routeData = (routes) => [
     childComp: Roles,
     data: {},
     permissions: true,
-    isUserCanView: routes.includes(routeConstant.roles),
+    isUserCanView: true,
   },
   {
     routeTo: routeConstant.registerUser,
@@ -134,6 +137,14 @@ export const routeData = (routes) => [
     routeTo: routeConstant.photo, // photo route
     header: "",
     childComp: Photo,
+    data: {},
+    permissions: true,
+    isUserCanView: true,
+  },
+  {
+    routeTo: routeConstant.client, // photo route
+    header: "",
+    childComp: Client,
     data: {},
     permissions: true,
     isUserCanView: true,
