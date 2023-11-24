@@ -33,7 +33,7 @@ const Login = () => {
 
     const onSubmit = (data) => {
         // $(".blurbackground").css("visibility", "visible");    //userName: userName, 
-        axios.post("auth/login", { employeeCode: data.userName, password: data.password }, false).then(data => {
+        axios.post("auth/login", { username: data.userName, password: data.password }, false).then(data => {
             auth.setAuthData(data.data);
             setValidateState({
                 isError: false,

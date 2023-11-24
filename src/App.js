@@ -8,8 +8,43 @@ import './App.css';
 
 const App = () => {
 
-  return (         
+ 
+  // const handleThemeChange = (index) => {
+  //   setCurrentThemeIndex(index);
+  //   // setIsDropdownOpen(false); // Close the dropdown after selecting a theme
+  // };
+
+  // const selectedTheme = themes[currentThemeIndex]; 
+
+  return (
     <>
+    {/* <div
+        className="dropdown mt-200"
+        style={{
+          backgroundColor: selectedTheme.backgroundColor,
+          color: selectedTheme.textColor,    
+        }}
+      >
+        <button className="dropbtn" onClick={handleDropdownToggle}>
+          Select Theme
+        </button>
+        {isDropdownOpen && (
+          <div className="dropdown-content">
+            {themes.map((theme, index) => (
+              <button
+                key={index}
+                onClick={() => handleThemeChange(index)}
+                style={{
+                  backgroundColor: theme.backgroundColor,
+                  color: theme.textColor,
+                }}
+              >
+                {theme.name}
+              </button>
+            ))}
+          </div>
+        )}
+      </div> */}
       <ToastContainer />
       <BrowserRouter>
         <Routes>
@@ -20,9 +55,9 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <Dashboard />
-              </ProtectedRoute>
+              </ProtectedRoute>        
             }
-          />
+          />    
         </Routes>
       </BrowserRouter>
     </>
