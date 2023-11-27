@@ -22,3 +22,27 @@
 .pcolr {
   padding: 3px;
 }
+/* ContextMenu.css */
+.contextMenu {
+  position: absolute;
+  background-color: #ffffff4f; 
+  z-index: 1000;
+}
+
+.contextMenu.right {
+  left: 70%;
+  top: 20%;
+}
+
+.menu-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  font-size: small;
+  transition: background-color 0.3s ease;
+  &:hover {
+    background-color: #f0f0f0;
+    color: black;
+  }
+} 

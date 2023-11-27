@@ -16,7 +16,7 @@ export const Roles = (props) => {
         // axios.getWithCallback("user-roles/", (data) => setRoles(data.map(x => { return { value: x.id, label: x.name  }})));
     }, [])
     // const processList = (list) => {
-    //     return list.map(x =>  { return { ...x, templateId: x.id}});
+    //     return list.map(x =>  { return { ...x, templateId: x.id}}); 
     // }
     return (<CommonFormWithList 
     formDataAction={getRoleFields}

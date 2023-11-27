@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import CommonFormWithList from '../components/common-form-with-list';
+import config from "../components/config/config.json"
+import { getClientFields } from '../user/roles-data';
 
 const Client = () => {
     const [formData, setFormData] = useState({
@@ -21,54 +24,21 @@ const Client = () => {
         isActive: true,
     });
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Perform actions with formData, e.g., submit to server
-        console.log('Form submitted:', formData);
-    };
+    let defaultObj = { active: true };
 
     return (
-        <form style={{}} onSubmit={handleSubmit}>
-            <label>
-                Employee Code :     
-                    <input type="text" name="emp_code" value={formData.emp_code} onChange={handleInputChange} placeholder='Emp' />
-            </label>
-            <br />
-            <label>
-                First Name:
-                <input type="text" name="firstname" value={formData.firstname} onChange={handleInputChange}  />
-            </label>
-            <br />
-            <label>
-                Middle Name:
-                <input type="text" name="middlename" value={formData.middlename} onChange={handleInputChange} />
-            </label>
-            <br />
-            <label>
-                Last Name:
-                <input type="text" name="lastname" value={formData.lastname} onChange={handleInputChange}  />
-            </label>
-            <br />
-            <label>
-                Email:
-                <input type="email" name="email" value={formData.email} onChange={handleInputChange} />
-            </label>
-            <br />
-            <label>
-                Is Active:
-                <input type="checkbox" name="isActive" checked={formData.isActive} onChange={handleInputChange} />
-            </label>
-            <br />
-            <button type="submit">Submit</button>
-        </form>
+        <>
+            <CommonFormWithList
+                formDataAction={getClientFields}
+                columns={config.EMPLOYEE_COLUMNS}
+                insertApi="client"
+                updateApi="client/:id"
+                getApi="client"
+                title="Client"
+                defaultObj={defaultObj}
+                tableTitle='client'
+            />
+        </>
     );
 };
 
