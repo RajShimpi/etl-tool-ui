@@ -15,29 +15,30 @@ export default  ({ isSelected, textRef, nodeName, setNodeName }) => {
 
   return (
     <aside>
-    <div className="row">
+      <div className="row">
         <div className="col-md-12">
-        {isSelected && 
+          {isSelected && 
             <EditMessage
-            textRef={textRef}
-            nodeName={nodeName}
-            setNodeName={setNodeName}
+              textRef={textRef}
+              nodeName={nodeName}
+              setNodeName={setNodeName}
             />}
-            </div>
-            <div className="col-md-12">
-            <div
+        </div>
+        <div className="col-md-12">
+          <div
             className="dndnode input"
-            onDragStart={(event,img) => onDragStart(event, "node", "Click to Edit message",img)}
+            onDragStart={(event) => onDragStart(event, "node", "Click to Edit message")}
             draggable
             >
             <NoteAddIcon/>
             </div>
             
           </div>
-          <div className="col-md-12">
-            <div
+        </div>
+        <div className="col-md-12">
+          <div
             className="dndnode input"
-            onDragStart={(event,img) => onDragStart(event, "node", "Click to Edit message",img)}
+            onDragStart={(event) => onDragStart(event, "node", "Click to Edit message")}
             draggable
             >
             <TextSnippetIcon/>
@@ -72,12 +73,8 @@ export default  ({ isSelected, textRef, nodeName, setNodeName }) => {
             >
             <AddToDriveIcon/>
             </div>
-            
-          </div>
+            {/* Add Node */}
           </div>
     </aside>
-    
-       
-    
   );
 };

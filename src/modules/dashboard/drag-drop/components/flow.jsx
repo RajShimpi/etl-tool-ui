@@ -69,10 +69,16 @@ const OverviewFlow = () => {
     setSelectedNode(newNode.id);
   };
   const onConnect = useCallback(
-    (params) =>
-      setEdges((eds) =>
-        addEdge({ ...params, markerEnd: { type: "arrowclosed" } }, eds)
-      ),
+    (params) => {
+      const newEdge = {
+        ...params,
+        type: params.type || "step", // Set the default type to "step"
+        markerEnd: {
+          // type: MarkerType.ArrowClosed
+        }
+      };
+      setEdges((eds) => addEdge(newEdge, eds));
+    },
     [setEdges]
   );
 
