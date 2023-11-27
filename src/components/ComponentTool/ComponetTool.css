@@ -112,11 +112,12 @@
   padding: 0 20px 0 50px;
 }
 
-.tool {
-  font-size: 15px;
+.tools {
+  /* font-size: 15px;
   /* color: rgb(0, 0, 0); */
-  justify-content: center;
-  display: flex;
+  /* justify-content: center; */
+  /* display: flex; */ 
+  text-align: center;
 }
 
 .right-sidebar li .comIcon {

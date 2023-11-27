@@ -1,11 +1,15 @@
 import React from "react";
 import EditMessage from "../sidebar/edit-message";
-
-export default ({ isSelected, textRef, nodeName, setNodeName }) => {
+import NoteAddIcon from '@mui/icons-material/NoteAdd';
+import ContentPasteIcon from '@mui/icons-material/ContentPaste';
+import TextSnippetIcon from '@mui/icons-material/TextSnippet';
+import EditIcon from '@mui/icons-material/Edit';
+import AddToDriveIcon from '@mui/icons-material/AddToDrive';
+export default  ({ isSelected, textRef, nodeName, setNodeName }) => {
   const onDragStart = (event, nodeType, content,img) => {
     event.dataTransfer.setData("application/reactflow", nodeType);
     event.dataTransfer.setData("content", content);
-    event.dataTransfer.setData("img", img);
+    event.dataTransfer.setData("img",img );
     event.dataTransfer.effectAllowed = "move";
   };
 
@@ -26,7 +30,7 @@ export default ({ isSelected, textRef, nodeName, setNodeName }) => {
             onDragStart={(event,img) => onDragStart(event, "node", "Click to Edit message",img)}
             draggable
             >
-            Add Node
+            <NoteAddIcon/>
             </div>
             
           </div>
@@ -36,7 +40,37 @@ export default ({ isSelected, textRef, nodeName, setNodeName }) => {
             onDragStart={(event,img) => onDragStart(event, "node", "Click to Edit message",img)}
             draggable
             >
-            Add Node
+            <TextSnippetIcon/>
+            </div>
+            
+          </div>
+          <div className="col-md-12">
+            <div
+            className="dndnode input"
+            onDragStart={(event,img) => onDragStart(event, "node", "Click to Edit message",img)}
+            draggable
+            >
+            <ContentPasteIcon/>
+            </div>
+            
+          </div>
+          <div className="col-md-12">
+            <div
+            className="dndnode input"
+            onDragStart={(event,img) => onDragStart(event, "node", "Click to Edit message",img)}
+            draggable
+            >
+            <EditIcon/>
+            </div>
+            
+          </div>
+          <div className="col-md-12">
+            <div
+            className="dndnode input"
+            onDragStart={(event,img) => onDragStart(event, "node", "Click to Edit message",img)}
+            draggable
+            >
+            <AddToDriveIcon/>
             </div>
             
           </div>

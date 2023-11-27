@@ -5,6 +5,7 @@ import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import Collapse from '@mui/material/Collapse';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import Sidebar from '../../modules/dashboard/drag-drop/components/sidebar/sidebar';
 
 function ComponetTool({ textColor }) {
     const [isOpen, setIsOpen] = useState(false);
@@ -59,11 +60,12 @@ function ComponetTool({ textColor }) {
                             </div>
                             <Collapse in={component.isCollapseOpen}>
                                 <div className='tools' >
-                                    <div className='tool' >Add</div>
-                                    <div className='tool' >Edit</div>
-                                    <div className='tool' >Delete</div>
-                                    <div className='tool' >Kill</div>
-                                    <div className='tool' >Save</div>
+                                    <Sidebar
+                                    // isSelected={isSelected}
+                                    // textRef={textRef}
+                                    // nodeName={nodeName}
+                                    // setNodeName={setNodeName}
+                                    />
                                 </div>
                             </Collapse>
                         </li>

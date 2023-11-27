@@ -157,13 +157,13 @@ const OverviewFlow = () => {
               <Background color="#aaa" gap={16} />
             </ReactFlow>
           </div>
-
+{/* 
           <Sidebar
             isSelected={isSelected}
             textRef={textRef}
             nodeName={nodeName}
             setNodeName={setNodeName}
-          />
+          /> */}
         </ReactFlowProvider>
       </div>
     </>

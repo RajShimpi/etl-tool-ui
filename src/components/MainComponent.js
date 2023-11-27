@@ -5,6 +5,7 @@ import Photo from "./Photo";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowUp';
 
 import "./MainComponete.css";
+import OverviewFlow from "../modules/dashboard/drag-drop/components/flow";
 
 const MainComponent = () => {
   const [isProjectStructureOpen, setIsProjectStructureOpen] = useState(false);
@@ -116,7 +117,7 @@ const MainComponent = () => {
             />
           </div>
           <div style={{ width: calculatePhotoWidth() }}>  {/* Add the Components inside the div only for display responsive Components  */}
-            <Photo />
+            <OverviewFlow/>
           </div>
           <div className={` ${isComponetToolOpen ? "open" : ""}`}>
             <ComponetTool
