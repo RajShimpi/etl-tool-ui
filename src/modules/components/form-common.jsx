@@ -13,7 +13,7 @@ import SearchModal from './search-modal';
 
 const FormCommon = ({props}) => {
     return (
-        props.data.map((pitem, pindex) =>
+        props.data && props.data.map((pitem, pindex) =>
         (//<div key={'form-group' + pindex} className="form-group">
             <div key={'form-row' + pindex} className="row">
                 {

@@ -4,13 +4,14 @@ import { style } from "./message-node-styles";
 import { Margin } from "@mui/icons-material";
 import FormCommon from "../../../../components/form-common";
 import { nodes } from "../../initial-element";
+import EditMessage from "../sidebar/edit-message";
 
 
 const GoogleFormPopup = ({ onClose, data }) => (
   <>
     <div className="popup">
       
-      <FormCommon props={{ data }} />
+      <FormCommon props={{ data:"" }} />
 
       <button style={{ marginLeft: "10px" }} onClick={onClose}>Close</button>
     </div>
@@ -18,7 +19,7 @@ const GoogleFormPopup = ({ onClose, data }) => (
 );
 
 
-const Node = ({ data }) => {
+const Node = ({ data ,isSelected, textRef, nodeName, setNodeName}) => {
   const [selected, setSelected] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
 
@@ -39,6 +40,12 @@ const Node = ({ data }) => {
 
   return (
     <>
+    {isSelected && 
+            <EditMessage
+              textRef={textRef}
+              nodeName={nodeName}
+              setNodeName={setNodeName}
+            />}
       <div style={{ textAlign: "center" }} className="text-updater-node">
         {showPopup ? (
           <>
