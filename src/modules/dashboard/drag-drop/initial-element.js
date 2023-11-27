@@ -58,5 +58,5 @@ export const edges = [
 
 ];
 function getlabelColor(label) {
-  return label === "ok" ? "green" : label === "error" ?"red" : "black";
+  return label === "ok" ? "green" : label === "error" ? "red" : "black";
 }

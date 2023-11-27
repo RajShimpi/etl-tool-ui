@@ -67,21 +67,21 @@
   cursor: pointer;
 }
 
-.folderStyle{
+.folderStyle {
   list-style: none;
   /* margin-left:20px; */
   cursor: pointer;
 }
 
-.folderstyle{
+.folderstyle {
   list-style: none;
-  margin-left:20px;
+  margin-left: 20px;
   cursor: pointer;
 }
 
-.insidefileStyle{
-margin-left: 20px;
-cursor: pointer;
+.insidefileStyle {
+  margin-left: 20px;
+  cursor: pointer;
 }
 
 .sidebar .logo_details #btn {

@@ -10,8 +10,8 @@ import EditMessage from "../sidebar/edit-message";
 const GoogleFormPopup = ({ onClose, data }) => (
   <>
     <div className="popup">
-      
-      <FormCommon props={{ data:"" }} />
+
+      <FormCommon props={{ data: "" }} />
 
       <button style={{ marginLeft: "10px" }} onClick={onClose}>Close</button>
     </div>
@@ -19,11 +19,11 @@ const GoogleFormPopup = ({ onClose, data }) => (
 );
 
 
-const Node = ({ data ,isSelected, textRef, nodeName, setNodeName}) => {
+const Node = ({ data, isSelected, textRef, nodeName, setNodeName }) => {
   const [selected, setSelected] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
 
-  const handleToggle = () => {  
+  const handleToggle = () => {
     setSelected(!selected);
   };
 
@@ -40,12 +40,12 @@ const Node = ({ data ,isSelected, textRef, nodeName, setNodeName}) => {
 
   return (
     <>
-    {isSelected && 
-            <EditMessage
-              textRef={textRef}
-              nodeName={nodeName}
-              setNodeName={setNodeName}
-            />}
+      {isSelected &&
+        <EditMessage
+          textRef={textRef}
+          nodeName={nodeName}
+          setNodeName={setNodeName}
+        />}
       <div style={{ textAlign: "center" }} className="text-updater-node">
         {showPopup ? (
           <>
