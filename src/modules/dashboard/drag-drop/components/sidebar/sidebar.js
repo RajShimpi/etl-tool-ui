@@ -26,7 +26,13 @@ export default ({ isSelected, textRef, nodeName, setNodeName }) => {
             onDragStart={(event) => onDragStart(event, "node", "Click to Edit message")}
             draggable
           >
-            Add Node
+        <img
+              src="https://www.nicepng.com/png/full/139-1394852_download-for-free-at-icons8-view-document-icon.png"
+              alt="Node Image"
+              style={{ width: "30px", height: "30px", marginTop: "16px" }} // Adjust the width and height as needed
+            />
+            {/* Add Node */}
+
           </div>
         </div>
         <div className="col-md-12">
@@ -35,7 +41,13 @@ export default ({ isSelected, textRef, nodeName, setNodeName }) => {
             onDragStart={(event) => onDragStart(event, "node", "Click to Edit message")}
             draggable
           >
-            Add Node
+             <img
+              src="https://icones.pro/wp-content/uploads/2021/06/icone-fichier-document-rouge.png"
+              alt="Node Image"
+              style={{ width: "30px", height: "30px",marginTop:"16px"  }} // Adjust the width and height as needed
+            />
+            
+            {/* Add Node */}
           </div>
         </div>
       </div>

@@ -11,8 +11,7 @@ import SearchModal from './search-modal';
 
 
 
-const FormCommon = (props) => {
-
+const FormCommon = ({props}) => {
     return (
         props.data.map((pitem, pindex) =>
         (//<div key={'form-group' + pindex} className="form-group">
@@ -53,7 +52,7 @@ const FormCommon = (props) => {
                                 {
                                     item.control === "select-react" && <SelectReact key={'select-react' + index}
                                     {...item}
-                                        primaryKey={item.id + index}
+                                        primaryKey={item.id + index}                                
                                         name={item.name}
                                         label={item.label}
                                         callback={pitem.callback}

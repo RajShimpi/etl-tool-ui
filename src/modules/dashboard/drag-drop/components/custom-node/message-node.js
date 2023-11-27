@@ -2,55 +2,27 @@ import React, { useState, memo } from "react";
 import { Handle, Position } from "reactflow";
 import { style } from "./message-node-styles";
 import { Margin } from "@mui/icons-material";
+import FormCommon from "../../../../components/form-common";
+import { nodes } from "../../initial-element";
+
 
 const GoogleFormPopup = ({ onClose, data }) => (
   <>
-    <div className="popup" style={{ height: "100%", textAlign: "center", width: "230px", backgroundColor:"#8cbfc8"}}>
-      {/* Replace 'your-google-form-url-here' with the actual URL of your Google Form */}
-      <label>
-        Node:
-        <>
-          <input
-            type="node"
-            name="node"
-          />
-          Node:
-          <input
-            type="node"
-            name="node"
-          />
-          <label for="cars" style={{ marginTop: "10px" }}>select Option:</label>
-
-          <select name="cars" id="cars">
-            <option value="disable">Options</option>
-            <option value="mercedes">Value</option>
-            <option value="audi">Action</option>
-          </select>
-          <label for="cars" style={{ marginTop: "10px" }}>select Option:</label>
-
-          <select name="cars" id="cars">
-            <option value="disable">Options</option>
-            <option value="mercedes">Value</option>
-            <option value="audi">Action</option>
-          </select>
-
-        </>
-
-      </label>
-      <br></br>
-      <button style={{ marginTop: "21px" }} type="submit" >Submit</button>
+    <div className="popup">
+      
+      <FormCommon props={{ data }} />
 
       <button style={{ marginLeft: "10px" }} onClick={onClose}>Close</button>
-
     </div>
   </>
 );
+
 
 const Node = ({ data }) => {
   const [selected, setSelected] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
 
-  const handleToggle = () => {
+  const handleToggle = () => {  
     setSelected(!selected);
   };
 
@@ -78,7 +50,7 @@ const Node = ({ data }) => {
             {selected ? null : (
               <>
                 <img
-                  style={{ width: "100px", height: "100px" }}
+                  style={{ width: "70px", height: "70px" }}
                   src={data.img}
                   // src={"https://www.picng.com/upload/cv/png_cv_87849.png"}
                   onClick={handleImageClick}
