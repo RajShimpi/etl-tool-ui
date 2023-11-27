@@ -5,6 +5,7 @@ import Photo from "./Photo";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowUp';
 
 import "./MainComponete.css";
+import OverviewFlow from "../modules/dashboard/drag-drop/components/flow";
 
 const MainComponent = () => {
   const [isProjectStructureOpen, setIsProjectStructureOpen] = useState(false);
@@ -25,7 +26,7 @@ const MainComponent = () => {
     },
     {
       // name: "dark",
-      backgroundColor: "#1f1f1f",
+      backgroundColor: "#000000",
       textColor: "#ffffff",
 
     },
@@ -44,7 +45,11 @@ const MainComponent = () => {
       backgroundColor: "#34f205",
       textColor: "#000000",
     },
-    
+    {
+      // name: "yellow",
+      backgroundColor: "#dd07f5",
+      textColor: "#ffffff",
+    },
   ];
 
   const handleProjectStructureToggle = () => {
@@ -66,19 +71,19 @@ const MainComponent = () => {
 
   const calculatePhotoWidth = () => {
     if (isProjectStructureOpen && isComponetToolOpen) {
-      return "70vw";
+      return "70%";
     } else if (isProjectStructureOpen || isComponetToolOpen) {
-      return "85vw";
+      return "85%";
     } else {
-      return "100vw";
+      return "100%";
     }
   };
 
   return (
     <>
       <div className="dropdown">
-        <div className="dropbtn" style={{cursor:'pointer'}} onClick={handleDropdownToggle}>
-          Select Theme <KeyboardArrowDownIcon /> 
+        <div className="dropbtn" onClick={handleDropdownToggle}>
+          Select Theme <KeyboardArrowDownIcon />
         </div>
         {isDropdownOpen && (
           <div className="dropdown-content pcolr">
@@ -89,7 +94,6 @@ const MainComponent = () => {
                 style={{
                   backgroundColor: theme.backgroundColor,
                   color: theme.textColor,
-
                 }}
               >
                 {/* {theme.name} */}
@@ -98,7 +102,6 @@ const MainComponent = () => {
           </div>
         )}
       </div>
-
       <div
         className="main-container"
         style={{
@@ -113,8 +116,8 @@ const MainComponent = () => {
               textColor={themes[currentThemeIndex].textColor}
             />
           </div>
-          <div  style={{ width: calculatePhotoWidth() }}>
-            <Photo/>
+          <div style={{ width: calculatePhotoWidth() }}>  {/* Add the Components inside the div only for display responsive Components  */}
+            <OverviewFlow/>
           </div>
           <div className={` ${isComponetToolOpen ? "open" : ""}`}>
             <ComponetTool

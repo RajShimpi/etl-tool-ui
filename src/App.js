@@ -7,35 +7,6 @@ import ProtectedRoute from './modules/user/protected-route';
 import './App.css';
 
 const App = () => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [currentThemeIndex, setCurrentThemeIndex] = useState(0);
-  const themes = [
-    {
-      name: 'light',
-      backgroundColor: '#ffffff',
-      textColor: '#000000',
-    },
-    {
-      name: 'dark',
-      backgroundColor: '#1f1f1f',
-      textColor: '#ffffff',
-    },
-    {
-      name: 'yellow',
-      backgroundColor: '#fcf803',
-      textColor: '#000000',
-    },
-    {
-      name: 'red',
-      backgroundColor: '#ff0000',
-      textColor: '#ffffff',
-    },
-    {
-      name: 'green',
-      backgroundColor: '#34f205',
-      textColor: '#000000',
-    },
-  ];
 
  
   // const handleThemeChange = (index) => {
@@ -43,7 +14,7 @@ const App = () => {
   //   // setIsDropdownOpen(false); // Close the dropdown after selecting a theme
   // };
 
-  const selectedTheme = themes[currentThemeIndex];
+  // const selectedTheme = themes[currentThemeIndex]; 
 
   return (
     <>
@@ -51,7 +22,7 @@ const App = () => {
         className="dropdown mt-200"
         style={{
           backgroundColor: selectedTheme.backgroundColor,
-          color: selectedTheme.textColor,
+          color: selectedTheme.textColor,    
         }}
       >
         <button className="dropbtn" onClick={handleDropdownToggle}>
@@ -84,12 +55,11 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <Dashboard />
-              </ProtectedRoute>
+              </ProtectedRoute>        
             }
-          />
+          />    
         </Routes>
       </BrowserRouter>
-      
     </>
   );
 };

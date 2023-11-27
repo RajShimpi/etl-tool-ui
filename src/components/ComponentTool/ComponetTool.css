@@ -2,10 +2,10 @@
   /* overflow-y: scroll; 
   -ms-overflow-style: none;
   scrollbar-width: none;  */
-  height: 650px;
+  height: 600px;
   width: 78px;
   padding: 6px 14px;
-  background-color: rgba(116, 113, 113, 0.329);
+  background-color: rgba(116, 113, 113, 0.123);
   transition: all 0.5s ease;
   top: 0;
   right: 0;
@@ -15,6 +15,10 @@
   width: 220px;
 }
 
+.component {
+  padding: 1px;
+  margin: 2px;
+}
 .right-sidebar .logo_details {
   height: 60px;
   display: flex;
@@ -96,6 +100,7 @@
 /* .right-sidebar input::placeholder {
   color: rgb(0, 0, 0);
 } */
+
 .right-sidebar .comp {
   display: none;
 }
@@ -107,11 +112,12 @@
   padding: 0 20px 0 50px;
 }
 
-.tool {
-  font-size: 15px;
+.tools {
+  /* font-size: 15px;
   /* color: rgb(0, 0, 0); */
-  justify-content: center;
-  display: flex;
+  /* justify-content: center; */
+  /* display: flex; */ 
+  text-align: center;
 }
 
 .right-sidebar li .comIcon {
@@ -124,6 +130,7 @@
   position: relative;
   transition: all 0.5s ease;
   z-index: 12;
+  border: none;
   /* color: rgb(255, 255, 255); */
 }
 
@@ -144,12 +151,13 @@
   transform: scaleX(1);
   /* color: rgb(0, 0, 0); */
 }
+
 /* .icon {
   color:rgb(0, 0, 0);
 } */
 
 .right-sidebar li .comIcon.link_name {
-  color: rgba(116, 113, 113, 0.329);
+  color: rgba(116, 113, 113, 0.123);
   font-size: 15px;
   font-weight: 400;
   white-space: nowrap;
@@ -177,10 +185,10 @@
   border-radius: 20pxpx;
 }
 
-.right-sidebar .openf1{
+.right-sidebar .tools {
   display: none;
 }
 
-.right-sidebar.open .openf1{
+.right-sidebar.open .tools {
   display: block;
 }

@@ -2,10 +2,10 @@ import React from "react";
 import EditMessage from "../sidebar/edit-message";
 
 export default ({ isSelected, textRef, nodeName, setNodeName }) => {
-  const onDragStart = (event, nodeType, content, img) => {
+  const onDragStart = (event, nodeType, content,img) => {
     event.dataTransfer.setData("application/reactflow", nodeType);
     event.dataTransfer.setData("content", content);
-    event.dataTransfer.setData("img", img || "https://www.nicepng.com/png/full/139-1394852_download-for-free-at-icons8-view-document-icon.png");
+    event.dataTransfer.setData("img", img);
     event.dataTransfer.effectAllowed = "move";
   };
 
@@ -25,32 +25,22 @@ export default ({ isSelected, textRef, nodeName, setNodeName }) => {
             className="dndnode input"
             onDragStart={(event) => onDragStart(event, "node", "Click to Edit message")}
             draggable
-          >
-        <img
-              src="https://www.nicepng.com/png/full/139-1394852_download-for-free-at-icons8-view-document-icon.png"
-              alt="Node Image"
-              style={{ width: "30px", height: "30px", marginTop: "16px" }} // Adjust the width and height as needed
-            />
-            {/* Add Node */}
-
+            >
+            Add Node
+            </div>
+            
           </div>
-        </div>
-        <div className="col-md-12">
-          <div
+          <div className="col-md-12">
+            <div
             className="dndnode input"
             onDragStart={(event) => onDragStart(event, "node", "Click to Edit message")}
             draggable
-          >
-             <img
-              src="https://icones.pro/wp-content/uploads/2021/06/icone-fichier-document-rouge.png"
-              alt="Node Image"
-              style={{ width: "30px", height: "30px",marginTop:"16px"  }} // Adjust the width and height as needed
-            />
+            >
+            Add Node
+            </div>
             
-            {/* Add Node */}
           </div>
-        </div>
-      </div>
+          </div>
     </aside>
   );
 };

@@ -14,11 +14,12 @@ import AddMenu from "../user/add-menu";
 import { DashboardBuilder } from "./dashboard-builder";
 import UserMaster from "../masters/user-master";
 import ResetPassword from "../user/reset-password";
-import ProjecFolder from "../../components/ProjectStrucure/ProjectFolder";
 import ProjecStructure from "../../components/ProjectStrucure/ProjectStructure";
 import ComponetTool from "../../components/ComponentTool/ComponetTool";
 import MainComponent from "../../components/MainComponent";
 import Photo from "../../components/Photo";
+import Client from "../masters/client";
+
 
 export const routeConstant = {
   dashboard: "/dashboard",
@@ -36,6 +37,7 @@ export const routeConstant = {
   componettool: "/componettool",
   maincomponent: "/maincomponent",
   photo: "/photo",
+  client:"/client"
 
 };
 export const routeData = (routes) => [
@@ -53,7 +55,7 @@ export const routeData = (routes) => [
     childComp: Roles,
     data: {},
     permissions: true,
-    isUserCanView: routes.includes(routeConstant.roles),
+    isUserCanView: true,
   },
   {
     routeTo: routeConstant.registerUser,
@@ -108,14 +110,6 @@ export const routeData = (routes) => [
     isUserCanView: routes.includes(routeConstant.resetPassword),
   },
   {
-    routeTo: routeConstant.projecfolder, // ProjecFolder route
-    header: "",
-    childComp: ProjecFolder,
-    data: {},
-    permissions: true,
-    isUserCanView: true,
-  },
-  {
     routeTo: routeConstant.projectstructure, // ProjecStructure route
     header: "",
     childComp: ProjecStructure,
@@ -132,7 +126,7 @@ export const routeData = (routes) => [
     isUserCanView: true,
   },
   {
-    routeTo: routeConstant.maincomponent, // ComponetTool route
+    routeTo: routeConstant.maincomponent, // Main Component route
     header: "",
     childComp: MainComponent,
     data: {},
@@ -140,9 +134,17 @@ export const routeData = (routes) => [
     isUserCanView: true,
   },
   {
-    routeTo: routeConstant.photo, // ComponetTool route
+    routeTo: routeConstant.photo, // photo route
     header: "",
     childComp: Photo,
+    data: {},
+    permissions: true,
+    isUserCanView: true,
+  },
+  {
+    routeTo: routeConstant.client, // photo route
+    header: "",
+    childComp: Client,
     data: {},
     permissions: true,
     isUserCanView: true,

@@ -1,5 +1,5 @@
 .sidebar {
-  height: 650px;
+  height: 600px;
   /* overflow-y: scroll; */
   /* overflow-y: scroll; 
   -ms-overflow-style: none;
@@ -7,7 +7,7 @@
   /* min-height: 100vh; */
   width: 78px;
   padding: 6px 14px;
-  background-color: rgba(116, 113, 113, 0.329);
+  background-color: rgba(116, 113, 113, 0.123);
   transition: all 0.5s ease;
   border-radius: revert;
   top: 0;
@@ -51,16 +51,38 @@
 .sidebar .link_name {
   display: none;
 }
+
 .sidebar.open .link_name {
   display: block;
+  margin-left: 15px;
 }
-
 
 .sidebar.open .logo_details .icon,
 .sidebar.open .logo_details .logo_name {
   opacity: 1;
 }
 
+.insideItemStyle {
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+.folderStyle{
+  list-style: none;
+  /* margin-left:20px; */
+  cursor: pointer;
+}
+
+.folderstyle{
+  list-style: none;
+  margin-left:20px;
+  cursor: pointer;
+}
+
+.insidefileStyle{
+margin-left: 20px;
+cursor: pointer;
+}
 
 .sidebar .logo_details #btn {
   position: absolute;
@@ -86,7 +108,6 @@
   text-align: center;
 }
 
-
 .sidebar .nav-list {
   margin-top: 10px;
   height: 100%;
@@ -98,6 +119,7 @@
   margin: 8px 0;
   list-style: none;
 }
+
 .sidebar input {
   font-size: 15px;
   /* color: rgb(0, 0, 0); */
@@ -148,7 +170,7 @@
 
 .sidebar li .proicon:hover::after {
   transform: scaleX(1);
-   /* color: rgb(0, 0, 0);  */
+  /* color: rgb(0, 0, 0);  */
 }
 
 .sidebar li .proicon.link_name {
@@ -184,9 +206,10 @@
   margin-top: 20px;
 }
 
-.sidebar .openf1{
+.sidebar .openf1 {
   display: none;
 }
-.sidebar.open .openf1{
+
+.sidebar.open .openf1 {
   display: block;
 }
