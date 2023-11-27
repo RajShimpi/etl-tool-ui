@@ -17,7 +17,7 @@ const FormCommon = ({props}) => {
         (//<div key={'form-group' + pindex} className="form-group">
             <div key={'form-row' + pindex} className="row">
                 {
-                    pitem.groups.map(
+                    pitem.groups.map(          
                         (item, index) => (
                         item.id !== 'none' &&  <div key={item.id} className={"col-md-" + pitem.col + " mb-2 mt-2" }>
                             {/* <span key={"float-span" + item.id} className="has-float-label"> */}
