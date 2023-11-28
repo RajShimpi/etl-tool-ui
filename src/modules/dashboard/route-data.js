@@ -17,9 +17,9 @@ import ResetPassword from "../user/reset-password";
 import ProjecStructure from "../../components/ProjectStrucure/ProjectStructure";
 import ComponetTool from "../../components/ComponentTool/ComponetTool";
 import MainComponent from "../../components/MainComponent";
-import Photo from "../../components/Photo";
 import Client from "../masters/client";
 import Project from "../masters/project";
+import ProjectFile from "../masters/project-file";
 
 
 export const routeConstant = {
@@ -37,9 +37,9 @@ export const routeConstant = {
   projectstructure: "/projectstructure",
   componettool: "/componettool",
   maincomponent: "/maincomponent",
-  photo: "/photo",
   client:"/client",
-  project:"/project"
+  project:"/project",
+  projectfile:"/projectfile",
 
 };
 export const routeData = (routes) => [
@@ -136,15 +136,7 @@ export const routeData = (routes) => [
     isUserCanView: true,
   },
   {
-    routeTo: routeConstant.photo, // photo route
-    header: "",
-    childComp: Photo,
-    data: {},
-    permissions: true,
-    isUserCanView: true,
-  },
-  {
-    routeTo: routeConstant.client, // photo route
+    routeTo: routeConstant.client, // Client Form route
     header: "",
     childComp: Client,
     data: {},
@@ -152,9 +144,17 @@ export const routeData = (routes) => [
     isUserCanView: true,
   },
   {
-    routeTo: routeConstant.project, // photo route
+    routeTo: routeConstant.project, // Project Form route
     header: "",
     childComp: Project,
+    data: {},
+    permissions: true,
+    isUserCanView: true,
+  },
+  {
+    routeTo: routeConstant.projectfile, // Project Form route
+    header: "",
+    childComp: ProjectFile,
     data: {},
     permissions: true,
     isUserCanView: true,

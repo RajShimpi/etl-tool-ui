@@ -5,15 +5,6 @@ import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import './project.css';
 
 function FolderDropdown({ folder, onToggleFolder, onToggleFile, textColor }) {
-    // const folderStyle = {
-    //     listStyleType: 'none',
-    //     cursor: 'pointer'
-    // };
-
-    // const insidefileStyle = {
-    //     marginLeft: '20px',
-    //     cursor: 'pointer'
-    // };
 
     const handleFileToggle = (file) => {
         onToggleFile(file);
@@ -69,10 +60,7 @@ function Folders() {
         });
         setFolders(updatedFolders);
     };
-
-    // const style = {
-    //     overflow: "hidden"
-    // };
+;
 
     return (
         <div>

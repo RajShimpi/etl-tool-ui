@@ -21,10 +21,6 @@ function ComponetTool({ textColor }) {
         { name: "Component 5", isCollapseOpen: false },    // Add more components
     ]);
 
-    // const handleDragStart = (event, item) => {
-    //     event.dataTransfer.setData('text/plain', item);
-    // };
-
     const handleCollapseToggle = (index) => {
         const updatedComponents = [...components];
         updatedComponents[index].isCollapseOpen = !updatedComponents[index].isCollapseOpen;
@@ -47,7 +43,6 @@ function ComponetTool({ textColor }) {
                         key={index}
                         className='component'
                         draggable
-                    // onDragStart={(e) => handleDragStart(e, component.name)}
                     >
                         <li>
                             <div  >
@@ -60,12 +55,7 @@ function ComponetTool({ textColor }) {
                             </div>
                             <Collapse in={component.isCollapseOpen}>
                                 <div className='tools' >
-                                    <Sidebar
-                                    // isSelected={isSelected}
-                                    // textRef={textRef}
-                                    // nodeName={nodeName}
-                                    // setNodeName={setNodeName}
-                                    />
+                                    <Sidebar/>
                                 </div>
                             </Collapse>
                         </li>

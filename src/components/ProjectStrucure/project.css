@@ -24,7 +24,6 @@
   align-items: center;
   position: relative;
   cursor: pointer;
-  /* color: white; */
 }
 
 .sidebar .logo_details .icon {
@@ -183,12 +182,6 @@
   pointer-events: none;
   opacity: 0;
 }
-
-/* .sidebar li .proicon:hover .link_name,
-.sidebar li .proicon:hover i {
-  transition: all 0.5s ease;
-  /* color: rgb(0, 0, 0); 
-} */
 
 .sidebar.open li .proicon .link_name {
   opacity: 1;
