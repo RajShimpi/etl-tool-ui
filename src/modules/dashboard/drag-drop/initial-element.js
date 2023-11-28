@@ -55,5 +55,7 @@ export const edges = [
     },
     style: { stroke: getlabelColor("ok") }
   }
-
 ];
+function getlabelColor(label) {
+  return label === "ok" ? "green" : label === "error" ?"red" : "black";
+}
