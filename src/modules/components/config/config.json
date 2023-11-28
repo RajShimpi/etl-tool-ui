@@ -86,5 +86,14 @@
         "warehouse",
         "binLocation",
         "role"
+    ],
+    "CLIENT":[
+        "name",
+        "abbreviation"
+    ],
+    "PROJECT":[
+        "project_name",
+        "client_id",
+        "base_location"
     ]
 }
