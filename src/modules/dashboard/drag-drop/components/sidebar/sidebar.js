@@ -28,7 +28,7 @@ export default ({ isSelected, textRef, nodeName, setNodeName }) => {
             }
             draggable
           >
-            <NoteAddIcon />
+           <img src={require('../../../../../assets/Images/Files.png')} style={{height:"20px"}} alt="File Icon" />
           </div>
         </div>
       </div>

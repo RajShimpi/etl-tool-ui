@@ -3,13 +3,12 @@ import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import FolderIcon from '@mui/icons-material/Folder';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import './project.css';
-import Folders from './Folder.js'
+import Folders from './Folder.js';
 
 function FolderDropdown({ folder, onToggleFolder, onToggleFile, textColor }) {
-    
     const handleItemToggle = (item) => {
         if (item.type === 'file') {
-            onToggleFile(item);
+            onToggleFile(item.fileName);
         } else {
             onToggleFolder(item);
         }
@@ -21,25 +20,25 @@ function FolderDropdown({ folder, onToggleFolder, onToggleFile, textColor }) {
                 {folder.isOpen ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='small' />} {folder.folderName}
             </div>
             {folder.isOpen && (
-                <div className="insideItemStyle" >
+                <div className="insideItemStyle">
                     {folder.items.map((item, index) => (
                         <div key={index} className={`folder ${item.isOpen ? 'open' : ''}`} style={{ textColor }} onClick={() => handleItemToggle(item)}>
                             {item.type === 'file' ? (
                                 <>
-                                    <InsertDriveFileIcon style={{ fontSize: '20px' }} /> {item.fileName}
+                                    <div className={`Folder ${item.isOpen ? '' : ''}`}><InsertDriveFileIcon style={{ fontSize: '20px' }} />{item.fileName}</div>
                                 </>
                             ) : (
                                 <FolderDropdown
                                     folder={item}
                                     onToggleFolder={() => handleItemToggle(item)}
-                                    onToggleFile={(file) => onToggleFile(file)}
+                                    onToggleFile={() => onToggleFile(item.fileName)}
+                                    textColor={textColor}
                                 />
                             )}
                         </div>
                     ))}
-                    <Folders />   
+                    <Folders />
                 </div>
-
             )}
         </div>
     );
@@ -51,27 +50,37 @@ function FolderContainer() {
         createFolder('Folder 2', ['File 4', 'File 5']),
     ]);
 
-    const toggleFolder = (index) => {
+    const toggleFolder = (folder) => {
         const updatedFolders = [...folders];
-        updatedFolders[index].isOpen = !updatedFolders[index].isOpen;
+        const targetFolder = updatedFolders.find(f => f.folderName === folder.folderName);
+        targetFolder.isOpen = !targetFolder.isOpen;
         setFolders(updatedFolders);
     };
 
-    const toggleFile = (folderIndex, file) => {
-        const updatedFolders = [...folders];
-        updatedFolders[folderIndex].openFiles[file] = !updatedFolders[folderIndex].openFiles[file];
-        setFolders(updatedFolders);
+    const toggleFile = (file) => {
+        setFolders(prevFolders => {
+            const updatedFolders = [...prevFolders];
+            updatedFolders.forEach(folder => {
+                folder.items.forEach(item => {
+                    if (item.fileName === file) {
+                        item.isOpen = !item.isOpen;
+                    }
+                });
+            });
+            return updatedFolders;
+        });
     };
 
     return (
         <div>
-            <div >
+            <div>
                 {folders.map((folder, index) => (
                     <FolderDropdown
                         key={index}
                         folder={folder}
-                        onToggleFolder={() => toggleFolder(index)}
-                        onToggleFile={(file) => toggleFile(index, file)}
+                        onToggleFolder={() => toggleFolder(folder)}
+                        onToggleFile={() => toggleFile(folder)}
+                        textColor="black"
                     />
                 ))}
             </div>
