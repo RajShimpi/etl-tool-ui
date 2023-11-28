@@ -20,6 +20,12 @@ const MainComponent = () => {
 
     },
     {
+      // name: "dark",
+      backgroundColor: "#000000",
+      textColor: "#ffffff",
+
+    },
+    {
       // name: "blue",
       backgroundColor: "#4842f5",
       textColor: "#ffffff",
@@ -29,7 +35,12 @@ const MainComponent = () => {
       backgroundColor: "#ffffff",
       textColor: "#000000",
     },
-  
+    {
+      // name: "dark",
+      backgroundColor: "#000000",
+      textColor: "#ffffff",
+
+    },
     {
       // name: "yellow",
       backgroundColor: "#fcf803",

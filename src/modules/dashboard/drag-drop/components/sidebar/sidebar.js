@@ -12,6 +12,7 @@ export default ({ isSelected, textRef, nodeName, setNodeName }) => {
       <div className="row">
         <div className="col-md-12">
           {/* {isSelected &&
+          {/* {isSelected &&
             <EditMessage
               textRef={textRef}
               nodeName={nodeName}
@@ -27,7 +28,7 @@ export default ({ isSelected, textRef, nodeName, setNodeName }) => {
             }
             draggable
           >
-            <img src={require('../../../../../assets/Images/Files.png')} style={{height:"20px"}} alt="File Icon" />
+            <NoteAddIcon />
           </div>
         </div>
       </div>
