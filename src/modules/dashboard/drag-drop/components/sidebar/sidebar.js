@@ -5,11 +5,11 @@ import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 import EditIcon from '@mui/icons-material/Edit';
 import AddToDriveIcon from '@mui/icons-material/AddToDrive';
-export default  ({ isSelected, textRef, nodeName, setNodeName }) => {
-  const onDragStart = (event, nodeType, content,img) => {
+export default ({ isSelected, textRef, nodeName, setNodeName }) => {
+  const onDragStart = (event, nodeType, content, img) => {
     event.dataTransfer.setData("application/reactflow", nodeType);
     event.dataTransfer.setData("content", content);
-    event.dataTransfer.setData("img",img || "https://www.nicepng.com/png/full/139-1394852_download-for-free-at-icons8-view-document-icon.png" );
+    event.dataTransfer.setData("img", img || require('../../../../../assets/file1.png'));
     event.dataTransfer.effectAllowed = "move";
   };
 
@@ -17,7 +17,7 @@ export default  ({ isSelected, textRef, nodeName, setNodeName }) => {
     <aside>
       <div className="row">
         <div className="col-md-12">
-          {/* {isSelected && 
+          {/* {isSelected &&
             <EditMessage
               textRef={textRef}
               nodeName={nodeName}
@@ -29,53 +29,48 @@ export default  ({ isSelected, textRef, nodeName, setNodeName }) => {
             className="dndnode input"
             onDragStart={(event) => onDragStart(event, "node", "Click to Edit message")}
             draggable
-            >
-            <NoteAddIcon/>
-            </div>
-            
+          >
+           {/* <img  src="../../../../../assets/file1.png"/> */}
+            <NoteAddIcon />
           </div>
         </div>
-        <div className="col-md-12">
-          <div
-            className="dndnode input"
-            onDragStart={(event) => onDragStart(event, "node", "Click to Edit message")}
-            draggable
-            >
-            <TextSnippetIcon/>
-            </div>
-            
-          </div>
-          <div className="col-md-12">
-            <div
-            className="dndnode input"
-            onDragStart={(event,img) => onDragStart(event, "node", "Click to Edit message",img)}
-            draggable
-            >
-            <ContentPasteIcon/>
-            </div>
-            
-          </div>
-          <div className="col-md-12">
-            <div
-            className="dndnode input"
-            onDragStart={(event,img) => onDragStart(event, "node", "Click to Edit message",img)}
-            draggable
-            >
-            <EditIcon/>
-            </div>
-            
-          </div>
-          <div className="col-md-12">
-            <div
-            className="dndnode input"
-            onDragStart={(event,img) => onDragStart(event, "node", "Click to Edit message",img)}
-            draggable
-            >
-            <AddToDriveIcon/>
-            </div>
-            
-            {/* Add Node */}
-          </div>
+      </div>
+      <div className="col-md-12">
+        <div
+          className="dndnode input"
+          onDragStart={(event) => onDragStart(event, "node", "Click to Edit message")}
+          draggable
+        >
+          <TextSnippetIcon />
+        </div>
+      </div>
+      <div className="col-md-12">
+        <div
+          className="dndnode input"
+          onDragStart={(event, img) => onDragStart(event, "node", "Click to Edit message", img)}
+          draggable
+        >
+          <ContentPasteIcon />
+        </div>
+      </div>
+      <div className="col-md-12">
+        <div
+          className="dndnode input"
+          onDragStart={(event, img) => onDragStart(event, "node", "Click to Edit message", img)}
+          draggable
+        >
+          <EditIcon />
+        </div>
+      </div>
+      <div className="col-md-12">
+        <div
+          className="dndnode input"
+          onDragStart={(event, img) => onDragStart(event, "node", "Click to Edit message", img)}
+          draggable
+        >
+          <AddToDriveIcon />
+        </div>
+      </div>
     </aside>
   );
 };

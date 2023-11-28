@@ -5,18 +5,18 @@ import ReactFlow, {
   useNodesState,
   useEdgesState,
   ReactFlowProvider,
-  updateEdge
+  updateEdge,
 } from "reactflow";
 
 // Components
-import Sidebar from './sidebar/sidebar';
+import Sidebar from "./sidebar/sidebar";
 import Node from "./custom-node/message-node";
 
 // Utils
 import { isAllNodeisConnected } from "../utils";
 import {
   nodes as initialNodes,
-  edges as initialEdges
+  edges as initialEdges,
 } from "../initial-element";
 
 // Styles
@@ -30,7 +30,6 @@ const getId = () => `dndnode_${id++}`;
 const nodeTypes = { node: Node };
 
 const OverviewFlow = () => {
-
   const reactFlowWrapper = useRef(null);
   const edgeUpdateSuccessful = useRef(true);
   const textRef = useRef(null);
@@ -57,13 +56,13 @@ const OverviewFlow = () => {
     console.log(reactFlowInstance, "reactIns");
     const position = reactFlowInstance.project({
       x: event.clientX - reactFlowBounds.left,
-      y: event.clientY - reactFlowBounds.top
+      y: event.clientY - reactFlowBounds.top,
     });
     const newNode = {
       id: getId(),
       type,
       position,
-      data: { heading: "Send Message", content: label ,img :img}
+      data: { heading: "Send Message", content: label, img: img },
     };
     setNodes((es) => es.concat(newNode));
     setSelectedNode(newNode.id);
@@ -75,7 +74,7 @@ const OverviewFlow = () => {
         type: params.type || "step", // Set the default type to "step"
         markerEnd: {
           // type: MarkerType.ArrowClosed
-        }
+        },
       };
       setEdges((eds) => addEdge(newEdge, eds));
     },
@@ -109,7 +108,7 @@ const OverviewFlow = () => {
         if (node.id === selectedNode?.id) {
           node.data = {
             ...node.data,
-            content: nodeName || " "
+            content: nodeName || " ",
           };
         }
         return node;
@@ -145,7 +144,7 @@ const OverviewFlow = () => {
       <div className="dndflow">
         <ReactFlowProvider>
           <div className="reactflow-wrapper" ref={reactFlowWrapper}>
-            <ReactFlow 
+            <ReactFlow
               nodes={nodes}
               edges={edges}
               nodeTypes={nodeTypes}
@@ -163,7 +162,7 @@ const OverviewFlow = () => {
               <Background color="#aaa" gap={16} />
             </ReactFlow>
           </div>
-{/* 
+          {/* 
           <Sidebar
             isSelected={isSelected}
             textRef={textRef}

@@ -49,7 +49,7 @@ function FolderDropdown({ folder, onToggleFolder, onToggleFile, textColor }) {
                             )}
                         </div>
                     ))}
-                    <Folders />
+                    <Folders />   
                 </div>
 
             )}

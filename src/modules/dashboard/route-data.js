@@ -19,6 +19,7 @@ import ComponetTool from "../../components/ComponentTool/ComponetTool";
 import MainComponent from "../../components/MainComponent";
 import Photo from "../../components/Photo";
 import Client from "../masters/client";
+import Project from "../masters/project";
 
 
 export const routeConstant = {
@@ -37,7 +38,8 @@ export const routeConstant = {
   componettool: "/componettool",
   maincomponent: "/maincomponent",
   photo: "/photo",
-  client:"/client"
+  client:"/client",
+  project:"/project"
 
 };
 export const routeData = (routes) => [
@@ -145,6 +147,14 @@ export const routeData = (routes) => [
     routeTo: routeConstant.client, // photo route
     header: "",
     childComp: Client,
+    data: {},
+    permissions: true,
+    isUserCanView: true,
+  },
+  {
+    routeTo: routeConstant.project, // photo route
+    header: "",
+    childComp: Project,
     data: {},
     permissions: true,
     isUserCanView: true,
