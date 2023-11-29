@@ -51,7 +51,7 @@
   z-index: 1000;
   left: 84px;
   top: 0px;
-  width: 700px;
+  /* width: 700px; */
 }
 
 .contextMenu.right .menu-item {
