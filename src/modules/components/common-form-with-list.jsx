@@ -52,7 +52,7 @@ const CommonFormWithList = (props) => {
       case "addLink":
       case "updateLink":
       case "listLink":
-        case "widgetType" :
+      case "widgetType":
         setData((prevState) => ({ ...prevState, [name]: e.value }));
         break;
       case "manager":
@@ -67,9 +67,16 @@ const CommonFormWithList = (props) => {
         setData((prevState) => ({ ...prevState, [name]: parseInt(e.value) }));
         break;
       case "role":
-        setData((prevState) => ({...prevState,[name]: e.label,[`${name}Id`]: e.value}));
-      break;
+        setData((prevState) => ({
+          ...prevState,
+          [name]: e.label,
+          [`${name}Id`]: e.value,
+        }));
+        break;
       case "whsId":
+        setData((prevState) => ({ ...prevState, [name]: parseInt(e.value) }));
+        break;
+      case "client_id":
         setData((prevState) => ({ ...prevState, [name]: parseInt(e.value) }));
         break;
       case "TemplateItemId":

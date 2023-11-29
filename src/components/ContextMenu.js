@@ -1,36 +1,67 @@
-import React from 'react';
-import './MainComponete.css';
+import React, { useState } from 'react';
+import './MainComponent.css';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import PopupComponent from './PopupComponent';
 
 const ContextMenu = ({ onToggleFolder, popType }) => {
-    const handleContextMenuClick = (event) => {
-        event.preventDefault();
-    };   
+  const [popupType, setPopupType] = useState(null);
+  const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
 
-    return (
-        <div className={`contextMenu ${popType === 'right' ? 'right' : ''}`} onContextMenu={handleContextMenuClick}>
-            <div className="menu-item" onClick={onToggleFolder}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
-                    <AddIcon style={{ fontSize: 'medium', marginRight: '5px', marginTop: '3px' }} />
-                    Add
-                </div>
-            </div>
-            <div className="menu-item" onClick={onToggleFolder}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
-                    <EditIcon style={{ fontSize: 'medium', marginRight: '5px', marginTop: '3px' }} />
-                    Edit
-                </div>
-            </div>
-            <div className="menu-item" onClick={onToggleFolder}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
-                    <DeleteIcon style={{ fontSize: 'medium', marginRight: '5px', marginTop: '3px' }} />
-                    Delete
-                </div>
-            </div>
+  const handleContextMenuClick = (event) => {
+    event.preventDefault();
+  };
+
+  const openPopup = (type, position) => {
+    setPopupType(type);
+    setPopupPosition(position);
+  };
+
+  const closePopup = () => {
+    setPopupType(null);
+  };
+
+  return (
+    <div className={`contextMenu ${popType === 'right' ? 'right' : ''}`} onContextMenu={handleContextMenuClick}>
+      <div
+        className="menu-item"
+        onClick={(e) => openPopup('Add', { top: e.clientY, left: e.clientX + 10 })}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
+          <AddIcon style={{ fontSize: 'medium', marginRight: '5px', marginTop: '3px' }} />
+          Add
         </div>
-    );
+      </div>
+      <div
+        className="menu-item"
+        onClick={(e) => openPopup('Edit', { top: e.clientY, left: e.clientX + 10 })}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
+          <EditIcon style={{ fontSize: 'medium', marginRight: '5px', marginTop: '3px' }} />
+          Edit
+        </div>
+      </div>
+      <div
+        className="menu-item"
+        onClick={(e) => openPopup('Delete', { top: e.clientY, left: e.clientX + 10 })}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
+          <DeleteIcon style={{ fontSize: 'medium', marginRight: '5px', marginTop: '3px' }} />
+          Delete
+        </div>
+      </div>
+
+      {/* Render the PopupComponent based on the popupType and position state */}
+      {popupType && (
+        <PopupComponent
+          onClose={closePopup}
+          actionType={popupType}
+          style={{ top: popupPosition.top, left: popupPosition.left, marginLeft: '10px' }}
+        />
+      )}
+    </div>
+  );
 };
 
 export default ContextMenu;

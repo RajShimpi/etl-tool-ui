@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import ComponetTool from "./ComponentTool/ComponetTool";
 import ProjectStructure from "./ProjectStrucure/ProjectStructure";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowUp';
-
-import "./MainComponete.css";
+import "./MainComponent.css";
 import OverviewFlow from "../modules/dashboard/drag-drop/components/flow";
 
 const MainComponent = () => {

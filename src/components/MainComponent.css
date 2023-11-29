@@ -42,3 +42,22 @@
     color: black;
   }
 } 
+
+.popup {
+  position: absolute;
+  background-color: white;
+  padding:5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  left: 84px;
+  top: 0px;
+  width: 700px;
+}
+
+.contextMenu.right .menu-item {
+  cursor: pointer;
+}
+
+.menu-item:hover {
+  background-color: #f0f0f0;
+}
