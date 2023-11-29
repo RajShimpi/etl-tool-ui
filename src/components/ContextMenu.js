@@ -69,8 +69,6 @@ const ContextMenu = ({ onToggleFolder, popType }) => {
           Delete
         </div>
       </div>
-
-      {/* Render the PopupComponent based on the popupType and position state */}
       {popupType && (
         <PopupComponent
           onClose={closePopup}

@@ -6,11 +6,8 @@ const PopupComponent = ({ onClose, actionType }) => {
   return (
     <div className="popup">
       <div className="popup-content">
-        {/* <button onClick={onClose}>Close</button> */}
-        <div style={{ display: 'flex' }}>
           <div style={{ flex: 1 }}>
             <Project />
-          </div>
         </div>
       </div>
     </div>
