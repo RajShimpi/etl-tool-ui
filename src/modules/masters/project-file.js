@@ -24,7 +24,7 @@ const ProjectFile = () => {
                 getApi="project-files"
                 title="Project-File"
                 defaultObj={defaultObj}
-                tableTitle='project-files'
+                tableTitle='Project-File'
             />
         </>
     );

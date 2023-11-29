@@ -1,10 +1,10 @@
 .sidebar {
   height: 600px;
-  /* overflow-y: scroll; */
   /* overflow-y: scroll; 
+  overflow-y: scroll; 
   -ms-overflow-style: none;
   scrollbar-width: none;  */
-  /* min-height: 100vh; */
+   min-height: 100vh;
   width: 78px;
   padding: 6px 14px;
   background-color: rgba(116, 113, 113, 0.123);

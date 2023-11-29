@@ -22,7 +22,7 @@ const Client = () => {
                 getApi="clients"
                 title="Client"
                 defaultObj={defaultObj}
-                tableTitle='client'
+                tableTitle='Client'
             />
         </>
     );
