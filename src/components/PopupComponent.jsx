@@ -9,9 +9,6 @@ const PopupComponent = ({ onClose, actionType }) => {
         {/* <button onClick={onClose}>Close</button> */}
         <div style={{ display: 'flex' }}>
           <div style={{ flex: 1 }}>
-            {/* <p>{`This is your ${actionType} popup content.`}</p> */}
-          </div>
-          <div style={{ flex: 1 }}>
             <Project />
           </div>
         </div>

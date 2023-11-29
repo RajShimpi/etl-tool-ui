@@ -43,6 +43,7 @@
   }
 } 
 
+
 .popup {
   position: absolute;
   background-color: white;
@@ -51,7 +52,8 @@
   z-index: 1000;
   left: 84px;
   top: 0px;
-  /* width: 700px; */
+  width: 850px;
+  /* width: 100%; */
 }
 
 .contextMenu.right .menu-item {
