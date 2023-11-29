@@ -4,19 +4,19 @@ export const nodes = [
   {
     id: "1",
     type: "node",
-    data: { heading: "Database Entity", content: "Click to edit text", img: require("../../../assets/file1.png") },
+    data: { heading: "Database Entity", content: "Click to edit text", img: require("../../../assets/Images/file1.png") },
     position: { x: 50, y: 200 },
   },
   {
     id: "2",
     type: "node",
-    data: { heading: "Send Message", content: "click to edit text", img: require("../../../assets/fileR.png") },
+    data: { heading: "Send Message", content: "click to edit text", img: require("../../../assets/Images/Files-PNG-Clipart.png") },
     position: { x: 300, y: 100 }
   },
   {
     id: "3",
     type: "node",
-    data: { heading: "Send Message", content: "click to edit text", img: require("../../../assets/file3.png") },
+    data: { heading: "Send Message", content: "click to edit text", img: require("../../../assets/Images/file3.png") },
     position: { x: 500, y: 100 },
   },
 ];

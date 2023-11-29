@@ -6,19 +6,7 @@ import './project.css';
 import Folders from './Folder.js'
 
 function FolderDropdown({ folder, onToggleFolder, onToggleFile, textColor }) {
-    // const folderStyle = {
-    //     // listStyleType: 'none',
-    //     // marginLeft: '20px',
-    //     // cursor: 'pointer',
-    //     // color: 'white'
-    // };
-
-    // const insideItemStyle = {
-    //     marginLeft: '20px',
-    //     cursor: 'pointer',
-    //     // color: 'white'
-    // };
-
+    
     const handleItemToggle = (item) => {
         if (item.type === 'file') {
             onToggleFile(item);

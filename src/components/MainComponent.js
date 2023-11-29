@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import ComponetTool from "./ComponentTool/ComponetTool";
 import ProjectStructure from "./ProjectStrucure/ProjectStructure";
-import Photo from "./Photo";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowUp';
 
 import "./MainComponete.css";
@@ -107,9 +106,7 @@ const MainComponent = () => {
                   backgroundColor: theme.backgroundColor,
                   color: theme.textColor,
                 }}
-              >
-                {/* {theme.name} */}
-              </button>
+              />
             ))}
           </div>
         )}
@@ -128,7 +125,7 @@ const MainComponent = () => {
               textColor={themes[currentThemeIndex].textColor}
             />
           </div>
-          <div style={{ width: calculatePhotoWidth() }}>  {/* Add the Components inside the div only for display responsive Components  */}
+          <div style={{ width: calculatePhotoWidth() }}>
             <OverviewFlow/>
           </div>
           <div className={` ${isComponetToolOpen ? "open" : ""}`}>

@@ -7,7 +7,7 @@ export const getProjectFields = (itemData) => {
         groups: [{
             type: "text",
             id: "inputprojectName",
-            label: "project_name",
+            label: "Project_Name",
             name:"project_name",
             control: "input",
             isRequired: true,             

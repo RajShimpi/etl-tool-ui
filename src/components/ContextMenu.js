@@ -7,7 +7,7 @@ import EditIcon from '@mui/icons-material/Edit';
 const ContextMenu = ({ onToggleFolder, popType }) => {
     const handleContextMenuClick = (event) => {
         event.preventDefault();
-    };
+    };   
 
     return (
         <div className={`contextMenu ${popType === 'right' ? 'right' : ''}`} onContextMenu={handleContextMenuClick}>

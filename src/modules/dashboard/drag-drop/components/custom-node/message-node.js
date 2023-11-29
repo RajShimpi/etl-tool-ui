@@ -6,7 +6,9 @@ import FormCommon from "../../../../components/form-common";
 import { nodes } from "../../initial-element";
 import Modal from "../../../../components/modal-popup";
 import ProjectStructure from "../../../../../components/ProjectStrucure/ProjectStructure";
-import Client from "../../../../masters/client";
+import Read from "../../../../masters/Read";
+// import Client from "../../../../masters/client";
+// import CommonModel from "../../../../components/common-modal";
 
 
 // const GoogleFormPopup = ({ onClose, data }) => (
@@ -48,7 +50,7 @@ const Node = ({ data, isSelected, textRef, nodeName, setNodeName }) => {
       <div style={{ textAlign: "center" }} className="text-updater-node">
       {showNodeMaster && (
         <Modal show={showNodeMaster} modalTitle={"Save/Update Parameter"} handleClose={handleCloseNodeMaster} maxWidth={'100%'}>
-          <Client/>
+          <Read/>
         </Modal>
       )} 
           <div style={{ textAlign: "center" }}>

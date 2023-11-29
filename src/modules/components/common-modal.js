@@ -8,7 +8,7 @@ import axios from "../services/axios";
 import configContext from "../dashboard/config-context";
 import { errorAlert } from "./config/alert";
 import utils from "./utils";
-const CommonFormWithList = (props) => {
+const CommonModel = (props) => {
   const contextData = useContext(configContext);
   const [update, setUpdate] = useState(false);
   const formDataAction = props.formDataAction;
@@ -468,9 +468,9 @@ const CommonFormWithList = (props) => {
         </div>
       </div>
       <div className="col-md-12 ">
-        <DataTable {...dataTableData} />
+        {/* <DataTable {...dataTableData} /> */}
       </div>
     </div>
   );
 };
-export default CommonFormWithList;
+export default CommonModel;

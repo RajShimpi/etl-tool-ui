@@ -118,6 +118,7 @@
   /* justify-content: center; */
   /* display: flex; */
   text-align: center;
+  margin: 10px;
 }
 
 .right-sidebar li .comIcon {

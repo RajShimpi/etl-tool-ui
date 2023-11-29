@@ -95,5 +95,11 @@
         "project_name",
         "client_id",
         "base_location"
+    ],
+    "PROJECT_FILE":[
+        "project_id",
+        "type",
+        "file_name",
+        "parent_id"
     ]
 }
