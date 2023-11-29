@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './project.css';
 import DensityMediumIcon from '@mui/icons-material/DensityMedium';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
@@ -28,10 +28,24 @@ function ProjectStructure({ textColor }) {
     setFolders(updatedFolders);
   };
 
-  const handleContextMenu = (event, index, popType) => {
+  const handleContextMenu = (event, index) => {
     event.preventDefault();
     setContextMenuIndex(index);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (contextMenuIndex !== null && !event.target.closest('.contextMenu')) {
+        setContextMenuIndex(null);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [contextMenuIndex]);
 
   return (
     <div>
@@ -47,7 +61,7 @@ function ProjectStructure({ textColor }) {
         <ul className="nav-list">
           {folders.map((folder, index) => (
             <div key={index} style={{ textColor }}>
-              <li onContextMenu={(event) => handleContextMenu(event, index, 'right')}>
+              <li onContextMenu={(event) => handleContextMenu(event, index)}>
                 <div className='proicon' onClick={() => toggleFolder(index)}>
                   <FolderOpenIcon className="bx bx-grid-alt" />
                   <span className="link_name">
