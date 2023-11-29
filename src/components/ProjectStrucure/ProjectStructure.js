@@ -55,7 +55,7 @@ function ProjectStructure({ textColor }) {
                   </span>
                 </div>
                 {contextMenuIndex === index && (
-                  <ContextMenu className="icon" onToggleFolder={() => toggleFolder(index)} popType="right" />
+                  <ContextMenu onToggleFolder={() => toggleFolder(index)} popType="right" />
                 )}
                 {folder.isOpen && (
                   <div className={`openf1 ${isOpen ? 'open' : ''}`}>

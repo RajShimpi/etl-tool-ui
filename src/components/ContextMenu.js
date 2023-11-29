@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './MainComponent.css';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -21,6 +21,24 @@ const ContextMenu = ({ onToggleFolder, popType }) => {
   const closePopup = () => {
     setPopupType(null);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        popupType &&
+        !event.target.closest('.contextMenu') &&
+        !event.target.closest('.popup')
+      ) {
+        closePopup();
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [popupType]);
 
   return (
     <div className={`contextMenu ${popType === 'right' ? 'right' : ''}`} onContextMenu={handleContextMenuClick}>
