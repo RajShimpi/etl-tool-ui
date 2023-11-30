@@ -1,7 +1,7 @@
 
 import CommonFormWithList from "../components/common-form-with-list";
 import { getDepartmentFields } from "./department-data";
-import config from "../config/config.json"
+import config from "../components/config/config.json"
 
 //import baseApiCaller from "../services/baseApiCaller";
 //import hrmsapis from "../services/hrmsapis";

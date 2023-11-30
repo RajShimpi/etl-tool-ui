@@ -2,6 +2,7 @@
 import { Branch } from "../hrms/branch";
 import ChangePassword from "../user/change-password";
 import DashboardContent from "./dashboard-content";
+// import Dashboard from "./dashboard";
 import { Department } from "../hrms/department";
 import { Employees } from "../hrms/employee";
 
@@ -13,6 +14,13 @@ import AddMenu from "../user/add-menu";
 import { DashboardBuilder } from "./dashboard-builder";
 import UserMaster from "../masters/user-master";
 import ResetPassword from "../user/reset-password";
+import ProjecStructure from "../../components/ProjectStrucure/ProjectStructure";
+import ComponetTool from "../../components/ComponentTool/ComponetTool";
+import MainComponent from "../../components/MainComponent";
+import Client from "../masters/client";
+import Project from "../masters/project";
+import ProjectFile from "../masters/project-file";
+
 
 export const routeConstant = {
   dashboard: "/dashboard",
@@ -25,8 +33,14 @@ export const routeConstant = {
   addMenu: "/add-menu",
   dashboardBuilder: "/dashboard-builder",
   userMaster: "/user-master",
-  resetPassword: "/reset-password"
-  
+  resetPassword: "/reset-password",
+  projectstructure: "/projectstructure",
+  componettool: "/componettool",
+  maincomponent: "/maincomponent",
+  client:"/client",
+  project:"/project",
+  projectfile:"/projectfile",
+
 };
 export const routeData = (routes) => [
   {
@@ -43,7 +57,7 @@ export const routeData = (routes) => [
     childComp: Roles,
     data: {},
     permissions: true,
-    isUserCanView: routes.includes(routeConstant.roles),
+    isUserCanView: true,
   },
   {
     routeTo: routeConstant.registerUser,
@@ -61,7 +75,7 @@ export const routeData = (routes) => [
     permissions: true,
     isUserCanView: true,
   },
-  
+
   {
     routeTo: routeConstant.addMenu,
     header: "Add Menu",
@@ -70,7 +84,7 @@ export const routeData = (routes) => [
     permissions: true,
     isUserCanView: true,
   },
-  
+
   {
     routeTo: routeConstant.dashboardBuilder,
     header: "Dashboard Builder",
@@ -79,7 +93,7 @@ export const routeData = (routes) => [
     permissions: true,
     isUserCanView: routes.includes(routeConstant.dashboardBuilder),
   },
-  
+
   {
     routeTo: routeConstant.userMaster,
     header: "User Master",
@@ -88,7 +102,7 @@ export const routeData = (routes) => [
     permissions: true,
     isUserCanView: routes.includes(routeConstant.userMaster),
   },
- 
+
   {
     routeTo: routeConstant.resetPassword,
     header: "Reset Password",
@@ -96,6 +110,53 @@ export const routeData = (routes) => [
     data: {},
     permissions: true,
     isUserCanView: routes.includes(routeConstant.resetPassword),
+  },
+  {
+    routeTo: routeConstant.projectstructure, // ProjecStructure route
+    header: "",
+    childComp: ProjecStructure,
+    data: {},
+    permissions: true,
+    isUserCanView: true,
+  },
+  {
+    routeTo: routeConstant.componettool, // ComponetTool route
+    header: "",
+    childComp: ComponetTool,
+    data: {},
+    permissions: true,
+    isUserCanView: true,
+  },
+  {
+    routeTo: routeConstant.maincomponent, // Main Component route
+    header: "",
+    childComp: MainComponent,
+    data: {},
+    permissions: true,
+    isUserCanView: true,
+  },
+  {
+    routeTo: routeConstant.client, // Client Form route
+    header: "",
+    childComp: Client,
+    data: {},
+    permissions: true,
+    isUserCanView: true,
+  },
+  {
+    routeTo: routeConstant.project, // Project Form route
+    header: "",
+    childComp: Project,
+    data: {},
+    permissions: true,
+    isUserCanView: true,
+  },
+  {
+    routeTo: routeConstant.projectfile, // Project Form route
+    header: "",
+    childComp: ProjectFile,
+    data: {},
+    permissions: true,
+    isUserCanView: true,
   }
-
 ];

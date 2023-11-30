@@ -1,5 +1,5 @@
 import utils from "../components/utils";
-import { EmailRegEx } from "../config/common-config";
+import { EmailRegEx } from "../components/config/common-config";
 
 export const getEmployeeFields = (itemData) => {
     return [{
