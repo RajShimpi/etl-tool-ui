@@ -19,16 +19,31 @@ const Modal = (props) => {
     const close = () => {
         props.handleClose();
     }
+    const modalContent = {
+        position: 'relative',
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%',
+        // color: 'var(--bs-modal-color)',
+        pointerEvents: 'auto',
+        // backgroundColor: 'var(--bs-modal-bg)',
+        backgroundClip: 'padding-box',
+        // border: 'var(--bs-modal-border-width) solid var(--bs-modal-border-color)',
+        // borderRadius: 'var(--bs-modal-border-radius)',
+        outline: 0,
+      };
+      
+      
     return (
         <div className={props.show ? "modal d-block hide-body-scroll" : "modal d-none"} style={{ overflow: "auto" }} tabIndex="-1" role="dialog">
             <div className={`modal-dialog modal-lg ${props.maxWidth && 'modal-top'} `} style={{ maxWidth: props.maxWidth, }} role="document">
-                <div className="modal-content">
-                    <div className={`${props.maxWidth && 'modal-header-custom-padding'} modal-header`}>
-                        <h5 className="modal-title">{props.modalTitle}</h5>
+                <div className=" w-50" style={modalContent}>
+                    {/* <div className={`${props.maxWidth && 'modal-header-custom-padding'} modal-header`}>
+                        {/* <h5 className="modal-title">{props.modalTitle}</h5>
                         <button type="button" onClick={() => close()} className="btn btn-link close-btn" data-dismiss="modal" aria-label="Close">
                             <i className="fa fa-2x fa-times-circle" aria-hidden="true" size='12'></i>
-                        </button>
-                    </div>
+                        </button> 
+                    </div> */}
                     <div className={`${props.maxWidth && 'modal-body-custom-top-padding'} modal-body`}>
                         <div className={`${!props.maxWidth && 'container-fluid'}`}>
                             <ChildComponent {...childProps} />

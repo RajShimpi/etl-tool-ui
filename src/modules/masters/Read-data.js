@@ -1,7 +1,7 @@
 export const getReadFields = (itemData) => {
     return [{
 
-        col: 4,
+        col: 12,
         callback: itemData.callback,
         disabled: itemData.disabled,
         groups: [{
@@ -13,6 +13,14 @@ export const getReadFields = (itemData) => {
             isRequired: true,             
             itemVal: itemData.values ? itemData.values["type"] : '',
         },
+    ]
+    },
+    {
+
+        col: 12,
+        callback: itemData.callback,
+        disabled: itemData.disabled,
+        groups: [
         {
             type: "text",
             id: "inputDisplayabbreviation",
@@ -21,17 +29,25 @@ export const getReadFields = (itemData) => {
             control: "input",
             isRequired: true,
             itemVal: itemData.values ? itemData.values["location"] : '',
-        },
+        }
+    ]
+    } ,
+    {
+
+        col: 12,
+        callback: itemData.callback,
+        disabled: itemData.disabled,
+        groups: [
         {
             type: "radio",
             id: "inputDisplaybase_location",
             label: "Cache?",
             name:"cache",
-            control: "radio",
+            control: "input",
             isRequired: true,
             itemVal: itemData.values ? itemData.values["base_location"] : '',
-        },
+        }
     ]
-    }   
-    ];
+    }  
+]
 }

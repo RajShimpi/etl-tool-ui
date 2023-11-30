@@ -29,6 +29,7 @@ export default ({ isSelected, textRef, nodeName, setNodeName }) => {
             draggable
           >
            <img src={require('../../../../../assets/Images/Files.png')} style={{height:"20px"}} alt="File Icon" />
+           <div>Data</div>
           </div>
         </div>
       </div>
@@ -42,6 +43,7 @@ export default ({ isSelected, textRef, nodeName, setNodeName }) => {
           draggable
         >
           <img src={require('../../../../../assets/Images/file1.png')} style={{height:"20px"}} alt="File Icon" />
+          <div>Edit</div>
         </div>
       </div>
       <div className="col-md-12">
@@ -54,9 +56,10 @@ export default ({ isSelected, textRef, nodeName, setNodeName }) => {
           draggable
         >
           <img src={require('../../../../../assets/Images/Folders.png')} style={{height:"20px"}} alt="File Icon" />
+          <div>Delete</div>
         </div>
       </div>
-      <div className="col-md-12">
+      {/* <div className="col-md-12">
         <div
           style={{margin:'5px'}}
           className="dndnode input m-10"
@@ -67,7 +70,7 @@ export default ({ isSelected, textRef, nodeName, setNodeName }) => {
         >
           <img src={require('../../../../../assets/Images/Files-PNG-Clipart.png')} style={{height:"20px"}} alt="File Icon" />
         </div>
-      </div>
+      </div> */}
     </aside>
   );
 };

@@ -6,7 +6,7 @@ import FormCommon from "../../../../components/form-common";
 import { nodes } from "../../initial-element";
 import Modal from "../../../../components/modal-popup";
 import ProjectStructure from "../../../../../components/ProjectStrucure/ProjectStructure";
-import Read from "../../../../masters/Read";
+import Read from "../../../../masters/read";
 
 const Node = ({ data, isSelected, textRef, nodeName, setNodeName }) => {
   const [selected, setSelected] = useState(false);
@@ -60,7 +60,7 @@ const Node = ({ data, isSelected, textRef, nodeName, setNodeName }) => {
             handleClose={handleCloseNodeMaster}
             maxWidth={"100%"}
           >
-            <Read />
+            {data.comp}
           </Modal>
         )}
         <div style={{ textAlign: "center" }}>

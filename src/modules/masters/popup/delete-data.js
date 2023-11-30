@@ -1,0 +1,34 @@
+export const getDeleteFields = (itemData) => {
+    return [{
+        col: 12,
+        callback: itemData.callback,
+        disabled: itemData.disabled,
+        groups: [{
+            type: "text",
+            id: "inputprojectName",
+            label: "Delete Folder Name",
+            name: "name",
+            control: "input",
+            isRequired: true,
+            itemVal: itemData.values ? itemData.values["type"] : '',
+        },
+        ]
+    },
+    {
+        col: 12,
+        callback: itemData.callback,
+        disabled: itemData.disabled,
+        groups: [
+            {
+                type: "text",
+                id: "inputDisplayabbreviation",
+                label: "Delete File Name",
+                name: "location",
+                control: "input",
+                isRequired: true,
+                itemVal: itemData.values ? itemData.values["location"] : '',
+            }
+        ]
+    },
+    ]
+}

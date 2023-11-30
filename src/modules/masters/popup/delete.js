@@ -1,34 +1,31 @@
 import React from 'react';
-import CommonFormWithList from '../components/common-form-with-list';
-import config from "../components/config/config.json"
-// import { getClientFields } from './client-data';
-// import { getReadFields } from './read-data';
-import CommonModel from '../components/common-modal';
-import { getReadFields } from './read-data';
+import config from "../../components/config/config.json"
+import CommonModel from '../../components/common-modal';
+import { getDeleteFields } from './delete-data';
 
-const Read = () => {
+const Delete = () => {
     // const [formData, setFormData] = useState({
     //     id: null,
     //     name:'',
     //     abbreviation:'',
     // });
 
-    let defaultObj = {name:'',abbreviation:'', active: true };
+    let defaultObj = { name: '', abbreviation: '', active: true };
 
     return (
         <>
             <CommonModel   // this file create copy from common-form-with-list and Datatable componet Remove from Comman Model componete
-                formDataAction={getReadFields}
+                formDataAction={getDeleteFields}
                 columns={config.CLIENT}
                 // insertApi="clients"
                 // updateApi="clients/:id"
                 // getApi="clients"
-                title="Read"
+                title="Delete"
                 defaultObj={defaultObj}
-                tableTitle='client'
+            // tableTitle='client'
             />
         </>
     );
 };
 
-export default Read;
+export default Delete;
