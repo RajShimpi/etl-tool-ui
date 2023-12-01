@@ -13,22 +13,6 @@ export const getDeleteFields = (itemData) => {
             itemVal: itemData.values ? itemData.values["type"] : '',
         },
         ]
-    },
-    {
-        col: 12,
-        callback: itemData.callback,
-        disabled: itemData.disabled,
-        groups: [
-            {
-                type: "text",
-                id: "inputDisplayabbreviation",
-                label: "Delete File Name",
-                name: "location",
-                control: "input",
-                isRequired: true,
-                itemVal: itemData.values ? itemData.values["location"] : '',
-            }
-        ]
-    },
+    }
     ]
 }

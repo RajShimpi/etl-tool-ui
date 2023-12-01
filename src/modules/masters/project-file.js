@@ -14,7 +14,7 @@ const ProjectFile = () => {
     }, []);
 
     useEffect(() => {
-        axios.getWithCallback('project-files/', (data) => setParentId(data.map(y => ({ value: y.id }))))
+        axios.getWithCallback('project-files/', (data) => setParentId(data.map(y => ({ value: y.id, label: y.file_name }))))
     }, []);
 
     const defaultObj = { project_id: '', type: '', file_name: '', parent_id: '', active: true };
@@ -31,7 +31,7 @@ const ProjectFile = () => {
                 title="Project-File"
                 defaultObj={defaultObj}
                 options={[projectId,
-                    //  parentId
+                     parentId
                 ]}
                 tableTitle='Project-File'
             />

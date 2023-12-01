@@ -93,13 +93,13 @@
     ],
     "PROJECT":[
         "project_name",
-        "client_id",
+        "client.name",
         "base_location"
     ],
     "PROJECT_FILE":[
-        "project_id",
+        "project.project_name",
         "type",
         "file_name",
-        "parent_id"
+        "parent.file_name"
     ]
 }

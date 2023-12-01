@@ -1,12 +1,7 @@
 import React, { useState, memo, useRef, useEffect } from "react";
 import { Handle, Position } from "reactflow";
 import { style } from "./message-node-styles";
-import { Margin } from "@mui/icons-material";
-import FormCommon from "../../../../components/form-common";
-import { nodes } from "../../initial-element";
 import Modal from "../../../../components/modal-popup";
-import ProjectStructure from "../../../../../components/ProjectStrucure/ProjectStructure";
-import Read from "../../../../masters/read";
 
 const Node = ({ data, isSelected, textRef, nodeName, setNodeName }) => {
   const [selected, setSelected] = useState(false);
@@ -32,16 +27,13 @@ const Node = ({ data, isSelected, textRef, nodeName, setNodeName }) => {
 
   const handleClickOutside = (event) => {
     if (nodeRef.current && !nodeRef.current.contains(event.target)) {
-      // Clicked outside the node, close the modal
       setShowNodeMaster(false);
     }
   };
 
   useEffect(() => {
-    // Attach the event listener when the component mounts
     document.addEventListener("click", handleClickOutside);
 
-    // Detach the event listener when the component unmounts
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
