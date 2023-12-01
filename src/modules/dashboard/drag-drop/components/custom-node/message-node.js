@@ -62,7 +62,7 @@ const Node = ({ data, isSelected, textRef, nodeName, setNodeName }) => {
                 src={data.img}
                 style={{ width: "70px", height: "70px" }}
                 onClick={handleImageClick}
-              />
+              />      
               <div style={style.contentWrapper}>{data.heading}</div>
             </>
           )}
