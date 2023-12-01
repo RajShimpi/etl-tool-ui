@@ -18,7 +18,7 @@ const Delete = () => {
                 formDataAction={getDeleteFields}
                 columns={config.CLIENT}
                 // insertApi="clients"
-                // updateApi="clients/:id"
+                // updateApi="clients/:id"      
                 // getApi="clients"
                 title="Delete"
                 defaultObj={defaultObj}
