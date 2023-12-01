@@ -55,7 +55,7 @@ function ComponetTool({ textColor }) {
                             </div>
                             <Collapse in={component.isCollapseOpen}>
                                 <div className='tools' >
-                                    <Sidebar/>
+                                    <Sidebar />
                                 </div>
                             </Collapse>
                         </li>

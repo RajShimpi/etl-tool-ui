@@ -2,7 +2,7 @@ import React, { useState, memo, useRef, useEffect } from "react";
 import { Handle, Position } from "reactflow";
 import { style } from "./message-node-styles";
 import Modal from "../../../../components/modal-popup";
-
+import AddFile from '../../../../masters/popup/add-file'
 const Node = ({ data, isSelected, textRef, nodeName, setNodeName }) => {
   const [selected, setSelected] = useState(false);
   const [showNodeMaster, setShowNodeMaster] = useState(false);
@@ -52,7 +52,7 @@ const Node = ({ data, isSelected, textRef, nodeName, setNodeName }) => {
             handleClose={handleCloseNodeMaster}
             maxWidth={"100%"}
           >
-            {data.comp}
+            {data.comp? data.comp: <AddFile/>}
           </Modal>
         )}
         <div style={{ textAlign: "center" }}>

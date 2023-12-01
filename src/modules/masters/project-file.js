@@ -31,7 +31,7 @@ const ProjectFile = () => {
                 title="Project-File"
                 defaultObj={defaultObj}
                 options={[projectId,
-                     parentId
+                    parentId
                 ]}
                 tableTitle='Project-File'
             />

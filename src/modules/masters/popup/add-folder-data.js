@@ -10,7 +10,7 @@ export const getFolderFields = (itemData) => {
             label: "Folder Name",
             name: "name",
             control: "input",
-            isRequired: true,
+            isRequired: true, 
             itemVal: itemData.values ? itemData.values["type"] : '',
         },
         ]

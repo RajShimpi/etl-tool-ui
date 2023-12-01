@@ -2,7 +2,7 @@ import React from "react";
 import Folder from "../modules/masters/popup/add-folder";
 import AddFile from "../modules/masters/popup/add-file";
 import Edit from "../modules/masters/popup/edit-file";
-import Delete from "../modules/masters/popup/delete"; 
+import Delete from "../modules/masters/popup/delete";
 
 const PopupComponent = ({ onClose, actionType }) => {
   let contentComponent;

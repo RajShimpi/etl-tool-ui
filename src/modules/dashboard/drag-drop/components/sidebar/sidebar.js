@@ -72,5 +72,5 @@ export default ({ isSelected, textRef, nodeName, setNodeName }) => {
         </div>
       </div> */}
     </aside>
-  );
+  ); 
 };

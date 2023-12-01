@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import CommonFormWithList from '../components/common-form-with-list';
 import config from "../components/config/config.json"
 import { getProjectFields } from './project-data';
@@ -11,12 +11,12 @@ const Project = () => {
     //     client_id:'',
     //     base_location:'',
     // });
-    const [clientId , setClientId]=useState([])
+    const [clientId, setClientId] = useState([])
     useEffect(() => {
         axios.getWithCallback('clients/', (data) => setClientId(data.map(x => { return { label: x.name, value: x.id } })))
     }, [])
 
-    let defaultObj = {project_name:'',client_id:'',base_location:'', active: true };
+    let defaultObj = { project_name: '', client_id: '', base_location: '', active: true };
 
     return (
         <>
@@ -28,7 +28,7 @@ const Project = () => {
                 getApi="projects"
                 title="Project"
                 defaultObj={defaultObj}
-                options = {[clientId]}
+                options={[clientId]}
                 tableTitle='Projects'
             />
         </>

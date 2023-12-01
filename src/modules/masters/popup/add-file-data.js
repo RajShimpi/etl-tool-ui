@@ -7,7 +7,7 @@ export const getFileFields = (itemData) => {
             type: "text",
             id: "inputFileName",
             label: "File Name",
-            name: "name",
+            name: "name", 
             control: "input",
             isRequired: true,
             itemVal: itemData.values ? itemData.values["name"] : '',

@@ -13,7 +13,7 @@ const Read = () => {
     //     abbreviation:'',
     // });
 
-    let defaultObj = {name:'',abbreviation:'', active: true };
+    let defaultObj = { name: '', abbreviation: '', active: true };
 
     return (
         <>

@@ -42,6 +42,6 @@ export const getProjectFileFields = (itemData) => {
             itemVal: itemData.values ? itemData.values["parent_id"] : '',
         },
         ]
-    }
+    } 
     ];
 }
