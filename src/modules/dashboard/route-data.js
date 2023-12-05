@@ -20,6 +20,7 @@ import MainComponent from "../../components/MainComponent";
 import Client from "../masters/client";
 import Project from "../masters/project";
 import ProjectFile from "../masters/project-file";
+import StepType from "../masters/steptype";
 
 
 export const routeConstant = {
@@ -40,7 +41,7 @@ export const routeConstant = {
   client:"/client",
   project:"/project",
   projectfile:"/projectfile",
-
+  step:"/step"
 };
 export const routeData = (routes) => [
   {
@@ -155,6 +156,14 @@ export const routeData = (routes) => [
     routeTo: routeConstant.projectfile, // Project Form route
     header: "",
     childComp: ProjectFile,
+    data: {},
+    permissions: true,
+    isUserCanView: true,
+  },
+  {
+    routeTo: routeConstant.step, // Project Form route
+    header: "",
+    childComp: StepType,
     data: {},
     permissions: true,
     isUserCanView: true,
