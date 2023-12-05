@@ -10,9 +10,9 @@ const Folder = () => {
     //     abbreviation:'',
     // });
 
-    let defaultObj = { project_name: '', client_id:1, base_location: "true" };
+    let defaultObj = { project_name: '', client_id: 1, base_location: "true" };
 
-    return ( 
+    return (
         <>
             <CommonModel   // this file create copy from common-form-with-list and Datatable componet Remove from Comman Model componete
                 formDataAction={getFolderFields}

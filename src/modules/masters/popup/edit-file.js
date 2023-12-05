@@ -10,19 +10,19 @@ const Edit = () => {
     //     abbreviation:'',
     // });
 
-    let defaultObj = { name: '', abbreviation: '', active: true };
+    let defaultObj = { project_name: '', client_id: 1, base_location: "true" };
 
-    return ( 
+    return (
         <>
             <CommonModel   // this file create copy from common-form-with-list and Datatable componet Remove from Comman Model componete
                 formDataAction={getEditFields}
-                columns={config.CLIENT}
+                columns={config.PROJECT}
                 // insertApi="clients"
-                // updateApi="clients/:id"
+                updateApi="projects/:id"
                 // getApi="clients"
                 title="Edit"
                 defaultObj={defaultObj}
-            // tableTitle='client'
+                // tableTitle='client'
             />
         </>
     );

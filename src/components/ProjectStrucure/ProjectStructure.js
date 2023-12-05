@@ -12,7 +12,7 @@ function ProjectStructure({ textColor }) {
   const [apiData, setApiData] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:3000/projects/')
+    axios.get('http://localhost:3000/projects')
       .then(response => {
         setApiData(response.data);
       })

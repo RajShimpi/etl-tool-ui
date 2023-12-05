@@ -62,7 +62,7 @@ function FolderContainer() {
   const [projects, setProjects] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:3000/project-files/')
+    axios.get('http://localhost:3000/project-files')
       .then(response => {
         setProjects(response.data);
       })

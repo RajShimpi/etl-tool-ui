@@ -1,4 +1,3 @@
-// ComponetTool.js
 import React, { useState } from 'react';
 import './ComponetTool.css';
 import DensityMediumIcon from '@mui/icons-material/DensityMedium';

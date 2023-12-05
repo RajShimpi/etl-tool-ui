@@ -79,7 +79,7 @@ const ContextMenu = ({ onToggleFolder, popType }) => {
         >
           <InsertDriveFileIcon
             style={{ fontSize: "medium", marginRight: "5px", marginTop: "3px" }}
-          /> 
+          />
           Add File
         </div>
       </div>
