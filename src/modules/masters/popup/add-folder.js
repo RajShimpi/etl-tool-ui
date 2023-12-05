@@ -10,14 +10,14 @@ const Folder = () => {
     //     abbreviation:'',
     // });
 
-    let defaultObj = { name: '', abbreviation: '', active: true };
+    let defaultObj = { project_name: '', client_id:1, base_location: "true" };
 
     return ( 
         <>
             <CommonModel   // this file create copy from common-form-with-list and Datatable componet Remove from Comman Model componete
                 formDataAction={getFolderFields}
-                columns={config.CLIENT}
-                // insertApi="clients"
+                columns={config.PROJECT}
+                insertApi="projects"
                 // updateApi="clients/:id"
                 // getApi="clients"
                 title="Add Folder"
