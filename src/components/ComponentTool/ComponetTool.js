@@ -51,7 +51,7 @@ function ComponetTool({ textColor }) {
                       className='comp'
                       onClick={() => handleCollapseToggle(index)}
                     >
-                      Componets {component.isCollapseOpen ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                      {component.name} {component.isCollapseOpen ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                     </div>
                   </span>
                 </div>

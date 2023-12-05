@@ -63,7 +63,7 @@ const OverviewFlow = () => {
       id: getId(),
       type,
       position,
-      data: { heading: "Send Message", content: label, img: img },
+      data: { heading: "read", content: label, img: img },
     };
     setNodes((es) => es.concat(newNode));
     setSelectedNode(newNode.id);
