@@ -1,4 +1,3 @@
-// Sidebar.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 const onDragStart = (event, nodeType, content, img) => {
@@ -13,7 +12,6 @@ const Sidebar = () => {
   const [apiData, setApiData] = useState([]);
 
   useEffect(() => {
-    // Make the API call
     axios.get('http://localhost:3000/step-type')
       .then(response => {
         setApiData(response.data);
@@ -21,7 +19,7 @@ const Sidebar = () => {
       .catch(error => {
         console.error('Error fetching data:', error);
       });
-  }, []); // Empty dependency array ensures the effect runs once on mount
+  }, []);
 
   return (
     <div className="">
@@ -41,7 +39,7 @@ const Sidebar = () => {
           <li key={item.id}>{item.name}</li>
           </div>
          
-          <div
+          {/* <div
           style={{margin:'5px'}}
           className="dndnode input m-10"
           onDragStart={(event) =>
@@ -51,7 +49,7 @@ const Sidebar = () => {
         >
           <img src={require('../../../../../assets/Images/Folders.png')} style={{height:"40px"}} alt="File Icon" />
           <li key={item.id}>{item.name}</li>
-        </div>
+        </div> */}
 
           </>
         ))}
