@@ -101,5 +101,11 @@
         "type",
         "file_name",
         "parent.file_name"
+    ],
+    "STEPTYPE":[
+        "type",
+        "name",
+        "symbol",
+        "group"
     ]
 }

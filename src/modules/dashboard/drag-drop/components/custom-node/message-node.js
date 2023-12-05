@@ -30,7 +30,7 @@ const Node = ({ data, isSelected, textRef, nodeName, setNodeName }) => {
       setShowNodeMaster(false);
     }
   };
-
+  
   useEffect(() => {
     document.addEventListener("click", handleClickOutside);
 

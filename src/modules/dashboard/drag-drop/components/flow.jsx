@@ -23,6 +23,7 @@ import {
 import "reactflow/dist/style.css";
 import "./dnd.css";
 import "./update-node.css";
+import { Modal } from "bootstrap";
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
@@ -160,8 +161,9 @@ const OverviewFlow = () => {
               attributionPosition="top-right"
             >
               <Background color="#aaa" gap={16} />
-            </ReactFlow>
+               </ReactFlow>  
           </div>
+          
           {/* 
           <Sidebar
             isSelected={isSelected}
