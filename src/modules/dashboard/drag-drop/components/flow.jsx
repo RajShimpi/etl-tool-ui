@@ -24,6 +24,7 @@ import "reactflow/dist/style.css";
 import "./dnd.css";
 import "./update-node.css";
 import { Modal } from "bootstrap";
+import { Key } from "@mui/icons-material";
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
@@ -54,6 +55,7 @@ const OverviewFlow = () => {
     const type = event.dataTransfer.getData("application/reactflow");
     const label = event.dataTransfer.getData("content");
     const img = event.dataTransfer.getData("img");
+    const name = event.dataTransfer.getData("name");
     console.log(reactFlowInstance, "reactIns");
     const position = reactFlowInstance.project({
       x: event.clientX - reactFlowBounds.left,
@@ -63,7 +65,7 @@ const OverviewFlow = () => {
       id: getId(),
       type,
       position,
-      data: { heading: "read", content: label, img: img },
+      data: { heading:"read", content: label, img: img },
     };
     setNodes((es) => es.concat(newNode));
     setSelectedNode(newNode.id);

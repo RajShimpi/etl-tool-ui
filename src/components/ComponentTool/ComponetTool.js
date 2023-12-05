@@ -15,11 +15,11 @@ function ComponetTool({ textColor }) {
   };
 
   const [components, setComponents] = useState([
-    { name: "Component 1", isCollapseOpen: false },
-    { name: "Component 2", isCollapseOpen: false },
-    { name: "Component 3", isCollapseOpen: false },
-    { name: "Component 4", isCollapseOpen: false },
-    { name: "Component 5", isCollapseOpen: false }, // Add more components
+    { name: "Input/Output", isCollapseOpen: false },
+    { name: "Process", isCollapseOpen: false },
+    { name: "Control", isCollapseOpen: false },
+    // { name: "Component 4", isCollapseOpen: false },
+    // { name: "Component 5", isCollapseOpen: false }, // Add more components
   ]);
 
   const handleCollapseToggle = (index) => {
@@ -52,6 +52,7 @@ function ComponetTool({ textColor }) {
                       onClick={() => handleCollapseToggle(index)}
                     >
                       {component.name} {component.isCollapseOpen ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                      
                     </div>
                   </span>
                 </div>
@@ -62,6 +63,8 @@ function ComponetTool({ textColor }) {
                 </div>
               </Collapse>
             </li>
+            
+            
           </div>
         ))}
       </ul>
