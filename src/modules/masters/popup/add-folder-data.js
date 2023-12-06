@@ -8,10 +8,10 @@ export const getFolderFields = (itemData) => {
             type: "text",
             id: "inputprojectName",
             label: "Folder Name",
-            name: "project_name",
+            name: "file_name",
             control: "input",
             isRequired: true,
-            itemVal: itemData.values ? itemData.values["project_name"] : '',
+            itemVal: itemData.values ? itemData.values["file_name"] : '',
         },
         ]
     }

@@ -13,7 +13,6 @@ function ProjectStructure({ textColor }) {
 
   useEffect(() => {
     axios.getWithCallback('projects/', (data) => {
-      // console.log('apiData:', data);
       setApiData(data);
     });
   }, []);

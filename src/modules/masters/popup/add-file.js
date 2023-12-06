@@ -9,15 +9,14 @@ const AddFile = () => {
     //     name:'',
     //     abbreviation:'', 
     // });
-
-    let defaultObj = { name: '', abbreviation: '', active: true };
+    let defaultObj =  {  file_name:'',project_id:1, type: 'File',parent_id:1};
 
     return (
         <>
             <CommonModel   // this file create copy from common-form-with-list and Datatable componet Remove from Comman Model componete
                 formDataAction={getFileFields}
-                columns={config.CLIENT}
-                // insertApi="clients"
+                columns={config.PROJECT_FILE}
+                insertApi="project-files"
                 // updateApi="clients/:id"
                 // getApi="clients"
                 title="Add File"

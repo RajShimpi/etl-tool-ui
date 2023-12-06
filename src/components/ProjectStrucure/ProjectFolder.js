@@ -5,20 +5,8 @@ import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import './project.css';
 import axios from '../../modules/services/axios.js';
 
-function FolderDropdown({ folder, onToggleFolder, onToggleFile, textColor }) {
-  const [apiData, setApiData] = useState([]);
-
-  useEffect(() => {
-    axios.get(`http://localhost:3000/project-files`)
-      .then(response => {
-        setApiData(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
-  }, [folder.id]);
-
-  const handleItemToggle = (item) => {
+function FolderDropdown({ item, onToggleFolder, onToggleFile, textColor }) {
+  const handleItemToggle = () => {
     if (item.type === 'file') {
       onToggleFile(item.file_name);
     } else {
@@ -28,29 +16,23 @@ function FolderDropdown({ folder, onToggleFolder, onToggleFile, textColor }) {
 
   return (
     <div className="folderstyle">
-      <div className={` ${folder.isOpen ? 'open' : ''}`} style={{ textColor }} onClick={() => handleItemToggle(folder)}>
-        {folder.isOpen ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='small' />} {folder.file_name}
+      <div className={` ${item.isOpen ? 'open' : ''}`} style={{ textColor }} onClick={handleItemToggle}>
+        {item.type === 'Folder' && (
+          item.isOpen ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='small' />
+        )}
+        {item.type === 'File' && <InsertDriveFileIcon fontSize='small' />}
+        {item.file_name}
       </div>
-      {folder.isOpen && (
+      {item.isOpen && item.items && (
         <div className="insideItemStyle">
-          {apiData.map((item, index) => (
-            <div key={index} className={`folder ${item.isOpen ? 'open' : ''}`} style={{ textColor }} onClick={() => handleItemToggle(item)}>
-              {item.type === 'file' ? (
-                <>
-                  <div className={`Folder ${item.isOpen ? '' : ''}`}>
-                    <InsertDriveFileIcon style={{ fontSize: '20px' }} />
-                    {item.file_name}
-                  </div>
-                </>
-              ) : (
-                <FolderDropdown
-                  folder={item}
-                  onToggleFolder={() => handleItemToggle(item)}
-                  onToggleFile={() => onToggleFile(item.file_name)}
-                  textColor={textColor}
-                />
-              )}
-            </div>
+          {item.items.map((subItem, index) => (
+            <FolderDropdown
+              key={index}
+              item={subItem}
+              onToggleFolder={() => onToggleFolder(subItem)}
+              onToggleFile={() => onToggleFile(subItem.file_name)}
+              textColor={textColor}
+            />
           ))}
         </div>
       )}
@@ -62,19 +44,15 @@ function FolderContainer() {
   const [projects, setProjects] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:3000/project-files')
-      .then(response => {
-        setProjects(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
+    axios.getWithCallback('project-files/', (data) => {
+      setProjects(data);
+    });
   }, []);
 
   const toggleFolder = (project) => {
-    setProjects(prevProjects => {
+    setProjects((prevProjects) => {
       const updatedProjects = [...prevProjects];
-      const targetProject = updatedProjects.find(p => p.id === project.id);
+      const targetProject = updatedProjects.find((p) => p.id === project.id);
       targetProject.isOpen = !targetProject.isOpen;
       return updatedProjects;
     });
@@ -90,9 +68,9 @@ function FolderContainer() {
         {projects.map((project, index) => (
           <FolderDropdown
             key={index}
-            folder={project}
+            item={project}
             onToggleFolder={() => toggleFolder(project)}
-            onToggleFile={() => toggleFile(project)}
+            onToggleFile={() => toggleFile(project.file_name)}
             textColor="black"
           />
         ))}
