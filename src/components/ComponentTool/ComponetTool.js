@@ -1,5 +1,4 @@
-// ComponetTool.js
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './ComponetTool.css';
 import DensityMediumIcon from '@mui/icons-material/DensityMedium';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
@@ -7,29 +6,40 @@ import Collapse from '@mui/material/Collapse';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Sidebar from '../../modules/dashboard/drag-drop/components/sidebar/sidebar';
+import axios from '../../modules/services/axios';
 
-function ComponetTool({ textColor }) {
+function ComponentTool({ textColor }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [apiData, setApiData] = useState([]);
+  const [components, setComponents] = useState([]);
+
+  useEffect(() => {
+        axios.getWithCallback('step-type/', (data) => {setApiData(data);
+            const groupedData = groupDataBy(data, 'group');
+            const newComponents = Object.keys(groupedData).map((group) => ({
+                name: group,
+                isCollapseOpen: false,
+                data: groupedData[group],
+            }));
+            setComponents(newComponents);
+        });
+}, []);
+
+
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
 
-  const [components, setComponents] = useState([
-    { name: "Input/Output", isCollapseOpen: false },
-    { name: "Process", isCollapseOpen: false },
-    { name: "Control", isCollapseOpen: false },
-    // { name: "Component 4", isCollapseOpen: false },
-    // { name: "Component 5", isCollapseOpen: false }, // Add more components
-  ]);
-
   const handleCollapseToggle = (index) => {
-    const updatedComponents = [...components];
-    updatedComponents[index].isCollapseOpen = !updatedComponents[index].isCollapseOpen;
-    setComponents(updatedComponents);
+    setComponents((prevComponents) =>
+      prevComponents.map((component, i) =>
+        i === index ? { ...component, isCollapseOpen: !component.isCollapseOpen } : component
+      )
+    );
   };
 
   return (
-    <div className={`componet-tool ${isOpen ? 'open' : ''} right-sidebar`}>
+    <div className={`component-tool ${isOpen ? 'open' : ''} right-sidebar`}>
       <div className="logo_details" style={{ textColor }}>
         <div className="logo_name">Component Tool</div>
         <DensityMediumIcon
@@ -52,17 +62,16 @@ function ComponetTool({ textColor }) {
                       onClick={() => handleCollapseToggle(index)}
                     >
                       {component.name} {component.isCollapseOpen ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                      
                     </div>
                   </span>
                 </div>
               </div>
               <Collapse in={component.isCollapseOpen}>
                 <div className='tools'>
-                  <Sidebar />
+                  <Sidebar apiData={component.data} />
                 </div>
               </Collapse>
-            </li>      
+            </li>
           </div>
         ))}
       </ul>
@@ -70,4 +79,15 @@ function ComponetTool({ textColor }) {
   );
 }
 
-export default ComponetTool;
+function groupDataBy(data, property) {
+  return data.reduce((acc, item) => {
+    const key = item[property];
+    if (!acc[key]) {
+      acc[key] = [];
+    }
+    acc[key].push(item);
+    return acc;
+  }, {});
+}
+
+export default ComponentTool;

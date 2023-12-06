@@ -2,20 +2,21 @@ import React, { useState, useEffect } from 'react';
 import './project.css';
 import DensityMediumIcon from '@mui/icons-material/DensityMedium';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
-import FolderDropdown from './ProjectFolder';
 import ContextMenu from '../ContextMenu';
+import axios from '../../modules/services/axios';
+import FolderContainer from './ProjectFolder';
 
 function ProjectStructure({ textColor }) {
   const [isOpen, setIsOpen] = useState(false);
   const [contextMenuIndex, setContextMenuIndex] = useState(null);
+  const [apiData, setApiData] = useState([]);
 
-  const [folders, setFolders] = useState([
-    { projectName: 'Project 1', isOpen: false },
-    { projectName: 'Project 2', isOpen: false },
-    { projectName: 'Project 3', isOpen: false },
-    { projectName: 'Project 4', isOpen: false },
-    { projectName: 'Project 5', isOpen: false },
-  ]);
+  useEffect(() => {
+    axios.getWithCallback('projects/', (data) => {
+      // console.log('apiData:', data);
+      setApiData(data);
+    });
+  }, []);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -23,9 +24,9 @@ function ProjectStructure({ textColor }) {
 
   const toggleFolder = (index) => {
     setContextMenuIndex(null);
-    const updatedFolders = [...folders];
-    updatedFolders[index].isOpen = !updatedFolders[index].isOpen;
-    setFolders(updatedFolders);
+    const updatedApiData = [...apiData];
+    updatedApiData[index].isOpen = !updatedApiData[index].isOpen;
+    setApiData(updatedApiData);
   };
 
   const handleContextMenu = (event, index) => {
@@ -50,7 +51,7 @@ function ProjectStructure({ textColor }) {
   return (
     <div>
       <div className={`sidebar ${isOpen ? 'open' : ''}`}>
-        <div className="logo_details" style={{ textColor }}>
+        <div className="logo_details" style={{ color: textColor }}>
           <div className="logo_name">Project Structure</div>
           <DensityMediumIcon
             className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`}
@@ -59,24 +60,21 @@ function ProjectStructure({ textColor }) {
           />
         </div>
         <ul className="nav-list">
-          {folders.map((folder, index) => (
-            <div key={index} style={{ textColor }}>
+          {apiData.map((project, index) => (
+            <div key={index}>
               <li onContextMenu={(event) => handleContextMenu(event, index)}>
                 <div className='proicon' onClick={() => toggleFolder(index)}>
                   <FolderOpenIcon className="bx bx-grid-alt" />
                   <span className="link_name">
-                    {folder.projectName}
+                    {project.project_name}
                   </span>
                 </div>
                 {contextMenuIndex === index && (
                   <ContextMenu onToggleFolder={() => toggleFolder(index)} popType="right" />
                 )}
-                {folder.isOpen && (
+                {project.isOpen && (
                   <div className={`openf1 ${isOpen ? 'open' : ''}`}>
-                    <FolderDropdown
-                      folder={folder}
-                      onToggleFolder={() => toggleFolder(index)}
-                    />
+                    <FolderContainer projects={project.items} />
                   </div>
                 )}
               </li>
