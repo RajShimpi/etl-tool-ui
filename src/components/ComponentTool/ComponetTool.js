@@ -1,4 +1,3 @@
-// ComponentTool.js
 import React, { useEffect, useState } from 'react';
 import './ComponetTool.css';
 import DensityMediumIcon from '@mui/icons-material/DensityMedium';
@@ -12,26 +11,31 @@ import axios from '../../modules/services/axios';
 function ComponentTool({ textColor }) {
   const [isOpen, setIsOpen] = useState(false);
   const [apiData, setApiData] = useState([]);
+  const [components, setComponents] = useState([]);
+
+  useEffect(() => {
+        axios.getWithCallback('step-type/', (data) => {setApiData(data);
+            const groupedData = groupDataBy(data, 'group');
+            const newComponents = Object.keys(groupedData).map((group) => ({
+                name: group,
+                isCollapseOpen: false,
+                data: groupedData[group],
+            }));
+            setComponents(newComponents);
+        });
+}, []);
+
+
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
 
-  const [components, setComponents] = useState([
-    { name: "Input/Output", isCollapseOpen: false },
-    { name: "Process", isCollapseOpen: false },
-    { name: "Control", isCollapseOpen: false },
-  ]);
-
-  useEffect(() => {
-    axios.getWithCallback('step-type/', (data) => {
-      setApiData(data);
-    });
-  }, []);
-
   const handleCollapseToggle = (index) => {
-    const updatedComponents = [...components];
-    updatedComponents[index].isCollapseOpen = !updatedComponents[index].isCollapseOpen;
-    setComponents(updatedComponents);
+    setComponents((prevComponents) =>
+      prevComponents.map((component, i) =>
+        i === index ? { ...component, isCollapseOpen: !component.isCollapseOpen } : component
+      )
+    );
   };
 
   return (
@@ -64,7 +68,7 @@ function ComponentTool({ textColor }) {
               </div>
               <Collapse in={component.isCollapseOpen}>
                 <div className='tools'>
-                  <Sidebar apiData={apiData} />
+                  <Sidebar apiData={component.data} />
                 </div>
               </Collapse>
             </li>
@@ -73,6 +77,17 @@ function ComponentTool({ textColor }) {
       </ul>
     </div>
   );
+}
+
+function groupDataBy(data, property) {
+  return data.reduce((acc, item) => {
+    const key = item[property];
+    if (!acc[key]) {
+      acc[key] = [];
+    }
+    acc[key].push(item);
+    return acc;
+  }, {});
 }
 
 export default ComponentTool;
