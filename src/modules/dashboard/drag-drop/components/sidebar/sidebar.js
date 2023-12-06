@@ -21,6 +21,7 @@ const Sidebar = ({ apiData }) => {
             draggable
             key={item.id}
           >
+             {/* <img src={require(`../../../../../assets/Images/${item.symbol}`)} alt={item.symbol} style={{ width: '50px', height: '50px' }} /> */}
             <span style={{ fontSize: "20px" }}>{item.symbol}</span>
             <li>{item.name}</li>
           </div>
