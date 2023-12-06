@@ -14,16 +14,17 @@ function ComponentTool({ textColor }) {
   const [components, setComponents] = useState([]);
 
   useEffect(() => {
-        axios.getWithCallback('step-type/', (data) => {setApiData(data);
-            const groupedData = groupDataBy(data, 'group');
-            const newComponents = Object.keys(groupedData).map((group) => ({
-                name: group,
-                isCollapseOpen: false,
-                data: groupedData[group],
-            }));
-            setComponents(newComponents);
-        });
-}, []);
+    axios.getWithCallback('step-type/', (data) => {
+      setApiData(data);
+      const groupedData = groupDataBy(data, 'group');
+      const newComponents = Object.keys(groupedData).map((group) => ({
+        name: group,
+        isCollapseOpen: false,
+        data: groupedData[group],
+      }));
+      setComponents(newComponents);
+    });
+  }, []);
 
 
   const toggleSidebar = () => {
