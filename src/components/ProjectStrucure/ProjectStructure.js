@@ -4,21 +4,18 @@ import DensityMediumIcon from '@mui/icons-material/DensityMedium';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import ContextMenu from '../ContextMenu';
 import axios from '../../modules/services/axios';
-import FolderContainer from './ProjectFolder'
+import FolderContainer from './ProjectFolder';
+
 function ProjectStructure({ textColor }) {
   const [isOpen, setIsOpen] = useState(false);
   const [contextMenuIndex, setContextMenuIndex] = useState(null);
-
   const [apiData, setApiData] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:3000/projects')
-      .then(response => {
-        setApiData(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
+    axios.getWithCallback('projects/', (data) => {
+      // console.log('apiData:', data);
+      setApiData(data);
+    });
   }, []);
 
   const toggleSidebar = () => {
@@ -27,11 +24,9 @@ function ProjectStructure({ textColor }) {
 
   const toggleFolder = (index) => {
     setContextMenuIndex(null);
-    if (apiData && apiData[index]) {
-      const updatedApiData = [...apiData];
-      updatedApiData[index].isOpen = !updatedApiData[index].isOpen;
-      setApiData(updatedApiData);
-    }
+    const updatedApiData = [...apiData];
+    updatedApiData[index].isOpen = !updatedApiData[index].isOpen;
+    setApiData(updatedApiData);
   };
 
   const handleContextMenu = (event, index) => {
@@ -56,7 +51,7 @@ function ProjectStructure({ textColor }) {
   return (
     <div>
       <div className={`sidebar ${isOpen ? 'open' : ''}`}>
-        <div className="logo_details" style={{ textColor }}>
+        <div className="logo_details" style={{ color: textColor }}>
           <div className="logo_name">Project Structure</div>
           <DensityMediumIcon
             className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`}
@@ -66,7 +61,7 @@ function ProjectStructure({ textColor }) {
         </div>
         <ul className="nav-list">
           {apiData.map((project, index) => (
-            <div key={index} style={{ textColor }}>
+            <div key={index}>
               <li onContextMenu={(event) => handleContextMenu(event, index)}>
                 <div className='proicon' onClick={() => toggleFolder(index)}>
                   <FolderOpenIcon className="bx bx-grid-alt" />
