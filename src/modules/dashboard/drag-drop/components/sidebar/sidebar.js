@@ -55,24 +55,7 @@ const Sidebar = () => {
           </>
         ))}
       </ul>
-      <ul>
-        {stepProcess.map(items => (
-           <>
-           <div
-           style={{margin:'5px'}}
-           className="dndnode input m-10"
-           onDragStart={(event) =>
-             onDragStart(event, "node", "Click to Edit message", require("../../../../../assets/Images/file1.png"))
-           }
-           draggable
-         >   
-          <img src={require('../../../../../assets/Images/file1.png')} style={{height:"40px"}} alt="File Icon" /> 
-            {/* <div key={item.id}>{item.symbol}</div> */}
-          <li key={items.id}>{items.name}</li>
-          </div>    
-          </>
-        ))}
-      </ul>
+     
     </div>
   );
 };

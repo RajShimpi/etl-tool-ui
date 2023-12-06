@@ -62,9 +62,7 @@ function ComponetTool({ textColor }) {
                   <Sidebar />
                 </div>
               </Collapse>
-            </li>
-            
-            
+            </li>      
           </div>
         ))}
       </ul>
