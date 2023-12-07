@@ -6,17 +6,26 @@ import './project.css';
 import axios from '../../modules/services/axios.js';
 
 function FolderDropdown({ item, onToggleFolder, onToggleFile, textColor }) {
-  const handleItemToggle = () => {
+  const handleItemToggle = (event) => {
+    event.preventDefault();
+
     if (item.type === 'file') {
+      console.log('Right-clicked on file:', item.file_name);
       onToggleFile(item.file_name);
     } else {
+      console.log('Right-clicked on folder:', item);
       onToggleFolder(item);
     }
   };
 
   return (
     <div className="folderstyle">
-      <div className={` ${item.isOpen ? 'open' : ''}`} style={{ textColor }} onClick={handleItemToggle}>
+      <div
+        className={` ${item.isOpen ? 'open' : ''}`}
+        style={{ textColor }}
+        onClick={handleItemToggle}
+        onContextMenu={handleItemToggle} 
+      >
         {item.type === 'Folder' && (
           item.isOpen ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='small' />
         )}
@@ -58,10 +67,6 @@ function FolderContainer() {
     });
   };
 
-  // const toggleFile = (file) => {
-  //   console.log('Toggle File:', file);
-  // };
-
   return (
     <div>
       <div>
@@ -70,7 +75,6 @@ function FolderContainer() {
             key={index}
             item={project}
             onToggleFolder={() => toggleFolder(project)}
-            // onToggleFile={() => toggleFile(project.file_name)}
             textColor="black"
           />
         ))}
