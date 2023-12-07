@@ -6,7 +6,7 @@ import ContextMenu from '../ContextMenu';
 import axios from '../../modules/services/axios';
 import FolderContainer from './ProjectFolder';
 
-function ProjectStructure({ textColor }) {
+function ProjectStructure({ textColor,projectID, parentID }) {
   const [isOpen, setIsOpen] = useState(false);
   const [contextMenuIndex, setContextMenuIndex] = useState(null);
   const [apiData, setApiData] = useState([]);
@@ -69,11 +69,11 @@ function ProjectStructure({ textColor }) {
                   </span>
                 </div>
                 {contextMenuIndex === index && (
-                  <ContextMenu onToggleFolder={() => toggleFolder(index)} popType="right" />
+                  <ContextMenu onToggleFolder={() => toggleFolder(index)} popType="right" projectID={projectID}  parentID={parentID}/>
                 )}
                 {project.isOpen && (
                   <div className={`openf1 ${isOpen ? 'open' : ''}`}>
-                    <FolderContainer projects={project.items} />
+                    <FolderContainer projects={project.items} projectID={projectID}  parentID={parentID} />
                   </div>
                 )}
               </li>

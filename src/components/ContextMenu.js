@@ -5,7 +5,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import PopupComponent from "./PopupComponent";
 import FolderIcon from "@mui/icons-material/Folder";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
-const ContextMenu = ({ onToggleFolder, popType }) => {
+const ContextMenu = ({ onToggleFolder, popType,projectID, parentID }) => {
   const [popupType, setPopupType] = useState(null);
   const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
 
@@ -130,6 +130,9 @@ const ContextMenu = ({ onToggleFolder, popType }) => {
             left: popupPosition.left,
             marginLeft: "10px",
           }}
+          projectID={projectID}
+          parentID={parentID}
+          
         />
       )}
     </div>

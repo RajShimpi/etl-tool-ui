@@ -4,7 +4,7 @@ import AddFile from "../modules/masters/popup/add-file";
 import Edit from "../modules/masters/popup/edit-file";
 import Delete from "../modules/masters/popup/delete";
 
-const PopupComponent = ({ onClose, actionType }) => {
+const PopupComponent = ({ onClose, actionType, projectID, parentID }) => {
   let contentComponent;
 
   switch (actionType) {
@@ -12,7 +12,7 @@ const PopupComponent = ({ onClose, actionType }) => {
       contentComponent = <Folder />;
       break;
     case "Add":
-      contentComponent = <AddFile />;
+      contentComponent = <AddFile projectID={projectID} parentID={parentID}  />;
       break;
     case "Edit":
       contentComponent = <Edit />;

@@ -5,17 +5,18 @@ import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import './project.css';
 import axios from '../../modules/services/axios.js';
 
-function FolderDropdown({ item, onToggleFolder, onToggleFile, textColor }) {
-  const handleItemToggle = (event) => {
-    event.preventDefault();
-
+function FolderDropdown({ item, onToggleFolder, onToggleFile, textColor, onContextMenu }) {
+  const handleItemToggle = () => {
     if (item.type === 'file') {
-      console.log('Right-clicked on file:', item.file_name);
       onToggleFile(item.file_name);
     } else {
-      console.log('Right-clicked on folder:', item);
       onToggleFolder(item);
     }
+  };
+
+  const handleContextMenu = (event) => {
+    event.preventDefault();
+    onContextMenu(item);
   };
 
   return (
@@ -24,7 +25,7 @@ function FolderDropdown({ item, onToggleFolder, onToggleFile, textColor }) {
         className={` ${item.isOpen ? 'open' : ''}`}
         style={{ textColor }}
         onClick={handleItemToggle}
-        onContextMenu={handleItemToggle} 
+        onContextMenu={handleContextMenu}
       >
         {item.type === 'Folder' && (
           item.isOpen ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='small' />
@@ -41,6 +42,7 @@ function FolderDropdown({ item, onToggleFolder, onToggleFile, textColor }) {
               onToggleFolder={() => onToggleFolder(subItem)}
               onToggleFile={() => onToggleFile(subItem.file_name)}
               textColor={textColor}
+              onContextMenu={onContextMenu}
             />
           ))}
         </div>
@@ -67,6 +69,10 @@ function FolderContainer() {
     });
   };
 
+  const handleContextMenu = (item) => {
+    console.log('Right-clicked on:', item);
+  };
+
   return (
     <div>
       <div>
@@ -76,6 +82,7 @@ function FolderContainer() {
             item={project}
             onToggleFolder={() => toggleFolder(project)}
             textColor="black"
+            onContextMenu={handleContextMenu}
           />
         ))}
       </div>
