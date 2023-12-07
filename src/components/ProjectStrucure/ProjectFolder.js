@@ -59,6 +59,7 @@ function FolderContainer() {
       setProjects(data);
     });
   }, []);
+  
 
   const toggleFolder = (project) => {
     setProjects((prevProjects) => {
