@@ -31,9 +31,6 @@ function ProjectStructure({ textColor }) {
   const handleContextMenu = (event, index) => {
     event.preventDefault();
     setContextMenuIndex(index);
-
-    // const clickedProject = apiData[index];
-    // console.log('Right-clicked on project:', clickedProject);
   };
 
   useEffect(() => {
