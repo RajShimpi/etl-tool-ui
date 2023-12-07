@@ -6,7 +6,7 @@ import ContextMenu from '../ContextMenu';
 import axios from '../../modules/services/axios';
 import FolderContainer from './ProjectFolder';
 
-function ProjectStructure({ textColor,projectID, parentID }) {
+function ProjectStructure({ textColor, project_id, parent_id }) {
   const [isOpen, setIsOpen] = useState(false);
   const [contextMenuIndex, setContextMenuIndex] = useState(null);
   const [apiData, setApiData] = useState([]);
@@ -32,7 +32,10 @@ function ProjectStructure({ textColor,projectID, parentID }) {
     event.preventDefault();
     setContextMenuIndex(index);
   };
-
+  const hhh = () => {
+    console.log("hhh", project_id)
+    console.log("hhh", parent_id)
+  }
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (contextMenuIndex !== null && !event.target.closest('.contextMenu')) {
@@ -59,9 +62,9 @@ function ProjectStructure({ textColor,projectID, parentID }) {
           />
         </div>
         <ul className="nav-list">
-          {apiData.map((project, index) => (
+          {apiData.map((project, index, project_id, parent_id) => (
             <div key={index}>
-              <li onContextMenu={(event) => handleContextMenu(event, index)}>
+              <li onContextMenu={(event) => { console.log(project_id, parent_id); handleContextMenu(event, index, project_id, parent_id); }}>
                 <div className='proicon' onClick={() => toggleFolder(index)}>
                   <FolderOpenIcon className="bx bx-grid-alt" />
                   <span className="link_name">
@@ -69,11 +72,11 @@ function ProjectStructure({ textColor,projectID, parentID }) {
                   </span>
                 </div>
                 {contextMenuIndex === index && (
-                  <ContextMenu onToggleFolder={() => toggleFolder(index)} popType="right" projectID={projectID}  parentID={parentID}/>
+                  <ContextMenu onToggleFolder={() => toggleFolder(index)} popType="right" project_id={project_id} parent_id={parent_id} />
                 )}
                 {project.isOpen && (
-                  <div className={`openf1 ${isOpen ? 'open' : ''}`}>
-                    <FolderContainer projects={project.items} projectID={projectID}  parentID={parentID} />
+                  <div className={`openf1 ${isOpen ? 'open' : ''}`} onClick={hhh}>
+                    <FolderContainer initialProjects={project.items} project_id={project_id} parent_id={parent_id} />
                   </div>
                 )}
               </li>

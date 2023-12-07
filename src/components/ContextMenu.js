@@ -5,7 +5,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import PopupComponent from "./PopupComponent";
 import FolderIcon from "@mui/icons-material/Folder";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
-const ContextMenu = ({ onToggleFolder, popType,projectID, parentID }) => {
+const ContextMenu = ({ onToggleFolder, popType, project_id, parent_id }) => {
   const [popupType, setPopupType] = useState(null);
   const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
 
@@ -39,7 +39,10 @@ const ContextMenu = ({ onToggleFolder, popType,projectID, parentID }) => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, [popupType]);
-
+  const hhh = () => {
+    console.log("hhh",parent_id)
+    console.log("hhh",project_id)
+  }
   return (
     <div
       className={`contextMenu ${popType === "right" ? "right" : ""}`}
@@ -66,10 +69,12 @@ const ContextMenu = ({ onToggleFolder, popType,projectID, parentID }) => {
       </div>
       <div
         className="menu-item"
-        onClick={(e) =>
-          openPopup("Add", { top: e.clientY, left: e.clientX + 10 })
-        }
+        onClick={(e) => {
+          openPopup("Add", { top: e.clientY, left: e.clientX + 10 });
+          hhh(); // Call the function after opening the popup
+        }}
       >
+
         <div
           style={{
             display: "flex",
@@ -130,9 +135,9 @@ const ContextMenu = ({ onToggleFolder, popType,projectID, parentID }) => {
             left: popupPosition.left,
             marginLeft: "10px",
           }}
-          projectID={projectID}
-          parentID={parentID}
-          
+          project_id={project_id} 
+           parent_id={parent_id}
+
         />
       )}
     </div>

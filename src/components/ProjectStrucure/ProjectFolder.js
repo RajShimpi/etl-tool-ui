@@ -5,18 +5,26 @@ import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import './project.css';
 import axios from '../../modules/services/axios.js';
 
-function FolderDropdown({ item, onToggleFolder, onToggleFile, textColor, onContextMenu }) {
+function FolderDropdown({
+  item,
+  onToggleFolder,
+  onToggleFile,
+  textColor,
+  onContextMenu,
+  project_id, parent_id
+}) {
   const handleItemToggle = () => {
     if (item.type === 'file') {
       onToggleFile(item.file_name);
     } else {
-      onToggleFolder(item);
+      onToggleFolder(item,project_id, parent_id);
     }
   };
 
   const handleContextMenu = (event) => {
     event.preventDefault();
-    onContextMenu(item);
+    onContextMenu(item, project_id, parent_id);
+    console.log('Props in FolderDropdown:', item.project_id, item.parent_id);
   };
 
   return (
@@ -24,7 +32,9 @@ function FolderDropdown({ item, onToggleFolder, onToggleFile, textColor, onConte
       <div
         className={` ${item.isOpen ? 'open' : ''}`}
         style={{ textColor }}
-        onClick={handleItemToggle}
+        onClick={() => {
+          handleItemToggle();
+        }}
         onContextMenu={handleContextMenu}
       >
         {item.type === 'Folder' && (
@@ -39,10 +49,12 @@ function FolderDropdown({ item, onToggleFolder, onToggleFile, textColor, onConte
             <FolderDropdown
               key={index}
               item={subItem}
-              onToggleFolder={() => onToggleFolder(subItem)}
-              onToggleFile={() => onToggleFile(subItem.file_name)}
+              onToggleFolder={onToggleFolder}
+              onToggleFile={onToggleFile}
               textColor={textColor}
               onContextMenu={onContextMenu}
+              project_id={project_id}
+            parent_id={ parent_id}
             />
           ))}
         </div>
@@ -51,7 +63,7 @@ function FolderDropdown({ item, onToggleFolder, onToggleFile, textColor, onConte
   );
 }
 
-function FolderContainer() {
+function FolderContainer({ projectList, parent_id, project_id }) {
   const [projects, setProjects] = useState([]);
 
   useEffect(() => {
@@ -59,19 +71,23 @@ function FolderContainer() {
       setProjects(data);
     });
   }, []);
-  
 
-  const toggleFolder = (project) => {
+  const toggleFolder = (clickedProject) => {
     setProjects((prevProjects) => {
-      const updatedProjects = [...prevProjects];
-      const targetProject = updatedProjects.find((p) => p.id === project.id);
-      targetProject.isOpen = !targetProject.isOpen;
-      return updatedProjects;
+      return prevProjects.map((project) => {
+        if (project.id === clickedProject.id) {
+          return { ...project, isOpen: !project.isOpen };
+        } else {
+          return project;
+        }
+      });
     });
   };
 
   const handleContextMenu = (item) => {
     console.log('Right-clicked on:', item);
+    console.log('Project ID:', item.project_id);
+    console.log('Parent ID:', item.parent_id);
   };
 
   return (
@@ -81,9 +97,12 @@ function FolderContainer() {
           <FolderDropdown
             key={index}
             item={project}
-            onToggleFolder={() => toggleFolder(project)}
+            onToggleFolder={(clickedProject) => toggleFolder(clickedProject, project_id, parent_id)}
+            onToggleFile={(fileName) => console.log('Toggled File:', fileName)}
             textColor="black"
-            onContextMenu={handleContextMenu}
+            onContextMenu={(clickedItem) => handleContextMenu(clickedItem, project_id, parent_id)}
+            project_id={project_id}
+            parent_id={parent_id}
           />
         ))}
       </div>
