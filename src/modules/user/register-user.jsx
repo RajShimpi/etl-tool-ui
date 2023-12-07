@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import CustomSelect from '../components/custom-select';
 import SearchableInput from '../components/searchable-input';
 import axios from '../services/axios';
-import { successAlert } from '../config/alert';
+import { successAlert } from '../components/config/alert';
 import SelectReact from '../components/select-react';
 
 const RegisterUser = (props) => {

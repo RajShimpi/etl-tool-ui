@@ -109,7 +109,7 @@ $BASE_URL = "http://localhost/SparkETL-Admin/";
 .has-float-label .form-control:placeholder-shown:not(:focus)+* {
     font-size: 100%;
     opacity: .5;
-    top: 12px;
+    top: 8px;
 }
 
 .input-group .has-float-label {

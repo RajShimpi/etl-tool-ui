@@ -1,9 +1,9 @@
 import * as yup from "yup";
 
-import { PasswordRegex } from '../config/common-config'
+import { PasswordRegex } from '../components/config/common-config'
 import auth from './auth';
 import axios from '../services/axios';
-import { successAlert } from "../config/alert";
+import { successAlert } from "../components/config/alert";
 import { useForm } from "react-hook-form";
 import { useState } from 'react';
 import { yupResolver } from "@hookform/resolvers/yup";

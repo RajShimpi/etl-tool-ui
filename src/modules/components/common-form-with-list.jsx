@@ -6,7 +6,7 @@ import _ from "lodash";
 import auth from "../user/auth";
 import axios from "../services/axios";
 import configContext from "../dashboard/config-context";
-import { errorAlert } from "../config/alert";
+import { errorAlert } from "./config/alert";
 import utils from "./utils";
 const CommonFormWithList = (props) => {
   const contextData = useContext(configContext);
@@ -52,7 +52,7 @@ const CommonFormWithList = (props) => {
       case "addLink":
       case "updateLink":
       case "listLink":
-        case "widgetType" :
+      case "widgetType":
         setData((prevState) => ({ ...prevState, [name]: e.value }));
         break;
       case "manager":
@@ -67,9 +67,16 @@ const CommonFormWithList = (props) => {
         setData((prevState) => ({ ...prevState, [name]: parseInt(e.value) }));
         break;
       case "role":
-        setData((prevState) => ({...prevState,[name]: e.label,[`${name}Id`]: e.value}));
-      break;
+        setData((prevState) => ({
+          ...prevState,
+          [name]: e.label,
+          [`${name}Id`]: e.value,
+        }));
+        break;
       case "whsId":
+        setData((prevState) => ({ ...prevState, [name]: parseInt(e.value) }));
+        break;
+      case "client_id":
         setData((prevState) => ({ ...prevState, [name]: parseInt(e.value) }));
         break;
       case "TemplateItemId":
@@ -467,7 +474,7 @@ const CommonFormWithList = (props) => {
           </form>
         </div>
       </div>
-      <div className="col-md-12">
+      <div className="col-md-12 ">
         <DataTable {...dataTableData} />
       </div>
     </div>
