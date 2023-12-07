@@ -14,8 +14,17 @@ function FolderDropdown({ item, onToggleFolder, onToggleFile, textColor }) {
     }
   };
 
+  const handleContextMenu = (event) => {
+    event.preventDefault();
+    logProjectData(item); // Log project data on right-click
+  };
+
+  const logProjectData = (project) => {
+    console.log('Right-clicked on Project:', project);
+  };
+
   return (
-    <div className="folderstyle">
+    <div className="folderstyle" onContextMenu={handleContextMenu}>
       <div className={` ${item.isOpen ? 'open' : ''}`} style={{ textColor }} onClick={handleItemToggle}>
         {item.type === 'Folder' && (
           item.isOpen ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='small' />
@@ -58,10 +67,6 @@ function FolderContainer() {
     });
   };
 
-  const toggleFile = (file) => {
-    console.log('Toggle File:', file);
-  };
-
   return (
     <div>
       <div>
@@ -70,7 +75,6 @@ function FolderContainer() {
             key={index}
             item={project}
             onToggleFolder={() => toggleFolder(project)}
-            onToggleFile={() => toggleFile(project.file_name)}
             textColor="black"
           />
         ))}
