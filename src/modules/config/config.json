@@ -86,5 +86,11 @@
         "warehouse",
         "binLocation",
         "role"
+    ],
+    "TYPE_CONFIG": [
+        "category",
+        "value",
+        "isActive",
+        "params"
     ]
 }
