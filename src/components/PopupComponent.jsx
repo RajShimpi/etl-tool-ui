@@ -10,16 +10,16 @@ const PopupComponent = ({ onClose, actionType, project_id, parent_id }) => {
 
   switch (actionType) {
     case "AddFolder":
-      contentComponent = <Folder />;
+      contentComponent = <Folder project_id={project_id} parent_id={parent_id} />;
       break;
     case "Add":
       contentComponent = <AddFile project_id={project_id} parent_id={parent_id} />;
       break;
     case "Edit":
-      contentComponent = <Edit />;
+      contentComponent = <Edit project_id={project_id} parent_id={parent_id}/>;
       break;
     case "Delete":
-      contentComponent = <Delete />;
+      contentComponent = <Delete project_id={project_id} parent_id={parent_id}/>;
       break;
     default:
       contentComponent = null;

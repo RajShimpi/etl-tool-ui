@@ -30,14 +30,14 @@ function FolderDropdown({ folder, onToggleFolder, onToggleFile, textColor }) {
 
 function Folders() {
     const [folders, setFolders] = useState([
-        createFolder('SubFolder 1', [
+        createFolder('project 1', [
             { fileName: 'File 1' },
             { fileName: 'File 2' },
             { fileName: 'File 3' },
             { fileName: 'File 4' },
             { fileName: 'File 5' }
         ]),
-        createFolder('SubFolder 2', [
+        createFolder('project 2', [
             { fileName: 'File 3' },
             { fileName: 'File 4' }
         ]),

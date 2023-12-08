@@ -55,7 +55,7 @@ const ContextMenu = ({ onToggleFolder, popType, project_id, parent_id, onClose }
       <div
         className="menu-item"
         onClick={(e) =>
-          openPopup("AddFolder", { top: e.clientY, left: e.clientX + 10 })
+          openPopup("AddFolder", { top: e.clientY, left: e.clientX + 10 },project_id,parent_id)
         }
       >
         <div
@@ -93,7 +93,7 @@ const ContextMenu = ({ onToggleFolder, popType, project_id, parent_id, onClose }
       <div
         className="menu-item"
         onClick={(e) =>
-          openPopup("Edit", { top: e.clientY, left: e.clientX + 10 })
+          openPopup("Edit", { top: e.clientY, left: e.clientX + 10 },project_id,parent_id)
         }
       >
         <div
@@ -112,7 +112,7 @@ const ContextMenu = ({ onToggleFolder, popType, project_id, parent_id, onClose }
       <div
         className="menu-item"
         onClick={(e) =>
-          openPopup("Delete", { top: e.clientY, left: e.clientX + 10 })
+          openPopup("Delete", { top: e.clientY, left: e.clientX + 10 },project_id,parent_id)
         }
       >
         <div

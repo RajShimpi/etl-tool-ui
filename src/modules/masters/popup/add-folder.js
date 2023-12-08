@@ -3,14 +3,14 @@ import config from "../../components/config/config.json"
 import CommonModel from '../../components/common-modal';
 import { getFolderFields } from './add-folder-data';
 
-const Folder = () => {
+const Folder = ({ project_id, parent_id }) => {
     // const [formData, setFormData] = useState({
     //     id: null,
     //     name:'',
     //     abbreviation:'',
     // });
 
-    let defaultObj =  {  file_name:'',project_id:1, type: 'Folder',parent_id:1};
+    let defaultObj =  {  file_name:'',project_id: project_id,type: 'Folder', parent_id: parent_id };
 
     return (
         <>

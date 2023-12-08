@@ -1,3 +1,4 @@
+// ProjectStructure.js
 import React, { useState, useEffect } from 'react';
 import './project.css';
 import DensityMediumIcon from '@mui/icons-material/DensityMedium';
@@ -31,7 +32,7 @@ function ProjectStructure({ textColor }) {
     event.preventDefault();
     setContextMenuIndex(index);
   };
-  
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (contextMenuIndex !== null && !event.target.closest('.contextMenu')) {
@@ -58,21 +59,22 @@ function ProjectStructure({ textColor }) {
           />
         </div>
         <ul className="nav-list">
-          {apiData.map((project, index, project_id, parent_id) => (
+          {apiData.map((project, index) => (
             <div key={index}>
-              <li onContextMenu={(event) => { console.log(project_id, parent_id); handleContextMenu(event, index, project_id, parent_id); }}>
+              <li onContextMenu={(event) => handleContextMenu(event, index)}>
                 <div className='proicon' onClick={() => toggleFolder(index)}>
                   <FolderOpenIcon className="bx bx-grid-alt" />
                   <span className="link_name">
                     {project.project_name}
                   </span>
                 </div>
-                {/* {contextMenuIndex === index && (
-                  <ContextMenu onToggleFolder={() => toggleFolder(index)} popType="right" project_id={project_id} parent_id={parent_id} />
-                )} */}
                 {project.isOpen && (
                   <div className={`openf1 ${isOpen ? 'open' : ''}`}>
-                    <FolderContainer initialProjects={project.items} project_id={project_id} parent_id={parent_id} />
+                    <FolderContainer
+                      initialProjects={project.items}
+                      project_id={project.project_id}
+                      parent_id={project.parent_id}
+                    />
                   </div>
                 )}
               </li>

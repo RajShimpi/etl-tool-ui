@@ -5,6 +5,7 @@ import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import './project.css';
 import ContextMenu from '../ContextMenu';
 import axios from '../../modules/services/axios';
+import Folders from './Folder';
 
 function FolderDropdown({
   item,
@@ -17,6 +18,7 @@ function FolderDropdown({
   openContextMenuForItemId,
 }) {
   const [contextMenuPosition, setContextMenuPosition] = useState(null);
+  const [files, setFiles] = useState();
   const dropdownRef = useRef(null);
 
   const handleItemToggle = () => {
@@ -59,7 +61,7 @@ function FolderDropdown({
     <div className="folderstyle"style={{ color: textColor }} onContextMenu={handleContextMenu} ref={dropdownRef}>
       <div
         className={` ${item.isOpen ? 'open' : ''}`}
-        style={{ color: textColor }}
+        style={{  color:"white" }}
         onDoubleClick={handleItemToggle}
       >
         {item.type === 'Folder' && (
@@ -68,6 +70,7 @@ function FolderDropdown({
         {item.type === 'File' && <InsertDriveFileIcon fontSize='small' />}
         {item.file_name}
       </div>
+
       {contextMenuPosition && openContextMenuForItemId === item.id && (
         <ContextMenu
           onClose={closeContextMenu}
