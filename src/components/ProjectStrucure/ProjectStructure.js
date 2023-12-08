@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import './project.css';
 import DensityMediumIcon from '@mui/icons-material/DensityMedium';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
-import ContextMenu from '../ContextMenu';
 import axios from '../../modules/services/axios';
 import FolderContainer from './ProjectFolder';
 
-function ProjectStructure({ textColor, project_id, parent_id }) {
+function ProjectStructure({ textColor }) {
   const [isOpen, setIsOpen] = useState(false);
   const [contextMenuIndex, setContextMenuIndex] = useState(null);
   const [apiData, setApiData] = useState([]);
@@ -32,10 +31,7 @@ function ProjectStructure({ textColor, project_id, parent_id }) {
     event.preventDefault();
     setContextMenuIndex(index);
   };
-  const hhh = () => {
-    console.log("hhh", project_id)
-    console.log("hhh", parent_id)
-  }
+  
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (contextMenuIndex !== null && !event.target.closest('.contextMenu')) {
@@ -71,11 +67,11 @@ function ProjectStructure({ textColor, project_id, parent_id }) {
                     {project.project_name}
                   </span>
                 </div>
-                {contextMenuIndex === index && (
+                {/* {contextMenuIndex === index && (
                   <ContextMenu onToggleFolder={() => toggleFolder(index)} popType="right" project_id={project_id} parent_id={parent_id} />
-                )}
+                )} */}
                 {project.isOpen && (
-                  <div className={`openf1 ${isOpen ? 'open' : ''}`} onClick={hhh}>
+                  <div className={`openf1 ${isOpen ? 'open' : ''}`}>
                     <FolderContainer initialProjects={project.items} project_id={project_id} parent_id={parent_id} />
                   </div>
                 )}

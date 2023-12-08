@@ -5,7 +5,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import PopupComponent from "./PopupComponent";
 import FolderIcon from "@mui/icons-material/Folder";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
-const ContextMenu = ({ onToggleFolder, popType, project_id, parent_id }) => {
+
+const ContextMenu = ({ onToggleFolder, popType, project_id, parent_id, onClose }) => {
   const [popupType, setPopupType] = useState(null);
   const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
 
@@ -20,6 +21,7 @@ const ContextMenu = ({ onToggleFolder, popType, project_id, parent_id }) => {
 
   const closePopup = () => {
     setPopupType(null);
+    onClose(); // Close the context menu
   };
 
   useEffect(() => {
@@ -39,10 +41,12 @@ const ContextMenu = ({ onToggleFolder, popType, project_id, parent_id }) => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, [popupType]);
+
   const hhh = () => {
-    console.log("hhh",parent_id)
-    console.log("hhh",project_id)
-  }
+    console.log("hhh", parent_id);
+    console.log("hhhggg", project_id);
+  };
+
   return (
     <div
       className={`contextMenu ${popType === "right" ? "right" : ""}`}
@@ -70,11 +74,9 @@ const ContextMenu = ({ onToggleFolder, popType, project_id, parent_id }) => {
       <div
         className="menu-item"
         onClick={(e) => {
-          openPopup("Add", { top: e.clientY, left: e.clientX + 10 });
-          hhh(); // Call the function after opening the popup
+          openPopup("Add", { top: e.clientY, left: e.clientX + 10 },project_id,parent_id);
         }}
       >
-
         <div
           style={{
             display: "flex",
@@ -135,9 +137,8 @@ const ContextMenu = ({ onToggleFolder, popType, project_id, parent_id }) => {
             left: popupPosition.left,
             marginLeft: "10px",
           }}
-          project_id={project_id} 
-           parent_id={parent_id}
-
+          project_id={project_id}
+          parent_id={parent_id}
         />
       )}
     </div>

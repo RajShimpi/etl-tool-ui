@@ -23,6 +23,8 @@
   position: absolute;
   background-color: #ffffff4f;
   z-index: 1000;
+  margin-left: 106px;
+  width: 114px;
 }
 
 .contextMenu.right {
@@ -40,7 +42,7 @@
   transition: background-color 0.3s ease;
   &:hover {
     background-color: #f0f0f0;
-    color: black;
+    /* color: black; */
   }
 }
 

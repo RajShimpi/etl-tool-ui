@@ -1,10 +1,11 @@
+// AddFile.js
 import React from 'react';
 import config from "../../components/config/config.json"
 import CommonModel from '../../components/common-modal';
 import { getFileFields } from './add-file-data';
 
-const AddFile = ({ projectID, parentID }) => {
-    let defaultObj = { file_name: '', project_id: projectID, type: 'File', parent_id: parentID };
+const AddFile = ({ project_id, parent_id }) => {
+    let defaultObj = { file_name: '', project_id: project_id, type: 'File', parent_id: parent_id };
 
     return (
         <>
