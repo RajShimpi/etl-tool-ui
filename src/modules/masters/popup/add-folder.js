@@ -10,7 +10,7 @@ const Folder = ({ project_id, parent_id }) => {
     //     abbreviation:'',
     // });
 
-    let defaultObj =  {  file_name:'',project_id: project_id,type: 'Folder', parent_id: parent_id };
+    let defaultObj = { file_name: '', project_id: project_id, type: 'Folder', parent_id: parent_id };
 
     return (
         <>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import FolderIcon from '@mui/icons-material/Folder';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
@@ -18,14 +18,12 @@ function FolderDropdown({
   openContextMenuForItemId,
 }) {
   const [contextMenuPosition, setContextMenuPosition] = useState(null);
-  const [files, setFiles] = useState();
-  const dropdownRef = useRef(null);
 
   const handleItemToggle = () => {
-    if (item.type === 'file') {
-      onToggleFile(item.file_name);
-    } else {
-      onToggleFolder(item, project_id, parent_id);
+    if (item.type === 'Folder') {
+      onToggleFolder(item);
+    } else if (item.type === 'File') {
+      onToggleFile(item);
     }
   };
 
@@ -39,38 +37,19 @@ function FolderDropdown({
     setContextMenuPosition(null);
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target) &&
-        !event.target.closest('.contextMenu')
-      ) {
-        closeContextMenu();
-      }
-    };
-
-    document.addEventListener('click', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
-  }, [dropdownRef, closeContextMenu]);
-
   return (
-    <div className="folderstyle"style={{ color: textColor }} onContextMenu={handleContextMenu} ref={dropdownRef}>
+    <div className="folderstyle" style={{ color: textColor }} onContextMenu={handleContextMenu}>
       <div
         className={` ${item.isOpen ? 'open' : ''}`}
-        style={{  color:"white" }}
-        onDoubleClick={handleItemToggle}
+        style={{ color: textColor }}
+        onClick={handleItemToggle}
       >
         {item.type === 'Folder' && (
           item.isOpen ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='small' />
         )}
         {item.type === 'File' && <InsertDriveFileIcon fontSize='small' />}
-        {item.file_name}
+        {item.fileName}
       </div>
-
       {contextMenuPosition && openContextMenuForItemId === item.id && (
         <ContextMenu
           onClose={closeContextMenu}
@@ -80,7 +59,7 @@ function FolderDropdown({
           position={contextMenuPosition}
         />
       )}
-      {item.isOpen && item.items && (
+      {item.type === 'Folder' && item.isOpen && item.items && (
         <div className="insideItemStyle">
           {item.items.map((subItem, index) => (
             <FolderDropdown
@@ -106,45 +85,51 @@ function FolderContainer() {
   const [openContextMenuForItemId, setOpenContextMenuForItemId] = useState(null);
 
   useEffect(() => {
-    axios.getWithCallback('project-files/', (data) => {
-      setProjects(data);
-    });
+      axios.getWithCallback('project-files/', (data) => {
+          setProjects(data);
+          console.log(data);
+      });
   }, []);
 
-  const toggleFolder = (clickedProject) => {
-    console.log('Toggled Folder:', clickedProject);
+  const toggleFolder = (clickedFolder) => {
+      setProjects((prevProjects) =>
+          prevProjects.map((project) =>
+              project === clickedFolder ? { ...project, isOpen: !project.isOpen } : project
+          )
+      );
   };
 
-  const handleToggleFile = (fileName) => {
-    console.log('Toggled File:', fileName);
+  const toggleFile = (clickedFile) => {
+      console.log('Toggled File:', clickedFile.fileName);
   };
 
   const handleContextMenu = (item, project_id, parent_id) => {
-    console.log('Right-clicked on:', item);
-    console.log('Project ID:', project_id);
-    console.log('Parent ID:', parent_id);
-    setOpenContextMenuForItemId(null);
-    setOpenContextMenuForItemId(item.id);
+      console.log('Right-clicked on:', item);
+      console.log('Project ID:', project_id);
+      console.log('Parent ID:', parent_id);
+      console.log('File Name:', item.fileName); 
+      setOpenContextMenuForItemId(item.id);
   };
 
   return (
-    <div>
-      {projects.map((project, index) => (
-        <FolderDropdown
-          key={index}
-          item={project}
-          onToggleFolder={(clickedProject) => toggleFolder(clickedProject)}
-          onToggleFile={(fileName) => handleToggleFile(fileName)}
-          textColor="black"
-          project_id={project.project_id}
-          parent_id={project.parent_id}
-          onContextMenu={(item, project_id, parent_id) =>
-            handleContextMenu(item, project_id, parent_id)
-          }
-          openContextMenuForItemId={openContextMenuForItemId}
-        />
-      ))}
-    </div>
+      <div>
+          {projects.map((project, index) => (
+              <FolderDropdown
+                  key={index}
+                  item={project}
+                  onToggleFolder={() => toggleFolder(project)}
+                  onToggleFile={() => toggleFile(project)}
+                  textColor="black"
+                  project_id={project.project_id}
+                  parent_id={project.parent_id}
+                  onContextMenu={(item, project_id, parent_id) =>
+                      handleContextMenu(item, project_id, parent_id)
+                  }
+                  openContextMenuForItemId={openContextMenuForItemId}
+              />
+          ))}
+          <Folders items={projects} onToggleFile={toggleFile} textColor="black" />
+      </div>
   );
 }
 

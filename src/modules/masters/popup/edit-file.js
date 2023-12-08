@@ -22,7 +22,7 @@ const Edit = () => {
                 // getApi="clients"
                 title="Edit"
                 defaultObj={defaultObj}
-                // tableTitle='client'
+            // tableTitle='client'
             />
         </>
     );

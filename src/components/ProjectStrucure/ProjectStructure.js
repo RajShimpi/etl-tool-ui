@@ -1,4 +1,3 @@
-// ProjectStructure.js
 import React, { useState, useEffect } from 'react';
 import './project.css';
 import DensityMediumIcon from '@mui/icons-material/DensityMedium';

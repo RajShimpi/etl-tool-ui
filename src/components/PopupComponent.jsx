@@ -1,4 +1,3 @@
-// PopupComponent.js
 import React from "react";
 import Folder from "../modules/masters/popup/add-folder";
 import AddFile from "../modules/masters/popup/add-file";
@@ -10,29 +9,37 @@ const PopupComponent = ({ onClose, actionType, project_id, parent_id }) => {
 
   switch (actionType) {
     case "AddFolder":
-      contentComponent = <Folder project_id={project_id} parent_id={parent_id} />;
+      contentComponent = (
+        <Folder project_id={project_id} parent_id={parent_id} />
+      );
       break;
     case "Add":
-      contentComponent = <AddFile project_id={project_id} parent_id={parent_id} />;
+      contentComponent = (
+        <AddFile project_id={project_id} parent_id={parent_id} />
+      );
       break;
     case "Edit":
-      contentComponent = <Edit project_id={project_id} parent_id={parent_id}/>;
+      contentComponent = <Edit project_id={project_id} parent_id={parent_id} />;
       break;
     case "Delete":
-      contentComponent = <Delete project_id={project_id} parent_id={parent_id}/>;
+      contentComponent = (
+        <Delete project_id={project_id} parent_id={parent_id} />
+      );
       break;
     default:
       contentComponent = null;
   }
-  const hhh=()=>{
-    console.log("KKKK",project_id)
-    console.log(parent_id)
-  }
+  const hhh = () => {
+    console.log( project_id);
+    console.log(parent_id);
+  };
 
   return (
     <div className="popup">
       <div className="popup-content">
-        <div style={{ flex: 1 }}onClick={hhh()}>{contentComponent}</div>
+        <div style={{ flex: 1 }} onClick={hhh()}>
+          {contentComponent}
+        </div>
       </div>
     </div>
   );

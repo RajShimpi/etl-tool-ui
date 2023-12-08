@@ -1,4 +1,3 @@
-// AddFile.js
 import React from 'react';
 import config from "../../components/config/config.json"
 import CommonModel from '../../components/common-modal';

@@ -1,89 +1,53 @@
 import React, { useState } from 'react';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import FolderIcon from '@mui/icons-material/Folder';
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import './project.css';
 
-function FolderDropdown({ folder, onToggleFolder, onToggleFile, textColor }) {
-
-    const handleFileToggle = (file) => {
-        onToggleFile(file);
+function FolderDropdown({ item, onToggleFile, textColor }) {
+    const handleFileToggle = () => {
+        onToggleFile(item);
+        console.log(item.fileName);
     };
 
     return (
-        <div className='folderStyle'>
-            <div className={` ${folder.isOpen ? 'open' : ''}`} style={textColor} onClick={onToggleFolder}>
-                {folder.isOpen ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='small' />} {folder.folderName}
-            </div>
-            {folder.isOpen && (
-                <div className='insidefileStyle'>
-                    {folder.files.map((file, index) => (
-                        <div key={index} className={`folder ${file.isOpen ? 'open' : ''}`} style={textColor} onClick={() => handleFileToggle(file)}>
-                            <InsertDriveFileIcon style={{ fontSize: '20px' }} />  {file.fileName}
-                        </div>
-                    ))}
+        <div className="folderStyle" style={{ color: textColor }}>
+            {item.type === 'Folder' && (
+                <div className={`${item.isOpen ? 'open' : ''}`} onClick={handleFileToggle}>
+                    {item.isOpen ? <FolderOpenIcon fontSize="small" /> : <FolderIcon fontSize="small" />}
+                    {item.fileName}
+                </div>
+            )}
+            {item.type === 'File' && (
+                <div className={`file ${item.isOpen ? 'open' : ''}`} onClick={handleFileToggle}>
+                    <InsertDriveFileIcon style={{ fontSize: '20px' }} /> {item.fileName} 
                 </div>
             )}
         </div>
     );
 }
+function Folders({ items, onToggleFile, textColor }) {
+    const [stateItems, setItems] = useState(items);
 
-function Folders() {
-    const [folders, setFolders] = useState([
-        createFolder('project 1', [
-            { fileName: 'File 1' },
-            { fileName: 'File 2' },
-            { fileName: 'File 3' },
-            { fileName: 'File 4' },
-            { fileName: 'File 5' }
-        ]),
-        createFolder('project 2', [
-            { fileName: 'File 3' },
-            { fileName: 'File 4' }
-        ]),
-        // Add more folders as needed
-    ],);
-
-    const toggleFolder = (index) => {
-        const updatedFolders = [...folders];
-        updatedFolders[index].isOpen = !updatedFolders[index].isOpen;
-        setFolders(updatedFolders);
+    const toggleFile = (clickedItem) => {
+        const updatedItems = stateItems.map((item) =>
+            item === clickedItem ? { ...item, isOpen: !item.isOpen } : item
+        );
+        setItems(updatedItems);
     };
-
-    const toggleFile = (folderIndex, clickedFile) => {
-        const updatedFolders = [...folders];
-        updatedFolders[folderIndex].files = updatedFolders[folderIndex].files.map(file => {
-            if (file === clickedFile) {
-                return { ...file, isOpen: !file.isOpen };
-            }
-            return file;
-        });
-        setFolders(updatedFolders);
-    };
-    ;
 
     return (
         <div>
-            <div >
-                {folders.map((folder, index) => (
-                    <FolderDropdown
-                        key={index}
-                        folder={folder}
-                        onToggleFolder={() => toggleFolder(index)}
-                        onToggleFile={(file) => toggleFile(index, file)}
-                    />
-                ))}
-            </div>
+            {stateItems.map((item, index) => (
+                <FolderDropdown
+                    key={index}
+                    item={item}
+                    onToggleFile={() => toggleFile(item)}
+                    textColor={textColor}
+                />
+            ))}
         </div>
     );
-}
-
-function createFolder(folderName, files = []) {
-    return {
-        folderName,
-        files,
-        isOpen: false,
-    };
 }
 
 export default Folders;
