@@ -7,20 +7,20 @@ import './project.css';
 function FolderDropdown({ item, onToggleFile, textColor }) {
     const handleFileToggle = () => {
         onToggleFile(item);
-        console.log(item.fileName);
+        console.log(item.file_name);
     };
 
     return (
-        <div className="folderStyle" style={{ color: textColor }}>
+        <div className="folderStyle" style={{  textColor }}>
             {item.type === 'Folder' && (
                 <div className={`${item.isOpen ? 'open' : ''}`} onClick={handleFileToggle}>
                     {item.isOpen ? <FolderOpenIcon fontSize="small" /> : <FolderIcon fontSize="small" />}
-                    {item.fileName}
+                    {item.file_name}
                 </div>
             )}
             {item.type === 'File' && (
                 <div className={`file ${item.isOpen ? 'open' : ''}`} onClick={handleFileToggle}>
-                    <InsertDriveFileIcon style={{ fontSize: '20px' }} /> {item.fileName} 
+                    <InsertDriveFileIcon style={{ fontSize: '20px' }} /> {item.file_name} 
                 </div>
             )}
         </div>

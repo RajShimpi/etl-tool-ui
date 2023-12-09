@@ -38,17 +38,17 @@ function FolderDropdown({
   };
 
   return (
-    <div className="folderstyle" style={{ color: textColor }} onContextMenu={handleContextMenu}>
+    <div className="folderstyle" style={{  textColor }} onContextMenu={handleContextMenu}>
       <div
         className={` ${item.isOpen ? 'open' : ''}`}
-        style={{ color: textColor }}
+        style={{  textColor }}
         onClick={handleItemToggle}
       >
         {item.type === 'Folder' && (
           item.isOpen ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='small' />
         )}
         {item.type === 'File' && <InsertDriveFileIcon fontSize='small' />}
-        {item.fileName}
+        {item.file_name}
       </div>
       {contextMenuPosition && openContextMenuForItemId === item.id && (
         <ContextMenu
