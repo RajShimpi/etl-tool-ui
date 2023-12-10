@@ -1,19 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './project.css';
 import DensityMediumIcon from '@mui/icons-material/DensityMedium';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
+import FolderDropdown from './ProjectFolder';
 import axios from '../../modules/services/axios';
-import FolderContainer from './ProjectFolder';
 
 function ProjectStructure({ textColor }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [contextMenuIndex, setContextMenuIndex] = useState(null);
-  const [apiData, setApiData] = useState([]);
+  const [folders, setFolders] = useState([]);
 
   useEffect(() => {
-    axios.getWithCallback('projects/', (data) => {
-      setApiData(data);
-    });
+    axios.getWithCallback('projects/', (data) => setFolders(data));
   }, []);
 
   const toggleSidebar = () => {
@@ -21,35 +18,21 @@ function ProjectStructure({ textColor }) {
   };
 
   const toggleFolder = (index) => {
-    setContextMenuIndex(null);
-    const updatedApiData = [...apiData];
-    updatedApiData[index].isOpen = !updatedApiData[index].isOpen;
-    setApiData(updatedApiData);
+    const updatedFolders = [...folders];
+    updatedFolders[index].isOpen = !updatedFolders[index].isOpen;
+    setFolders(updatedFolders);
   };
 
-  const handleContextMenu = (event, index) => {
-    event.preventDefault();
-    setContextMenuIndex(index);
+  const toggleFile = (folderIndex, file) => {
+    const updatedFolders = [...folders];
+    updatedFolders[folderIndex].openFiles[file] = !updatedFolders[folderIndex].openFiles[file];
+    setFolders(updatedFolders);
   };
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (contextMenuIndex !== null && !event.target.closest('.contextMenu')) {
-        setContextMenuIndex(null);
-      }
-    };
-
-    document.addEventListener('click', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
-  }, [contextMenuIndex]);
 
   return (
     <div>
       <div className={`sidebar ${isOpen ? 'open' : ''}`}>
-        <div className="logo_details" style={{ color: textColor }}>
+        <div className="logo_details" style={{ textColor }}>
           <div className="logo_name">Project Structure</div>
           <DensityMediumIcon
             className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`}
@@ -57,22 +40,22 @@ function ProjectStructure({ textColor }) {
             onClick={toggleSidebar}
           />
         </div>
-        <ul className="nav-list">
-          {apiData.map((project, index) => (
+        <ul className="nav-list" style={{ textColor }}>
+          {folders.map((folder, index) => (
             <div key={index}>
-              <li onContextMenu={(event) => handleContextMenu(event, index)}>
+              <li>
                 <div className='proicon' onClick={() => toggleFolder(index)}>
                   <FolderOpenIcon className="bx bx-grid-alt" />
-                  <span className="link_name">
-                    {project.project_name}
+                  <span className="link_name" style={{ marginLeft: '5px' }}>
+                    {folder.project_name}
                   </span>
                 </div>
-                {project.isOpen && (
-                  <div className={`openf1 ${isOpen ? 'open' : ''}`}>
-                    <FolderContainer
-                      initialProjects={project.items}
-                      project_id={project.project_id}
-                      parent_id={project.parent_id}
+                {folder.isOpen && (
+                  <div className={`${isOpen ? 'open' : ''}`}>
+                    <FolderDropdown
+                      folder={folder}
+                      onToggleFolder={() => toggleFolder(index)}
+                      onToggleFile={(file) => toggleFile(index, file)}
                     />
                   </div>
                 )}
