@@ -1,6 +1,6 @@
+import config from '../components/config/config.json'
 const getTypeConfigMaster = (itemData) => {
     return [{
-
         col: 3,
         callback: itemData.callback,
         disabled: itemData.disabled,
@@ -44,5 +44,5 @@ const getTypeConfigMaster = (itemData) => {
 }
 
 export {
-    getTypeConfigMaster
+    getTypeConfigMaster,
 }

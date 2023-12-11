@@ -1,6 +1,6 @@
 import { useState } from "react";
 import CommonFormWithList from "../components/common-form-with-list";
-import config from "../config/config.json";
+import config from "../components/config/config.json";
 import { getTypeConfigMaster } from "./master-data";
 
 const TypeConfigMaster = () => {
