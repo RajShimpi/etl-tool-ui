@@ -21,6 +21,8 @@ import Client from "../masters/client";
 import Project from "../masters/project";
 import ProjectFile from "../masters/project-file";
 import StepType from "../masters/steptype";
+import Parameter from "../masters/parameter";
+import Step_type_parameters from "../masters/step_type_parameters";
 
 
 export const routeConstant = {
@@ -41,7 +43,9 @@ export const routeConstant = {
   client:"/client",
   project:"/project",
   projectfile:"/projectfile",
-  step:"/step"
+  step:"/step",
+  parameter:"/parameter",
+  step_type_parameters:"/step_type_parameters"
 };
 export const routeData = (routes) => [
   {
@@ -164,6 +168,22 @@ export const routeData = (routes) => [
     routeTo: routeConstant.step, // Project Form route
     header: "",
     childComp: StepType,
+    data: {},
+    permissions: true,
+    isUserCanView: true,
+  },
+    {
+    routeTo: routeConstant.parameter, // Project Form route
+    header: "",
+    childComp: Parameter,
+    data: {},
+    permissions: true,
+    isUserCanView: true,
+  },
+  {
+    routeTo: routeConstant.step_type_parameters, // Project Form route
+    header: "",
+    childComp: Step_type_parameters,
     data: {},
     permissions: true,
     isUserCanView: true,

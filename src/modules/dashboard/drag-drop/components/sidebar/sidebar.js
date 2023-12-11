@@ -16,7 +16,7 @@ const Sidebar = ({ apiData }) => {
       <ul>
         {apiData.map(item => (
           <div
-            style={{ margin: '5px' }}
+            style={{ margin: '5px', display:'flex'}}
             className="dndnode input m-10"
             onDragStart={(event) =>
               onDragStart(event, "node", "Click to Edit message", item.symbol,item.name)

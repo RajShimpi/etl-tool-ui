@@ -107,5 +107,18 @@
         "name",
         "symbol",
         "group"
+    ],
+    "PARAMETER":[
+        "name",
+        "context",
+        "display_name",
+        "descirption",
+        "type",
+        "resource"
+    ],
+    "STEP_TYPE_PARAMETERS":[
+        "step_id",
+        "parameter_id",
+        "required"
     ]
 }
