@@ -16,7 +16,7 @@ const Sidebar = ({ apiData }) => {
       <ul>
         {apiData.map(item => (
           <div
-            style={{ margin: '5px' }}
+            style={{ margin: '5px', display:'flex'}}
             className="dndnode input m-10"
             onDragStart={(event) =>
               onDragStart(event, "node", "Click to Edit message", item.symbol,item.name)
@@ -24,7 +24,9 @@ const Sidebar = ({ apiData }) => {
             draggable
             key={item.id}
           >
-             <img src={item.symbol} alt={item.symbol} style={{ width: '50px', height: '50px' }} />
+            <div style={{marginTop: '-2px', padding:'7px'}}>  
+             <img src={item.symbol} alt={item.symbol} style={{ width: '20px', height: '20px' }} />
+             </div>
             {/* <span style={{ fontSize: "20px" }}>{item.symbol}</span> */}
             <li>{item.name}</li>
           </div>

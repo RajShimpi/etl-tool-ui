@@ -1,7 +1,6 @@
 .sidebar {
   height: 600px;
-  /* overflow-y: scroll; 
-  overflow-y: scroll; 
+  /* overflow-y: scroll !important; 
   -ms-overflow-style: none;
   scrollbar-width: none;  */
   min-height: 100vh;
@@ -14,9 +13,9 @@
   left: 0;
 }
 
-/* .sidebar::-webkit-scrollbar { 
-  display: none;  /* Safari and Chrome 
-} */
+ .sidebar::-webkit-scrollbar { 
+  display: none;  /* Safari and Chrome  */
+}
 
 .sidebar.open {
   width: 220px;

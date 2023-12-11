@@ -41,7 +41,7 @@ const ContextMenu = ({ onToggleFolder, popType }) => {
   }, [popupType]);
 
   return (
-    <div
+    <div style={{zIndex:1}}
       className={`contextMenu ${popType === "right" ? "right" : ""}`}
       onContextMenu={handleContextMenuClick}
     >
