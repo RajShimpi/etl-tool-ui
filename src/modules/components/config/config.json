@@ -112,13 +112,13 @@
         "name",
         "context",
         "display_name",
-        "descirption",
+        "description",
         "type",
         "resource"
     ],
     "STEP_TYPE_PARAMETERS":[
-        "step_id",
-        "parameter_id",
+        "step.name",
+        "parameter.name",
         "required"
     ]
 }

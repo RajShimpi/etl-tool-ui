@@ -1,27 +1,35 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import CommonFormWithList from '../components/common-form-with-list';
 import config from "../components/config/config.json"
-import { getParameterFields, getSteptypeFields } from './parameter-data';
+import axios from '../services/axios';
+import { getParameterFields } from './parameter.-data';
 
-const Parameter= () => {
-    // const [formData, setFormData] = useState({
-    //     id: null,
-    //     name:'',
-    //     abbreviation:'',
-    // });
+const Parameter = () => {
 
-    let defaultObj = {name:'',context:'', display_name: '', descirption:'',type:'',resource:''};
+    const [parameter, setParameter] = useState([]);
+
+    useEffect(() => {
+        axios.getWithCallback('parameter/', (data) => setParameter(data.map(x => ({ value: x.id, label: x.name }))))
+    }, []);
+
+
+
+    const defaultObj = { name: '', context: '', display_name: '', description: '', type: '',resource:'' };
+
 
     return (
-        <>      
+        <>
             <CommonFormWithList
                 formDataAction={getParameterFields}
                 columns={config.PARAMETER}
                 insertApi="parameter"
-                updateApi="parameter/:id"
+                updateApi="parameter"
                 getApi="parameter"
                 title="Parameter"
                 defaultObj={defaultObj}
+                // options={[projectId,
+                //     parentId
+                // ]}
                 tableTitle='Parameter'
             />
         </>

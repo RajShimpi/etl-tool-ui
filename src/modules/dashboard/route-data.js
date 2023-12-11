@@ -22,7 +22,7 @@ import Project from "../masters/project";
 import ProjectFile from "../masters/project-file";
 import StepType from "../masters/steptype";
 import Parameter from "../masters/parameter";
-import Step_type_parameters from "../masters/step_type_parameters";
+import StepTypeParamete from "../masters/step-type-parameter";
 
 
 export const routeConstant = {
@@ -45,7 +45,7 @@ export const routeConstant = {
   projectfile:"/projectfile",
   step:"/step",
   parameter:"/parameter",
-  step_type_parameters:"/step_type_parameters"
+  steptypeparameter:"/step-type-parameter"
 };
 export const routeData = (routes) => [
   {
@@ -157,7 +157,7 @@ export const routeData = (routes) => [
     isUserCanView: true,
   },
   {
-    routeTo: routeConstant.projectfile, // Project Form route
+    routeTo: routeConstant.projectfile, // ProjectFile Form route
     header: "",
     childComp: ProjectFile,
     data: {},
@@ -165,15 +165,15 @@ export const routeData = (routes) => [
     isUserCanView: true,
   },
   {
-    routeTo: routeConstant.step, // Project Form route
+    routeTo: routeConstant.step, // StepType Form route
     header: "",
     childComp: StepType,
     data: {},
     permissions: true,
     isUserCanView: true,
   },
-    {
-    routeTo: routeConstant.parameter, // Project Form route
+  {
+    routeTo: routeConstant.parameter, // StepType Form route
     header: "",
     childComp: Parameter,
     data: {},
@@ -181,9 +181,9 @@ export const routeData = (routes) => [
     isUserCanView: true,
   },
   {
-    routeTo: routeConstant.step_type_parameters, // Project Form route
+    routeTo: routeConstant.steptypeparameter, // StepType Form route
     header: "",
-    childComp: Step_type_parameters,
+    childComp: StepTypeParamete,
     data: {},
     permissions: true,
     isUserCanView: true,
