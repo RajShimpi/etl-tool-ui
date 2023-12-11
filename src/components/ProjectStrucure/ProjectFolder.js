@@ -50,9 +50,7 @@ function FolderDropdown({
         )}
         {item.type === 'File' && <InsertDriveFileIcon fontSize='small' />}
         {item.file_name}
-        {item.isOpen && item.type === 'Folder' && <Folders />}
-      </div>
-      {contextMenuPosition && openContextMenuForItemId === item.id && (
+        {contextMenuPosition && openContextMenuForItemId === item.id && (
         <ContextMenu
           onClose={closeContextMenu}
           project_id={project_id}
@@ -61,6 +59,17 @@ function FolderDropdown({
           position={contextMenuPosition}
         />
       )}
+        {item.isOpen && item.type === 'Folder' && <Folders />}
+      </div>
+      {/* {contextMenuPosition && openContextMenuForItemId === item.id && (
+        <ContextMenu
+          onClose={closeContextMenu}
+          project_id={project_id}
+          parent_id={parent_id}
+          textColor={textColor}
+          position={contextMenuPosition}
+        />
+      )} */}
       {/* {item.type === 'Folder' && item.isOpen && item.items && (
         <div className="insideItemStyle">
           {/* {item.items.map((subItem, index) => (

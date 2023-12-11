@@ -45,7 +45,7 @@ function FolderDropdown({
     return (
         <div style={folderStyle}>
             <div
-                className={` ${project.isOpen ? 'open' : ''}`}
+                className={`${project.isOpen ? 'open' : ''}`}
                 style={textColor}
                 onClick={() => onToggleFolder(project)}
                 onContextMenu={(e) => handleContextMenu(e, 'right', project.id, project.parent_id)}
@@ -56,6 +56,7 @@ function FolderDropdown({
                     <InsertDriveFileIcon fontSize='small' />
                 )}{' '}
                 {project.file_name}
+                
             </div>
             {project.isOpen && (
                 <div style={insidefileStyle}>
@@ -109,7 +110,7 @@ function Folders() {
     };
 
     const closeContextMenu = (callback) => {
-        console.log("Closing context menu...");
+        // console.log("Closing context menu...",projects.project_id,projects.parent_id);
         setContextMenu(null);
         if (callback) {
             callback();
