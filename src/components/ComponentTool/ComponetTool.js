@@ -7,7 +7,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Sidebar from '../../modules/dashboard/drag-drop/components/sidebar/sidebar';
 import axios from '../../modules/services/axios';
-
+    
 function ComponentTool({ textColor }) {
   const [isOpen, setIsOpen] = useState(false);
   const [apiData, setApiData] = useState([]);
@@ -22,6 +22,10 @@ function ComponentTool({ textColor }) {
                 data: groupedData[group],
             }));
             setComponents(newComponents);
+            data.forEach(item => {
+              console.log("ID:", item.id, "Name:", item.name);
+            });
+
         });
 }, []);
 

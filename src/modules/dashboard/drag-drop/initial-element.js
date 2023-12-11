@@ -14,7 +14,7 @@ export const nodes = [
     id: "2",
     type: "node",
     data: { heading: "Send Message", content: "click to edit text", img: require("../../../assets/Images/Files-PNG-Clipart.png"), comp: <Edit /> },
-    position: { x: 300, y: 100 }
+    position: { x: 300, y: 0 }
   },
   {
     id: "3",
