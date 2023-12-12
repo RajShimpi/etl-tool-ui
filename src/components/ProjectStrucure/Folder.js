@@ -7,8 +7,8 @@ import ContextMenu from '../ContextMenu';
 import axios from '../../modules/services/axios';
 
 function FolderDropdown({
-    project,
-    onToggleFolder,
+    files,
+    onToggleFiles,
     onToggleFile,
     textColor,
     closeContextMenu,
@@ -45,22 +45,22 @@ function FolderDropdown({
     return (
         <div style={folderStyle}>
             <div
-                className={`${project.isOpen ? 'open' : ''}`}
+                className={`${files.isOpen ? 'open' : ''}`}
                 style={textColor}
-                onClick={() => onToggleFolder(project)}
-                onContextMenu={(e) => handleContextMenu(e, 'right', project.id, project.parent_id)}
+                onClick={() => onToggleFiles(files)}
+                onContextMenu={(e) => handleContextMenu(e, 'right', files.id, files.parent_id)}
             >
-                {project.type === 'Folder' ? (
-                    project.isOpen ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='small' />
+                {files.type === 'Folder' ? (
+                    files.isOpen ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='small' />
                 ) : (
                     <InsertDriveFileIcon fontSize='small' />
                 )}{' '}
-                {project.file_name}
-                
+                {files.file_name}
+
             </div>
-            {project.isOpen && (
+            {files.isOpen && (
                 <div style={insidefileStyle}>
-                    {project.files.map((file, index) => (
+                    {files.files.map((file, index) => (
                         <div
                             key={index}
                             className={`folder ${file.isOpen ? 'open' : ''}`}
@@ -83,34 +83,33 @@ function FolderDropdown({
 }
 
 function Folders() {
-    const [projects, setProjects] = useState([]);
+    const [files, setFiles] = useState([]);
     const [contextMenu, setContextMenu] = useState(null);
 
     useEffect(() => {
         axios.getWithCallback('project-files/', (data) => {
-            setProjects(data);
+            setFiles(data);
         });
     }, []);
 
-    const toggleFolder = (index) => {
-        const updatedProjects = [...projects];
-        updatedProjects[index].isOpen = !updatedProjects[index].isOpen;
-        setProjects(updatedProjects);
+    const toggleFiles = (index) => {
+        const updatedFiles = [...files];
+        updatedFiles[index].isOpen = !updatedFiles[index].isOpen;
+        setFiles(updatedFiles);
     };
 
-    const toggleFile = (folderIndex, clickedFile) => {
-        const updatedProjects = [...projects];
-        updatedProjects[folderIndex].files = updatedProjects[folderIndex].files.map((file) => {
+    const toggleFile = (filesIndex, clickedFile) => {
+        const updatedFiles = [...files];
+        updatedFiles[filesIndex].files = updatedFiles[filesIndex].files.map((file) => {
             if (file === clickedFile) {
                 return { ...file, isOpen: !file.isOpen };
             }
             return file;
         });
-        setProjects(updatedProjects);
+        setFiles(updatedFiles);
     };
 
     const closeContextMenu = (callback) => {
-        // console.log("Closing context menu...",projects.project_id,projects.parent_id);
         setContextMenu(null);
         if (callback) {
             callback();
@@ -124,11 +123,11 @@ function Folders() {
     return (
         <div>
             <div style={style}>
-                {projects.map((project, index) => (
+                {files.map((files, index) => (
                     <FolderDropdown
                         key={index}
-                        project={project}
-                        onToggleFolder={() => toggleFolder(index)}
+                        files={files}
+                        onToggleFiles={() => toggleFiles(index)}
                         onToggleFile={(file) => toggleFile(index, file)}
                         closeContextMenu={closeContextMenu}
                         setContextMenu={setContextMenu}
@@ -137,7 +136,7 @@ function Folders() {
             </div>
             {contextMenu && (
                 <ContextMenu
-                    onToggleFolder={(project) => toggleFolder(projects.indexOf(project))}
+                    onToggleFiles={(files) => toggleFile(files.indexOf(files))}
                     popType={contextMenu.type}
                     project_id={contextMenu.project.id}
                     parent_id={contextMenu.project.parent_id}

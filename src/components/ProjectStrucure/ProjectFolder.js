@@ -51,14 +51,14 @@ function FolderDropdown({
         {item.type === 'File' && <InsertDriveFileIcon fontSize='small' />}
         {item.file_name}
         {contextMenuPosition && openContextMenuForItemId === item.id && (
-        <ContextMenu
-          onClose={closeContextMenu}
-          project_id={project_id}
-          parent_id={parent_id}
-          textColor={textColor}
-          position={contextMenuPosition}
-        />
-      )}
+          <ContextMenu
+            onClose={closeContextMenu}
+            project_id={project_id}
+            parent_id={parent_id}
+            textColor={textColor}
+            position={contextMenuPosition}
+          />
+        )}
         {item.isOpen && item.type === 'Folder' && <Folders />}
       </div>
       {/* {contextMenuPosition && openContextMenuForItemId === item.id && (
@@ -92,20 +92,20 @@ function FolderDropdown({
 }
 
 function FolderContainer() {
-  const [projects, setProjects] = useState([]);
+  const [folder, setFolder] = useState([]);
   const [openContextMenuForItemId, setOpenContextMenuForItemId] = useState(null);
 
   useEffect(() => {
     axios.getWithCallback('project-files/', (data) => {
-      setProjects(data);
+      setFolder(data);
       // console.log(data);
     });
   }, []);
 
   const toggleFolder = (clickedFolder) => {
-    setProjects((prevProjects) =>
-      prevProjects.map((project) =>
-        project === clickedFolder ? { ...project, isOpen: !project.isOpen } : project
+    setFolder((prevFolder) =>
+      prevFolder.map((folder) =>
+        folder === clickedFolder ? { ...folder, isOpen: !folder.isOpen } : folder
       )
     );
   };
@@ -124,15 +124,15 @@ function FolderContainer() {
 
   return (
     <div>
-      {projects.map((project, index) => (
+      {folder.map((folder, index) => (
         <FolderDropdown
           key={index}
-          item={project}
-          onToggleFolder={() => toggleFolder(project)}
-          onToggleFile={() => toggleFile(project)}
+          item={folder}
+          onToggleFolder={() => toggleFolder(folder)}
+          onToggleFile={() => toggleFile(folder)}
           textColor="black"
-          project_id={project.project_id}
-          parent_id={project.parent_id}
+          project_id={folder.project_id}
+          parent_id={folder.parent_id}
           onContextMenu={(item, project_id, parent_id) =>
             handleContextMenu(item, project_id, parent_id)
           }

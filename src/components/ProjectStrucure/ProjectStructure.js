@@ -7,26 +7,26 @@ import axios from '../../modules/services/axios';
 
 function ProjectStructure({ textColor }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [folders, setFolders] = useState([]);
+  const [project, setProject] = useState([]);
 
   useEffect(() => {
-    axios.getWithCallback('projects/', (data) => setFolders(data));
+    axios.getWithCallback('projects/', (data) => setProject(data));
   }, []);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
 
-  const toggleFolder = (index) => {
-    const updatedFolders = [...folders];
-    updatedFolders[index].isOpen = !updatedFolders[index].isOpen;
-    setFolders(updatedFolders);
+  const toggleProject = (index) => {
+    const updatedProject = [...project];
+    updatedProject[index].isOpen = !updatedProject[index].isOpen;
+    setProject(updatedProject);
   };
 
-  const toggleFile = (folderIndex, file) => {
-    const updatedFolders = [...folders];
-    updatedFolders[folderIndex].openFiles[file] = !updatedFolders[folderIndex].openFiles[file];
-    setFolders(updatedFolders);
+  const toggleFile = (projectIndex, file) => {
+    const updatedProject = [...project];
+    updatedProject[projectIndex].openFiles[file] = !updatedProject[projectIndex].openFiles[file];
+    setProject(updatedProject);
   };
 
   return (
@@ -41,20 +41,20 @@ function ProjectStructure({ textColor }) {
           />
         </div>
         <ul className="nav-list" style={{ textColor }}>
-          {folders.map((folder, index) => (
+          {project.map((project, index) => (
             <div key={index}>
               <li>
-                <div className='proicon' onClick={() => toggleFolder(index)}>
+                <div className='proicon' onClick={() => toggleProject(index)}>
                   <FolderOpenIcon className="bx bx-grid-alt" />
                   <span className="link_name" style={{ marginLeft: '5px' }}>
-                    {folder.project_name}
+                    {project.project_name}
                   </span>
                 </div>
-                {folder.isOpen && (
+                {project.isOpen && (
                   <div className={`${isOpen ? 'open' : ''}`}>
                     <FolderDropdown
-                      folder={folder}
-                      onToggleFolder={() => toggleFolder(index)}
+                      project={project}
+                      onToggleFolder={() => toggleProject(index)}
                       onToggleFile={(file) => toggleFile(index, file)}
                     />
                   </div>

@@ -27,9 +27,6 @@ const Parameter = () => {
                 getApi="parameter"
                 title="Parameter"
                 defaultObj={defaultObj}
-                // options={[projectId,
-                //     parentId
-                // ]}
                 tableTitle='Parameter'
             />
         </>
