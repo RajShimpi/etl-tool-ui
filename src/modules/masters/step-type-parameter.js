@@ -21,8 +21,8 @@ const StepTypeParamete = () => {
     }, []);
 
    
+    const defaultObj = { step_id: '', parameter_id: '',active: true};
 
-    const defaultObj = { step_id: '', parameter_id: '', required: '' };
 
 
     return (

@@ -32,21 +32,21 @@ function ProjectStructure({ textColor }) {
   return (
     <div>
       <div className={`sidebar ${isOpen ? 'open' : ''}`}>
-        <div className="logo_details" style={{ textColor }}>
-          <div className="logo_name">Project Structure</div>
+        <div className='logo_details' style={{ textColor }}>
+          <div className='logo_name'>Project Structure</div>
           <DensityMediumIcon
             className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`}
-            id="btn"
+            id='btn'
             onClick={toggleSidebar}
           />
         </div>
-        <ul className="nav-list" style={{ textColor }}>
+        <ul className='nav-list' style={{ textColor }}>
           {project.map((project, index) => (
             <div key={index}>
               <li>
                 <div className='proicon' onClick={() => toggleProject(index)}>
-                  <FolderOpenIcon className="bx bx-grid-alt" />
-                  <span className="link_name" style={{ marginLeft: '5px' }}>
+                  <FolderOpenIcon className='bx bx-grid-alt' />
+                  <span className='link_name' style={{ marginLeft: '5px' }}>
                     {project.project_name}
                   </span>
                 </div>
@@ -54,6 +54,7 @@ function ProjectStructure({ textColor }) {
                   <div className={`${isOpen ? 'open' : ''}`}>
                     <FolderDropdown
                       project={project}
+                      parentID={project.id}
                       onToggleFolder={() => toggleProject(index)}
                       onToggleFile={(file) => toggleFile(index, file)}
                     />

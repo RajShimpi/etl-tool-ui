@@ -24,7 +24,7 @@ function ComponentTool({ textColor }) {
       }));
       setComponents(newComponents);
       data.forEach(item => {
-        console.log("ID:", item.id, "Name:", item.name);
+        console.log('ID:', item.id, 'Name:', item.name);
       });
 
     });
@@ -45,24 +45,24 @@ function ComponentTool({ textColor }) {
 
   return (
     <div className={`component-tool ${isOpen ? 'open' : ''} right-sidebar`}>
-      <div className="logo_details" style={{ textColor }}>
-        <div className="logo_name">Component Tool</div>
+      <div className='logo_details' style={{ textColor }}>
+        <div className='logo_name'>Component Tool</div>
         <DensityMediumIcon
           className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`}
-          id="btn"
+          id='btn'
           onClick={toggleSidebar}
         ></DensityMediumIcon>
       </div>
-      <ul className="nav-list">
+      <ul className='nav-list'>
         {components.map((component, index) => (
           <div key={index} className='component' draggable>
             <li>
               <div>
-                <div href="#" className="comIcon">
-                  <FolderOpenIcon className="bx bx-grid-alt" />
-                  <span className="link_name" style={{ marginLeft: '5px' }}>
+                <div href='#' className='comIcon'>
+                  <FolderOpenIcon className='bx bx-grid-alt' />
+                  <span className='link_name' style={{ marginLeft: '5px' }}>
                     <div
-                      variant="contained"
+                      variant='contained'
                       className='comp'
                       onClick={() => handleCollapseToggle(index)}
                     >

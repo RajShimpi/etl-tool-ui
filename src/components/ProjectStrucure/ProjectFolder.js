@@ -39,7 +39,7 @@ function FolderDropdown({
   };
 
   return (
-    <div className="folderstyle" style={{ textColor }} onContextMenu={handleContextMenu}>
+    <div className='folderstyle' style={{ textColor }} onContextMenu={handleContextMenu}>
       <div
         className={` ${item.isOpen ? 'open' : ''}`}
         style={{ textColor }}
@@ -59,7 +59,7 @@ function FolderDropdown({
             position={contextMenuPosition}
           />
         )}
-        {item.isOpen && item.type === 'Folder' && <Folders />}
+        {item.isOpen && item.type === 'Folder' && <Folders parentId={item.id}  />}
       </div>
       {/* {contextMenuPosition && openContextMenuForItemId === item.id && (
         <ContextMenu
@@ -91,16 +91,16 @@ function FolderDropdown({
   );
 }
 
-function FolderContainer() {
+function FolderContainer({parentID}) {
   const [folder, setFolder] = useState([]);
   const [openContextMenuForItemId, setOpenContextMenuForItemId] = useState(null);
 
   useEffect(() => {
-    axios.getWithCallback('project-files/', (data) => {
+    axios.getWithCallback('project-files/' + parentID, (data) => {
       setFolder(data);
-      // console.log(data);
+      console.log(data);
     });
-  }, []);
+  }, [parentID]);
 
   const toggleFolder = (clickedFolder) => {
     setFolder((prevFolder) =>
@@ -130,7 +130,6 @@ function FolderContainer() {
           item={folder}
           onToggleFolder={() => toggleFolder(folder)}
           onToggleFile={() => toggleFile(folder)}
-          textColor="black"
           project_id={folder.project_id}
           parent_id={folder.parent_id}
           onContextMenu={(item, project_id, parent_id) =>

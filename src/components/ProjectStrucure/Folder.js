@@ -25,11 +25,11 @@ function FolderDropdown({
         cursor: 'pointer',
     };
 
-    const handleContextMenu = (event, type, projectId, parentId) => {
+    const handleContextMenu = (event, type, projectId, parentId, file_name) => {
         event.preventDefault();
 
         closeContextMenu(() => {
-            console.log("Opening new context menu...");
+            console.log(projectId, file_name);
             setContextMenu({
                 type,
                 position: { top: event.clientY, left: event.clientX + 10 },
@@ -43,12 +43,14 @@ function FolderDropdown({
     };
 
     return (
-        <div style={folderStyle}>
+        <div style={{ listStyleType: 'none', cursor: 'pointer', marginLeft: '20px' }}>
+        {/* Check if parentId is not null before rendering the content */}
+        {files.parentId !== null && (
             <div
-                className={`${files.isOpen ? 'open' : ''}`}
-                style={textColor}
-                onClick={() => onToggleFiles(files)}
-                onContextMenu={(e) => handleContextMenu(e, 'right', files.id, files.parent_id)}
+                className={` ${files.isOpen ? 'open' : ''}`}
+                style={{ textColor }} 
+                onClick={() => handleFileToggle()}
+                onContextMenu={(e) => handleContextMenu(e, 'right')}
             >
                 {files.type === 'Folder' ? (
                     files.isOpen ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='small' />
@@ -56,41 +58,38 @@ function FolderDropdown({
                     <InsertDriveFileIcon fontSize='small' />
                 )}{' '}
                 {files.file_name}
-
             </div>
-            {files.isOpen && (
-                <div style={insidefileStyle}>
-                    {files.files.map((file, index) => (
-                        <div
-                            key={index}
-                            className={`folder ${file.isOpen ? 'open' : ''}`}
-                            style={textColor}
-                            onClick={() => handleFileToggle(file)}
-                            onContextMenu={(e) => handleContextMenu(e, 'right', file.project_id, file.parent_id)}
-                        >
-                            {file.type === 'Folder' ? (
-                                file.isOpen ? <FolderOpenIcon style={{ fontSize: '20px' }} /> : <FolderIcon style={{ fontSize: '20px' }} />
-                            ) : (
-                                <InsertDriveFileIcon style={{ fontSize: '20px' }} />
-                            )}{' '}
-                            {file.file_name}
-                        </div>
-                    ))}
-                </div>
-            )}
-        </div>
+        )}
+    
+        {files.isOpen && files.type === 'Folder' && files.files && (
+            <div style={{ marginLeft: '20px' }}>
+                {files.files.map((subItem, index) => (
+                    <FolderDropdown
+                        key={index}
+                        item={subItem}
+                        onToggleFiles={() => onToggleFiles(subItem)}
+                        onToggleFile={() => onToggleFile(subItem)}
+                        textColor={textColor}
+                        closeContextMenu={closeContextMenu}
+                        setContextMenu={setContextMenu}
+                    />
+                ))}
+            </div>
+        )}
+    </div>
+    
     );
 }
 
-function Folders() {
+function Folders({ parentId }) {
     const [files, setFiles] = useState([]);
     const [contextMenu, setContextMenu] = useState(null);
 
     useEffect(() => {
-        axios.getWithCallback('project-files/', (data) => {
+        axios.getWithCallback('project-files/' + parentId, (data) => {
             setFiles(data);
         });
-    }, []);
+    }, [parentId]);
 
     const toggleFiles = (index) => {
         const updatedFiles = [...files];
@@ -124,14 +123,17 @@ function Folders() {
         <div>
             <div style={style}>
                 {files.map((files, index) => (
-                    <FolderDropdown
-                        key={index}
-                        files={files}
-                        onToggleFiles={() => toggleFiles(index)}
-                        onToggleFile={(file) => toggleFile(index, file)}
-                        closeContextMenu={closeContextMenu}
-                        setContextMenu={setContextMenu}
-                    />
+                    // Check if parent_id is null before rendering FolderDropdown
+                    (files.parent_id === null) && (
+                        <FolderDropdown
+                            key={index}
+                            files={files}
+                            onToggleFiles={() => toggleFiles(index)}
+                            onToggleFile={(file) => toggleFile(index, file)}
+                            closeContextMenu={closeContextMenu}
+                            setContextMenu={setContextMenu}
+                        />
+                    )
                 ))}
             </div>
             {contextMenu && (

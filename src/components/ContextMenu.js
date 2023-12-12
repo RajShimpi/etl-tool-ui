@@ -28,28 +28,23 @@ const ContextMenu = ({ onToggleFolder, popType, project_id, parent_id, onClose }
     const handleClickOutside = (event) => {
       if (
         popupType &&
-        !event.target.closest(".contextMenu") &&
-        !event.target.closest(".popup")
+        !event.target.closest('.contextMenu') &&
+        !event.target.closest('.popup')
       ) {
         closePopup();
       }
     };
 
-    document.addEventListener("click", handleClickOutside);
+    document.addEventListener('click', handleClickOutside);
 
     return () => {
-      document.removeEventListener("click", handleClickOutside);
+      document.removeEventListener('click', handleClickOutside);
     };
   }, [popupType]);
 
-  const hhh = () => {
-    console.log("hhh", parent_id);
-    console.log("hhhggg", project_id);
-  };
-
   return (
     <div style={{zIndex:1}}
-      className={`contextMenu ${popType === "right" ? "right" : ""}`}
+      className={`contextMenu ${popType === 'right' ? 'right' :''}`}
       onContextMenu={handleContextMenuClick}
     >
       <div
