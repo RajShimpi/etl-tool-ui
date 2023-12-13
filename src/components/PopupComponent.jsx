@@ -4,13 +4,13 @@ import AddFile from "../modules/masters/popup/add-file";
 import Edit from "../modules/masters/popup/edit-file";
 import Delete from "../modules/masters/popup/delete";
 
-const PopupComponent = ({ onClose, actionType, project_id, id,parent_id }) => {
+const PopupComponent = ({ onClose, actionType, project_id, id }) => {
   let contentComponent;
 
   switch (actionType) {
     case "AddFolder":
       contentComponent = (
-        <Folder project_id={project_id} parent_id={parent_id} />
+        <Folder project_id={project_id} id={id} />
       );
       break;
     case "Add":
@@ -19,11 +19,11 @@ const PopupComponent = ({ onClose, actionType, project_id, id,parent_id }) => {
       );
       break;
     case "Edit":
-      contentComponent = <Edit project_id={project_id} parent_id={parent_id} />;
+      contentComponent = <Edit project_id={project_id} parent_id={id} />;
       break;
     case "Delete":
       contentComponent = (
-        <Delete project_id={project_id} parent_id={parent_id} />
+        <Delete project_id={project_id} parent_id={id} />
       );
       break;
     default:
@@ -31,7 +31,7 @@ const PopupComponent = ({ onClose, actionType, project_id, id,parent_id }) => {
   }
   const hhh = () => {
     console.log( project_id);
-    console.log(parent_id);
+    console.log(id);
   };
 
   return (
