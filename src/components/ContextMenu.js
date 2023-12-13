@@ -6,9 +6,9 @@ import PopupComponent from "./PopupComponent";
 import FolderIcon from "@mui/icons-material/Folder";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 
-const ContextMenu = ({ onToggleFolder, popType, project_id, id, onClose,parent_id }) => {
+const ContextMenu = ({ onToggleFiles, popType, project_id, parent_id,id, onClose }) => {
   const [popupType, setPopupType] = useState(null);
-  const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
+  const [popupPosition, setPopupPosition] = useState();
 
   const handleContextMenuClick = (event) => {
     event.preventDefault();

@@ -80,7 +80,7 @@ function FolderDropdown({
         )}
         {item.isOpen && item.type === 'Folder' && <Folders parentId={item.id} projectId={project_id} />}
       </div>
-       {item.type === 'Folder' && item.isOpen && item.items && (
+      {/* {item.type === 'Folder' && item.isOpen && item.items && (
         <div className="insideItemStyle">
           {item.items.map((subItem, index) => (
             <FolderDropdown
@@ -96,23 +96,23 @@ function FolderDropdown({
             />
           ))}
         </div>
-      )} 
+      )}  */}
     </div>
   );
 }
 
-function FolderContainer({parentId,projectId}) {
+function FolderContainer({ parentId, projectId }) {
   const [folder, setFolder] = useState([]);
   const [openContextMenuForItemId, setOpenContextMenuForItemId] = useState(null);
 
   useEffect(() => {
-    let url = parentId ? 'project-files/get-folder-hierarchy?projectId=' + projectId + '&parentId='+parentId : 'project-files/get-folder-hierarchy?projectId=' + projectId 
+    let url = parentId ? 'project-files/get-folder-hierarchy?projectId=' + projectId + '&parentId=' + parentId : 'project-files/get-folder-hierarchy?projectId=' + projectId
     axios.getWithCallback(url, (data) => {
 
       setFolder(data);
       console.log(data);
     });
-  }, [parentId,projectId]);
+  }, [parentId, projectId]);
 
   const toggleFolder = (clickedFolder) => {
     setFolder((prevFolder) =>
@@ -121,13 +121,13 @@ function FolderContainer({parentId,projectId}) {
       )
     );
   };
-  
+
 
   let toggleFile = (clickedFile) => {
     console.log('Toggled File:', clickedFile.file_name);
   };
 
-  let handleContextMenu = (item, project_id, parent_id,id) => {
+  let handleContextMenu = (item, project_id, parent_id, id) => {
     console.log('Right-clicked on:', item);
     console.log('Project ID:', project_id);
     console.log('Parent ID:', parent_id);
@@ -147,8 +147,8 @@ function FolderContainer({parentId,projectId}) {
           project_id={folder.project_id}
           parent_id={folder.parent_id}
           id={folder.id}
-          onContextMenu={(item, project_id, parent_id,id) =>
-            handleContextMenu(item, project_id, parent_id,id)
+          onContextMenu={(item, project_id, parent_id, id) =>
+            handleContextMenu(item, project_id, parent_id, id)
           }
           openContextMenuForItemId={openContextMenuForItemId}
         />

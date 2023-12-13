@@ -48,7 +48,7 @@ function ProjectStructure({ textColor }) {
                 <div className='proicon' onClick={() => toggleProject(index)}>
                   <FolderOpenIcon className='bx bx-grid-alt' />
                   <span className='link_name' style={{ marginLeft: '5px' }}>
-                    {project.project_name} 
+                    {project.project_name}
                   </span>
                 </div>
                 {project.isOpen && (

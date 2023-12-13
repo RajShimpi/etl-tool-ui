@@ -1,17 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import FolderIcon from '@mui/icons-material/Folder';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import './project.css';
 import ContextMenu from '../ContextMenu';
 import axios from '../../modules/services/axios';
-
-// import React, { useState } from 'react';
-// import FolderOpenIcon from '@mui/icons-material/FolderOpen';
-// import FolderIcon from '@mui/icons-material/Folder';
-// import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
-// import './project.css';
-// import ContextMenu from '../ContextMenu';
 
 const FolderDropdown = ({
   files,
@@ -20,31 +13,25 @@ const FolderDropdown = ({
   onOpenFolder,
   onCloseFolder,
   textColor,
-  closeContextMenu,
-  setContextMenu,
+  projectId,
+  parentId,
+  id,
 }) => {
-  const folderStyle = {
-    listStyleType: 'none',
-    cursor: 'pointer',
-    marginLeft: '20px',
-  };
+  const [contextMenu, setContextMenu] = useState(false);
+  const folderRef = useRef(null);
 
-  const insidefileStyle = {
-    marginLeft: '40px',
-    cursor: 'pointer',
-  };
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (folderRef.current && !folderRef.current.contains(event.target)) {
+        setContextMenu(false);
+      }
+    };
 
-  const handleContextMenu = (event, type, projectId, parentId, file_name, id) => {
-    event.preventDefault();
-
-    closeContextMenu(() => {
-      setContextMenu({
-        type,
-        position: { top: event.clientY, left: event.clientX + 10 },
-        project: { project_id: projectId, parent_id: parentId, id: id },
-      });
-    });
-  };
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
 
   const handleFileToggle = () => {
     if (files.type === 'Folder') {
@@ -54,28 +41,22 @@ const FolderDropdown = ({
       } else {
         onOpenFolder(files);
       }
-    } else {
-      onToggleFile(files);
-      if (files.file_name === 'file_nameget' && files.parent.file_name === 'file_namepull') {
-        // Open the "file_nameget" folder
-        onOpenFolder(files);
-      } else if (files.file_name === 'file_namepull') {
-        // Close the parent "file_namepull" folder
-        onCloseFolder(files.parent);
-      }
     }
   };
 
+  const handleContextMenu = (event) => {
+    event.preventDefault();
+    setContextMenu(true);
+  };
+
   return (
-    <div style={folderStyle}>
+    <div ref={folderRef} style={{ listStyleType: 'none', cursor: 'pointer', marginLeft: '20px' }}>
       {files.parentId !== null && (
         <div
           className={` ${files.isOpen ? 'open' : ''}`}
           style={{ textColor }}
           onClick={handleFileToggle}
-          onContextMenu={(e) =>
-            handleContextMenu(e, 'right', files.projectId, files.parentId, files.file_name, files.id)
-          }
+          onContextMenu={handleContextMenu}
         >
           {files.type === 'Folder' ? (
             files.isOpen ? (
@@ -87,8 +68,17 @@ const FolderDropdown = ({
             <InsertDriveFileIcon fontSize='small' />
           )}{' '}
           {files.file_name}
-          {files.isOpen  && files.files && (
-            <div style={insidefileStyle}>
+          {contextMenu && (
+            <ContextMenu
+              projectId={projectId}
+              parentId={parentId}
+              id={id}
+              textColor={textColor}
+              onClose={() => setContextMenu(false)}
+            />
+          )}
+          {files.isOpen && files.type === 'Folder' && files.files && (
+            <div style={{ marginLeft: '40px', cursor: 'pointer' }}>
               {files.files.map((subItem, index) => (
                 <FolderDropdown
                   key={index}
@@ -98,8 +88,9 @@ const FolderDropdown = ({
                   onOpenFolder={onOpenFolder}
                   onCloseFolder={onCloseFolder}
                   textColor={textColor}
-                  closeContextMenu={closeContextMenu}
-                  setContextMenu={setContextMenu}
+                  projectId={projectId}
+                  parentId={parentId}
+                  id={id}
                 />
               ))}
             </div>
@@ -109,65 +100,55 @@ const FolderDropdown = ({
     </div>
   );
 };
- 
 
 
-function Folders({ parentId, projectId }) {
-    const [files, setFiles] = useState([]);
-    const [contextMenu, setContextMenu] = useState(null);
-
-    useEffect(() => {
-        axios.getWithCallback('project-files/get-folder-hierarchy?projectId=' + projectId + '&parentId='+parentId, (data) => {
-            setFiles(data);
-        });
-    }, [parentId,projectId]);
 
 
-    const toggleFiles = (index) => {
-        const updatedFiles = [...files];
-        updatedFiles[index].isOpen = !updatedFiles[index].isOpen;
-        setFiles(updatedFiles);
-    };
+function Folders({ parentId, projectId, textColor, id }) {
+  const [files, setFiles] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
 
-    const handleOpenFolder = (folder) => {
-        console.log('Opened Folder:', folder.file_name);
-    };
+  useEffect(() => {
+    axios.getWithCallback('project-files/get-folder-hierarchy?projectId=' + projectId + '&parentId=' + parentId, (data) => {
+      setFiles(data);
+    });
+  }, [parentId, projectId]);
 
-    const handleCloseFolder = (folder) => {
-        console.log('Closed Folder:', folder.file_name);
-    };
+  const toggleFiles = (index) => {
+    const updatedFiles = [...files];
+    updatedFiles[index].isOpen = !updatedFiles[index].isOpen;
+    setFiles(updatedFiles);
+  };
 
-    return (
-        <div>
-            <div>
-                {files.map((file, index) =>
-                    file && file.parent_id !== null ? (
-                        <FolderDropdown
-                            key={index}
-                            files={file}
-                            onToggleFiles={() => toggleFiles(index)}
-                            onToggleFile={(clickedFile) => console.log('Toggled File:', clickedFile.file_name)}
-                            onOpenFolder={handleOpenFolder}
-                            onCloseFolder={handleCloseFolder}
-                            textColor="black"
-                            closeContextMenu={() => setContextMenu(null)}
-                            setContextMenu={setContextMenu}
-                        />
-                    ) : null
-                )}
-            </div>
-            {contextMenu && (
-                <ContextMenu
-                    onToggleFiles={() => console.log('Toggled Files')}
-                    popType={contextMenu.type}
-                    project_id={contextMenu.project.id}
-                    parent_id={contextMenu.project.parent_id}
-                    id={contextMenu.project.id}
-                    onClose={() => setContextMenu(null)}
-                />
-            )}
-        </div>
-    );
+  const handleOpenFolder = (folder) => {
+    console.log('Opened Folder:', folder.file_name);
+    setIsOpen(true);
+  };
+
+  const handleCloseFolder = (folder) => {
+    console.log('Closed Folder:', folder.file_name);
+    setIsOpen(!isOpen);
+  };
+
+  return (
+    <div>
+      <div className={`${isOpen ? 'open' : ''}`}>
+        {files.map((file, index) =>
+          file && file.parent_id !== null ? (
+            <FolderDropdown
+              key={index}
+              files={file}
+              onToggleFiles={() => toggleFiles(index)}
+              onToggleFile={(clickedFile) => console.log('Toggled File:', clickedFile.file_name)}
+              onOpenFolder={handleOpenFolder}
+              onCloseFolder={handleCloseFolder}
+              textColor={textColor}
+            />
+          ) : null
+        )}
+      </div>
+    </div>
+  );
 }
 
 export default Folders;

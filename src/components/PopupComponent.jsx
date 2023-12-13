@@ -9,28 +9,22 @@ const PopupComponent = ({ onClose, actionType, project_id, id }) => {
 
   switch (actionType) {
     case "AddFolder":
-      contentComponent = (
-        <Folder project_id={project_id} id={id} />
-      );
+      contentComponent = <Folder project_id={project_id} id={id} />;
       break;
     case "Add":
-      contentComponent = (
-        <AddFile project_id={project_id} id={id} />
-      );
+      contentComponent = <AddFile project_id={project_id} id={id} />;
       break;
     case "Edit":
       contentComponent = <Edit project_id={project_id} parent_id={id} />;
       break;
     case "Delete":
-      contentComponent = (
-        <Delete project_id={project_id} parent_id={id} />
-      );
+      contentComponent = <Delete project_id={project_id} parent_id={id} />;
       break;
     default:
       contentComponent = null;
   }
   const hhh = () => {
-    console.log( project_id);
+    console.log(project_id);
     console.log(id);
   };
 
