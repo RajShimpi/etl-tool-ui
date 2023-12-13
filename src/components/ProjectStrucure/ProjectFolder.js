@@ -15,6 +15,7 @@ function FolderDropdown({
   textColor,
   project_id,
   parent_id,
+  id,
   onContextMenu,
   openContextMenuForItemId,
 }) {
@@ -31,7 +32,7 @@ function FolderDropdown({
   const handleContextMenu = (event) => {
     event.preventDefault();
     setContextMenuPosition({ top: event.clientY, left: event.clientX });
-    onContextMenu(item, project_id, parent_id);
+    onContextMenu(item, project_id, parent_id,id);
   };
 
   const closeContextMenu = () => {
@@ -55,11 +56,12 @@ function FolderDropdown({
             onClose={closeContextMenu}
             project_id={project_id}
             parent_id={parent_id}
+            id={id}
             textColor={textColor}
             position={contextMenuPosition}
           />
         )}
-        {item.isOpen && item.type === 'Folder' && <Folders parentId={item.id}  />}
+        {item.isOpen && item.type === 'Folder' && <Folders parentId={item.id} projectId={project_id} />}
       </div>
       {/* {contextMenuPosition && openContextMenuForItemId === item.id && (
         <ContextMenu
@@ -91,20 +93,22 @@ function FolderDropdown({
   );
 }
 
-function FolderContainer({parentID}) {
+function FolderContainer({parentId,projectId}) {
   const [folder, setFolder] = useState([]);
   const [openContextMenuForItemId, setOpenContextMenuForItemId] = useState(null);
 
   useEffect(() => {
-    axios.getWithCallback('project-files/' + parentID, (data) => {
+    let url = parentId ? 'project-files/get-folder-hierarchy?projectId=' + projectId + '&parentId='+parentId : 'project-files/get-folder-hierarchy?projectId=' + projectId 
+    axios.getWithCallback(url, (data) => {
+
       setFolder(data);
       console.log(data);
     });
-  }, [parentID]);
+  }, [parentId,projectId]);
 
   const toggleFolder = (clickedFolder) => {
     setFolder((prevFolder) =>
-      prevFolder.map((folder) =>
+      prevFolder.map((folder) =
         folder === clickedFolder ? { ...folder, isOpen: !folder.isOpen } : folder
       )
     );
@@ -114,10 +118,11 @@ function FolderContainer({parentID}) {
     console.log('Toggled File:', clickedFile.file_name);
   };
 
-  const handleContextMenu = (item, project_id, parent_id) => {
+  const handleContextMenu = (item, project_id, parent_id,id) => {
     console.log('Right-clicked on:', item);
     console.log('Project ID:', project_id);
     console.log('Parent ID:', parent_id);
+    console.log('Id:', id);
     console.log('File Name:', item.file_name);
     setOpenContextMenuForItemId(item.id);
   };
@@ -132,8 +137,9 @@ function FolderContainer({parentID}) {
           onToggleFile={() => toggleFile(folder)}
           project_id={folder.project_id}
           parent_id={folder.parent_id}
-          onContextMenu={(item, project_id, parent_id) =>
-            handleContextMenu(item, project_id, parent_id)
+          id={folder.id}
+          onContextMenu={(item, project_id, parent_id,id) =>
+            handleContextMenu(item, project_id, parent_id,id)
           }
           openContextMenuForItemId={openContextMenuForItemId}
         />

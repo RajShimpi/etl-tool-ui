@@ -4,7 +4,7 @@ import AddFile from "../modules/masters/popup/add-file";
 import Edit from "../modules/masters/popup/edit-file";
 import Delete from "../modules/masters/popup/delete";
 
-const PopupComponent = ({ onClose, actionType, project_id, parent_id }) => {
+const PopupComponent = ({ onClose, actionType, project_id, id,parent_id }) => {
   let contentComponent;
 
   switch (actionType) {
@@ -15,7 +15,7 @@ const PopupComponent = ({ onClose, actionType, project_id, parent_id }) => {
       break;
     case "Add":
       contentComponent = (
-        <AddFile project_id={project_id} parent_id={parent_id} />
+        <AddFile project_id={project_id} id={id} />
       );
       break;
     case "Edit":

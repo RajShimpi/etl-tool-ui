@@ -25,7 +25,7 @@ function FolderDropdown({
         cursor: 'pointer',
     };
 
-    const handleContextMenu = (event, type, projectId, parentId, file_name) => {
+    const handleContextMenu = (event, type, projectId, parentId, file_name,id) => {
         event.preventDefault();
 
         closeContextMenu(() => {
@@ -33,7 +33,7 @@ function FolderDropdown({
             setContextMenu({
                 type,
                 position: { top: event.clientY, left: event.clientX + 10 },
-                project: { id: projectId, parent_id: parentId },
+                project: { project_id: projectId, parent_id: parentId, id:id},
             });
         });
     };
@@ -81,15 +81,15 @@ function FolderDropdown({
     );
 }
 
-function Folders({ parentId }) {
+function Folders({ parentId ,projectId}) {
     const [files, setFiles] = useState([]);
     const [contextMenu, setContextMenu] = useState(null);
 
     useEffect(() => {
-        axios.getWithCallback('project-files/' + parentId, (data) => {
+        axios.getWithCallback('project-files/get-folder-hierarchy?projectId=' + projectId + '&parentId='+parentId, (data) => {
             setFiles(data);
         });
-    }, [parentId]);
+    }, [parentId,projectId]);
 
     const toggleFiles = (index) => {
         const updatedFiles = [...files];
@@ -124,7 +124,7 @@ function Folders({ parentId }) {
             <div style={style}>
                 {files.map((files, index) => (
                     // Check if parent_id is null before rendering FolderDropdown
-                    (files.parent_id === null) && (
+                    (files.parent_id !== null) && (
                         <FolderDropdown
                             key={index}
                             files={files}
@@ -142,6 +142,7 @@ function Folders({ parentId }) {
                     popType={contextMenu.type}
                     project_id={contextMenu.project.id}
                     parent_id={contextMenu.project.parent_id}
+                    id={contextMenu.project.id}
                     onClose={() => closeContextMenu()}
                 />
             )}

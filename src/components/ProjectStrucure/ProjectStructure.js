@@ -54,7 +54,8 @@ function ProjectStructure({ textColor }) {
                   <div className={`${isOpen ? 'open' : ''}`}>
                     <FolderDropdown
                       project={project}
-                      parentID={project.id}
+                      projectId={project.id}
+                      // parentId={null}
                       onToggleFolder={() => toggleProject(index)}
                       onToggleFile={(file) => toggleFile(index, file)}
                     />
