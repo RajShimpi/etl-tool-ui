@@ -101,5 +101,11 @@
         "type",
         "file_name",
         "parent_id"
+    ],
+    "TYPE_CONFIG": [
+        "category",
+        "value",
+        "isActive",
+        "params"
     ]
 }

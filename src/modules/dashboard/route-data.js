@@ -20,6 +20,7 @@ import MainComponent from "../../components/MainComponent";
 import Client from "../masters/client";
 import Project from "../masters/project";
 import ProjectFile from "../masters/project-file";
+import TypeConfigMaster from "../masters/type-config-master";
 
 
 export const routeConstant = {
@@ -40,6 +41,7 @@ export const routeConstant = {
   client:"/client",
   project:"/project",
   projectfile:"/projectfile",
+  typeconfigmaster: "/type-config"
 
 };
 export const routeData = (routes) => [
@@ -155,6 +157,14 @@ export const routeData = (routes) => [
     routeTo: routeConstant.projectfile, // Project Form route
     header: "",
     childComp: ProjectFile,
+    data: {},
+    permissions: true,
+    isUserCanView: true,
+  },
+  {
+    routeTo: routeConstant.typeconfigmaster, // TypeConfigs Form route
+    header: "",
+    childComp: TypeConfigMaster,
     data: {},
     permissions: true,
     isUserCanView: true,
