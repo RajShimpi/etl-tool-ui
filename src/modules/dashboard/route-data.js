@@ -45,7 +45,7 @@ export const routeConstant = {
   project:"/project",
   projectfile:"/projectfile",
   step:"/step",
-  typeconfigmaster: "/type-config"
+  typeconfigmaster: "/type-config",
   parameter:"/parameter",
   steptypeparameter:"/step-type-parameter"
 };
@@ -181,7 +181,7 @@ export const routeData = (routes) => [
      data: {},
     permissions: true,
     isUserCanView: true,
-   }
+   },
   {
     routeTo: routeConstant.parameter, // StepType Form route
     header: "",
