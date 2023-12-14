@@ -11,7 +11,7 @@ import configContext from "./config-context";
 import SearchFilter from "../components/search-filter";
 import SearchResult from "../components/search-result";
 import NotificationsDropdown from "../components/notifications-dropdown";
-import { io } from 'socket.io-client';
+// import { io } from 'socket.io-client';
 
 // export const socket = io(process.env.REACT_APP_WEB_SOCKET_SERVER_URL, {
 //     reconnectionDelay: 1000, // Set the reconnection delay to 1 second
@@ -36,21 +36,21 @@ const Dashboard = () => {
     const [finalData, setfinalData] = useState([]);
     useEffect(() => {
         // setUserFirstName(auth.getStorageData('firstName'))
-        // axios.getWithCallback('user/getUserById/' + auth.getStorageData('id'), (data) => {
-        //     let roles = data.usersToRoles.map(x => x.role_id);
-        //     let roledata = data.usersToRoles.map(x => x.role).map(y => y.displayname).join(',');
-        //     setRoleData(roledata);
-        //     axios.postWithCallback('user-menus/get', { roles: roles }, (menus) => {
-        //         setMenuData(menus);
-        //     }, null, null, false);
-        // });
+        axios.getWithCallback('user/getUserById/' + auth.getStorageData('id'), (data) => {
+            let roles = data.usersToRoles.map(x => x.role_id);
+            let roledata = data.usersToRoles.map(x => x.role).map(y => y.displayname).join(',');
+            setRoleData(roledata);
+            axios.postWithCallback('user-menus/get', { roles: roles }, (menus) => {
+                setMenuData(menus);
+            }, null, null, false);
+        });
         // axios.getWithCallback("system-config/all", (data) => {
         //     setConfigValues({ config: data });
         // });
         return () => { };
     }, []);
 
-    useEffect(() => {
+    // useEffect(() => {
 
         // socket.on('connect', () => {
         //     console.log(`=> CONNECTED (😃): %c${socket.id}`, 'color: #34c38f');
@@ -72,7 +72,7 @@ const Dashboard = () => {
             // localStorage.removeItem('total_notifications');
         // }
 
-    }, []);
+    // }, []);
 
     const callback = (data, name) => {
         switch (name) {
