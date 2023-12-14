@@ -1,73 +1,39 @@
-import React from "react";
-export default ({ isSelected, textRef, nodeName, setNodeName }) => {
-  const onDragStart = (event, nodeType, content, img) => {
-    event.dataTransfer.setData("application/reactflow", nodeType);
-    event.dataTransfer.setData("content", content);
-    event.dataTransfer.setData("img", img);
-    event.dataTransfer.effectAllowed = "move";
-  };
+import React from 'react';
 
+const onDragStart = (event, nodeType, content, img,name) => {
+  event.dataTransfer.setData("application/reactflow", nodeType);
+  event.dataTransfer.setData("content", content);
+  event.dataTransfer.setData("img", img);
+  event.dataTransfer.setData("name", name);
+  event.dataTransfer.effectAllowed = "move";
+  
+};
+
+const Sidebar = ({ apiData }) => {
+ 
   return (
-    <aside>
-      <div className="row">
-        <div className="col-md-12">
-          {/* {isSelected &&
-          {/* {isSelected &&
-            <EditMessage
-              textRef={textRef}
-              nodeName={nodeName}
-              setNodeName={setNodeName}
-            />} */}
-        </div>
-        <div className="col-md-12">
+    <div className="">
+      <ul>
+        {apiData.map(item => (
           <div
-            className="dndnode input "
-            style={{margin:'5px'}}
+            style={{ margin: '5px', display:'flex'}}
+            className="dndnode input m-10"
             onDragStart={(event) =>
-              onDragStart(event, "node", "Click to Edit message", require("../../../../../assets/Images/Files.png"))
+              onDragStart(event, "node", "Click to Edit message", item.symbol,item.name)
             }
             draggable
+            key={item.id}
           >
-           <img src={require('../../../../../assets/Images/Files.png')} style={{height:"20px"}} alt="File Icon" />
+            <div style={{marginTop:"-2px",padding:"7px"}}>
+             <img src={`/assets/images/${item.symbol}.png`} alt={item.symbol} style={{ width: '20px', height: '20px' }} /></div>
+            {/* <span style={{ fontSize: "20px" }}>{item.symbol}</span> */}
+            <li>{item.name}</li>
           </div>
-        </div>
-      </div>
-      <div className="col-md-12">
-        <div
-          style={{margin:'5px'}}
-          className="dndnode input m-10"
-          onDragStart={(event) =>
-            onDragStart(event, "node", "Click to Edit message", require("../../../../../assets/Images/file1.png"))
-          }
-          draggable
-        >
-          <img src={require('../../../../../assets/Images/file1.png')} style={{height:"20px"}} alt="File Icon" />
-        </div>
-      </div>
-      <div className="col-md-12">
-        <div
-          style={{margin:'5px'}}
-          className="dndnode input m-10"
-          onDragStart={(event) =>
-            onDragStart(event, "node", "Click to Edit message", require("../../../../../assets/Images/Folders.png"))
-          }
-          draggable
-        >
-          <img src={require('../../../../../assets/Images/Folders.png')} style={{height:"20px"}} alt="File Icon" />
-        </div>
-      </div>
-      <div className="col-md-12">
-        <div
-          style={{margin:'5px'}}
-          className="dndnode input m-10"
-          onDragStart={(event) =>
-            onDragStart(event, "node", "Click to Edit message", require("../../../../../assets/Images/Files-PNG-Clipart.png"))
-          }
-          draggable
-        >
-          <img src={require('../../../../../assets/Images/Files-PNG-Clipart.png')} style={{height:"20px"}} alt="File Icon" />
-        </div>
-      </div>
-    </aside>
+        ))}
+      </ul>
+    </div>
   );
 };
+
+export default Sidebar;
+

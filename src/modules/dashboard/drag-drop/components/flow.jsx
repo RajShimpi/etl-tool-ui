@@ -23,6 +23,9 @@ import {
 import "reactflow/dist/style.css";
 import "./dnd.css";
 import "./update-node.css";
+import { Modal } from "bootstrap";
+import { Key } from "@mui/icons-material";
+import { data } from "jquery";
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
@@ -31,7 +34,7 @@ const nodeTypes = { node: Node };
 
 const OverviewFlow = () => {
   const reactFlowWrapper = useRef(null);
-  const edgeUpdateSuccessful = useRef(true);
+  const edgeUpdateSuccessful = useRef(true);  
   const textRef = useRef(null);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
@@ -45,7 +48,7 @@ const OverviewFlow = () => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
   };
-
+ 
   const onDrop = (event) => {
     event.preventDefault();
     const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
@@ -53,19 +56,23 @@ const OverviewFlow = () => {
     const type = event.dataTransfer.getData("application/reactflow");
     const label = event.dataTransfer.getData("content");
     const img = event.dataTransfer.getData("img");
+    const name = event.dataTransfer.getData("name");
     console.log(reactFlowInstance, "reactIns");
     const position = reactFlowInstance.project({
       x: event.clientX - reactFlowBounds.left,
       y: event.clientY - reactFlowBounds.top,
     });
+    
     const newNode = {
       id: getId(),
+      name,
       type,
       position,
-      data: { heading: "Send Message", content: label, img: img },
-    };
+      data: { heading:name, img: img },
+    }
+
     setNodes((es) => es.concat(newNode));
-    setSelectedNode(newNode.id);
+    setSelectedNode(newNode.a=name);
   };
   const onConnect = useCallback(
     (params) => {
@@ -160,8 +167,9 @@ const OverviewFlow = () => {
               attributionPosition="top-right"
             >
               <Background color="#aaa" gap={16} />
-            </ReactFlow>
+               </ReactFlow>  
           </div>
+          
           {/* 
           <Sidebar
             isSelected={isSelected}

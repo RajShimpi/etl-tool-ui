@@ -20,7 +20,10 @@ import MainComponent from "../../components/MainComponent";
 import Client from "../masters/client";
 import Project from "../masters/project";
 import ProjectFile from "../masters/project-file";
+import StepType from "../masters/steptype";
 import TypeConfigMaster from "../masters/type-config-master";
+import Parameter from "../masters/parameter";
+import StepTypeParamete from "../masters/step-type-parameter";
 
 
 export const routeConstant = {
@@ -41,8 +44,10 @@ export const routeConstant = {
   client:"/client",
   project:"/project",
   projectfile:"/projectfile",
-  typeconfigmaster: "/type-config"
-
+  step:"/step",
+  typeconfigmaster: "/type-config",
+  parameter:"/parameter",
+  steptypeparameter:"/step-type-parameter"
 };
 export const routeData = (routes) => [
   {
@@ -154,9 +159,17 @@ export const routeData = (routes) => [
     isUserCanView: true,
   },
   {
-    routeTo: routeConstant.projectfile, // Project Form route
+    routeTo: routeConstant.projectfile, // ProjectFile Form route
     header: "",
     childComp: ProjectFile,
+    data: {},
+    permissions: true,
+    isUserCanView: true,
+  },
+  {
+    routeTo: routeConstant.step, // StepType Form route
+    header: "",
+    childComp: StepType,
     data: {},
     permissions: true,
     isUserCanView: true,
@@ -165,6 +178,22 @@ export const routeData = (routes) => [
     routeTo: routeConstant.typeconfigmaster, // TypeConfigs Form route
     header: "",
     childComp: TypeConfigMaster,
+     data: {},
+    permissions: true,
+    isUserCanView: true,
+   },
+  {
+    routeTo: routeConstant.parameter, // StepType Form route
+    header: "",
+    childComp: Parameter,
+    data: {},
+    permissions: true,
+    isUserCanView: true,
+  },
+  {
+    routeTo: routeConstant.steptypeparameter, // StepType Form route
+    header: "",
+    childComp: StepTypeParamete,
     data: {},
     permissions: true,
     isUserCanView: true,

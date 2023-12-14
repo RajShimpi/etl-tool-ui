@@ -93,19 +93,38 @@
     ],
     "PROJECT":[
         "project_name",
-        "client_id",
+        "client.name",
         "base_location"
     ],
     "PROJECT_FILE":[
-        "project_id",
+        "project.project_name",
         "type",
         "file_name",
-        "parent_id"
+        "parent.file_name"
+    ],
+    "STEPTYPE":[
+        "type",
+        "name",
+        "symbol",
+        "group"
     ],
     "TYPE_CONFIG": [
         "category",
         "value",
         "isActive",
         "params"
+],
+    "PARAMETER":[
+        "name",
+        "context",
+        "display_name",
+        "description",
+        "type",
+        "resource"
+    ],
+    "STEP_TYPE_PARAMETERS":[
+        "step.name",
+        "parameter.name",
+        "required"
     ]
 }

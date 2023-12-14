@@ -1,23 +1,23 @@
 export const getProjectFileFields = (itemData) => {
     return [{
-
         col: 4,
         callback: itemData.callback,
         disabled: itemData.disabled,
         groups: [{
-            type: "text",
             id: "inputProjectFileid",
-            label: "project_id",
-            name:"project_id",
-            control: "input",
-            isRequired: true,             
+            label: "project Name",
+            name: "project_id",
+            options: itemData.options[0],
+            control: "select",
+            isSubmit: itemData.isSubmit,
+            isRequired: !itemData?.values?.project_id,
             itemVal: itemData.values ? itemData.values["project_id"] : '',
         },
-        {
-            type: "text",
+        {    
+            type: "text",     
             id: "inputDisplayType",
             label: "Project File Display Type",
-            name:"type",
+            name: "type",
             control: "input",
             isRequired: true,
             itemVal: itemData.values ? itemData.values["type"] : '',
@@ -26,21 +26,22 @@ export const getProjectFileFields = (itemData) => {
             type: "text",
             id: "inputDisplayFileName",
             label: "Project File Display Name",
-            name:"file_name",
+            name: "file_name",
             control: "input",
             isRequired: true,
             itemVal: itemData.values ? itemData.values["file_name"] : '',
         },
         {
-            type: "text",
             id: "inputDisplayParentId",
-            label: "Project File Display Parent Id",
-            name:"parent_id",
-            control: "input",
-            isRequired: true,
+            label: "Parent Id",
+            name: "parent_id",
+            options: itemData.options[1],
+            control: "select",
+            isSubmit: itemData.isSubmit,
+            // isRequired: !itemData?.values?.parent_id,
             itemVal: itemData.values ? itemData.values["parent_id"] : '',
         },
-    ]
-    }   
+        ]
+    } 
     ];
 }

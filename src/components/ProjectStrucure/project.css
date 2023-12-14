@@ -1,10 +1,9 @@
 .sidebar {
   height: 600px;
-  /* overflow-y: scroll; 
-  overflow-y: scroll; 
+  /* overflow-y: scroll !important; 
   -ms-overflow-style: none;
   scrollbar-width: none;  */
-   min-height: 100vh;
+  min-height: 100vh;
   width: 78px;
   padding: 6px 14px;
   background-color: rgba(116, 113, 113, 0.123);
@@ -12,6 +11,10 @@
   border-radius: revert;
   top: 0;
   left: 0;
+}
+
+ .sidebar::-webkit-scrollbar { 
+  display: none;  /* Safari and Chrome  */
 }
 
 .sidebar.open {
@@ -107,6 +110,7 @@
   text-align: center;
 }
 
+  
 .sidebar .nav-list {
   margin-top: 10px;
   height: 100%;
@@ -129,7 +133,6 @@
   border-radius: 5px;
   /* background-color: rgb(0, 0, 0); */
   transition: all 0.5s ease;
-  
 }
 
 /* .sidebar input::placeholder {
@@ -138,7 +141,7 @@
 
 .sidebar.open input {
   width: 100%;
-  padding: 0 20px 0 50px;
+  /* padding: 0 -1px 0 50px; */
 }
 
 .sidebar li .proicon {
