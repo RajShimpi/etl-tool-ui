@@ -480,7 +480,7 @@ const DataTable = (props) => {
                                                                             col?.columnId.toUpperCase().includes("STATUS") ? item.statusColor + ' font-weight-bold' : 'text-truncate'}
                                                                     >
                                                                         {
-                                                                            col?.columnId.includes("Has") || ["isInventoryItem", "isActive", "solvent", "modifier", "sprayAgent", "active"].includes(col?.columnId)
+                                                                            col?.columnId.includes("Has") || ["isInventoryItem", "isActive", "solvent", "modifier", "sprayAgent", "active","required"].includes(col?.columnId)
                                                                                 ? <input type="checkbox" checked={item[col.columnId]} disabled={true}></input>
                                                                                 : col?.columnId.toUpperCase().includes('DATETIME') && !col?.columnId.toUpperCase().includes('NAME')
                                                                                     ? <ReactTimeAgo date={item[col.columnId]} locale="en-US"/>

@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import './project.css';
 import DensityMediumIcon from '@mui/icons-material/DensityMedium';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
-import FolderDropdown from './ProjectFolder';
+// import FolderDropdown from './ProjectFolder';
 import axios from '../../modules/services/axios';
+import FolderContainer from './ProjectFolder';
 
 function ProjectStructure({ textColor }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,12 +23,13 @@ function ProjectStructure({ textColor }) {
     updatedProject[index].isOpen = !updatedProject[index].isOpen;
     setProject(updatedProject);
   };
+  
 
-  const toggleFile = (projectIndex, file) => {
-    const updatedProject = [...project];
-    updatedProject[projectIndex].openFiles[file] = !updatedProject[projectIndex].openFiles[file];
-    setProject(updatedProject);
-  };
+  // const toggleFile = (projectIndex, file) => {
+  //   const updatedProject = [...project];
+  //   updatedProject[projectIndex].openFiles[file] = !updatedProject[projectIndex].openFiles[file];
+  //   setProject(updatedProject);
+  // };
 
 
   return (
@@ -53,13 +55,14 @@ function ProjectStructure({ textColor }) {
                 </div>
                 {project.isOpen && (
                   <div className={`${isOpen ? 'open' : ''}`}>
-                    <FolderDropdown
+                    <FolderContainer
                       project={project}
                       projectId={project.id}
-                      // parentId={null}
-                      onToggleFolder={() => toggleProject(index)}
-                      onToggleFile={(file) => toggleFile(index, file)}
+                    // // parentId={null}
+                    // onToggleFolder={() => toggleProject(index)}
+                    // onToggleFile={(file) => toggleFile(index, file)}
                     />
+
                   </div>
                 )}
               </li>

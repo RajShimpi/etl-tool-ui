@@ -9,13 +9,14 @@ import axios from '../../modules/services/axios';
 const FolderDropdown = ({
   files,
   onToggleFiles,
-  onToggleFile,
   onOpenFolder,
   onCloseFolder,
   textColor,
+  handleItemToggle,
   projectId,
   parentId,
   id,
+  handleFileToggles,
 }) => {
   const [contextMenu, setContextMenu] = useState(false);
   const folderRef = useRef(null);
@@ -38,8 +39,19 @@ const FolderDropdown = ({
       onToggleFiles(files);
       if (files.isOpen) {
         onCloseFolder(files);
+        console.log('close');
       } else {
         onOpenFolder(files);
+        console.log('open');
+      }
+    } else if (files.type === 'File') {
+      onToggleFiles(files);
+      if (files.isOpen) {
+        onCloseFolder(files);
+        console.log('close');
+      } else {
+        onOpenFolder(files);
+        console.log('open');
       }
     }
   };
@@ -77,23 +89,8 @@ const FolderDropdown = ({
               onClose={() => setContextMenu(false)}
             />
           )}
-          {files.isOpen && files.type === 'Folder' && files.files && (
-            <div style={{ marginLeft: '40px', cursor: 'pointer' }}>
-              {files.files.map((subItem, index) => (
-                <FolderDropdown
-                  key={index}
-                  files={subItem}
-                  onToggleFiles={onToggleFiles}
-                  onToggleFile={onToggleFile}
-                  onOpenFolder={onOpenFolder}
-                  onCloseFolder={onCloseFolder}
-                  textColor={textColor}
-                  projectId={projectId}
-                  parentId={parentId}
-                  id={id}
-                />
-              ))}
-            </div>
+          {files.isOpen && files.type === 'Folder' && (
+            <Folders parentId={files.id} projectId={projectId} handleItemToggle={handleItemToggle} handleFileToggles={handleFileToggles} />
           )}
         </div>
       )}
@@ -101,17 +98,28 @@ const FolderDropdown = ({
   );
 };
 
+// Import necessary dependencies and components
+// import React, { useEffect, useState } from 'react';
+// import axios from 'axios';
+// import FolderDropdown from './FolderDropdown'; // Make sure to replace with the correct path
 
-
-
-function Folders({ parentId, projectId, textColor, id }) {
+// Your Folders component
+function Folders({ parentId, projectId, textColor, id, handleItemToggle, handleFileToggles }) {
   const [files, setFiles] = useState([]);
-  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    axios.getWithCallback('project-files/get-folder-hierarchy?projectId=' + projectId + '&parentId=' + parentId, (data) => {
-      setFiles(data);
-    });
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`project-files/get-folder-hierarchy?projectId=${projectId}&parentId=${parentId}`);
+        const initialFiles = response.data.map(file => ({ ...file, isOpen: false }));
+        setFiles(initialFiles);
+        console.log(initialFiles);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
   }, [parentId, projectId]);
 
   const toggleFiles = (index) => {
@@ -120,29 +128,35 @@ function Folders({ parentId, projectId, textColor, id }) {
     setFiles(updatedFiles);
   };
 
-  const handleOpenFolder = (folder) => {
-    console.log('Opened Folder:', folder.file_name);
-    setIsOpen(true);
+  const handleOpenFolder = (clickedFolder) => {
+    console.log('Opened Folder:', clickedFolder.file_name);
+    handleItemToggle(clickedFolder);
   };
 
-  const handleCloseFolder = (folder) => {
-    console.log('Closed Folder:', folder.file_name);
-    setIsOpen(!isOpen);
+  const handleCloseFolder = (clickedFolder) => {
+    console.log('Closed Folder:', clickedFolder.file_name);
+    handleItemToggle(clickedFolder);
   };
 
   return (
     <div>
-      <div className={`${isOpen ? 'open' : ''}`}>
+      <div>
         {files.map((file, index) =>
           file && file.parent_id !== null ? (
             <FolderDropdown
               key={index}
               files={file}
+              isOpen={file.isOpen}
               onToggleFiles={() => toggleFiles(index)}
               onToggleFile={(clickedFile) => console.log('Toggled File:', clickedFile.file_name)}
-              onOpenFolder={handleOpenFolder}
-              onCloseFolder={handleCloseFolder}
+              onOpenFolder={() => handleOpenFolder(file)}
+              onCloseFolder={() => handleCloseFolder(file)}
               textColor={textColor}
+              projectId={projectId}
+              parentId={parentId}
+              id={id}
+              handleItemToggle={handleItemToggle}
+              handleFileToggles={handleFileToggles}
             />
           ) : null
         )}
