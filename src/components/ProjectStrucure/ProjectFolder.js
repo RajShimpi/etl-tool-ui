@@ -16,7 +16,7 @@ function FolderDropdown({
   onContextMenuOpen,
   onContextMenuClose,
 }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen] = useState(false);
   const containerRef = useRef(null);
 
   useEffect(() => {
