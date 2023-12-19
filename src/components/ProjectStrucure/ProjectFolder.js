@@ -19,6 +19,20 @@ function FolderDropdown({
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef(null);
 
+  useEffect(() => {
+    const closeContextMenu = (event) => {
+      if (!containerRef.current) {
+        onContextMenuClose();
+      }
+    };
+
+    document.addEventListener('click', closeContextMenu);
+
+    return () => {
+      document.removeEventListener('click', closeContextMenu);
+    };
+  }, [onContextMenuClose]);
+
   return (
     <>
       <div className='folderstyle' ref={containerRef}>
@@ -29,7 +43,7 @@ function FolderDropdown({
             e.preventDefault();
             onContextMenuOpen(id);
           }}
-          className={`${isOpen ? '' : 'open'}`}
+          className={`${isOpen ? '' : 'open'}  `}
         >
           {item.type === 'Folder' && (
             item.isOpen ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='small' />
@@ -40,7 +54,6 @@ function FolderDropdown({
             <ContextMenu onClose={onContextMenuClose} project_id={project_id} id={id} textColor={textColor} />
           )}
         </div>
-
         {item.isOpen && item.type === 'Folder' && (
           <FolderContainer parentId={item.id} projectId={project_id} textColor={textColor} />
         )}
@@ -57,7 +70,6 @@ function FolderContainer({ parentId, projectId, textColor }) {
     let url = parentId
       ? `project-files/get-folder-hierarchy?projectId=${projectId}&parentId=${parentId}`
       : `project-files/get-folder-hierarchy?projectId=${projectId}`;
-
     axios.getWithCallback(url, (data) => {
       setFolder(data);
       console.log(data);
