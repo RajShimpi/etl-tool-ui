@@ -3,20 +3,15 @@ import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import FolderIcon from '@mui/icons-material/Folder';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import './project.css';
-import ContextMenu from '../ContextMenu';
 import axios from '../../modules/services/axios';
 
 function FolderDropdown({
   item,
   textColor,
   project_id,
-  parent_id,
-  id,
-  openContextMenuForItemId,
   onToggleFolder
 }) {
-  const [contextMenuPosition, setContextMenuPosition] = useState(null);
-  const [isContextMenuOpen, setContextMenuOpen] = useState(false);
+
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef(null);
 
@@ -28,33 +23,28 @@ function FolderDropdown({
   // const toggleFile = () => {
   //   setIsOpen(!isOpen);
   // }
+  
   return (
-    <div className='folderstyle' ref={containerRef}>
+    <>
+      <div className='folderstyle' ref={containerRef}>
 
-      <div
-        style={{ textColor }}
-        onClick={onToggleFolder}
-        className={`${isOpen ? '' : 'open'}`}
+        <div
+          style={{ textColor }}
+          onClick={onToggleFolder}
+          className={`${isOpen ? '' : 'open'}`}
 
-      >
-        {item.type === 'Folder' && (
-          item.isOpen ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='small' />
-        )}
-        {item.type === 'File' && <InsertDriveFileIcon fontSize='small' />}
-        {item.file_name}
-        {contextMenuPosition && openContextMenuForItemId === item.id && isContextMenuOpen && (
-          <ContextMenu
-            project_id={project_id}
-            parent_id={parent_id}
-            id={id}
-            textColor={textColor}
-          />
-        )}
+        >
+          {item.type === 'Folder' && (
+            item.isOpen ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='small' />
+          )}
+          {item.type === 'File' && <InsertDriveFileIcon fontSize='small' />}
+          {item.file_name}
+        </div>
         {item.isOpen && item.type === 'Folder' && (
           <FolderContainer parentId={item.id} projectId={project_id} />
         )}
       </div>
-    </div>
+    </>
   );
 }
 function FolderContainer({ parentId, projectId, textColor }) {
@@ -78,8 +68,6 @@ function FolderContainer({ parentId, projectId, textColor }) {
     updatedFolder[index].isOpen = !updatedFolder[index].isOpen;
     setFolder(updatedFolder);
   };
-
-
 
   const handleContextMenu = (item) => {
     console.log('Right-clicked on:', item);

@@ -23,7 +23,7 @@ function ProjectStructure({ textColor }) {
     updatedProject[index].isOpen = !updatedProject[index].isOpen;
     setProject(updatedProject);
   };
-  
+
 
   // const toggleFile = (projectIndex, file) => {
   //   const updatedProject = [...project];
