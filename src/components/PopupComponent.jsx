@@ -10,13 +10,13 @@ const PopupComponent = ({ onClose, actionType, project_id, id }) => {
   let contentComponent;
 
   switch (actionType) {
-    case "AddFolder":
+    case "Add Folder":
       contentComponent = <AddUpdateDeleteFileAndFolder project_id={project_id} id={id} />;
       break;
-    case "Add":
+    case "Add File":
       contentComponent = <AddUpdateDeleteFileAndFolder project_id={project_id} id={id} />;
       break;
-    case "Edit":
+    case "Edit Name":
       contentComponent = <AddUpdateDeleteFileAndFolder project_id={project_id} parent_id={id} />;
       break;
     case "Delete":
@@ -35,7 +35,7 @@ const PopupComponent = ({ onClose, actionType, project_id, id }) => {
   );
 };
 
-const AddUpdateDeleteFileAndFolder = (props,actionType) => {
+const AddUpdateDeleteFileAndFolder = (props) => {
   const [data, setData] = useState("");
 
   const setValues = (e, name) => {
