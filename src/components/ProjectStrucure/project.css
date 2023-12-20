@@ -88,13 +88,13 @@
   /* margin-left:20px; */
   cursor: pointer;
 }
-.fileName {
+/* .fileName {
   display: flex;
-  /* justify-content: center; */
-}
+  /* justify-content: center; 
+} */
 .folderstyle {
   list-style: none;
-  margin-left: 20px;
+  margin-left: 15px;
   cursor: pointer;
 }
 

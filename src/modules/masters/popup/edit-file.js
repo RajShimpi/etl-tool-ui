@@ -1,7 +1,7 @@
 import React from 'react';
 import config from "../../components/config/config.json"
 import CommonModel from '../../components/common-modal';
-import { getEditFields } from './edit-file-data';
+import { getCommonFields } from './common-data';
 
 const Edit = () => {
     // const [formData, setFormData] = useState({
@@ -15,7 +15,7 @@ const Edit = () => {
     return (
         <>
             <CommonModel   // this file create copy from common-form-with-list and Datatable componet Remove from Comman Model componete
-                formDataAction={getEditFields}
+                formDataAction={getCommonFields}
                 columns={config.PROJECT}
                 // insertApi="clients"
                 updateApi="projects/:id"

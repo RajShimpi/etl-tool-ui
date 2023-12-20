@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import FolderIcon from '@mui/icons-material/Folder';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
@@ -16,7 +16,6 @@ function FolderDropdown({
   onContextMenuOpen,
   onContextMenuClose,
 }) {
-  const [isOpen] = useState(false);
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -34,31 +33,29 @@ function FolderDropdown({
   }, [onContextMenuClose]);
 
   return (
-    <>
-      <div className='folderstyle' ref={containerRef}>
-        <div
-          style={{ textColor }}
-          onClick={onToggleFolder}
-          onContextMenu={(e) => {
-            e.preventDefault();
-            onContextMenuOpen(id);
-          }}
-          className={`${isOpen ? '' : 'open'}  `}
-        >
-          {item.type === 'Folder' && (
-            item.isOpen ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='small' />
-          )}
-          {item.type === 'File' && <InsertDriveFileIcon fontSize='small' />}
-          {item.file_name}
-          {openContextMenuId === id && (
-            <ContextMenu onClose={onContextMenuClose} project_id={project_id} id={id} textColor={textColor} />
-          )}
-        </div>
-        {item.isOpen && item.type === 'Folder' && (
-          <FolderContainer parentId={item.id} projectId={project_id} textColor={textColor} />
+    <div className='folderstyle' ref={containerRef}>
+      <div
+        style={{ textColor }}
+        onClick={onToggleFolder}
+        onContextMenu={(e) => {
+          e.preventDefault();
+          onContextMenuOpen(id);
+        }}
+        className={`${item.isOpen ? 'open' : ''}`}
+      >
+        {item.type === 'Folder' && (
+          item.isOpen ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='small' />
         )}
+        {item.type === 'File' && <InsertDriveFileIcon fontSize='small' />}
+        {item.file_name}
       </div>
-    </>
+      {openContextMenuId === id && (
+        <ContextMenu onClose={onContextMenuClose} project_id={project_id} id={id} textColor={textColor} />
+      )}
+      {item.isOpen && item.type === 'Folder' && (
+        <FolderContainer parentId={item.id} projectId={project_id} textColor={textColor} />
+      )}
+    </div>
   );
 }
 

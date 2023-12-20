@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './project.css';
 import DensityMediumIcon from '@mui/icons-material/DensityMedium';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
+import FolderIcon from '@mui/icons-material/Folder';
 // import FolderDropdown from './ProjectFolder';
 import axios from '../../modules/services/axios';
 import FolderContainer from './ProjectFolder';
@@ -48,7 +49,7 @@ function ProjectStructure({ textColor }) {
             <div key={index}>
               <li>
                 <div className='proicon' onClick={() => toggleProject(index)}>
-                  <FolderOpenIcon className='bx bx-grid-alt' />
+                  {project.isOpen ? <FolderOpenIcon fontSize='medium' /> : <FolderIcon fontSize='medium' />}
                   <span className='link_name' style={{ marginLeft: '5px' }}>
                     {project.project_name}
                   </span>

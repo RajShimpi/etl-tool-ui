@@ -1,4 +1,4 @@
-export const getFileFields = (itemData) => {
+export const getCommonFields = (itemData) => {
     return [{
         col: 12,
         callback: itemData.callback,

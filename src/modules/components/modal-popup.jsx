@@ -38,12 +38,12 @@ const Modal = (props) => {
         <div className={props.show ? "modal d-block hide-body-scroll" : "modal d-none"} style={{ overflow: "auto" }} tabIndex="-1" role="dialog">
             <div className={`modal-dialog modal-lg ${props.maxWidth && 'modal-top'} `} style={{ maxWidth: props.maxWidth, }} role="document">
                 <div className=" w-50" style={modalContent}>
-                    {/* <div className={`${props.maxWidth && 'modal-header-custom-padding'} modal-header`}>
-                        {/* <h5 className="modal-title">{props.modalTitle}</h5>
+                     <div className={`${props.maxWidth && 'modal-header-custom-padding'} modal-header`}>
+                        <h5 className="modal-title">{props.modalTitle}</h5>
                         <button type="button" onClick={() => close()} className="btn btn-link close-btn" data-dismiss="modal" aria-label="Close">
                             <i className="fa fa-2x fa-times-circle" aria-hidden="true" size='12'></i>
                         </button> 
-                    </div> */}
+                    </div> 
                     <div className={`${props.maxWidth && 'modal-body-custom-top-padding'} modal-body`}>
                         <div className={`${!props.maxWidth && 'container-fluid'}`}>
                             <ChildComponent {...childProps} />
