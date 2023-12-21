@@ -45,16 +45,16 @@ const Node = ({ data, isSelected, textRef, nodeName, setNodeName }) => {
   return (
     <div ref={nodeRef}>
       <div style={{ textAlign: "center" }} className="text-updater-node">
-        {showNodeMaster && (
+        {/* {showNodeMaster && (
           <Modal
             show={showNodeMaster}
             modalTitle={"Save/Update Parameter"}
             handleClose={handleCloseNodeMaster}
-            maxWidth={"100%"}
+            maxWidth={"100%"} 
           >
             {data.comp? data.comp: <AddFile/>}
           </Modal>
-        )}
+        )} */}
         <div style={{ textAlign: "center" }}>
           {selected ? null : (
             <>
@@ -76,11 +76,13 @@ const Node = ({ data, isSelected, textRef, nodeName, setNodeName }) => {
           >
             <div style={customTitle}>{data.heading}</div>
             <div style={style.contentWrapper}>{data.content}</div>
-          </div>
+          </div>    
         )}
-
-        <Handle type="source" position={Position.Right} id="b" onDoubleClick={onNodeDoubleClick} />
-        <Handle type="target" position={Position.Left} id="a" onDoubleClick={onNodeDoubleClick} />
+       
+            <Handle type="source" style={{marginTop:'-30px', backgroundColor:"green", border:"green"}} position={Position.Right} id="ok" onDoubleClick={onNodeDoubleClick} />
+            <Handle type="source" style={{backgroundColor:"red", border:"red"}} position={Position.Right} id="error" onDoubleClick={onNodeDoubleClick} />
+            <Handle type="target" position={Position.Left} id="target" onDoubleClick={onNodeDoubleClick} />
+      
       </div>
     </div>
   );
