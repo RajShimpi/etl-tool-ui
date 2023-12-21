@@ -38,10 +38,10 @@ const ContextMenu = ({ onToggleFiles, popType, project_id, parent_id, id, onClos
     const handleClickOutside = (event) => {
       if (
         popupType &&
-        !event.target.closest('.contextMenu'|| isPopupOpen) &&
-        !event.target.closest('.popup')  
+        !event.target.closest('.contextMenu') &&
+        !event.target.closest('.popup')
       ) {
-        closePopup();
+        // closePopup();
         onClose(); 
       }
     };
@@ -62,7 +62,7 @@ const ContextMenu = ({ onToggleFiles, popType, project_id, parent_id, id, onClos
       <div
         className="menu-item"
         onClick={(e) => {
-          openPopup("Add Folder", { top: e.clientY, left: e.clientX + 10 }, project_id, parent_id);
+          openPopup("AddFolder", { top: e.clientY, left: e.clientX + 10 }, project_id, parent_id);
           handleContextMenuClose();
         }}
       >
@@ -82,7 +82,7 @@ const ContextMenu = ({ onToggleFiles, popType, project_id, parent_id, id, onClos
       <div
         className="menu-item"
         onClick={(e) => {
-          openPopup("Add File", { top: e.clientY, left: e.clientX + 10 }, project_id, id);
+          openPopup("Add", { top: e.clientY, left: e.clientX + 10 }, project_id, id);
           handleContextMenuClose();
         }}
       >
@@ -102,7 +102,7 @@ const ContextMenu = ({ onToggleFiles, popType, project_id, parent_id, id, onClos
       <div
         className="menu-item"
         onClick={(e) => {
-          openPopup("Edit Name", { top: e.clientY, left: e.clientX + 10 }, project_id, parent_id);
+          openPopup("Edit", { top: e.clientY, left: e.clientX + 10 }, project_id, parent_id);
           handleContextMenuClose();
         }}
       >
