@@ -21,6 +21,7 @@ import Client from "../masters/client";
 import Project from "../masters/project";
 import ProjectFile from "../masters/project-file";
 import StepType from "../masters/steptype";
+import TypeConfigMaster from "../masters/type-config-master";
 import Parameter from "../masters/parameter";
 import StepTypeParamete from "../masters/step-type-parameter";
 
@@ -44,6 +45,7 @@ export const routeConstant = {
   project:"/project",
   projectfile:"/projectfile",
   step:"/step",
+  typeconfigmaster: "/type-config",
   parameter:"/parameter",
   steptypeparameter:"/step-type-parameter"
 };
@@ -172,6 +174,14 @@ export const routeData = (routes) => [
     permissions: true,
     isUserCanView: true,
   },
+  {
+    routeTo: routeConstant.typeconfigmaster, // TypeConfigs Form route
+    header: "",
+    childComp: TypeConfigMaster,
+     data: {},
+    permissions: true,
+    isUserCanView: true,
+   },
   {
     routeTo: routeConstant.parameter, // StepType Form route
     header: "",

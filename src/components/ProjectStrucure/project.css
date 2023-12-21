@@ -96,6 +96,7 @@
   list-style: none;
   margin-left: 15px;
   cursor: pointer;
+  text-wrap: nowrap;
 }
 
 .insidefileStyle {

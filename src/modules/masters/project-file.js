@@ -17,7 +17,7 @@ const ProjectFile = () => {
         axios.getWithCallback('project-files/', (data) => setParentId(data.map(y => ({ value: y.id, label: y.file_name }))))
     }, []);
 
-    const defaultObj = { project_id: '', type: '', file_name: '', parent_id: '', };
+    const defaultObj = { project_id: '', type: '', file_name: '', parent_id: null };
 
 
     return (
