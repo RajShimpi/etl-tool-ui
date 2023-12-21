@@ -89,17 +89,17 @@ const RecursiveFolder = ({ items, refreshData }) => {
                                     <>
                                         {contextMenuPosition && isContextMenuOpen[subItem.file_name] && (
                                             <div style={{ display: !isContextMenuOpen[subItem.file_name] && "none" }}>
-                                            <ContextMenu
+                                             <ContextMenu
                                                 onClose={closeContextMenu}
                                                 project_id={subItem.project_id}
                                                 parent_id={subItem.parent_id}
                                                 id={subItem.id}
-                                                item={subItem}                                              
+                                                item={subItem}
                                                 position={contextMenuPosition}
-                                                callback={callback}                                               
-                                            />
+                                                callback={callback}
+                                             />
                                             </div>
-                                            )}
+                                        )}
                                             {isContextMenuOpen[subItem.file_name] && (
                                                 <Modal modalTitle={"Add Folder"} handleClose={() => { setShow({})}}  show={!isShow[subItem.file_name]} maxWidth="75%">
                                                     <Folder project_id={subItem.project_id} id={subItem.id} onClose={closeContextMenu} />
@@ -112,7 +112,7 @@ const RecursiveFolder = ({ items, refreshData }) => {
                                             {subItem.children && <RecursiveFolder items={subItem.children} refreshData={refreshData} />}
                                         </div>
                                     </>
-                                )} 
+                                )}
                             </div>
                         </div>
                     ))}
