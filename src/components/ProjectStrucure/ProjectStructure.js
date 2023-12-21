@@ -6,7 +6,7 @@ import FolderDropdown from './ProjectFolder';
 import RecursiveFolder from './recursive-folders';
 import axios from '../../modules/services/axios';
 import FolderContainer from './ProjectFolder';
-
+import FolderIcon from '@mui/icons-material/Folder';
 function ProjectStructure({ textColor }) {
   const [isOpen, setIsOpen] = useState(false);
   const [project, setProject] = useState([]);
