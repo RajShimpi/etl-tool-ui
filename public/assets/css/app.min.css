@@ -1899,7 +1899,7 @@ body[data-layout=horizontal][data-layout-size=boxed] .navbar-header {
 }
 
 .w-xs {
-    min-width: 80px
+	min-width: 94px;
 }
 
 .w-sm {

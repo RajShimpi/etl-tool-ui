@@ -3,15 +3,19 @@ export const getFileFields = (itemData) => {
         col: 12,
         callback: itemData.callback,
         disabled: itemData.disabled,
-        groups: [{
+        
+        groups: [
+            {
             type: "text",
             id: "inputFileName",
             label: "File Name",
             name: "name",
             control: "input",
             isRequired: true,
-            itemVal: itemData.values ? itemData.values["name"] : '',
+            itemVal: itemData.values ? itemData.values["name"] : '',  
         },
+            
+       
         ]
     }
     ]

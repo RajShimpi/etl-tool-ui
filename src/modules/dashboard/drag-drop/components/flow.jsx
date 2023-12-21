@@ -23,9 +23,12 @@ import {
 import "reactflow/dist/style.css";
 import "./dnd.css";
 import "./update-node.css";
-import { Modal } from "bootstrap";
-import { Key } from "@mui/icons-material";
+
+import { Class, Key, Source } from "@mui/icons-material";
 import { data } from "jquery";
+import AddFile from "../../../masters/popup/add-file";
+import Modal from "../../../components/modal-popup";
+import { ClassNames } from "@emotion/react";
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
@@ -33,9 +36,12 @@ const getId = () => `dndnode_${id++}`;
 const nodeTypes = { node: Node };
 
 const OverviewFlow = () => {
+  const [showNodeMaster, setShowNodeMaster] = useState(false);
+
   const reactFlowWrapper = useRef(null);
-  const edgeUpdateSuccessful = useRef(true);  
+  const edgeUpdateSuccessful = useRef(true);
   const textRef = useRef(null);
+  const modalRef = useRef(null);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
@@ -47,8 +53,14 @@ const OverviewFlow = () => {
   const onDragOver = (event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
+
+    // const [showNodeMaster, setShowNodeMaster] = useState(false);
+
+    // ... (other state variables and functions)
+
+
   };
- 
+
   const onDrop = (event) => {
     event.preventDefault();
     const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
@@ -62,27 +74,54 @@ const OverviewFlow = () => {
       x: event.clientX - reactFlowBounds.left,
       y: event.clientY - reactFlowBounds.top,
     });
-    
+
     const newNode = {
       id: getId(),
       name,
       type,
       position,
-      data: { heading:name, img: img },
-    }
+      data: { heading: name, img: img },
+    };
 
     setNodes((es) => es.concat(newNode));
-    setSelectedNode(newNode.a=name);
+    setSelectedNode(newNode.a = name);
   };
+
   const onConnect = useCallback(
     (params) => {
+      const { sourceHandle } = params;
+
+      let label;
+      let backgroundColor;
+      let textColor;
+
+      if (sourceHandle === "ok") {
+        label = "ok";
+        backgroundColor = "green";
+        textColor = "white";
+      }
+
+      else {
+        label = "error";
+        backgroundColor = "red";
+        textColor = "white";
+      }
+
       const newEdge = {
         ...params,
-        type: params.type || "step", // Set the default type to "step"
-        markerEnd: {
-          // type: MarkerType.ArrowClosed
+        label,
+        type: params.type || "step",
+        arrowHeadType: "arrowclosed",
+        style: {
+          stroke: label === "error" ? "red" : label === "ok" ? "green" : "black",
+          backgroundColor,
+          color: textColor,
+          fontSize: "12px",
+          padding: "4px",
+            borderRadius: "4px",
         },
       };
+
       setEdges((eds) => addEdge(newEdge, eds));
     },
     [setEdges]
@@ -145,6 +184,36 @@ const OverviewFlow = () => {
     edgeUpdateSuccessful.current = true;
   }, []);
 
+
+  const onNodeDoubleClick = () => {
+    setShowNodeMaster(true);
+  };
+  const handleCloseNodeMaster = () => {
+    setShowNodeMaster(false);
+  }
+  const nodeRef = useRef();
+  const closeModel   = () => {
+    setShowNodeMaster(false);
+  };
+
+  const handleClickOutside = (event) => {
+    if (modalRef.current && !modalRef.current.contains(event.target)) {
+      handleCloseNodeMaster();
+    }
+  };
+
+  useEffect(() => {
+    const handleDocumentClick = (event) => handleClickOutside(event);
+
+    document.addEventListener("mousedown", handleDocumentClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleDocumentClick);
+    };
+  }, [handleCloseNodeMaster, modalRef]);
+
+
+
   return (
     <>
       <button onClick={saveHandler}>Save</button>
@@ -164,12 +233,19 @@ const OverviewFlow = () => {
               onEdgeUpdate={onEdgeUpdate}
               onEdgeUpdateStart={onEdgeUpdateStart}
               onEdgeUpdateEnd={onEdgeUpdateEnd}
-              attributionPosition="top-right"
+              attributionPosition="top  -right"
+              onNodeDoubleClick={onNodeDoubleClick}
+              onEdgeDoubleClick={true}
             >
               <Background color="#aaa" gap={16} />
-               </ReactFlow>  
+            </ReactFlow>
+
+            <Modal modalTitle={"Save/Update Parameter"} ref={modalRef} handleClose={handleCloseNodeMaster} show={showNodeMaster}>
+              <AddFile />
+            </Modal>
+    
           </div>
-          
+
           {/* 
           <Sidebar
             isSelected={isSelected}
@@ -182,5 +258,7 @@ const OverviewFlow = () => {
     </>
   );
 };
+
+
 
 export default OverviewFlow;

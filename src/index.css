@@ -308,6 +308,8 @@ code {
   top: 5%
 }
 
+
+
 .data-table-row-hover:hover {
   background-color: #d8dee2;
 }
@@ -731,11 +733,21 @@ th {
   padding: 20px 20px
 }
 
-.modal{
-  overflow: scroll;
-  width: 850px;
-  height: 462px;
-  --bs-modal-margin: -1.25rem;
+
+  .modal {
+    width: 36%;
+    height: 63%;
+    left: 34%;
+    top: 35%;
+    /* --bs-modal-margin: 13.75rem; */
+    justify-content: end;
+    align-items: center;
+  }
+ 
+
+
+.modal-lg, .modal-xl {
+	--bs-modal-width: 525px;
 }
 
 
@@ -1529,6 +1541,7 @@ th {
   
   body[data-layout=horizontal] .container-fluid, body[data-layout=horizontal] .navbar-header {
       max-width: 100% !important;
+      
   }
 
 }
