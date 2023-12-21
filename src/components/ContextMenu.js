@@ -5,6 +5,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import PopupComponent from "./PopupComponent";
 import FolderIcon from "@mui/icons-material/Folder";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import RecursiveFolder from "./ProjectStrucure/recursive-folders";
 
 const ContextMenu = ({ onToggleFiles, popType, project_id, parent_id, id, onClose }) => {
   const [popupType, setPopupType] = useState(null);
@@ -16,9 +17,12 @@ const ContextMenu = ({ onToggleFiles, popType, project_id, parent_id, id, onClos
   };
 
   const openPopup = (type, position) => {
+    console.log(type)
+    
     setPopupType(type);
     setPopupPosition(position);
     setIsPopupOpen(true);
+    console.log(popupType)
   };
 
   const closePopup = () => {
@@ -140,19 +144,20 @@ const ContextMenu = ({ onToggleFiles, popType, project_id, parent_id, id, onClos
         </div>
       </div>
       {popupType && (
-        <PopupComponent
-          onClose={closePopup}
-          actionType={popupType}
-          style={{
-            top: popupPosition.top,
-            left: popupPosition.left,
-            marginLeft: "10px",
-          }}
-          project_id={project_id}
-          parent_id={parent_id}
-          id={id}
-        />
-      )}
+  <RecursiveFolder
+    // onClose={closePopup}
+    actionType={popupType}
+    style={{
+      top: popupPosition.top,
+      left: popupPosition.left,
+      marginLeft: "10px",
+    }}
+    project_id={project_id}
+    parent_id={parent_id}
+    id={id}
+  />
+)}
+
     </div>
   );
 };

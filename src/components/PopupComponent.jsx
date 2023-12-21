@@ -7,25 +7,35 @@ import { getFolderFields } from '../modules/masters/popup/add-folder-data';
 import axios from "../modules/services/axios";
 import FormCommon from "../modules/components/form-common";
 
-const PopupComponent = ({ onClose, actionType, project_id, id }) => {
+const PopupComponent = ({ onClose, actionType, project_id, id, popType }) => {
   let contentComponent;
 
   switch (actionType) {
-    case "AddFolder":  
-      contentComponent = <Folder project_id={project_id} id={id} onClose={onClose} />;
+    case "AddFolder":
+      contentComponent = (
+        <Folder project_id={project_id} id={id} onClose={onClose} />
+      );
       break;
     case "Add":
-      contentComponent = <AddFile project_id={project_id} id={id} onClose={onClose} />;
+      contentComponent = (
+        <AddFile project_id={project_id} id={id} onClose={onClose} />
+      );
       break;
     case "Edit":
-      contentComponent = <Edit project_id={project_id} parent_id={id} onClose={onClose} />;
+      contentComponent = (
+        <Edit project_id={project_id} parent_id={id} onClose={onClose} />
+      );
       break;
     case "Delete":
-      contentComponent = <Delete project_id={project_id} parent_id={id} onClose={onClose} />;
+      contentComponent = (
+        <Delete project_id={project_id} parent_id={id} onClose={onClose} />
+      );
       break;
     default:
       contentComponent = null;
   }
+
+  // Use popType as needed
 
   return (
     <div className="popup">
