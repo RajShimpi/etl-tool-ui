@@ -18,7 +18,7 @@ const ContextMenu = ({ onToggleFiles, popType, project_id, parent_id, id, onClos
 
   const openPopup = (type, position) => {
     console.log(type)
-    
+
     setPopupType(type);
     setPopupPosition(position);
     setIsPopupOpen(true);
@@ -33,10 +33,10 @@ const ContextMenu = ({ onToggleFiles, popType, project_id, parent_id, id, onClos
   const handleContextMenuClose = () => {
     console.log("handleContextMenuClose");
     if (isPopupOpen) {
-      onClose(); 
+      onClose();
     }
   };
-  
+
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -46,7 +46,7 @@ const ContextMenu = ({ onToggleFiles, popType, project_id, parent_id, id, onClos
         !event.target.closest('.popup')
       ) {
         // closePopup();
-        onClose(); 
+        onClose();
       }
     };
 
@@ -144,19 +144,19 @@ const ContextMenu = ({ onToggleFiles, popType, project_id, parent_id, id, onClos
         </div>
       </div>
       {popupType && (
-  <RecursiveFolder
-    // onClose={closePopup}
-    actionType={popupType}
-    style={{
-      top: popupPosition.top,
-      left: popupPosition.left,
-      marginLeft: "10px",
-    }}
-    project_id={project_id}
-    parent_id={parent_id}
-    id={id}
-  />
-)}
+        <RecursiveFolder
+          // onClose={closePopup}
+          actionType={popupType}
+          style={{
+            top: popupPosition.top,
+            left: popupPosition.left,
+            marginLeft: "10px",
+          }}
+          project_id={project_id}
+          parent_id={parent_id}
+          id={id}
+        />
+      )}
 
     </div>
   );
