@@ -12,22 +12,26 @@ function ProjectStructure({ textColor }) {
   const [data, setData] = useState([]);
 
   useEffect(() => {
+    getProjects();
+  }, []);
+
+  const getProjects = () => {
     axios.getWithCallback('projects/', (data) =>  {       
-      data.forEach(dt => {
+      data.forEach((dt, inx) => {
       let url = 'project-files/get-folder-hierarchy?projectId=' + dt.id;
         axios.getWithCallback(url, (subdata) => {
           var treeData = treefy(subdata);
-          setData((prevData) => [...prevData, treeData]);
+          setData((prevData) => [...prevData, { prjId : dt.id, heirarchy: treeData}]);
           
         });
       });
       setProject(data);
     });
-  }, []);
+  };
 
-  useEffect(() => {
-    console.log(data);
-  }, [data])
+  const refreshData = () => {
+    getProjects();
+  }
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -44,6 +48,7 @@ function ProjectStructure({ textColor }) {
     const map = list.reduce((m, li, i) => {
       m[li.id] = i;
       li.children = [];
+      li.isRightClick = false;
       return m;
     }, {});
     return list.reduce((root, li) => {
@@ -60,6 +65,34 @@ function ProjectStructure({ textColor }) {
     setProject(updatedProject);
   };
 
+  const getHeirarchy = (projectId) => {
+      var filterDt = data.find(x => x.prjId === projectId);
+      return filterDt.heirarchy;
+  }
+
+  const onRightCallback = (item) =>{
+      let dt = data.find(x => x.prjId === item.project_id);
+      let dtIndex = data.findIndex(x => x.prjId === item.project_id);
+      let procesDt = processData(dt.heirarchy, item);
+      data[dtIndex].heirarchy = procesDt;
+      setData((prevData) => [...prevData]);
+    
+  }
+
+  const processData = (data, item) => {
+      data.forEach((x, index, arr) => {
+         if(x.id === item.id) {
+            x.isRightClick = true;
+         } else {
+            x.isRightClick = false;
+            if(x.children?.length) {
+              processData(arr, item);
+           }
+         }
+         
+      });
+      return data;
+  } 
 
   return (
     <div>
@@ -84,7 +117,7 @@ function ProjectStructure({ textColor }) {
                 </div>
                 {project.isOpen && (
                   <div className={`${isOpen ? 'open' : ''}`}>
-                    <RecursiveFolder items={data[index]} />
+                    <RecursiveFolder items={getHeirarchy(project.id)} refreshData={refreshData} />
                     {/* <FolderDropdown
                       project={project}
                       projectId={project.id}
