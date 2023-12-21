@@ -100,11 +100,11 @@ const RecursiveFolder = ({ items, refreshData }) => {
                                              />
                                             </div>
                                         )}
-                                            {isContextMenuOpen[subItem.file_name] && (
+                                            {/* {isContextMenuOpen[subItem.file_name] && (
                                                 <Modal modalTitle={"Add Folder"} handleClose={() => { setShow({})}}  show={!isShow[subItem.file_name]} maxWidth="75%">
                                                     <Folder project_id={subItem.project_id} id={subItem.id} onClose={closeContextMenu} />
                                                 </Modal>
-                                            )}
+                                            )} */}
                                        {showNested[subItem.file_name] ? <FolderOpenIcon key={subItem.file_name + "openIcon" + index }  fontSize='small' />
                                         : <FolderIcon key={subItem.file_name + "closeIcon" + index } fontSize='small' />}
                                         <>{subItem.file_name}</>
