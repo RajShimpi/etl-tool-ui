@@ -108,6 +108,12 @@
         "symbol",
         "group"
     ],
+    "TYPE_CONFIG": [
+        "category",
+        "value",
+        "isActive",
+        "params"
+],
     "PARAMETER":[
         "name",
         "context",

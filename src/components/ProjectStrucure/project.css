@@ -79,6 +79,7 @@
   list-style: none;
   margin-left: 20px;
   cursor: pointer;
+  text-wrap: nowrap;
 }
 
 .insidefileStyle {
