@@ -4,12 +4,7 @@ import CommonModel from '../../components/common-modal';
 import { getCommonFields } from './common-data';
 
 const Edit = () => {
-    // const [formData, setFormData] = useState({
-    //     id: null,
-    //     name:'',
-    //     abbreviation:'',
-    // });
-
+  
     let defaultObj = { project_name: '', client_id: 1, base_location: "true" };
 
     return (
@@ -22,7 +17,7 @@ const Edit = () => {
                 // getApi="clients"
                 title="Edit"
                 defaultObj={defaultObj}
-            // tableTitle='client'
+                // tableTitle='client'
             />
         </>
     );

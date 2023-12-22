@@ -12,14 +12,12 @@ const Parameter = () => {
     useEffect(() => {
         axios.getWithCallback('parameter/', (data) => setParameter(data.map(x =>  {return{ value: x.id, label: x.name }})))
     }, []);
+    
     useEffect(() => {
         axios.getWithCallback('step-type/', (data) => setStepType(data.map(y =>{return{ value: y.id, label: y.name} })))
     }, []);
 
-
-
     const defaultObj = { name: '', context: '', display_name: '', description: '', type: '',resource:'',step_id:'' };
-
 
     return (
         <>
@@ -31,7 +29,7 @@ const Parameter = () => {
                 getApi="parameter"
                 title="Parameter"
                 defaultObj={defaultObj}
-                options={[stepType]}
+                options={[stepType,parameter]}
                 tableTitle='Parameter'
             />
         </>

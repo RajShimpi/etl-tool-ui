@@ -38,10 +38,8 @@ export const getProjectFileFields = (itemData) => {
             options: itemData.options[1],
             control: "select",
             isSubmit: itemData.isSubmit,
-            // isRequired: !itemData?.values?.parent_id,
             itemVal: itemData.values ? itemData.values["parent_id"] : '',
         },
         ]
-    } 
-    ];
+    }];
 }

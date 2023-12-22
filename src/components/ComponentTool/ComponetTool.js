@@ -90,7 +90,7 @@ function groupDataBy(data, property) {
     const key = item[property];
     if (!acc[key]) {
       acc[key] = [];
-    }
+    } 
     acc[key].push(item);
     return acc;
   }, {});

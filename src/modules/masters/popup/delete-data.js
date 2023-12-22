@@ -13,6 +13,5 @@ export const getDeleteFields = (itemData) => {
             itemVal: itemData.values ? itemData.values["type"] : '',
         },
         ]
-    }
-    ]
+    }]
 }

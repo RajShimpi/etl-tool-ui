@@ -12,30 +12,20 @@ const PopupComponent = ({ onClose, actionType, project_id, id, popType }) => {
 
   switch (actionType) {
     case "AddFolder":
-      contentComponent = (
-        <Folder project_id={project_id} id={id} onClose={onClose} />
-      );
+      contentComponent = (<Folder project_id={project_id} id={id} onClose={onClose} />);
       break;
     case "Add":
-      contentComponent = (
-        <AddFile project_id={project_id} id={id} onClose={onClose} />
-      );
+      contentComponent = (<AddFile project_id={project_id} id={id} onClose={onClose} />);
       break;
     case "Edit":
-      contentComponent = (
-        <Edit project_id={project_id} parent_id={id} onClose={onClose} />
-      );
+      contentComponent = (<Edit project_id={project_id} parent_id={id} onClose={onClose} /> );
       break;
     case "Delete":
-      contentComponent = (
-        <Delete project_id={project_id} parent_id={id} onClose={onClose} />
-      );
+      contentComponent = (<Delete project_id={project_id} parent_id={id} onClose={onClose} /> );
       break;
     default:
       contentComponent = null;
   }
-
-  // Use popType as needed
 
   return (
     <div className="popup">
@@ -89,12 +79,7 @@ const AddUpdateDeleteFileAndFolder = (props) => {
                 </button>
               </h2>
             </div>
-            <div
-              id="collapseOne"
-              className="accordion-collapse collapse show"
-              aria-labelledby="headingOne"
-              data-bs-parent={"common-form-" + props.title}
-            >
+            <div  id="collapseOne" className="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent={"common-form-" + props.title} >
               <div className="accordion-body text-muted">
                 <div className="card-body">
                   <FormCommon
@@ -110,17 +95,15 @@ const AddUpdateDeleteFileAndFolder = (props) => {
                   />
                 </div>
                 <div className=" col-md-12 d-flex justify-content-end">
-                    <button
-                      type="submit"
-                      className={
-                        props.update
-                          ? "btn mx-2 btn-update w-xs waves-effect waves-light"
-                          : "btn mx-1 btn-add w-xs waves-effect waves-light"
-                      }
-                      
-                      >
+                    <button type="submit" className={  props.update? "btn mx-2 btn-update w-xs waves-effect waves-light": "btn mx-1 btn-add w-xs waves-effect waves-light" }>
                       {props.type}
                       </button>
                 </div>
-                </div></div></div></form></div></div></div>) 
+                </div>
+                </div>
+                </div>
+                </form>
+                </div>
+                </div>
+                </div>) 
 }

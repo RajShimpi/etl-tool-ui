@@ -41,13 +41,13 @@ export const routeConstant = {
   projectstructure: "/projectstructure",
   componettool: "/componettool",
   maincomponent: "/maincomponent",
-  client:"/client",
-  project:"/project",
-  projectfile:"/projectfile",
-  step:"/step",
+  client: "/client",
+  project: "/project",
+  projectfile: "/projectfile",
+  step: "/step",
   typeconfigmaster: "/type-config",
-  parameter:"/parameter",
-  steptypeparameter:"/step-type-parameter"
+  parameter: "/parameter",
+  steptypeparameter: "/step-type-parameter"
 };
 export const routeData = (routes) => [
   {
@@ -82,7 +82,6 @@ export const routeData = (routes) => [
     permissions: true,
     isUserCanView: true,
   },
-
   {
     routeTo: routeConstant.addMenu,
     header: "Add Menu",
@@ -91,7 +90,6 @@ export const routeData = (routes) => [
     permissions: true,
     isUserCanView: true,
   },
-
   {
     routeTo: routeConstant.dashboardBuilder,
     header: "Dashboard Builder",
@@ -100,7 +98,6 @@ export const routeData = (routes) => [
     permissions: true,
     isUserCanView: routes.includes(routeConstant.dashboardBuilder),
   },
-
   {
     routeTo: routeConstant.userMaster,
     header: "User Master",
@@ -109,7 +106,6 @@ export const routeData = (routes) => [
     permissions: true,
     isUserCanView: routes.includes(routeConstant.userMaster),
   },
-
   {
     routeTo: routeConstant.resetPassword,
     header: "Reset Password",
@@ -159,7 +155,7 @@ export const routeData = (routes) => [
     isUserCanView: true,
   },
   {
-    routeTo: routeConstant.projectfile, // ProjectFile Form route
+    routeTo: routeConstant.projectfile, // Project File Form route
     header: "",
     childComp: ProjectFile,
     data: {},
@@ -178,12 +174,12 @@ export const routeData = (routes) => [
     routeTo: routeConstant.typeconfigmaster, // TypeConfigs Form route
     header: "",
     childComp: TypeConfigMaster,
-     data: {},
+    data: {},
     permissions: true,
     isUserCanView: true,
-   },
+  },
   {
-    routeTo: routeConstant.parameter, // StepType Form route
+    routeTo: routeConstant.parameter, // Paramete Form route
     header: "",
     childComp: Parameter,
     data: {},
@@ -191,7 +187,7 @@ export const routeData = (routes) => [
     isUserCanView: true,
   },
   {
-    routeTo: routeConstant.steptypeparameter, // StepType Form route
+    routeTo: routeConstant.steptypeparameter, // StepTypeParamete Form route
     header: "",
     childComp: StepTypeParamete,
     data: {},

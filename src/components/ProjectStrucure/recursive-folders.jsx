@@ -7,7 +7,7 @@ import Modal from "../../modules/components/modal-popup";
 import Folder from "../../modules/masters/popup/add-folder";
 import PopupComponent from "../PopupComponent";
 
-const RecursiveFolder = ({ items, refreshData, actionType }) => {
+const RecursiveFolder = ({ items, refreshData }) => {
   // const [items, setItems] = useState([]);
 
   // useEffect(() => {
@@ -18,8 +18,7 @@ const RecursiveFolder = ({ items, refreshData, actionType }) => {
 
   useEffect(() => {
     console.log(items);
-    console.log(actionType,'12');
-  }, [items, actionType]);
+  }, [items]);
 
   const [showNested, setShowNested] = useState({});
   const [contextMenuPosition, setContextMenuPosition] = useState(null);
@@ -72,37 +71,19 @@ const RecursiveFolder = ({ items, refreshData, actionType }) => {
       {!!items && items.length && (
         <>
           {items.map((subItem, index) => (
-            <div
-              className="folderstyle"
-              ref={containerRef}
-              key={subItem.file_name + "rootDiv" + index}
-            >
-              <div
-                key={subItem.file_name + "contectDiv" + index}
-                className={`open`}
-                onClick={(e) => toggleNested(e, subItem.file_name)}
-                onContextMenu={(e) => handleContextMenu(e, subItem)}
-              >
+            <div className="folderstyle" ref={containerRef} key={subItem.file_name + "rootDiv" + index}>
+              <div key={subItem.file_name + "contectDiv" + index} className={`open`} onClick={(e) => toggleNested(e, subItem.file_name)} onContextMenu={(e) => handleContextMen(e, subItem)}>
                 {subItem.type === "File" && (
                   <>
-                    <InsertDriveFileIcon
-                      key={subItem.file_name + "fileIcon" + index}
-                      fontSize="small"
-                    />
+                    <InsertDriveFileIcon key={subItem.file_name + "fileIcon" + index} fontSize="small"/>
                     <>{subItem.file_name}</>
                   </>
                 )}
 
                 {subItem.type === "Folder" && subItem.children && (
                   <>
-                    {contextMenuPosition &&
-                      isContextMenuOpen[subItem.file_name] && (
-                        <div
-                          style={{
-                            display:
-                              !isContextMenuOpen[subItem.file_name] && "none",
-                          }}
-                        >
+                    {contextMenuPosition && isContextMenuOpen[subItem.file_name] && (
+                        <div style={{ display: !isContextMenuOpen[subItem.file_name] && "none" }}>
                           <ContextMenu
                             onClose={closeContextMenu}
                             project_id={subItem.project_id}
@@ -115,43 +96,20 @@ const RecursiveFolder = ({ items, refreshData, actionType }) => {
                         </div>
                       )}
                     {isContextMenuOpen[subItem.file_name] && (
-                      <Modal
-                        modalTitle={actionType}
-                        handleClose={() => {
-                          setShow({});
-                        }}
-                        show={!isShow[subItem.file_name]}
-                      >
-                        <PopupComponent
-                          actionType={actionType}
-                          project_id={subItem.project_id}
-                          parent_id={subItem.id}
-                        />
+                      <Modal modalTitle={actionType} handleClose={() => {setShow({});}} show={!isShow[subItem.file_name]}>
+                        <Folder project_id={subItem.project_id} id={subItem.id} onClose={closeContextMenu} />
                       </Modal>
                     )}
 
-                    {showNested[subItem.file_name] ? (
-                      <FolderOpenIcon
-                        key={subItem.file_name + "openIcon" + index}
-                        fontSize="small"
-                      />
-                    ) : (
-                      <FolderIcon
-                        key={subItem.file_name + "closeIcon" + index}
-                        fontSize="small"
-                      />
-                    )}
+                    {showNested[subItem.file_name] ? 
+                    ( <FolderOpenIcon key={subItem.file_name + "openIcon" + index}fontSize="small" /> ) 
+                    : ( <FolderIcon key={subItem.file_name + "closeIcon" + index} fontSize="small"/> )}
                     <>{subItem.file_name}</>
-                    <div
-                      style={{
-                        display: !showNested[subItem.file_name] && "none",
+                    <div style={{display: !showNested[subItem.file_name] && "none",
                       }}
                     >
                       {subItem.children && (
-                        <RecursiveFolder
-                          items={subItem.children}
-                          refreshData={refreshData}
-                        />
+                        <RecursiveFolder items={subItem.children} refreshData={refreshData}/>
                       )}
                     </div>
                   </>

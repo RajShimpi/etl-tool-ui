@@ -17,13 +17,13 @@ function ProjectStructure({ textColor }) {
   }, []);
 
   const getProjects = () => {
-    axios.getWithCallback('projects/', (data) =>  {       
+    axios.getWithCallback('projects/', (data) => {
       data.forEach((dt, inx) => {
-      let url = 'project-files/get-folder-hierarchy?projectId=' + dt.id;
+        let url = 'project-files/get-folder-hierarchy?projectId=' + dt.id;
         axios.getWithCallback(url, (subdata) => {
           var treeData = treefy(subdata);
-          setData((prevData) => [...prevData, { prjId : dt.id, heirarchy: treeData}]);
-          
+          setData((prevData) => [...prevData, { prjId: dt.id, heirarchy: treeData }]);
+
         });
       });
       setProject(data);
@@ -42,7 +42,7 @@ function ProjectStructure({ textColor }) {
     const updatedProject = [...project];
     updatedProject[index].isOpen = !updatedProject[index].isOpen;
     setProject(updatedProject);
-    
+
   };
 
 
@@ -56,7 +56,7 @@ function ProjectStructure({ textColor }) {
     return list.reduce((root, li) => {
       const arr = li.parent_id ? list[map[li.parent_id]].children : root;
       arr.push(li);
-      
+
       return root;
     }, []);
   }
@@ -68,33 +68,33 @@ function ProjectStructure({ textColor }) {
   };
 
   const getHeirarchy = (projectId) => {
-      var filterDt = data.find(x => x.prjId === projectId);
-      return filterDt.heirarchy;
+    var filterDt = data.find(x => x.prjId === projectId);
+    return filterDt.heirarchy;
   }
 
-  const onRightCallback = (item) =>{
-      let dt = data.find(x => x.prjId === item.project_id);
-      let dtIndex = data.findIndex(x => x.prjId === item.project_id);
-      let procesDt = processData(dt.heirarchy, item);
-      data[dtIndex].heirarchy = procesDt;
-      setData((prevData) => [...prevData]);
-    
+  const onRightCallback = (item) => {
+    let dt = data.find(x => x.prjId === item.project_id);
+    let dtIndex = data.findIndex(x => x.prjId === item.project_id);
+    let procesDt = processData(dt.heirarchy, item);
+    data[dtIndex].heirarchy = procesDt;
+    setData((prevData) => [...prevData]);
+
   }
 
   const processData = (data, item) => {
-      data.forEach((x, index, arr) => {
-         if(x.id === item.id) {
-            x.isRightClick = true;
-         } else {
-            x.isRightClick = false;
-            if(x.children?.length) {
-              processData(arr, item);
-           }
-         }
-         
-      });
-      return data;
-  } 
+    data.forEach((x, index, arr) => {
+      if (x.id === item.id) {
+        x.isRightClick = true;
+      } else {
+        x.isRightClick = false;
+        if (x.children?.length) {
+          processData(arr, item);
+        }
+      }
+
+    });
+    return data;
+  }
 
   return (
     <div>

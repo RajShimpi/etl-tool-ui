@@ -4,7 +4,6 @@ export const getStepTypeParameter = (itemData) => {
         callback: itemData.callback,
         disabled: itemData.disabled,
         groups: [{
-            // type: "number",
             id: "inputStepId",
             label: "Step Name",
             name: "step_id",
@@ -15,7 +14,6 @@ export const getStepTypeParameter = (itemData) => {
             itemVal: itemData.values ? itemData.values["step_id"] : '',
         },
         {
-            // type: "number",
             id: "inputParameterId",
             label: "Parameter Id",
             name: "parameter_id",
@@ -31,11 +29,9 @@ export const getStepTypeParameter = (itemData) => {
             label: "Required",
             name: "required",
             control: "input",
-            // isSubmit: itemData.isSubmit,
             isRequired: false,
             itemVal: itemData.values ? itemData.values["required"] : '',
         }
     ]
-    } 
-    ];
+    }];
 }

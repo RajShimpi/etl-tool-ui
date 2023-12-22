@@ -1,6 +1,5 @@
 export const getSteptypeFields = (itemData) => {
     return [{
-
         col: 4,
         callback: itemData.callback,
         disabled: itemData.disabled,
@@ -17,9 +16,7 @@ export const getSteptypeFields = (itemData) => {
             id: "inputDisplayclientId",
             label: "Step Name",
             name:"name",
-            // options: itemData.options[0],
             control: "input",
-            // isSubmit: itemData.isSubmit,
             isRequired: true,
             itemVal: itemData.values ? itemData.values["name"] : '',
         },
@@ -41,6 +38,5 @@ export const getSteptypeFields = (itemData) => {
             itemVal: itemData.values ? itemData.values["group"] : '',
         },
     ]
-    }   
-    ];
+    }];
 }
