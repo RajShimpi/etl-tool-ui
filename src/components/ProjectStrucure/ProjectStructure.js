@@ -118,7 +118,7 @@ function ProjectStructure({ textColor }) {
                   </span>
                 </div>
                 {project.isOpen && (
-                  <div className={`${isOpen ? 'open' : ''}`}>
+                  <div className={`${isOpen ? 'open' : 'd-none'}`}>
                     <RecursiveFolder items={getHeirarchy(project.id)} refreshData={refreshData} />
                     {/* <FolderDropdown
                       project={project}

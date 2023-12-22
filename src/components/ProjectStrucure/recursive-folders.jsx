@@ -18,7 +18,7 @@ const RecursiveFolder = ({ items, refreshData, actionType }) => {
 
   useEffect(() => {
     console.log(items);
-    console.log(actionType);
+    console.log(actionType,'12');
   }, [items, actionType]);
 
   const [showNested, setShowNested] = useState({});

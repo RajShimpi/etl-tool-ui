@@ -17,12 +17,12 @@ const ContextMenu = ({ onToggleFiles, popType, project_id, parent_id, id, onClos
   };
 
   const openPopup = (type, position) => {
-    console.log(type)
+    console.log(type,'lll')
 
     setPopupType(type);
     setPopupPosition(position);
     setIsPopupOpen(true);
-    console.log(popupType)
+    // console.log(popupType)
   };
 
   const closePopup = () => {

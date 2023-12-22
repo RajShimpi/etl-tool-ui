@@ -3,7 +3,7 @@ import { Handle, Position } from "reactflow";
 import { style } from "./message-node-styles";
 import Modal from "../../../../components/modal-popup";
 import AddFile from '../../../../masters/popup/add-file'
-const Node = ({ data, isSelected, textRef, nodeName, setNodeName }) => {
+const Node = ({ data,item, isSelected, textRef, nodeName, setNodeName }) => {
   const [selected, setSelected] = useState(false);
   const [showNodeMaster, setShowNodeMaster] = useState(false);
 
@@ -59,11 +59,11 @@ const Node = ({ data, isSelected, textRef, nodeName, setNodeName }) => {
           {selected ? null : (
             <>
               <img
-                src={data.img}
+                src={data.img }
                 style={{ width: "70px", height: "70px" }}
                 onClick={handleImageClick}
               />      
-              <div style={style.contentWrapper}>{data.heading}</div>
+              <div style={style.contentWrapper}>{data.headin}</div>
             </>
           )}
         </div>

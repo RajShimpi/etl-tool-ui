@@ -69,6 +69,17 @@ export const getParameterFields = (itemData) => {
             isRequired:true,
             itemVal: itemData.values ? itemData.values["resource"] : '',
         },
+        {
+            // type: "text",
+            id: "inputParameterResource",
+            label: "Step",
+            name: "step_id",
+            options: itemData.options[0],
+            control: "select",
+            isSubmit: itemData.isSubmit,
+            isRequired: !itemData?.values?.step_id,
+            itemVal: itemData.values ? itemData.values["step_id"] : '',
+        },
        
         ]
     } 
