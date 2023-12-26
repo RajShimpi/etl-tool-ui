@@ -24,6 +24,8 @@ import StepType from "../masters/steptype";
 import TypeConfigMaster from "../masters/type-config-master";
 import Parameter from "../masters/parameter";
 import StepTypeParamete from "../masters/step-type-parameter";
+import Job from "../masters/job";
+import JobStep from "../masters/job-step";
 
 
 export const routeConstant = {
@@ -47,7 +49,9 @@ export const routeConstant = {
   step: "/step",
   typeconfigmaster: "/type-config",
   parameter: "/parameter",
-  steptypeparameter: "/step-type-parameter"
+  job: "/job",
+  steptypeparameter: "/step-type-parameter",
+  jobstep: "/jobstep"
 };
 export const routeData = (routes) => [
   {
@@ -190,6 +194,22 @@ export const routeData = (routes) => [
     routeTo: routeConstant.steptypeparameter, // StepTypeParamete Form route
     header: "",
     childComp: StepTypeParamete,
+    data: {},
+    permissions: true,
+    isUserCanView: true,
+  },
+  {
+    routeTo: routeConstant.job, // StepTypeParamete Form route
+    header: "",
+    childComp: Job,
+    data: {},
+    permissions: true,
+    isUserCanView: true,
+  },
+  {
+    routeTo: routeConstant.jobstep, // StepTypeParamete Form route
+    header: "",
+    childComp: JobStep,
     data: {},
     permissions: true,
     isUserCanView: true,

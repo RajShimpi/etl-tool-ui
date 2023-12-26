@@ -70,6 +70,16 @@ const CommonModel = (props) => {
         setData((prevState) => ({...prevState,[name]: e.label,[`${name}Id`]: e.value}));
       break;
       case "whsId":
+      case "job_file_id":
+        case "client_id": 
+        case "project_id":
+        case "parent_id":
+        case "step_id":
+        case "parameter_id":
+        case "ok_step":
+        case "error_step":
+        case "step_type_id":
+        case "job_id":
         setData((prevState) => ({ ...prevState, [name]: parseInt(e.value) }));
         break;
       case "TemplateItemId":

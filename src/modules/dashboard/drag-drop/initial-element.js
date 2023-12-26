@@ -19,7 +19,7 @@ export const nodes = [
   {
     id: "3",
     type: "node",
-    data: { heading: "Send Message", content: "click to edit text", img: require("../../../assets/Images/file3.png"), comp: <Delete /> },
+    data: { heading: "Send Messagedddd", content: "click to edit text", img: require("../../../assets/Images/file3.png"), comp: <Delete /> },
     position: { x: 500, y: 100 },
   },
 ];

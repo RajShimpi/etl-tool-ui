@@ -74,6 +74,9 @@ const OverviewFlow = () => {
       x: event.clientX - reactFlowBounds.left,
       y: event.clientY - reactFlowBounds.top,
     });
+    console.log(type)
+    console.log(label)
+    console.log(name)
 
     const newNode = {
       id: getId(),
