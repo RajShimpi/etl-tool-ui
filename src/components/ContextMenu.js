@@ -6,7 +6,7 @@ import PopupComponent from "./PopupComponent";
 import FolderIcon from "@mui/icons-material/Folder";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 
-const ContextMenu = ({ onToggleFiles, popType, project_id, parent_id,id, onClose }) => {
+const ContextMenu = ({ item, onToggleFiles, popType, project_id, parent_id,id, onClose, callback }) => {
   const [popupType, setPopupType] = useState(null);
   const [popupPosition, setPopupPosition] = useState();
 
@@ -14,14 +14,16 @@ const ContextMenu = ({ onToggleFiles, popType, project_id, parent_id,id, onClose
     event.preventDefault();
   };
 
-  const openPopup = (type, position) => {
-    setPopupType(type);
-    setPopupPosition(position);
+  const openPopup = (e,type, position) => {
+    // setPopupType(type);
+    // setPopupPosition(position);
+    callback(item, type); 
+    onClose(e);
   };
 
-  const closePopup = () => {
+  const closePopup = (e) => {
     setPopupType(null);
-    onClose();
+    onClose(e);
   };
 
   useEffect(() => {
@@ -31,7 +33,7 @@ const ContextMenu = ({ onToggleFiles, popType, project_id, parent_id,id, onClose
         !event.target.closest('.contextMenu') &&
         !event.target.closest('.popup')
       ) {
-        closePopup();
+        closePopup(event);
       }
     };
 
@@ -50,7 +52,7 @@ const ContextMenu = ({ onToggleFiles, popType, project_id, parent_id,id, onClose
       <div
         className="menu-item"
         onClick={(e) =>
-          openPopup("AddFolder", { top: e.clientY, left: e.clientX + 10 }, project_id, parent_id)
+          openPopup(e,"AddFolder", { top: e.clientY, left: e.clientX + 10 }, project_id, parent_id)
         }
       >
         <div
@@ -69,7 +71,7 @@ const ContextMenu = ({ onToggleFiles, popType, project_id, parent_id,id, onClose
       <div
         className="menu-item"
         onClick={(e) => {
-          openPopup("Add", { top: e.clientY, left: e.clientX + 10 }, project_id, id);
+          openPopup(e,"Add", { top: e.clientY, left: e.clientX + 10 }, project_id, id);
         }}
       >
         <div
@@ -88,7 +90,7 @@ const ContextMenu = ({ onToggleFiles, popType, project_id, parent_id,id, onClose
       <div
         className="menu-item"
         onClick={(e) =>
-          openPopup("Edit", { top: e.clientY, left: e.clientX + 10 }, project_id, parent_id)
+          openPopup(e,"Edit", { top: e.clientY, left: e.clientX + 10 }, project_id, parent_id)
         }
       >
         <div
@@ -107,7 +109,7 @@ const ContextMenu = ({ onToggleFiles, popType, project_id, parent_id,id, onClose
       <div
         className="menu-item"
         onClick={(e) =>
-          openPopup("Delete", { top: e.clientY, left: e.clientX + 10 }, project_id, parent_id)
+          openPopup(e,"Delete", { top: e.clientY, left: e.clientX + 10 }, project_id, parent_id)
         }
       >
         <div
@@ -123,7 +125,7 @@ const ContextMenu = ({ onToggleFiles, popType, project_id, parent_id,id, onClose
           Delete
         </div>
       </div>
-      {popupType && (
+      {/* {popupType && (
         <PopupComponent
           onClose={closePopup}
           actionType={popupType}
@@ -136,7 +138,7 @@ const ContextMenu = ({ onToggleFiles, popType, project_id, parent_id,id, onClose
           parent_id={parent_id}
           id={id}
         />
-      )}
+      )} */}
     </div>
   );
 };
