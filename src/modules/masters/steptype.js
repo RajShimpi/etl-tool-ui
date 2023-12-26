@@ -4,11 +4,11 @@ import config from "../components/config/config.json"
 import { getSteptypeFields } from './steptype-data';
 
 const StepType = () => {
-   
-    let defaultObj = {type:'',name:'', symbol: '', group:''};
+
+    let defaultObj = { type: '', name: '', symbol: '', group: '' };
 
     return (
-        <>      
+        <>
             <CommonFormWithList
                 formDataAction={getSteptypeFields}
                 columns={config.STEPTYPE}

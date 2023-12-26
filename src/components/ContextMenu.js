@@ -53,28 +53,28 @@ const ContextMenu = ({ onToggleFiles, popType, project_id, parent_id, id, onClos
 
   return (
     <div style={{ zIndex: 1 }} className={`contextMenu ${popType === 'right' ? 'right' : ''}`} onContextMenu={handleContextMenuClick} >
-      <div className="menu-item" onClick={(e) => {openPopup("AddFolder", { top: e.clientY, left: e.clientX + 10 }, project_id, parent_id);handleContextMenuClose(); }}>
+      <div className="menu-item" onClick={(e) => { openPopup("AddFolder", { top: e.clientY, left: e.clientX + 10 }, project_id, parent_id); handleContextMenuClose(); }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", }} >
           <FolderIcon style={{ fontSize: "medium", marginRight: "5px", marginTop: "3px" }} />
           Add Folder
         </div>
       </div>
-      <div className="menu-item" onClick={(e) => {openPopup("Add", { top: e.clientY, left: e.clientX + 10 }, project_id, id);handleContextMenuClose();}}
+      <div className="menu-item" onClick={(e) => { openPopup("Add", { top: e.clientY, left: e.clientX + 10 }, project_id, id); handleContextMenuClose(); }}
       >
-        <div style={{  display: "flex",  alignItems: "center",  justifyContent: "flex-start",}}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", }}>
           <InsertDriveFileIcon style={{ fontSize: "medium", marginRight: "5px", marginTop: "3px" }} />
           Add File
         </div>
       </div>
-      <div className="menu-item"  onClick={(e) => { openPopup("Edit", { top: e.clientY, left: e.clientX + 10 }, project_id, parent_id); handleContextMenuClose();}} >
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start",}} >
+      <div className="menu-item" onClick={(e) => { openPopup("Edit", { top: e.clientY, left: e.clientX + 10 }, project_id, parent_id); handleContextMenuClose(); }} >
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", }} >
           <EditIcon style={{ fontSize: "medium", marginRight: "5px", marginTop: "3px" }} />
           Edit
         </div>
       </div>
       <div className="menu-item" onClick={(e) => { openPopup("Delete", { top: e.clientY, left: e.clientX + 10 }, project_id, parent_id); handleContextMenuClose(); }} >
-        <div style={{ display: "flex", alignItems: "center",justifyContent: "flex-start", }} >
-          <DeleteIcon style={{ fontSize: "medium", marginRight: "5px", marginTop: "3px" }}/>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", }} >
+          <DeleteIcon style={{ fontSize: "medium", marginRight: "5px", marginTop: "3px" }} />
           Delete
         </div>
       </div>

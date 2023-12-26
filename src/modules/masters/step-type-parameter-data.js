@@ -24,7 +24,7 @@ export const getStepTypeParameter = (itemData) => {
             itemVal: itemData.values ? itemData.values["parameter_id"] : '',
         },
         {
-            type: "checkbox",  
+            type: "checkbox",
             id: "inputRequired",
             label: "Required",
             name: "required",
@@ -32,6 +32,6 @@ export const getStepTypeParameter = (itemData) => {
             isRequired: false,
             itemVal: itemData.values ? itemData.values["required"] : '',
         }
-    ]
+        ]
     }];
 }

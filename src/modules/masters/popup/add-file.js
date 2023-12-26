@@ -17,7 +17,7 @@ const AddFile = ({ project_id, id }) => {
                 defaultObj={defaultObj}
             />
         </>
-    );
+    ); 
 };
 
 export default AddFile;

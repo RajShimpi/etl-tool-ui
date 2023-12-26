@@ -113,7 +113,7 @@ const MainComponent = () => {
             />
           </div>
           <div style={{ width: calculatePhotoWidth() }}>
-            <OverviewFlow />     
+            <OverviewFlow />
           </div>
           <div className={` ${isComponetToolOpen ? "open" : ""}`}>
             <ComponetTool

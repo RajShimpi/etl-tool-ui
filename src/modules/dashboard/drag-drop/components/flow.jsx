@@ -29,6 +29,7 @@ import { data } from "jquery";
 import AddFile from "../../../masters/popup/add-file";
 import Modal from "../../../components/modal-popup";
 import { ClassNames } from "@emotion/react";
+import Job from "../../../masters/job";
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
@@ -244,7 +245,7 @@ const OverviewFlow = () => {
             </ReactFlow>
 
             <Modal modalTitle={"Save/Update Parameter"} ref={modalRef} handleClose={handleCloseNodeMaster} show={showNodeMaster}>
-              <AddFile />
+              <Job />
             </Modal>
     
           </div>

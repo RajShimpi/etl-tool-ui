@@ -31,7 +31,6 @@ function ComponentTool({ textColor }) {
     });
   }, []);
 
-
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };

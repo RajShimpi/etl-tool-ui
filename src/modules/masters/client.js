@@ -8,7 +8,7 @@ const Client = () => {
     let defaultObj = { name: '', abbreviation: '', active: true };
 
     return (
-        <>      
+        <>
             <CommonFormWithList
                 formDataAction={getClientFields}
                 columns={config.CLIENT}
