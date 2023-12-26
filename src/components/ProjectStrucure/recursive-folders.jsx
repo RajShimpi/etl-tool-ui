@@ -4,9 +4,13 @@ import FolderIcon from '@mui/icons-material/Folder';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import ContextMenu from '../ContextMenu';
 import Modal from '../../modules/components/modal-popup';
+import { AddUpdateDeleteFileAndFolder } from "../PopupComponent";
 import Folder from "../../modules/masters/popup/add-folder";
+import AddFile from "../../modules/masters/popup/add-file";
+import Edit from "../../modules/masters/popup/edit-file";
+import Delete from "../../modules/masters/popup/delete";
 
-const RecursiveFolder = ({ items, refreshData }) => {
+const RecursiveFolder = ({ items, nestedCallback }) => {
     // const [items, setItems] = useState([]);
 
     // useEffect(() => {
@@ -23,6 +27,7 @@ const RecursiveFolder = ({ items, refreshData }) => {
     const [contextMenuPosition, setContextMenuPosition] = useState(null);
     const [isContextMenuOpen, setContextMenuOpen] = useState({});
     const [isShow, setShow] = useState({});
+    const [type, setType] = useState("AddFolder");
     // const [openContextMenuForItemId, setOpenContextMenuForItemId] = useState(null);
     const containerRef = useRef(null);
 
@@ -33,39 +38,76 @@ const RecursiveFolder = ({ items, refreshData }) => {
         setContextMenuPosition({ top: event.clientY, left: event.clientX });
         // setOpenContextMenuForItemId(item.id);
         setContextMenuOpen({ [item.file_name]: !isContextMenuOpen[item.file_name] });
-       
+        nestedCallback(item);
     };
 
-    const closeContextMenu = () => {
-        
+    const closeContextMenu = (e, item) => {
+        e.stopPropagation();
+        if(item) {
+            setContextMenuOpen({ [item.file_name]: false });
+        } else {
         setContextMenuPosition(null);
         setContextMenuOpen({});
+        }
         
     };
 
     const handleDocumentClick = (event) => {
         event.stopPropagation();
-        if (containerRef.current && !containerRef.current.contains(event.target)) {
-        closeContextMenu();
+        if (containerRef.current && !containerRef.current.contains(event.target) && !event.target.closest('.contextMenu') &&
+        !event.target.closest('.modal')) {
+        closeContextMenu(event);
         }
     };
     const toggleNested = (e, name) => {
         e.stopPropagation();
-        setShowNested({ ...showNested, [name]: !showNested[name] });
-        // closeContextMenu();
+        if(!e.target.closest('.contextMenu') && !e.target.closest('.modal'))
+            setShowNested({ ...showNested, [name]: !showNested[name] });
+        
       };
 
       useEffect(() => {
+        const close = (e) => {
+            if (e.keyCode === 27) {
+                closeContextMenu(e);
+            }
+        }
+        window.addEventListener('keydown', close)
+    
         document.addEventListener('click', handleDocumentClick);
         return () => {
           document.removeEventListener('click', handleDocumentClick);
+          window.removeEventListener('keydown', close)
         };
       }, []);
 
-      const callback = (item) => {
+      const nestCallback = (item) => {
+        setContextMenuOpen({});
+      }
+
+        //   useEffect(() => {
+        //     const handleClickOutside = (event) => {
+        //       if (
+        //         !event.target.closest('.contextMenu') &&
+        //         !event.target.closest('.modal')
+        //       ) {
+        //         closeContextMenu();
+        //       }
+        //     };
+        
+        //     document.addEventListener('click', handleClickOutside);
+        
+        //     return () => {
+        //       document.removeEventListener('click', handleClickOutside);
+        //     };
+        //   }, [isShow]);
+      
+      const callback = (item, type) => {
         // e.stopPropagation();
         setShow({ ...isShow, [item.file_name]: !isShow[item.file_name] });
-      }
+        setType(type);
+    }
+
     
     return (
         <>
@@ -90,7 +132,7 @@ const RecursiveFolder = ({ items, refreshData }) => {
                                         {contextMenuPosition && isContextMenuOpen[subItem.file_name] && (
                                             <div style={{ display: !isContextMenuOpen[subItem.file_name] && "none" }}>
                                             <ContextMenu
-                                                onClose={closeContextMenu}
+                                                onClose={(e) => closeContextMenu(e, subItem)}
                                                 project_id={subItem.project_id}
                                                 parent_id={subItem.parent_id}
                                                 id={subItem.id}
@@ -100,16 +142,28 @@ const RecursiveFolder = ({ items, refreshData }) => {
                                             />
                                             </div>
                                             )}
-                                            {isContextMenuOpen[subItem.file_name] && (
-                                                <Modal modalTitle={"Add Folder"} handleClose={() => { setShow({})}}  show={!!isShow[subItem.file_name]} maxWidth="75%">
-                                                    <Folder project_id={subItem.project_id} id={subItem.id} onClose={closeContextMenu} />;
+                                            {
+                                                <Modal modalTitle={type} handleClose={() => { setShow({})}}  show={!!isShow[subItem.file_name]} maxWidth="75%">
+                                                   {/* {(() => {    switch (type) {
+                                                            case "AddFolder": */}
+                                                        <AddUpdateDeleteFileAndFolder title={type} item={subItem} type={type} onClose={(e) => {closeContextMenu(e); setShow({});} } />                                                           
+                                                            {/* // case "Add":
+                                                            //     return <AddUpdateDeleteFileAndFolder item={subItem} type={type} onClose={(e) => closeContextMenu(e)} />                                                            
+                                                            // case "Edit":
+                                                            //     return <AddUpdateDeleteFileAndFolder item={subItem} type={type} onClose={(e) => closeContextMenu(e)} />                                                            
+                                                            // case "Delete":
+                                                            //     return <AddUpdateDeleteFileAndFolder item={subItem} type={type} onClose={(e) => closeContextMenu(e)} />                                                            
+                                                            // default:
+                                                            //     return <AddUpdateDeleteFileAndFolder item={subItem} type={type} onClose={(e) => closeContextMenu(e)} />  }})
+                                                            //     ()} */}
+                                                    
                                                 </Modal>
-                                            )}
+                                            }
                                        {showNested[subItem.file_name] ? <FolderOpenIcon key={subItem.file_name + "openIcon" + index }  fontSize='small' />
                                         : <FolderIcon key={subItem.file_name + "closeIcon" + index } fontSize='small' />}
                                         <>{subItem.file_name}</>
                                         <div style={{ display: !showNested[subItem.file_name] && "none" }}>
-                                            {subItem.children && <RecursiveFolder items={subItem.children} refreshData={refreshData} />}
+                                            {subItem.children && <RecursiveFolder items={subItem.children} nestedCallback={() => nestCallback(subItem)} />}
                                         </div>
                                     </>
                                 )} 

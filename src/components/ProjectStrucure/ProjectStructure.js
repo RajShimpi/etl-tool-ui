@@ -115,9 +115,23 @@ function ProjectStructure({ textColor }) {
                     {project.project_name}
                   </span>
                 </div>
+                {/* {contextMenuPosition && isContextMenuOpen[subItem.file_name] && (
+                                            <div style={{ display: !isContextMenuOpen[subItem.file_name] && "none" }}>
+                                            <ContextMenu
+                                                onClose={(e) => closeContextMenu(e, subItem)}
+                                                project_id={subItem.project_id}
+                                                parent_id={subItem.parent_id}
+                                                id={subItem.id}
+                                                item={subItem}                                              
+                                                position={contextMenuPosition}
+                                                callback={callback}
+                                                isDeleteUpdate={false}                                             
+                                            />
+                                            </div>
+                                            )} */}
                 {project.isOpen && (
                   <div className={`${isOpen ? 'open' : ''}`}>
-                    <RecursiveFolder items={getHeirarchy(project.id)} refreshData={refreshData} />
+                    <RecursiveFolder items={getHeirarchy(project.id)} nestedCallback={() => {}} />
                     {/* <FolderDropdown
                       project={project}
                       projectId={project.id}

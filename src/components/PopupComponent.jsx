@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Folder from "../modules/masters/popup/add-folder";
 import AddFile from "../modules/masters/popup/add-file";
 import Edit from "../modules/masters/popup/edit-file";
@@ -44,21 +44,66 @@ const PopupComponent = ({ onClose, actionType, project_id, id }) => {
 
 export default PopupComponent;
 
-const AddUpdateDeleteFileAndFolder = (props) => {
+export const AddUpdateDeleteFileAndFolder = (props) => {
   const [data, setData] = useState("");
+
+
+    useEffect(() => {
+      if(props.item?.file_name)
+      setData({ file_name: props.type == 'Edit' ? props.item?.file_name : "" })
+    }, [props.type, props.item?.file_name])
   
     const setValues = (e, name) => {
       if (!e) return;
       switch (name) {
-        case "file_name":
-            setData(e.target.value);
+        case "input":
+            setData({ [e.target.name]: e.target.value});
           break;
           }
   }
 
 
-  const onSubmit = (e) => {
-      
+  const onsubmit = (e) => {
+    e.preventDefault();
+    if (!e.target.checkValidity()) {
+      e.stopPropagation();
+      e.target.classList.add("was-validated");
+      //props.validationCallback(true);
+    } else {
+      let item = {  file_name: data.file_name, project_id: props.item.project_id, type: props.type.includes("Folder") ? 'Folder' : 'File', parent_id: props.item?.id };
+      switch(props.type) {
+        case "AddFolder":
+          axios.postWithCallback("project-files",
+          item,
+          (resp) => {
+            props.onClose(e);
+          });
+          break;
+        case "Add":
+          axios.postWithCallback("project-files",
+          item,
+          (resp) => {
+            props.onClose(e);
+          });
+          break;
+        case "Edit":
+          axios.putWithCallback("project-files/",
+          { ...item, id: props.item?.id },
+          (resp) => {
+            props.onClose(e);
+          });
+          break;
+        case "Delete":
+          axios.deleteWithCallback("project-files/" + props.item?.id,
+          item,
+          (resp) => {
+            props.onClose(e);
+          });
+          break;
+          default:
+            break;
+      }  
+    }
   }
 
     return (<div className="row">
@@ -92,7 +137,10 @@ const AddUpdateDeleteFileAndFolder = (props) => {
             >
               <div className="accordion-body text-muted">
                 <div className="card-body">
-                  <FormCommon
+                 {props.type == "Delete" ? <p style={{ whiteSpace: 'pre-wrap' }}>
+                  Are you sure you want delete this folder undelaying files also will be deleted?
+                 </p>  : 
+                 <FormCommon
                     data={getFolderFields({
                       isSubmit: false,
                       update: props.update,
@@ -102,7 +150,9 @@ const AddUpdateDeleteFileAndFolder = (props) => {
                       data: !!props.data ? props.data : [],
                       message: props.message,
                     })}
+                  
                   />
+                }
                 </div>
                 <div className=" col-md-12 d-flex justify-content-end">
                     <button
@@ -116,6 +166,16 @@ const AddUpdateDeleteFileAndFolder = (props) => {
                       >
                       {props.type}
                       </button>
+                      <button
+                      type="button"
+                      onClick={(e) => props.onClose(e)}
+                      className="btn btn-warning w-xs waves-effect waves-light"
+                        
+                      
+                      >
+                      Close
+                      </button>
                 </div>
                 </div></div></div></form></div></div></div>) 
 }
+
