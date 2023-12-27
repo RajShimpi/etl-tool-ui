@@ -9,6 +9,7 @@ const StepTypeParamete = () => {
     const [stepTypeParameter, setStepTypeParameter] = useState([]);
     const [stepType, setStepType] = useState([]);
     const [parameter, setParameter] = useState([]);
+    
 
     useEffect(() => {
         axios.getWithCallback('step-type-parameter/', (data) => setStepTypeParameter(data.map(x => ({ value: x.id, label: x.required }))))
@@ -21,6 +22,7 @@ const StepTypeParamete = () => {
     useEffect(() => {
         axios.getWithCallback('parameter/', (data) => setParameter(data.map(z => ({ value: z.id, label: z.name }))))
     }, []);
+
 
     const defaultObj = { step_id: '', parameter_id: '', active: true };
 

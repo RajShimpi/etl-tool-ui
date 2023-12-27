@@ -14,10 +14,10 @@ import Node from "./custom-node/message-node";
 
 // Utils
 import { isAllNodeisConnected } from "../utils";
-import {
-  nodes as initialNodes,
-  edges as initialEdges,
-} from "../initial-element";
+// import {
+//   // nodes as initialNodes,
+//   // edges as initialEdges,
+// } from "../initial-element";
 
 // Styles
 import "reactflow/dist/style.css";
@@ -26,10 +26,11 @@ import "./update-node.css";
 
 import { Class, Key, Source } from "@mui/icons-material";
 import { data } from "jquery";
-import AddFile from "../../../masters/popup/add-file";
+// import AddFile from "../../../masters/popup/add-file";
 import Modal from "../../../components/modal-popup";
 import { ClassNames } from "@emotion/react";
 import Job from "../../../masters/job";
+import axios from "../../../services/axios";
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
@@ -44,12 +45,56 @@ const OverviewFlow = () => {
   const textRef = useRef(null);
   const modalRef = useRef(null);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [nodes, setNodes, onNodesChange] = useState([]);
+  const [node, setNode] = useState([]);
+  const [edges, setEdges, onEdgesChange] = useState([]);
+  const [edge, setEdge, ] = useState([]);
   const [selectedNode, setSelectedNode] = useState(null);
   const [isSelected, setIsSelected] = useState(false);
 
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
+  useEffect(() => {
+    axios.getWithCallback('node/', (data) => {
+      const formattedNodes = data.map((item) => ({
+        type: "node",
+        data: {
+          heading: item.heading,
+          img: item.img,
+        },
+        position: {
+          x: item.position_X,
+          y: item.position_Y,
+        },
+      }));
+  
+      console.log(formattedNodes, "Formatted Nodes");
+      setNodes(formattedNodes);
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
+    });
+  }, []);
+  
+
+useEffect(() => {
+  axios.getWithCallback('edges/')
+    .then(response => {
+      const formattedData = response.data.map((item, index) => ({
+        // id: `e${item.source_ok}-${item.target}`,
+        source_ok: item.source_ok,
+        source_error: item.source_error,
+        target: item.target,
+        type: item.type,
+        label: item.label,
+      }));
+
+      console.log(formattedData);
+      setEdge(formattedData);
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
+    });
+}, []);
 
   const onDragOver = (event) => {
     event.preventDefault();
@@ -262,7 +307,5 @@ const OverviewFlow = () => {
     </>
   );
 };
-
-
 
 export default OverviewFlow;

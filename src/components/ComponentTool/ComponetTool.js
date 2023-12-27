@@ -29,6 +29,7 @@ function ComponentTool({ textColor }) {
       });
 
     });
+  
   }, []);
 
   const toggleSidebar = () => {
