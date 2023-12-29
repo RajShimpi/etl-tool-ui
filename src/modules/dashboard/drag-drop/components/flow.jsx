@@ -48,7 +48,7 @@ const OverviewFlow = () => {
   // const [node, setNode] = useState([]);
   const [nodes, setNodes, onNodesChange] = useState([]);
   const [edges, setEdges, onEdgesChange] = useState([]);
-  const [edge, setEdge] = useState([]);
+  // const [edge, setEdge] = useState([]);
   const [selectedNode, setSelectedNode] = useState(null);
   const [isSelected, setIsSelected] = useState(false);
   // const [id, setId] = useState();
@@ -70,31 +70,34 @@ const OverviewFlow = () => {
         },
       }));   
       const dataEdgesok = data.map((item) => ({
-      id: `e${item.id}-${item.ok_step}`,
-        source: ""+item.id,
-        target:""+item.ok_step,
-        label:"ok",
+        id: `e${item.id}-${item.ok_step}`,
+        source: "" + item.id,
+        target: "" + item.ok_step,
+        label: "ok",
         type: "step",
-      }));   
+        color: 'green'
+      }));
+       
 
       const dataEdgeserror = data.map((item) => ({
-      id: `e${item.id}-${item.ok_step}`,
+      id: `e${item.id}-${item.error_step}`,
         source: ""+item.id,
         target:""+item.error_step,
         label:"error",
         type: "step",
+        color:"red"
       }));   
 
       setNodes(dataNodes);
       setEdges([...dataEdgesok, ...dataEdgeserror]);
 
       // console.log(dataEdgesok,"dataEdgesok");
-      // console.log(dataEdgeserror,"dataEdgeserror");
+      console.log(dataEdgeserror,"dataEdgeserror");
     });
   }, []);
 
   // console.log(nodes,"nodes");
-  // console.log(edges,"edges");
+  console.log(edges,"edges");
   
   // useEffect(() => {
   //   axios.getWithCallback('edges/',(data)=>{
