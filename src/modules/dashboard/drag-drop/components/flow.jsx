@@ -45,56 +45,72 @@ const OverviewFlow = () => {
   const textRef = useRef(null);
   const modalRef = useRef(null);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
+  // const [node, setNode] = useState([]);
   const [nodes, setNodes, onNodesChange] = useState([]);
-  const [node, setNode] = useState([]);
   const [edges, setEdges, onEdgesChange] = useState([]);
-  const [edge, setEdge, ] = useState([]);
+  const [edge, setEdge] = useState([]);
   const [selectedNode, setSelectedNode] = useState(null);
   const [isSelected, setIsSelected] = useState(false);
+  // const [id, setId] = useState();
 
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
   useEffect(() => {
-    axios.getWithCallback('node/', (data) => {
-      const formattedNodes = data.map((item) => ({
+    axios.getWithCallback("job-steps/", (data) => {
+      // console.log(data,"job-step Data");
+      const dataNodes = data.map((item) => ({
+        id: ""+item.id,
         type: "node",
         data: {
-          heading: item.heading,
-          img: item.img,
+          heading: item.step_name,
+          img: `/assets/images/${item.stepType.img}.png`,
         },
         position: {
           x: item.position_X,
           y: item.position_Y,
         },
-      }));
-  
-      console.log(formattedNodes, "Formatted Nodes");
-      setNodes(formattedNodes);
-    })
-    .catch(error => {
-      console.error('Error fetching data:', error);
+      }));   
+      const dataEdgesok = data.map((item) => ({
+      id: `e${item.id}-${item.ok_step}`,
+        source: ""+item.id,
+        target:""+item.ok_step,
+        label:"ok",
+        type: "step",
+      }));   
+
+      const dataEdgeserror = data.map((item) => ({
+      id: `e${item.id}-${item.ok_step}`,
+        source: ""+item.id,
+        target:""+item.error_step,
+        label:"error",
+        type: "step",
+      }));   
+
+      setNodes(dataNodes);
+      setEdges([...dataEdgesok, ...dataEdgeserror]);
+
+      // console.log(dataEdgesok,"dataEdgesok");
+      // console.log(dataEdgeserror,"dataEdgeserror");
     });
   }, []);
+
+  // console.log(nodes,"nodes");
+  // console.log(edges,"edges");
   
+  // useEffect(() => {
+  //   axios.getWithCallback('edges/',(data)=>{
+  //       const formattedData = data.map((item) => ({
+  //         // id: `e${item.source_ok}-${item.target}`,
+  //         source_ok: item.source_ok,
+  //         source_error: item.source_error,
+  //         target: item.target,
+  //         type: item.type,
+  //         label: item.label,
+  //       }));
 
-useEffect(() => {
-  axios.getWithCallback('edges/')
-    .then(response => {
-      const formattedData = response.data.map((item, index) => ({
-        // id: `e${item.source_ok}-${item.target}`,
-        source_ok: item.source_ok,
-        source_error: item.source_error,
-        target: item.target,
-        type: item.type,
-        label: item.label,
-      }));
-
-      console.log(formattedData);
-      setEdge(formattedData);
-    })
-    .catch(error => {
-      console.error('Error fetching data:', error);
-    });
-}, []);
+  //       console.log(formattedData);
+  //       setEdge(formattedData);
+  //     })
+  // }, []);
 
   const onDragOver = (event) => {
     event.preventDefault();
@@ -103,16 +119,14 @@ useEffect(() => {
     // const [showNodeMaster, setShowNodeMaster] = useState(false);
 
     // ... (other state variables and functions)
-
-
   };
-
+  
   const onDrop = (event) => {
     event.preventDefault();
     const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
 
     const type = event.dataTransfer.getData("application/reactflow");
-    const label = event.dataTransfer.getData("content");
+    // const label = event.dataTransfer.getData("content");
     const img = event.dataTransfer.getData("img");
     const name = event.dataTransfer.getData("name");
     console.log(reactFlowInstance, "reactIns");
@@ -120,9 +134,9 @@ useEffect(() => {
       x: event.clientX - reactFlowBounds.left,
       y: event.clientY - reactFlowBounds.top,
     });
-    console.log(type)
-    console.log(label)
-    console.log(name)
+    // console.log(type)
+    // console.log(label)
+    // console.log(name)
 
     const newNode = {
       id: getId(),
@@ -133,54 +147,64 @@ useEffect(() => {
     };
 
     setNodes((es) => es.concat(newNode));
-    setSelectedNode(newNode.a = name);
+    setSelectedNode((newNode.a = name));
   };
-
+  const onNodeDragStop = (event, node) => {
+    const updatedNodes = nodes.map((n) => {
+      if (n.id === node.id) {
+        return {
+          ...n,
+          position: { x: node.position.x, y: node.position.y },
+        };
+      }
+      return n;
+    });
+  
+    setNodes(updatedNodes);
+  };
+  
   const onConnect = useCallback(
     (params) => {
       const { sourceHandle } = params;
-
+    
       let label;
-      let backgroundColor;
-      let textColor;
-
+      let color;
+    
       if (sourceHandle === "ok") {
         label = "ok";
-        backgroundColor = "green";
-        textColor = "white";
-      }
-
-      else {
+        color = "green";
+      } else {
         label = "error";
-        backgroundColor = "red";
-        textColor = "white";
+        color = "red";
       }
-
+    
       const newEdge = {
         ...params,
         label,
         type: params.type || "step",
         arrowHeadType: "arrowclosed",
         style: {
-          stroke: label === "error" ? "red" : label === "ok" ? "green" : "black",
-          backgroundColor,
-          color: textColor,
+          stroke: color,
+          backgroundColor: color,
+          color: "red",
           fontSize: "12px",
           padding: "4px",
-            borderRadius: "4px",
+          borderRadius: "4px",
         },
       };
-
+    
       setEdges((eds) => addEdge(newEdge, eds));
     },
     [setEdges]
   );
-
+  
   const [nodeName, setNodeName] = useState("Node 1");
-
+  // console.log(nodes,"llll")
   useEffect(() => {
     const node = nodes.filter((node) => {
+      // console.log(nodes,"nodes Data inside useEffect Filter")
       if (node.selected) return true;
+      // console.log(node,"inside node useEffect Filter")
       return false;
     });
     if (node[0]) {
@@ -192,7 +216,7 @@ useEffect(() => {
     }
   }, [nodes]);
   useEffect(() => {
-    setNodeName(selectedNode?.data?.content || selectedNode);
+    setNodeName(selectedNode?.data?.heading || selectedNode);
   }, [selectedNode]);
   useEffect(() => {
     textRef?.current?.focus();
@@ -210,10 +234,11 @@ useEffect(() => {
       })
     );
   }, [nodeName, setNodes]);
-
   const saveHandler = () => {
-    if (isAllNodeisConnected(nodes, edges)) alert("Congrats its correct");
-    else alert("Please connect source nodes (Cannot Save Flow)");
+    if (isAllNodeisConnected(nodes, edges)) {
+      alert("Congrats its correct");
+      // console.log(node,"Node If");
+    } else alert("Please connect source nodes (Cannot Save Flow)");
   };
 
   const onEdgeUpdateStart = useCallback(() => {
@@ -233,15 +258,14 @@ useEffect(() => {
     edgeUpdateSuccessful.current = true;
   }, []);
 
-
   const onNodeDoubleClick = () => {
     setShowNodeMaster(true);
   };
   const handleCloseNodeMaster = () => {
     setShowNodeMaster(false);
-  }
+  };
   const nodeRef = useRef();
-  const closeModel   = () => {
+  const closeModel = () => {
     setShowNodeMaster(false);
   };
 
@@ -260,8 +284,6 @@ useEffect(() => {
       document.removeEventListener("mousedown", handleDocumentClick);
     };
   }, [handleCloseNodeMaster, modalRef]);
-
-
 
   return (
     <>
@@ -285,14 +307,19 @@ useEffect(() => {
               attributionPosition="top  -right"
               onNodeDoubleClick={onNodeDoubleClick}
               onEdgeDoubleClick={true}
+              onNodeDragStop={onNodeDragStop}
             >
               <Background color="#aaa" gap={16} />
             </ReactFlow>
 
-            <Modal modalTitle={"Save/Update Parameter"} ref={modalRef} handleClose={handleCloseNodeMaster} show={showNodeMaster}>
+            <Modal
+              modalTitle={"Save/Update Parameter"}
+              ref={modalRef}
+              handleClose={handleCloseNodeMaster}
+              show={showNodeMaster}
+            >
               <Job />
             </Modal>
-    
           </div>
 
           {/* 

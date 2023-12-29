@@ -15,9 +15,9 @@ const RecursiveFolder = ({ items, refreshData }) => {
   //     }
   // }, [data])
 
-  useEffect(() => {
-    console.log(items);
-  }, [items]);
+  // useEffect(() => {
+  //   // console.log(items);
+  // }, [items]);
 
   const [showNested, setShowNested] = useState({});
   const [contextMenuPosition, setContextMenuPosition] = useState(null);
