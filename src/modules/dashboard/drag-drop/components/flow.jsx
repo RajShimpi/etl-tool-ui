@@ -29,6 +29,7 @@ import { data } from "jquery";
 import AddFile from "../../../masters/popup/add-file";
 import Modal from "../../../components/modal-popup";
 import { ClassNames } from "@emotion/react";
+import StepParameter from "../../../masters/popup/step-parameter";
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
@@ -37,7 +38,6 @@ const nodeTypes = { node: Node };
 
 const OverviewFlow = () => {
   const [showNodeMaster, setShowNodeMaster] = useState(false);
-
   const reactFlowWrapper = useRef(null);
   const edgeUpdateSuccessful = useRef(true);
   const textRef = useRef(null);
@@ -240,14 +240,16 @@ const OverviewFlow = () => {
               <Background color="#aaa" gap={16} />
             </ReactFlow>
 
-            <Modal modalTitle={"Save/Update Parameter"} ref={modalRef} handleClose={handleCloseNodeMaster} show={showNodeMaster}>
-              <AddFile />
-            </Modal>
-    
+                <Modal modalTitle={"Save/Update Parameter"} ref={modalRef} handleClose={handleCloseNodeMaster} show={showNodeMaster}>
+                  <StepParameter
+                  //  stepId={step_type_id}
+                   />
+                </Modal>
+              
           </div>
 
           {/* 
-          <Sidebar
+          <Sidebar  
             isSelected={isSelected}
             textRef={textRef}
             nodeName={nodeName}

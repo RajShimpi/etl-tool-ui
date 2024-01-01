@@ -24,6 +24,7 @@ import StepType from "../masters/steptype";
 import TypeConfigMaster from "../masters/type-config-master";
 import Parameter from "../masters/parameter";
 import StepTypeParamete from "../masters/step-type-parameter";
+import StepParameter from "../masters/popup/step-parameter";
 
 
 export const routeConstant = {
@@ -47,7 +48,8 @@ export const routeConstant = {
   step:"/step",
   typeconfigmaster: "/type-config",
   parameter:"/parameter",
-  steptypeparameter:"/step-type-parameter"
+  steptypeparameter:"/step-type-parameter",
+  steppara:"/para"
 };
 export const routeData = (routes) => [
   {
@@ -194,6 +196,14 @@ export const routeData = (routes) => [
     routeTo: routeConstant.steptypeparameter, // StepType Form route
     header: "",
     childComp: StepTypeParamete,
+    data: {},
+    permissions: true,
+    isUserCanView: true,
+  },
+  {
+    routeTo: routeConstant.steppara, // StepType Form route
+    header: "",
+    childComp: StepParameter,
     data: {},
     permissions: true,
     isUserCanView: true,

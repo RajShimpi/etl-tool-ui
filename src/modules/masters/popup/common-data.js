@@ -14,6 +14,7 @@ export const getCommonFields = (itemData) => {
             isRequired: true,
             itemVal: itemData.values ? itemData.values["file_name"] : '',  
         },
+        
             
        
         ]

@@ -126,5 +126,10 @@
         "step.name",
         "parameter.name",
         "required"
+    ],
+    "STEP_PARAMETER":[
+       "parameters.name"
+        
     ]
+
 }

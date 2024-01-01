@@ -75,12 +75,13 @@ const CommonFormWithList = (props) => {
         break;
       case "whsId":
         setData((prevState) => ({ ...prevState, [name]: parseInt(e.value) }));
-        break;
+      break;
       case "client_id": 
       case "project_id":
       case "parent_id":
       case "step_id":
       case "parameter_id":
+        case "parameters":
         setData((prevState) => ({ ...prevState, [name]: parseInt(e.value) }));
         break;
       case "TemplateItemId":
