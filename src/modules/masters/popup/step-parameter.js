@@ -13,12 +13,12 @@ import CommonModel from '../../components/common-modal';
 const StepParameter = ({ stepId }) => {
     const [parameter, setparameter] = useState([]);
     useEffect(() => {
-        axios.getWithCallback('step-type/parameter/get/', (data) => {setparameter (data[0].parameters); console.log(data) } )
+        axios.getWithCallback('step-type/parameter/get/', (data) => {setparameter (data[stepId].parameters); console.log(data) } )
        
     }, [])
-    let defaultObj = {type:'',name:'', symbol: '', group:'',parametres:''};
+    let defaultObj = {type:'',name:'', img: '', group:'',parametres:''};
     
-const getItemData = (itemData  )   => {
+const getItemData = (itemData  ) => {
   
     let dt= [
       {

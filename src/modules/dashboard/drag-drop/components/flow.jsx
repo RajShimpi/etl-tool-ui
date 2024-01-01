@@ -30,6 +30,7 @@ import AddFile from "../../../masters/popup/add-file";
 import Modal from "../../../components/modal-popup";
 import { ClassNames } from "@emotion/react";
 import StepParameter from "../../../masters/popup/step-parameter";
+import axios from "../../../services/axios";
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
@@ -47,7 +48,8 @@ const OverviewFlow = () => {
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [selectedNode, setSelectedNode] = useState(null);
   const [isSelected, setIsSelected] = useState(false);
-
+  const [stepId, setStepId]=useState([]) 
+  const [id, setId]=useState([]) 
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
 
   const onDragOver = (event) => {
@@ -78,6 +80,7 @@ const OverviewFlow = () => {
     const newNode = {
       id: getId(),
       name,
+      label,
       type,
       position,
       data: { heading: name, img: img },
@@ -212,6 +215,11 @@ const OverviewFlow = () => {
     };
   }, [handleCloseNodeMaster, modalRef]);
 
+  useEffect(() => {
+    axios.getWithCallback('step-type-parameter/step-type/1', (data)=>setStepId(data))    // setId((stepId.parameter.id))
+
+}, []);
+console.log(stepId.parameter.id,"step id data")
 
 
   return (
@@ -242,9 +250,9 @@ const OverviewFlow = () => {
 
                 <Modal modalTitle={"Save/Update Parameter"} ref={modalRef} handleClose={handleCloseNodeMaster} show={showNodeMaster}>
                   <StepParameter
-                  //  stepId={step_type_id}
+                   stepId={setId(stepId.parameter.id)}
                    />
-                </Modal>
+                 </Modal>
               
           </div>
 
