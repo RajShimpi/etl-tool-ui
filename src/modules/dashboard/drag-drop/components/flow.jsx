@@ -6,6 +6,7 @@ import ReactFlow, {
   useEdgesState,
   ReactFlowProvider,
   updateEdge,
+  MarkerType,
 } from "reactflow";
 
 // Components
@@ -14,10 +15,10 @@ import Node from "./custom-node/message-node";
 
 // Utils
 import { isAllNodeisConnected } from "../utils";
-import {
-  nodes as initialNodes,
-  edges as initialEdges,
-} from "../initial-element";
+// import {
+//   nodes as initialNodes,
+//   edges as initialEdges,
+// } from "../initial-element";
 
 // Styles
 import "reactflow/dist/style.css";
@@ -31,6 +32,7 @@ import Modal from "../../../components/modal-popup";
 import { ClassNames } from "@emotion/react";
 import StepParameter from "../../../masters/popup/step-parameter";
 import axios from "../../../services/axios";
+import { post } from "jquery";
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
@@ -44,13 +46,84 @@ const OverviewFlow = () => {
   const textRef = useRef(null);
   const modalRef = useRef(null);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [nodes, setNodes, ] = useNodesState();
+  const [edges, setEdges, ] = useEdgesState();
   const [selectedNode, setSelectedNode] = useState(null);
   const [isSelected, setIsSelected] = useState(false);
-  const [stepId, setStepId]=useState([]) 
-  const [id, setId]=useState([]) 
+  const [stepId, setStepId] = useState([]);
+  const [draggedNodeInfo, setDraggedNodeInfo] = useState(null);
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
+  useEffect(() => {
+    axios.getWithCallback("job-steps/", (data) => {
+      console.log(data,"job-step Data");
+
+      const dataNodes = data.map((item) => ({
+        id: "" + item.id,
+        type: "node",
+        data: {
+          heading: item.step_name,
+          img: `/assets/images/${item.stepType.img}.png`,
+        },
+        position: {
+          x: item.params.position_X,
+          y: item.params.position_Y,
+        },
+      }));
+
+      const dataEdgesok = data.map((item) => ({
+        id: `e${item.id}-${item.ok_step}`,
+        source: "" + item.id,
+        target: "" + item.ok_step,
+        label: "ok",
+        type: "step",
+        sourceHandle: "ok",
+        markerEnd: { type: MarkerType.ArrowClosed },
+        style: { stroke: getlabelColor("ok") },
+      }));
+
+      const dataEdgeserror = data.map((item) => ({
+        id: `e${item.id}-${item.error_step}`,
+        source: "" + item.id,
+        target: "" + item.error_step,
+        label: "error",
+        type: "step",
+        sourceHandle: "error",   
+        markerEnd: { type: MarkerType.ArrowClosed },
+        style: { stroke: getlabelColor("error") },
+      }));
+
+      setNodes(dataNodes);
+      setEdges([...dataEdgesok, ...dataEdgeserror]);
+
+      function getlabelColor(label) {
+        return label === "ok" ? "green" : label === "error" ? "red" : "black";
+      }
+
+      // console.log(dataEdgesok,"dataEdgesok")
+      console.log(dataEdgeserror, "dataEdgeserror");
+    });
+  }, []);
+
+
+
+  // console.log(nodes,"nodes");
+  // console.log(edges, "edges");
+
+  // useEffect(() => {
+  //   axios.getWithCallback('edges/',(data)=>{
+  //       const formattedData = data.map((item) => ({
+  //         // id: `e${item.source_ok}-${item.target}`,
+  //         source_ok: item.source_ok,
+  //         source_error: item.source_error,
+  //         target: item.target,
+  //         type: item.type,
+  //         label: item.label,
+  //       }));
+
+  //       console.log(formattedData);
+  //       setEdge(formattedData);
+  //     })
+  // }, []);
 
   const onDragOver = (event) => {
     event.preventDefault();
@@ -87,8 +160,50 @@ const OverviewFlow = () => {
     };
 
     setNodes((es) => es.concat(newNode));
-    setSelectedNode(newNode.a = name);
+    setSelectedNode((newNode.a = name));
   };
+  const onNodeDragStop = (event, node) => {
+    const updatedNodes = nodes.map((n) => {
+      if (n.id === node.id) {
+        return {
+          ...n,
+          position: { x: node.position.x, y: node.position.y },
+        };
+      }
+      return n;
+    });
+
+    setNodes(updatedNodes);
+    setDraggedNodeInfo({ id: node.id, position: node.position });
+    console.log(node.position);
+    // saveNodePosition(node.id, node.position);
+  };
+
+  const saveNodePosition = (nodeId, newPosition) => {
+    const data = {
+      params: {
+        position_X: newPosition.x,
+        position_Y: newPosition.y,
+      }
+    };
+  
+    axios.putWithCallback(`job-steps/${nodeId}/update/`, data)
+      .then((response) => {
+        // Handle the response if needed
+        console.log("Node position updated successfully:", response.data);
+      })
+      .catch((error) => {
+        // Handle errors
+        console.error("Error updating node position:", error);
+      });
+  };
+  
+
+// ...
+
+// ...
+
+
 
   const onConnect = useCallback(
     (params) => {
@@ -166,10 +281,17 @@ const OverviewFlow = () => {
   }, [nodeName, setNodes]);
 
   const saveHandler = () => {
-    if (isAllNodeisConnected(nodes, edges)) alert("Congrats its correct");
-    else alert("Please connect source nodes (Cannot Save Flow)");
+    if (isAllNodeisConnected(nodes, edges)) {
+      alert("Congrats its correct");
+  
+      nodes.forEach((node) => {
+        saveNodePosition(node.id, node.position);
+      });
+    } else {
+      alert("Please connect source nodes (Cannot Save Flow)");
+    }
   };
-
+  
   const onEdgeUpdateStart = useCallback(() => {
     edgeUpdateSuccessful.current = false;
   }, []);
@@ -219,7 +341,7 @@ const OverviewFlow = () => {
     axios.getWithCallback('step-type-parameter/step-type/1', (data)=>setStepId(data))    // setId((stepId.parameter.id))
 
 }, []);
-console.log(stepId.parameter.id,"step id data")
+// console.log(stepId.parameter.id,"step id data")
 
 
   return (
@@ -250,7 +372,7 @@ console.log(stepId.parameter.id,"step id data")
 
                 <Modal modalTitle={"Save/Update Parameter"} ref={modalRef} handleClose={handleCloseNodeMaster} show={showNodeMaster}>
                   <StepParameter
-                   stepId={setId(stepId.parameter.id)}
+                  //  stepId={stepId.parameter.id}
                    />
                  </Modal>
               

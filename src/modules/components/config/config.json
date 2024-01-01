@@ -101,7 +101,7 @@
   "STEPTYPE": [
     "type", 
     "name", 
-    "symbol", 
+    "img", 
     "group"],
   "TYPE_CONFIG": [
     "category", 
