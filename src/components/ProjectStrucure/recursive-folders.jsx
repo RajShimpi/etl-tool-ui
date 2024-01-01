@@ -10,7 +10,7 @@ import AddFile from "../../modules/masters/popup/add-file";
 import Edit from "../../modules/masters/popup/edit-file";
 import Delete from "../../modules/masters/popup/delete";
 
-const RecursiveFolder = ({ items, nestedCallback }) => {
+const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
     // const [items, setItems] = useState([]);
 
     // useEffect(() => {
@@ -20,7 +20,7 @@ const RecursiveFolder = ({ items, nestedCallback }) => {
     // }, [data])
 
     useEffect(() => {
-        console.log(items);
+        // console.log(items);
     }, [items])
     
     const [showNested, setShowNested] = useState({});
@@ -37,14 +37,15 @@ const RecursiveFolder = ({ items, nestedCallback }) => {
         event.stopPropagation();
         setContextMenuPosition({ top: event.clientY, left: event.clientX });
         // setOpenContextMenuForItemId(item.id);
-        setContextMenuOpen({ [item.file_name]: !isContextMenuOpen[item.file_name] });
-        nestedCallback(item);
+        // setContextMenuOpen({ [item.file_name]: !isContextMenuOpen[item.file_name] });
+        // nestedCallback(item);
+        onRightCallback(item);
     };
 
     const closeContextMenu = (e, item) => {
         e.stopPropagation();
         if(item) {
-            setContextMenuOpen({ [item.file_name]: false });
+            onRightCallback(item, true);
         } else {
         setContextMenuPosition(null);
         setContextMenuOpen({});
@@ -81,9 +82,9 @@ const RecursiveFolder = ({ items, nestedCallback }) => {
         };
       }, []);
 
-      const nestCallback = (item) => {
-        setContextMenuOpen({});
-      }
+    //   const nestCallback = (item) => {
+    //     setContextMenuOpen({});
+    //   }
 
         //   useEffect(() => {
         //     const handleClickOutside = (event) => {
@@ -129,8 +130,11 @@ const RecursiveFolder = ({ items, nestedCallback }) => {
 
                                 {subItem.type === 'Folder' && subItem.children && (
                                     <>
-                                        {contextMenuPosition && isContextMenuOpen[subItem.file_name] && (
-                                            <div style={{ display: !isContextMenuOpen[subItem.file_name] && "none" }}>
+                                        {contextMenuPosition 
+                                        // && isContextMenuOpen[subItem.file_name] 
+                                        && subItem.isRightClick
+                                        && (
+                                            <div style={{ display: !subItem.isRightClick && "none" }}>
                                             <ContextMenu
                                                 onClose={(e) => closeContextMenu(e, subItem)}
                                                 project_id={subItem.project_id}
@@ -146,7 +150,7 @@ const RecursiveFolder = ({ items, nestedCallback }) => {
                                                 <Modal modalTitle={type} handleClose={() => { setShow({})}}  show={!!isShow[subItem.file_name]} maxWidth="75%">
                                                    {/* {(() => {    switch (type) {
                                                             case "AddFolder": */}
-                                                        <AddUpdateDeleteFileAndFolder title={type} item={subItem} type={type} onClose={(e) => {closeContextMenu(e); setShow({});} } />                                                           
+                                                        <AddUpdateDeleteFileAndFolder title={type} item={subItem} type={type} onClose={(e, isRefreshNeeded) => {closeContextMenu(e); setShow({}); if(isRefreshNeeded) refreshData(); } } />                                                           
                                                             {/* // case "Add":
                                                             //     return <AddUpdateDeleteFileAndFolder item={subItem} type={type} onClose={(e) => closeContextMenu(e)} />                                                            
                                                             // case "Edit":
@@ -163,7 +167,7 @@ const RecursiveFolder = ({ items, nestedCallback }) => {
                                         : <FolderIcon key={subItem.file_name + "closeIcon" + index } fontSize='small' />}
                                         <>{subItem.file_name}</>
                                         <div style={{ display: !showNested[subItem.file_name] && "none" }}>
-                                            {subItem.children && <RecursiveFolder items={subItem.children} nestedCallback={() => nestCallback(subItem)} />}
+                                            {subItem.children && <RecursiveFolder items={subItem.children}  onRightCallback={onRightCallback} refreshData={refreshData} />}
                                         </div>
                                     </>
                                 )} 

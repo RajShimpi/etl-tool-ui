@@ -6,7 +6,7 @@ import PopupComponent from "./PopupComponent";
 import FolderIcon from "@mui/icons-material/Folder";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 
-const ContextMenu = ({ item, onToggleFiles, popType, project_id, parent_id,id, onClose, callback }) => {
+const ContextMenu = ({ item, onToggleFiles, popType, project_id, parent_id,id, onClose, callback, hideDeleteUpdate }) => {
   const [popupType, setPopupType] = useState(null);
   const [popupPosition, setPopupPosition] = useState();
 
@@ -18,7 +18,7 @@ const ContextMenu = ({ item, onToggleFiles, popType, project_id, parent_id,id, o
     // setPopupType(type);
     // setPopupPosition(position);
     callback(item, type); 
-    onClose(e);
+    onClose(e, item);
   };
 
   const closePopup = (e) => {
@@ -87,6 +87,7 @@ const ContextMenu = ({ item, onToggleFiles, popType, project_id, parent_id,id, o
           Add File
         </div>
       </div>
+      {!hideDeleteUpdate && <>
       <div
         className="menu-item"
         onClick={(e) =>
@@ -125,6 +126,8 @@ const ContextMenu = ({ item, onToggleFiles, popType, project_id, parent_id,id, o
           Delete
         </div>
       </div>
+      </>
+}
       {/* {popupType && (
         <PopupComponent
           onClose={closePopup}
