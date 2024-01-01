@@ -2,36 +2,34 @@ import React, { useCallback, useEffect, useState, useRef } from "react";
 import ReactFlow, {
   addEdge,
   Background,
-  Controls,
-  // useNodesState,
-  // useEdgesState,
+  useNodesState,
+  useEdgesState,
   ReactFlowProvider,
   updateEdge,
 } from "reactflow";
 
 // Components
-// import Sidebar from "./sidebar/sidebar";
+import Sidebar from "./sidebar/sidebar";
 import Node from "./custom-node/message-node";
-import { MarkerType } from "reactflow";
+
 // Utils
 import { isAllNodeisConnected } from "../utils";
-// import {
-//   // nodes as initialNodes,
-//   // edges as initialEdges,
-// } from "../initial-element";
+import {
+  nodes as initialNodes,
+  edges as initialEdges,
+} from "../initial-element";
 
 // Styles
 import "reactflow/dist/style.css";
 import "./dnd.css";
 import "./update-node.css";
 
-// import { Class, Key, Source } from "@mui/icons-material";
-// import { data } from "jquery";
-// import AddFile from "../../../masters/popup/add-file";
+import { Class, Key, Source } from "@mui/icons-material";
+import { data } from "jquery";
+import AddFile from "../../../masters/popup/add-file";
 import Modal from "../../../components/modal-popup";
-// import { ClassNames } from "@emotion/react";
-import Job from "../../../masters/job";
-import axios from "../../../services/axios";
+import { ClassNames } from "@emotion/react";
+import StepParameter from "../../../masters/popup/step-parameter";
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
@@ -40,90 +38,17 @@ const nodeTypes = { node: Node };
 
 const OverviewFlow = () => {
   const [showNodeMaster, setShowNodeMaster] = useState(false);
-
   const reactFlowWrapper = useRef(null);
   const edgeUpdateSuccessful = useRef(true);
   const textRef = useRef(null);
   const modalRef = useRef(null);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
-  // const [node, setNode] = useState([]);
-  const [nodes, setNodes, onNodesChange] = useState([]);
-  const [edges, setEdges, onEdgesChange] = useState([]);
-  // const [edge, setEdge] = useState([]);
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [selectedNode, setSelectedNode] = useState(null);
   const [isSelected, setIsSelected] = useState(false);
-  // const [id, setId] = useState();
 
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
-  useEffect(() => {
-    axios.getWithCallback("job-steps/", (data) => {
-      // console.log(data,"job-step Data");
-
-      const dataNodes = data.map((item) => ({
-        id: "" + item.id,
-        type: "node",
-        data: {
-          heading: item.step_name,
-          img: `/assets/images/${item.stepType.img}.png`,
-        },
-        position: {
-          x: item.position_X,
-          y: item.position_Y,
-        },
-      }));
-
-      const dataEdgesok = data.map((item) => ({
-        id: `e${item.id}-${item.ok_step}`,
-        source: "" + item.id,
-        target: "" + item.ok_step,
-        label: "ok",
-        type: "step",
-        sourceHandle: "ok",
-        markerEnd: { type: MarkerType.ArrowClosed },
-        style: { stroke: getlabelColor("ok") },
-      }));
-
-      const dataEdgeserror = data.map((item) => ({
-        id: `e${item.id}-${item.error_step}`,
-        source: "" + item.id,
-        target: "" + item.error_step,
-        label: "error",
-        type: "step",
-        sourceHandle: "error",
-        markerEnd: { type: MarkerType.ArrowClosed },
-        style: { stroke: getlabelColor("error") },
-      }));
-
-      setNodes(dataNodes);
-      setEdges([...dataEdgesok, ...dataEdgeserror]);
-
-      function getlabelColor(label) {
-        return label === "ok" ? "green" : label === "error" ? "red" : "black";
-      }
-
-      // console.log(dataEdgesok,"dataEdgesok")
-      console.log(dataEdgeserror, "dataEdgeserror");
-    });
-  }, []);
-
-  // console.log(nodes,"nodes");
-  // console.log(edges, "edges");
-
-  // useEffect(() => {
-  //   axios.getWithCallback('edges/',(data)=>{
-  //       const formattedData = data.map((item) => ({
-  //         // id: `e${item.source_ok}-${item.target}`,
-  //         source_ok: item.source_ok,
-  //         source_error: item.source_error,
-  //         target: item.target,
-  //         type: item.type,
-  //         label: item.label,
-  //       }));
-
-  //       console.log(formattedData);
-  //       setEdge(formattedData);
-  //     })
-  // }, []);
 
   const onDragOver = (event) => {
     event.preventDefault();
@@ -132,6 +57,8 @@ const OverviewFlow = () => {
     // const [showNodeMaster, setShowNodeMaster] = useState(false);
 
     // ... (other state variables and functions)
+
+
   };
 
   const onDrop = (event) => {
@@ -139,7 +66,7 @@ const OverviewFlow = () => {
     const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
 
     const type = event.dataTransfer.getData("application/reactflow");
-    // const label = event.dataTransfer.getData("content");
+    const label = event.dataTransfer.getData("content");
     const img = event.dataTransfer.getData("img");
     const name = event.dataTransfer.getData("name");
     console.log(reactFlowInstance, "reactIns");
@@ -147,10 +74,6 @@ const OverviewFlow = () => {
       x: event.clientX - reactFlowBounds.left,
       y: event.clientY - reactFlowBounds.top,
     });
-
-    // console.log(type)
-    // console.log(label)
-    // console.log(name)
 
     const newNode = {
       id: getId(),
@@ -161,20 +84,7 @@ const OverviewFlow = () => {
     };
 
     setNodes((es) => es.concat(newNode));
-    setSelectedNode((newNode.a = name));
-  };
-  const onNodeDragStop = (node) => {
-    const updatedNodes = nodes.map((n) => {
-      if (n.id === node.id) {
-        return {
-          ...n,
-          position: { x: node.position.x, y: node.position.y },
-        };
-      }
-      return n;
-    });
-
-    setNodes(updatedNodes);
+    setSelectedNode(newNode.a = name);
   };
 
   const onConnect = useCallback(
@@ -182,14 +92,19 @@ const OverviewFlow = () => {
       const { sourceHandle } = params;
 
       let label;
-      let color;
+      let backgroundColor;
+      let textColor;
 
       if (sourceHandle === "ok") {
         label = "ok";
-        color = "green";
-      } else {
+        backgroundColor = "green";
+        textColor = "white";
+      }
+
+      else {
         label = "error";
-        color = "red";
+        backgroundColor = "red";
+        textColor = "white";
       }
 
       const newEdge = {
@@ -198,12 +113,12 @@ const OverviewFlow = () => {
         type: params.type || "step",
         arrowHeadType: "arrowclosed",
         style: {
-          stroke: color,
-          backgroundColor: color,
-          color: "red",
+          stroke: label === "error" ? "red" : label === "ok" ? "green" : "black",
+          backgroundColor,
+          color: textColor,
           fontSize: "12px",
           padding: "4px",
-          borderRadius: "4px",
+            borderRadius: "4px",
         },
       };
 
@@ -213,12 +128,10 @@ const OverviewFlow = () => {
   );
 
   const [nodeName, setNodeName] = useState("Node 1");
-  // console.log(nodes,"llll")
+
   useEffect(() => {
     const node = nodes.filter((node) => {
-      // console.log(nodes,"nodes Data inside useEffect Filter")
       if (node.selected) return true;
-      // console.log(node,"inside node useEffect Filter")
       return false;
     });
     if (node[0]) {
@@ -230,7 +143,7 @@ const OverviewFlow = () => {
     }
   }, [nodes]);
   useEffect(() => {
-    setNodeName(selectedNode?.data?.heading || selectedNode);
+    setNodeName(selectedNode?.data?.content || selectedNode);
   }, [selectedNode]);
   useEffect(() => {
     textRef?.current?.focus();
@@ -248,11 +161,10 @@ const OverviewFlow = () => {
       })
     );
   }, [nodeName, setNodes]);
+
   const saveHandler = () => {
-    if (isAllNodeisConnected(nodes, edges)) {
-      alert("Congrats its correct");
-      // console.log(node,"Node If");
-    } else alert("Please connect source nodes (Cannot Save Flow)");
+    if (isAllNodeisConnected(nodes, edges)) alert("Congrats its correct");
+    else alert("Please connect source nodes (Cannot Save Flow)");
   };
 
   const onEdgeUpdateStart = useCallback(() => {
@@ -272,14 +184,15 @@ const OverviewFlow = () => {
     edgeUpdateSuccessful.current = true;
   }, []);
 
+
   const onNodeDoubleClick = () => {
     setShowNodeMaster(true);
   };
   const handleCloseNodeMaster = () => {
     setShowNodeMaster(false);
-  };
+  }
   const nodeRef = useRef();
-  const closeModel = () => {
+  const closeModel   = () => {
     setShowNodeMaster(false);
   };
 
@@ -298,6 +211,8 @@ const OverviewFlow = () => {
       document.removeEventListener("mousedown", handleDocumentClick);
     };
   }, [handleCloseNodeMaster, modalRef]);
+
+
 
   return (
     <>
@@ -321,24 +236,20 @@ const OverviewFlow = () => {
               attributionPosition="top  -right"
               onNodeDoubleClick={onNodeDoubleClick}
               onEdgeDoubleClick={true}
-              onNodeDragStop={onNodeDragStop}
             >
               <Background color="#aaa" gap={16} />
-              {/* <Controls /> */}
             </ReactFlow>
 
-            <Modal
-              modalTitle={"Save/Update Parameter"}
-              ref={modalRef}
-              handleClose={handleCloseNodeMaster}
-              show={showNodeMaster}
-            >
-              <Job />
-            </Modal>
+                <Modal modalTitle={"Save/Update Parameter"} ref={modalRef} handleClose={handleCloseNodeMaster} show={showNodeMaster}>
+                  <StepParameter
+                  //  stepId={step_type_id}
+                   />
+                </Modal>
+              
           </div>
 
           {/* 
-          <Sidebar
+          <Sidebar  
             isSelected={isSelected}
             textRef={textRef}
             nodeName={nodeName}
@@ -349,5 +260,7 @@ const OverviewFlow = () => {
     </>
   );
 };
+
+
 
 export default OverviewFlow;

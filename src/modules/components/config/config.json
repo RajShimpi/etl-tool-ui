@@ -109,32 +109,17 @@
     "isActive", 
     "params"
 ],
-  "PARAMETER": [
-    "name",
-    "context",
-    "display_name",
-    "description",
-    "type",
-    "resource",
-    "step.name"
-  ],
-  "STEP_TYPE_PARAMETERS": [
-    "step.name", 
-    "parameter.name", 
-    "required"],
-  "JOB": [
-    "name", 
-    "start_step", 
-    "type", 
-    "job_file.file_name", 
-    "project.project_name", 
-    "client.name"
-],
-"JOB_STEP":[
-    "job.name",
-    "step_type.name",
-    "step_name",
-    "ok_step",
-    "error_step"
-]
+    "PARAMETER":[
+        "name",
+        "context",
+        "display_name",
+        "description",
+        "type",
+        "resource"
+    ],
+    "STEP_TYPE_PARAMETERS":[
+        "step.name",
+        "parameter.name",
+        "required"
+    ]
 }

@@ -735,34 +735,33 @@ th {
 
 
   .modal {
-    width: 36%;
-    height: 63%;
-    left: 34%;
-    top: 35%;
+    /* width: 36%;
+    height: 63%; */
+    /* left: 34%; */
+    top: 25%;
     /* --bs-modal-margin: 13.75rem; */
-    justify-content: end;
+    /* justify-content: end; */
     align-items: center;
   }
  
-
-
 .modal-lg, .modal-xl {
-	--bs-modal-width: 525px;
+	/* --bs-modal-width: auto; */
+  --bs-modal-width: 300px;
+  /* padding: 0px 200px 0px 200px; */
 }
-
 
 .dropzone.dz-clickable {
   width: 100%;
   height: 100%;
 }
-
+  
 .upload-zone {
   position: relative;
 }
 
-.modal-width-700 {
+/* .modal-width-700 {
   max-width: 600px;
-}
+} */
 
 .spots-table-header {
   width: 90px;

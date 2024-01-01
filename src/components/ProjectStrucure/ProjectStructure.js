@@ -126,7 +126,7 @@ function ProjectStructure({ textColor }) {
                       // parentId={null}
                       onToggleFolder={() => toggleProject(index)}
                       onToggleFile={(file) => toggleFile(index, file)}
-                    /> */}
+                    /> */} 
                   </div>
                 )}
               </li>
