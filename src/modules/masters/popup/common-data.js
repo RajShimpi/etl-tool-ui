@@ -1,9 +1,8 @@
 export const getCommonFields = (itemData) => {
     return [{
-        col: 12,
+        col: 3,
         callback: itemData.callback,
         disabled: itemData.disabled,
-        
         groups: [
             {
             type: "text",
@@ -14,7 +13,6 @@ export const getCommonFields = (itemData) => {
             isRequired: true,
             itemVal: itemData.values ? itemData.values["file_name"] : '',  
         },
-        
             
        
         ]

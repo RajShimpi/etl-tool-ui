@@ -1,6 +1,5 @@
 export const getProjectFields = (itemData) => {
     return [{
-
         col: 4,
         callback: itemData.callback,
         disabled: itemData.disabled,
@@ -33,6 +32,5 @@ export const getProjectFields = (itemData) => {
             itemVal: itemData.values ? itemData.values["base_location"] : '',
         },
         ]
-    }
-    ];
+    }];
 }

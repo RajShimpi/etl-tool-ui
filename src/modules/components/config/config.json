@@ -1,118 +1,113 @@
 {
-    "TOP_NAV_COLOR": "#3c8dbc",
-   
-    "AUDIT_TRAIL_COLUMNS": [
-        "userName",
-        "responseStatus",
-        "ipAddress",
-        "apiUrl",
-        "DateTime",
-        "httpStatus",
-        "log",
-        "requestBody"
-    ],
-   
-    "BRNACH_COLUMNS": [
-        "name"
-    ],
-    "DEPARTMENT_COLUMNS": [
-        "name"
-    ],
-    "ROLE_COLUMNS": [
-        "name",
-        "displayname"
-    ],
-    "EMPLOYEE_COLUMNS": [
-        "emp_code",
-        "firstname",
-        "middlename",
-        "lastname",
-        "active",
-        "department",
-        "branch",
-        "manager"
-    ],
-   
-    "GENDER": [
-        {
-            "value": "Male",
-            "label": "Male"
-        },
-        {
-            "value": "Female",
-            "label": "Female"
-        },
-        {
-            "value": "Other",
-            "label": "Other"
-        }
-    ],
-    
-    "MENU_COLUMNS": [
-        "id",
-        "menuName",
-        "route",
-        "menuIcon",
-        "menuHasChild",
-        "menuParentId",
-        "menuRoles.role.name"
-    ],
-    
-    "DASHBOARD_MASTER_COLUMN": [
-        "name",
-        "apiName",
-        "primaryColumn",
-        "secondaryColumn",
-        "addLink",
-        "updateLink",
-        "listLink",
-        "active",
-        "role"
-    ],
-    
-    "USER_ROLES": {
-        "SUPER_ADMIN": "SUPER_ADMIN",
-        "ADMIN": "ADMIN",
-        "SCIENTIST": "SCIENTIST",
-        "CLIENT": "CLIENT"
-        },
-    
-    "USER_MASTER_COLUMNS":[
-        "emp_code",
-        "firstname",
-        "middlename",
-        "lastname",
-        "manager",
-        "warehouse",
-        "binLocation",
-        "role"
-    ],
-    "CLIENT":[
-        "name",
-        "abbreviation"
-    ],
-    "PROJECT":[
-        "project_name",
-        "client.name",
-        "base_location"
-    ],
-    "PROJECT_FILE":[
-        "project.project_name",
-        "type",
-        "file_name",
-        "parent.file_name"
-    ],
-    "STEPTYPE":[
-        "type",
-        "name",
-        "symbol",
-        "group"
-    ],
-    "TYPE_CONFIG": [
-        "category",
-        "value",
-        "isActive",
-        "params"
+  "TOP_NAV_COLOR": "#3c8dbc",
+
+  "AUDIT_TRAIL_COLUMNS": [
+    "userName",
+    "responseStatus",
+    "ipAddress",
+    "apiUrl",
+    "DateTime",
+    "httpStatus",
+    "log",
+    "requestBody"
+  ],
+
+  "BRNACH_COLUMNS": ["name"],
+  "DEPARTMENT_COLUMNS": ["name"],
+  "ROLE_COLUMNS": [
+    "name",
+    "displayname"
+],
+  "EMPLOYEE_COLUMNS": [
+    "emp_code",
+    "firstname",
+    "middlename",
+    "lastname",
+    "active",
+    "department",
+    "branch",
+    "manager"
+  ],
+
+  "GENDER": [
+    {
+      "value": "Male",
+      "label": "Male"
+    },
+    {
+      "value": "Female",
+      "label": "Female"
+    },
+    {
+      "value": "Other",
+      "label": "Other"
+    }
+  ],
+
+  "MENU_COLUMNS": [
+    "id",
+    "menuName",
+    "route",
+    "menuIcon",
+    "menuHasChild",
+    "menuParentId",
+    "menuRoles.role.name"
+  ],
+
+  "DASHBOARD_MASTER_COLUMN": [
+    "name",
+    "apiName",
+    "primaryColumn",
+    "secondaryColumn",
+    "addLink",
+    "updateLink",
+    "listLink",
+    "active",
+    "role"
+  ],
+
+  "USER_ROLES": {
+    "SUPER_ADMIN": "SUPER_ADMIN",
+    "ADMIN": "ADMIN",
+    "SCIENTIST": "SCIENTIST",
+    "CLIENT": "CLIENT"
+  },
+
+  "USER_MASTER_COLUMNS": [
+    "emp_code",
+    "firstname",
+    "middlename",
+    "lastname",
+    "manager",
+    "warehouse",
+    "binLocation",
+    "role"
+  ],
+  "CLIENT": [
+    "name", 
+    "abbreviation"
+],
+  "PROJECT": [
+    "project_name", 
+    "client.name", 
+    "base_location"
+],
+  "PROJECT_FILE": [
+    "project.project_name",
+    "type",
+    "file_name",
+    "parent.file_name"
+  ],
+  "STEPTYPE": [
+    "type", 
+    "name", 
+    "symbol", 
+    "group"],
+  "TYPE_CONFIG": [
+    "category", 
+    "value", 
+    "isActive", 
+    "params"
 ],
     "PARAMETER":[
         "name",
@@ -126,10 +121,5 @@
         "step.name",
         "parameter.name",
         "required"
-    ],
-    "STEP_PARAMETER":[
-       "parameters.name"
-        
     ]
-
 }

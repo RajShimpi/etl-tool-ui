@@ -30,9 +30,7 @@ const ProjectFile = () => {
                 getApi="project-files"
                 title="Project-File"
                 defaultObj={defaultObj}
-                options={[projectId,
-                    parentId
-                ]}
+                options={[projectId, parentId]}
                 tableTitle='Project-File'
             />
         </>

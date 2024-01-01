@@ -13,8 +13,8 @@ export const getProjectFileFields = (itemData) => {
             isRequired: !itemData?.values?.project_id,
             itemVal: itemData.values ? itemData.values["project_id"] : '',
         },
-        {    
-            type: "text",     
+        {
+            type: "text",
             id: "inputDisplayType",
             label: "Project File Display Type",
             name: "type",
@@ -38,10 +38,8 @@ export const getProjectFileFields = (itemData) => {
             options: itemData.options[1],
             control: "select",
             isSubmit: itemData.isSubmit,
-            // isRequired: !itemData?.values?.parent_id,
             itemVal: itemData.values ? itemData.values["parent_id"] : '',
         },
         ]
-    } 
-    ];
+    }];
 }

@@ -4,11 +4,6 @@ import CommonModel from '../../components/common-modal';
 import { getCommonFields } from './common-data';
 
 const Folder = ({ project_id, id }) => {
-    // const [formData, setFormData] = useState({
-    //     id: null,
-    //     name:'',
-    //     abbreviation:'',
-    // });
 
     let defaultObj = { file_name: '', project_id: project_id, type: 'Folder', parent_id: id };
 

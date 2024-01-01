@@ -4,11 +4,6 @@ import CommonModel from '../../components/common-modal';
 import { getCommonFields } from './common-data';
 
 const Delete = () => {
-    // const [formData, setFormData] = useState({
-    //     id: null,
-    //     name:'',
-    //     abbreviation:'',
-    // });
 
     let defaultObj = { name: '', abbreviation: '', active: true };
 

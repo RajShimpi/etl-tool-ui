@@ -5,13 +5,9 @@ import { getProjectFields } from './project-data';
 import axios from '../services/axios';
 
 const Project = () => {
-    // const [formData, setFormData] = useState({
-    //     id: null,
-    //     project_name:'',
-    //     client_id:'',
-    //     base_location:'',
-    // });
+
     const [clientId, setClientId] = useState([])
+
     useEffect(() => {
         axios.getWithCallback('clients/', (data) => setClientId(data.map(x => { return { label: x.name, value: x.id } })))
     }, [])

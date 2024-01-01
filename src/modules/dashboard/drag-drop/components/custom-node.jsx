@@ -4,37 +4,14 @@ import { Handle, Position } from "reactflow";
 export default memo(({ data, isConnectable }) => {
   return (
     <>
-      <Handle
-        type="target"
-        position={Position.Left}
-        style={{ background: "#555" }}
-        onConnect={(params) => console.log("handle onConnect", params)}
-        isConnectable={isConnectable}
-      />
+      <Handle type="target" position={Position.Left} style={{ background: "#555" }} onConnect={(params) => console.log("handle onConnect", params)} isConnectable={isConnectable} />
       <div>
-        Custom Color Picker Node: <strong>{data.color}</strong>
+         Custom Color Picker Node: 
+         <strong>{data.color}</strong>
       </div>
-      <input
-        className="nodrag"
-        type="color"
-        onChange={data.onChange}
-        defaultValue={data.color}
-      />
-      <Handle
-        type="source"
-        position={Position.Right}
-        id="ok"
-        style={{ top: 10, background: "#555" }}
-        isConnectable={isConnectable}
-      />
-      <Handle
-        type="source"
-        position={Position.Right}
-        id="error"
-        style={{ bottom: 10, top: "auto", background: "#555" }}
-        isConnectable={isConnectable}
-      />
-      
+      <input className="nodrag" type="color" onChange={data.onChange} defaultValue={data.color}/>
+      <Handle type="source" position={Position.Right} id="ok" style={{ top: 10, background: "#555" }} isConnectable={isConnectable} />
+      <Handle type="source" position={Position.Right} id="error" style={{ bottom: 10, top: "auto", background: "#555" }} isConnectable={isConnectable} />
     </>
   );
 });

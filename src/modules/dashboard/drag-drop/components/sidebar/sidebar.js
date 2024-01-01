@@ -1,16 +1,15 @@
 import React from 'react';
 
-const onDragStart = (event, nodeType, content, img,name) => {
+const onDragStart = (event, nodeType, img, name) => {
   event.dataTransfer.setData("application/reactflow", nodeType);
-  event.dataTransfer.setData("content", content);
+  // event.dataTransfer.setData("content", content);
   event.dataTransfer.setData("img", img);
   event.dataTransfer.setData("name", name);
   event.dataTransfer.effectAllowed = "move";
-  
 };
 
 const Sidebar = ({ apiData }) => {
- 
+
   return (
     <div className="">
       <ul>
@@ -19,7 +18,7 @@ const Sidebar = ({ apiData }) => {
             style={{ margin: '5px', display:'flex'}}
             className="dndnode input m-10"
             onDragStart={(event) =>
-              onDragStart(event, "node", "Click to Edit message", `/assets/images/${item.symbol}.png`,item.name)
+              onDragStart(event, "node", "Click to Edit message", item.symbol,item.name)
             }
             draggable
             key={item.id}
@@ -36,4 +35,3 @@ const Sidebar = ({ apiData }) => {
 };
 
 export default Sidebar;
-

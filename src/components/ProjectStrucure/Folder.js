@@ -11,7 +11,7 @@
 //   onToggleFiles,
 //   onToggleFolder,
 //   onOpenFolder,
-//   onCloseFolder,
+//   onCloseFolder,  
 //   textColor,
 //   projectId,
 //   parentId,

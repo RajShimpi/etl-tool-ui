@@ -15,7 +15,7 @@ function FolderDropdown({
   openContextMenuId,
   onContextMenuOpen,
   onContextMenuClose,
-}) {
+}) { 
   const containerRef = useRef(null);
 
   useEffect(() => {

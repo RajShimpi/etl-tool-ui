@@ -1,7 +1,7 @@
 .right-sidebar {
-  overflow-y: scroll; 
+  overflow-y: scroll;
   -ms-overflow-style: none;
-  scrollbar-width: none; 
+  scrollbar-width: none;
   /* scrollbar-color: transparent transparent; */
   height: 600px;
   width: 78px;
@@ -12,8 +12,8 @@
   right: 0;
 }
 
-.right-sidebar::-webkit-scrollbar { 
-  display: none;  /* Safari and Chrome */
+.right-sidebar::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
 }
 
 .right-sidebar.open {
@@ -198,4 +198,3 @@
 .right-sidebar.open .tools {
   display: block;
 }
- 

@@ -3,7 +3,7 @@ import { Handle, Position } from "reactflow";
 import { style } from "./message-node-styles";
 import Modal from "../../../../components/modal-popup";
 import AddFile from '../../../../masters/popup/add-file'
-const Node = ({ data, isSelected, textRef, nodeName, setNodeName }) => {
+const Node = ({ data, item, isSelected, textRef, nodeName, setNodeName }) => {
   const [selected, setSelected] = useState(false);
   const [showNodeMaster, setShowNodeMaster] = useState(false);
 
@@ -30,7 +30,7 @@ const Node = ({ data, isSelected, textRef, nodeName, setNodeName }) => {
       setShowNodeMaster(false);
     }
   };
-  
+
   useEffect(() => {
     document.addEventListener("click", handleClickOutside);
 
@@ -62,7 +62,7 @@ const Node = ({ data, isSelected, textRef, nodeName, setNodeName }) => {
                 src={data.img}
                 style={{ width: "70px", height: "70px" }}
                 onClick={handleImageClick}
-              />      
+              />
               <div style={style.contentWrapper}>{data.heading}</div>
             </>
           )}
@@ -75,14 +75,14 @@ const Node = ({ data, isSelected, textRef, nodeName, setNodeName }) => {
             onClick={handleToggle}
           >
             <div style={customTitle}>{data.heading}</div>
-            <div style={style.contentWrapper}>{data.content}</div>
-          </div>    
+            {/* <div style={style.contentWrapper}>{data.content}</div> */}
+          </div>
         )}
-       
-            <Handle type="source" style={{marginTop:'-30px', backgroundColor:"green", border:"green"}} position={Position.Right} id="ok" onDoubleClick={onNodeDoubleClick} />
-            <Handle type="source" style={{backgroundColor:"red", border:"red"}} position={Position.Right} id="error" onDoubleClick={onNodeDoubleClick} />
-            <Handle type="target" position={Position.Left} id="target" onDoubleClick={onNodeDoubleClick} />
-      
+
+        <Handle type="source" style={{ marginTop: '-30px', backgroundColor: "green", border: "green" }} position={Position.Right} id="ok" onDoubleClick={onNodeDoubleClick} />
+        <Handle type="source" style={{ backgroundColor: "red", border: "red" }} position={Position.Right} id="error" onDoubleClick={onNodeDoubleClick} />
+        <Handle type="target" position={Position.Left} id="target" onDoubleClick={onNodeDoubleClick} />
+
       </div>
     </div>
   );

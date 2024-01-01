@@ -1,6 +1,5 @@
 export const getSteptypeFields = (itemData) => {
     return [{
-
         col: 4,
         callback: itemData.callback,
         disabled: itemData.disabled,
@@ -8,18 +7,16 @@ export const getSteptypeFields = (itemData) => {
             type: "text",
             id: "inputprojectName",
             label: "Step_Type",
-            name:"type",
+            name: "type",
             control: "input",
-            isRequired: true,             
+            isRequired: true,
             itemVal: itemData.values ? itemData.values["type"] : '',
         },
         {
             id: "inputDisplayclientId",
             label: "Step Name",
-            name:"name",
-            // options: itemData.options[0],
+            name: "name",
             control: "input",
-            // isSubmit: itemData.isSubmit,
             isRequired: true,
             itemVal: itemData.values ? itemData.values["name"] : '',
         },
@@ -27,7 +24,7 @@ export const getSteptypeFields = (itemData) => {
             type: "text",
             id: "inputDisplaybase_location",
             label: "symbol",
-            name:"symbol",
+            name: "symbol",
             control: "input",
             isRequired: true,
             itemVal: itemData.values ? itemData.values["symbol"] : '',
@@ -35,12 +32,11 @@ export const getSteptypeFields = (itemData) => {
             type: "text",
             id: "inputDisplaybase_location",
             label: "Group",
-            name:"group",
+            name: "group",
             control: "input",
             isRequired: true,
             itemVal: itemData.values ? itemData.values["group"] : '',
         },
-    ]
-    }   
-    ];
+        ]
+    }];
 }

@@ -5,6 +5,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import PopupComponent from "./PopupComponent";
 import FolderIcon from "@mui/icons-material/Folder";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import RecursiveFolder from "./ProjectStrucure/recursive-folders";
 
 const ContextMenu = ({ onToggleFiles, popType, project_id, parent_id, id, onClose }) => {
   const [popupType, setPopupType] = useState(null);
@@ -29,10 +30,9 @@ const ContextMenu = ({ onToggleFiles, popType, project_id, parent_id, id, onClos
   const handleContextMenuClose = () => {
     console.log("handleContextMenuClose");
     if (isPopupOpen) {
-      onClose(); 
+      onClose();
     }
   };
-  
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -42,106 +42,45 @@ const ContextMenu = ({ onToggleFiles, popType, project_id, parent_id, id, onClos
         !event.target.closest('.popup')
       ) {
         // closePopup();
-        onClose(); 
+        onClose();
       }
     };
-
     document.addEventListener('click', handleClickOutside);
-
     return () => {
       document.removeEventListener('click', handleClickOutside);
     };
   }, [popupType, isPopupOpen, onClose]);
 
   return (
-    <div
-      style={{ zIndex: 1 }}
-      className={`contextMenu ${popType === 'right' ? 'right' : ''}`}
-      onContextMenu={handleContextMenuClick}
-    >
-      <div
-        className="menu-item"
-        onClick={(e) => {
-          openPopup("AddFolder", { top: e.clientY, left: e.clientX + 10 }, project_id, parent_id);
-          handleContextMenuClose();
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-start",
-          }}
-        >
-          <FolderIcon
-            style={{ fontSize: "medium", marginRight: "5px", marginTop: "3px" }}
-          />
+    <div style={{ zIndex: 1 }} className={`contextMenu ${popType === 'right' ? 'right' : ''}`} onContextMenu={handleContextMenuClick} >
+      <div className="menu-item" onClick={(e) => { openPopup("AddFolder", { top: e.clientY, left: e.clientX + 10 }, project_id, parent_id); handleContextMenuClose(); }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", }} >
+          <FolderIcon style={{ fontSize: "medium", marginRight: "5px", marginTop: "3px" }} />
           Add Folder
         </div>
       </div>
-      <div
-        className="menu-item"
-        onClick={(e) => {
-          openPopup("Add", { top: e.clientY, left: e.clientX + 10 }, project_id, id);
-          handleContextMenuClose();
-        }}
+      <div className="menu-item" onClick={(e) => { openPopup("Add", { top: e.clientY, left: e.clientX + 10 }, project_id, id); handleContextMenuClose(); }}
       >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-start",
-          }}
-        >
-          <InsertDriveFileIcon
-            style={{ fontSize: "medium", marginRight: "5px", marginTop: "3px" }}
-          />
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", }}>
+          <InsertDriveFileIcon style={{ fontSize: "medium", marginRight: "5px", marginTop: "3px" }} />
           Add File
         </div>
       </div>
-      <div
-        className="menu-item"
-        onClick={(e) => {
-          openPopup("Edit", { top: e.clientY, left: e.clientX + 10 }, project_id, parent_id);
-          handleContextMenuClose();
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-start",
-          }}
-        >
-          <EditIcon
-            style={{ fontSize: "medium", marginRight: "5px", marginTop: "3px" }}
-          />
+      <div className="menu-item" onClick={(e) => { openPopup("Edit", { top: e.clientY, left: e.clientX + 10 }, project_id, parent_id); handleContextMenuClose(); }} >
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", }} >
+          <EditIcon style={{ fontSize: "medium", marginRight: "5px", marginTop: "3px" }} />
           Edit
         </div>
       </div>
-      <div
-        className="menu-item"
-        onClick={(e) => {
-          openPopup("Delete", { top: e.clientY, left: e.clientX + 10 }, project_id, parent_id);
-          handleContextMenuClose();
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-start",
-          }}
-        >
-          <DeleteIcon
-            style={{ fontSize: "medium", marginRight: "5px", marginTop: "3px" }}
-          />
+      <div className="menu-item" onClick={(e) => { openPopup("Delete", { top: e.clientY, left: e.clientX + 10 }, project_id, parent_id); handleContextMenuClose(); }} >
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", }} >
+          <DeleteIcon style={{ fontSize: "medium", marginRight: "5px", marginTop: "3px" }} />
           Delete
         </div>
       </div>
       {popupType && (
-        <PopupComponent
-          onClose={closePopup}
+        <RecursiveFolder
+          // onClose={closePopup}
           actionType={popupType}
           style={{
             top: popupPosition.top,
@@ -153,6 +92,7 @@ const ContextMenu = ({ onToggleFiles, popType, project_id, parent_id, id, onClos
           id={id}
         />
       )}
+
     </div>
   );
 };

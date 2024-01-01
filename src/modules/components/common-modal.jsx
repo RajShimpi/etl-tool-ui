@@ -70,7 +70,7 @@ const CommonModel = (props) => {
         setData((prevState) => ({...prevState,[name]: e.label,[`${name}Id`]: e.value}));
       break;
       case "whsId":
-       setData((prevState) => ({ ...prevState, [name]: parseInt(e.value) }));
+        setData((prevState) => ({ ...prevState, [name]: parseInt(e.value) }));
         break;
       case "client_id": 
       case "project_id":

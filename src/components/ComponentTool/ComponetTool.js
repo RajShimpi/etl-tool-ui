@@ -29,8 +29,8 @@ function ComponentTool({ textColor }) {
       });
 
     });
+  
   }, []);
-
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -60,14 +60,14 @@ function ComponentTool({ textColor }) {
             <li>
               <div>
                 <div href='#' className='comIcon'>
-                {components.isOpen ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='medium'/>}
+                  {components.isOpen ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='medium' />}
                   <span className='link_name' style={{ marginLeft: '5px' }}>
                     <div
                       variant='contained'
                       className='comp'
                       onClick={() => handleCollapseToggle(index)}
                     >
-                      {component.name} {component.isCollapseOpen ? <KeyboardArrowUpIcon  fontSize='small' /> : <KeyboardArrowDownIcon  fontSize='small'/>}
+                      {component.name} {component.isCollapseOpen ? <KeyboardArrowUpIcon fontSize='small' /> : <KeyboardArrowDownIcon fontSize='small' />}
                     </div>
                   </span>
                 </div>
@@ -90,7 +90,7 @@ function groupDataBy(data, property) {
     const key = item[property];
     if (!acc[key]) {
       acc[key] = [];
-    }
+    } 
     acc[key].push(item);
     return acc;
   }, {});

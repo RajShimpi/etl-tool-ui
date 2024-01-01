@@ -4,6 +4,7 @@ import CommonModel from '../../components/common-modal';
 import { getCommonFields } from './common-data';
 
 const AddFile = ({ project_id, id }) => {
+
     let defaultObj = { file_name: '', project_id: project_id, type: 'File', parent_id: id };
 
     return (
@@ -16,7 +17,7 @@ const AddFile = ({ project_id, id }) => {
                 defaultObj={defaultObj}
             />
         </>
-    );
+    ); 
 };
 
 export default AddFile;

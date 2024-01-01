@@ -7,11 +7,6 @@ import CommonModel from '../components/common-modal';
 import { getReadFields } from './read-data';
 
 const Read = () => {
-    // const [formData, setFormData] = useState({
-    //     id: null,
-    //     name:'',
-    //     abbreviation:'',
-    // });
 
     let defaultObj = { name: '', abbreviation: '', active: true };
 
