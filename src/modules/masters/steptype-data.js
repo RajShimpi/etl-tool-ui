@@ -23,11 +23,11 @@ export const getSteptypeFields = (itemData) => {
         {
             type: "text",
             id: "inputDisplaybase_location",
-            label: "symbol",
-            name: "symbol",
+            label: "img",
+            name: "img",
             control: "input",
             isRequired: true,
-            itemVal: itemData.values ? itemData.values["symbol"] : '',
+            itemVal: itemData.values ? itemData.values["img"] : '',
         }, {
             type: "text",
             id: "inputDisplaybase_location",
