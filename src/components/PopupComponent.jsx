@@ -76,28 +76,33 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
           axios.postWithCallback("project-files",
           item,
           (resp) => {
-            props.onClose(e);
+            
+            props.onClose(e, true);
+            
           });
           break;
         case "Add":
           axios.postWithCallback("project-files",
           item,
           (resp) => {
-            props.onClose(e);
+            
+            props.onClose(e, true);
           });
           break;
         case "Edit":
           axios.putWithCallback("project-files/",
           { ...item, id: props.item?.id },
           (resp) => {
-            props.onClose(e);
+            
+            props.onClose(e, true);
           });
           break;
         case "Delete":
           axios.deleteWithCallback("project-files/" + props.item?.id,
           item,
           (resp) => {
-            props.onClose(e);
+            
+            props.onClose(e, true);
           });
           break;
           default:
