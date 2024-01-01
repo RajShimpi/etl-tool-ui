@@ -32,7 +32,7 @@ import Modal from "../../../components/modal-popup";
 // import { ClassNames } from "@emotion/react";
 import Job from "../../../masters/job";
 import axios from "../../../services/axios";
-import { post } from "jquery";
+// import { post } from "jquery";
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
@@ -56,6 +56,7 @@ const OverviewFlow = () => {
   // const [id, setId] = useState();
   const [draggedNodeInfo, setDraggedNodeInfo] = useState(null);
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
+
   useEffect(() => {
     axios.getWithCallback("job-steps/", (data) => {
       console.log(data,"job-step Data");
@@ -105,9 +106,8 @@ const OverviewFlow = () => {
       // console.log(dataEdgesok,"dataEdgesok")
       console.log(dataEdgeserror, "dataEdgeserror");
     });
+    
   }, []);
-
-
 
   // console.log(nodes,"nodes");
   // console.log(edges, "edges");
@@ -166,6 +166,7 @@ const OverviewFlow = () => {
     setNodes((es) => es.concat(newNode));
     setSelectedNode((newNode.a = name));
   };
+
   const onNodeDragStop = (event, node) => {
     const updatedNodes = nodes.map((n) => {
       if (n.id === node.id) {
@@ -193,21 +194,12 @@ const OverviewFlow = () => {
   
     axios.putWithCallback(`job-steps/${nodeId}/update/`, data)
       .then((response) => {
-        // Handle the response if needed
         console.log("Node position updated successfully:", response.data);
       })
       .catch((error) => {
-        // Handle errors
         console.error("Error updating node position:", error);
       });
   };
-  
-
-// ...
-
-// ...
-
-
 
   const onConnect = useCallback(
     (params) => {
@@ -246,6 +238,7 @@ const OverviewFlow = () => {
 
   const [nodeName, setNodeName] = useState("Node 1");
   // console.log(nodes,"llll")
+
   useEffect(() => {
     const node = nodes.filter((node) => {
       // console.log(nodes,"nodes Data inside useEffect Filter")
@@ -261,12 +254,15 @@ const OverviewFlow = () => {
       setIsSelected(false);
     }
   }, [nodes]);
+  
   useEffect(() => {
     setNodeName(selectedNode?.data?.heading || selectedNode);
   }, [selectedNode]);
+
   useEffect(() => {
     textRef?.current?.focus();
   }, [selectedNode]);
+
   useEffect(() => {
     setNodes((nds) =>
       nds.map((node) => {
@@ -280,6 +276,7 @@ const OverviewFlow = () => {
       })
     );
   }, [nodeName, setNodes]);
+
   const saveHandler = () => {
     if (isAllNodeisConnected(nodes, edges)) {
       alert("Congrats its correct");
@@ -312,9 +309,11 @@ const OverviewFlow = () => {
   const onNodeDoubleClick = () => {
     setShowNodeMaster(true);
   };
+
   const handleCloseNodeMaster = () => {
     setShowNodeMaster(false);
   };
+
   const nodeRef = useRef();
   const closeModel = () => {
     setShowNodeMaster(false);
