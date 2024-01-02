@@ -60,7 +60,7 @@ const OverviewFlow = () => {
 
   useEffect(() => {
     axios.getWithCallback("job-steps/", (data) => {
-      console.log(data, "job-step Data");
+      // console.log(data, "job-step Data");
 
       const dataNodes = data.map((item) => ({
         id: "" + item.id,
@@ -105,7 +105,6 @@ const OverviewFlow = () => {
       }
 
       // console.log(dataEdgesok,"dataEdgesok")
-      console.log(dataEdgeserror, "dataEdgeserror");
     });
   }, []);
 
@@ -145,7 +144,7 @@ const OverviewFlow = () => {
     // const label = event.dataTransfer.getData("content");
     const img = event.dataTransfer.getData("img");
     const name = event.dataTransfer.getData("name");
-    console.log(reactFlowInstance, "reactIns");
+    // console.log(reactFlowInstance, "reactIns");
     const position = reactFlowInstance.project({
       x: event.clientX - reactFlowBounds.left,
       y: event.clientY - reactFlowBounds.top,
@@ -162,17 +161,41 @@ const OverviewFlow = () => {
       position,
       data: { heading: name, img: img },
     };
-    console.log(newNode, "newNode");
+    // console.log(newNode, "newNode");
 
     setNodes((es) => es.concat(newNode));
     setSelectedNode((newNode.a = name));
-    setNewNodes(newNode)
+    setNewNodes(newNode);
     // saveNewNodes(newNodes)
-    saveNewNodes(newNode);
+
+    // saveNodeToDatabase(newNode);
   };
-  console.log(newNodes,"new node darg");
 
+  // console.log(newNodes,"new node darg");
+  const saveNodeToDatabase = () => {
+    console.log(edges, "jjj");
+    const data = {
+      job_id: "1",
+      // params: {
+      //   position_X: newNode.position.x,
+      //   position_Y: newNode.position.y,
+      // },
+      step_type_id: 1,
+      step_name: nodes.name,
+      ok_step: edges.label === "ok" ? edges.target : null,
+      error_step: edges.label === "error" ? edges.target : null,
+      type: "node",
+    };
+    console.log(data, "data");
 
+    axios.postWithCallback("job-steps", data);
+    // .then((response) => {
+    //   console.log("Node saved successfully:", response.data);
+    // })
+    // .catch((error) => {
+    //   console.error("Error saving node:", error);
+    // });
+  };
 
   const onNodeDragStop = (event, node) => {
     const updatedNodes = nodes.map((n) => {
@@ -187,7 +210,7 @@ const OverviewFlow = () => {
 
     setNodes(updatedNodes);
     setDraggedNodeInfo({ id: node.id, position: node.position });
-    console.log(node.position);
+    // console.log(node.position);
     // saveNodePosition(node.id, node.position);
   };
 
@@ -199,13 +222,13 @@ const OverviewFlow = () => {
       },
     };
 
-    axios.putWithCallback(`job-steps/${nodeId}/update/`, data)
-      .then((response) => {
-        console.log("Node position updated successfully:", response.data);
-      })
-      .catch((error) => {
-        console.error("Error updating node position:", error);
-      });
+    axios.putWithCallback(`job-steps/${nodeId}/update/`, data);
+    // .then((response) => {
+    //   // console.log("Node position updated successfully:", response.data);
+    // })
+    // .catch((error) => {
+    //   console.error("Error updating node position:", error);
+    // });
   };
 
   const onConnect = useCallback(
@@ -239,39 +262,11 @@ const OverviewFlow = () => {
       };
 
       setEdges((eds) => addEdge(newEdge, eds));
-      setNewNodes(newEdge)
-      
+      setNewNodes(newEdge);
+      console.log(edges);
     },
     [setEdges]
   );
-
-  const saveNewNodes = (newNode) => {
-    const newNodeData = {
-      type: "node",
-      // job_id:newNodes.job_id,
-      step_name: newNode.name,
-        
-      params: {
-           position_X: newNode.x,
-            position_Y: newNode.y,
-          },
-      source: newNode.id,
-      ok_step:  newNode.ok_step,
-      error_step: newNode.error_step,
-    } 
-    console.log(newNodeData,"newnodedata");
-
-    axios.postWithCallback("job-steps/", newNodeData)
-      .then((response) => {
-        console.log("New node saved successfully:", response.data);
-      })
-      .catch((error) => {
-        console.error("Error saving new node:", error);
-      });
-  };
-    
-
-
 
   const [nodeName, setNodeName] = useState("Node 1");
   // console.log(nodes,"llll")
@@ -317,10 +312,10 @@ const OverviewFlow = () => {
   const saveHandler = () => {
     if (isAllNodeisConnected(nodes, edges)) {
       alert("Congrats its correct");
-      saveNewNodes(newNodes)
-      nodes.forEach((node) => {
-        saveNodePosition(node.id, node.position);
-      });
+      saveNodeToDatabase();
+      // nodes.forEach((node) => {
+      //   saveNodePosition(node.id, node.position);
+      // });
     } else {
       alert("Please connect source nodes (Cannot Save Flow)");
     }
