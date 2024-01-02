@@ -2,22 +2,23 @@ import React, { useCallback, useEffect, useState, useRef } from "react";
 import ReactFlow, {
   addEdge,
   Background,
-  useNodesState,
-  useEdgesState,
+  Controls,
+  // useNodesState,
+  // useEdgesState,
   ReactFlowProvider,
   updateEdge,
-  MarkerType,
+  useNodeId,
 } from "reactflow";
 
 // Components
-import Sidebar from "./sidebar/sidebar";
+// import Sidebar from "./sidebar/sidebar";
 import Node from "./custom-node/message-node";
-
+import { MarkerType } from "reactflow";
 // Utils
 import { isAllNodeisConnected } from "../utils";
 // import {
-//   nodes as initialNodes,
-//   edges as initialEdges,
+//   // nodes as initialNodes,
+//   // edges as initialEdges,
 // } from "../initial-element";
 
 // Styles
@@ -25,14 +26,15 @@ import "reactflow/dist/style.css";
 import "./dnd.css";
 import "./update-node.css";
 
-import { Class, Key, Source } from "@mui/icons-material";
-import { data } from "jquery";
-import AddFile from "../../../masters/popup/add-file";
+// import { Class, Key, Source } from "@mui/icons-material";
+// import { data } from "jquery";
+// import AddFile from "../../../masters/popup/add-file";
 import Modal from "../../../components/modal-popup";
-import { ClassNames } from "@emotion/react";
-import StepParameter from "../../../masters/popup/step-parameter";
+// import { ClassNames } from "@emotion/react";
+import Job from "../../../masters/job";
 import axios from "../../../services/axios";
-import { post } from "jquery";
+import { event, post } from "jquery";
+import StepParameter from "../../../masters/popup/step-parameter";
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
@@ -41,21 +43,28 @@ const nodeTypes = { node: Node };
 
 const OverviewFlow = () => {
   const [showNodeMaster, setShowNodeMaster] = useState(false);
+
   const reactFlowWrapper = useRef(null);
   const edgeUpdateSuccessful = useRef(true);
   const textRef = useRef(null);
   const modalRef = useRef(null);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
-  const [nodes, setNodes, ] = useNodesState();
-  const [edges, setEdges, ] = useEdgesState();
+  // const [node, setNode] = useState([]);
+  const [nodes, setNodes, onNodesChange] = useState([]);
+  const [edges, setEdges, onEdgesChange] = useState([]);
+  // const [edge, setEdge] = useState([]);
   const [selectedNode, setSelectedNode] = useState(null);
   const [isSelected, setIsSelected] = useState(false);
-  const [stepId, setStepId] = useState([]);
+  const [id, setId] = useState();
   const [draggedNodeInfo, setDraggedNodeInfo] = useState(null);
+
+  const [stepId, setStepId] = useState({ parameter: {} });
+
+
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
   useEffect(() => {
     axios.getWithCallback("job-steps/", (data) => {
-      console.log(data,"job-step Data");
+      // console.log(data, "job-step Data");
 
       const dataNodes = data.map((item) => ({
         id: "" + item.id,
@@ -63,12 +72,18 @@ const OverviewFlow = () => {
         data: {
           heading: item.step_name,
           img: `/assets/images/${item.stepType.img}.png`,
+          stepType: item.stepType, // Include stepType in the data object
         },
         position: {
           x: item.params.position_X,
           y: item.params.position_Y,
         },
+        step_type_id: item.step_type_id
       }));
+
+      // const ids= data.map((ids)=>({
+      //   step_type_id:ids.step_type_id
+      // }))
 
       const dataEdgesok = data.map((item) => ({
         id: `e${item.id}-${item.ok_step}`,
@@ -87,7 +102,7 @@ const OverviewFlow = () => {
         target: "" + item.error_step,
         label: "error",
         type: "step",
-        sourceHandle: "error",   
+        sourceHandle: "error",
         markerEnd: { type: MarkerType.ArrowClosed },
         style: { stroke: getlabelColor("error") },
       }));
@@ -98,13 +113,16 @@ const OverviewFlow = () => {
       function getlabelColor(label) {
         return label === "ok" ? "green" : label === "error" ? "red" : "black";
       }
+      // const ids = data.map((item) => ({
+      //   step_type_id:item.step_type_id
+      // }));
+      // setId(ids)
+      // console.log(ids,"ddddd");
 
-      // console.log(dataEdgesok,"dataEdgesok")
-      console.log(dataEdgeserror, "dataEdgeserror");
+
     });
   }, []);
-
-
+  // console.log(id.step_type_id,"ddddd");
 
   // console.log(nodes,"nodes");
   // console.log(edges, "edges");
@@ -132,8 +150,6 @@ const OverviewFlow = () => {
     // const [showNodeMaster, setShowNodeMaster] = useState(false);
 
     // ... (other state variables and functions)
-
-
   };
 
   const onDrop = (event) => {
@@ -141,7 +157,7 @@ const OverviewFlow = () => {
     const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
 
     const type = event.dataTransfer.getData("application/reactflow");
-    const label = event.dataTransfer.getData("content");
+    // const label = event.dataTransfer.getData("content");
     const img = event.dataTransfer.getData("img");
     const name = event.dataTransfer.getData("name");
     console.log(reactFlowInstance, "reactIns");
@@ -150,10 +166,13 @@ const OverviewFlow = () => {
       y: event.clientY - reactFlowBounds.top,
     });
 
+    // console.log(type)
+    // console.log(label)
+    // console.log(name)
+
     const newNode = {
       id: getId(),
       name,
-      label,
       type,
       position,
       data: { heading: name, img: img },
@@ -175,7 +194,7 @@ const OverviewFlow = () => {
 
     setNodes(updatedNodes);
     setDraggedNodeInfo({ id: node.id, position: node.position });
-    console.log(node.position);
+    // console.log(node.position);
     // saveNodePosition(node.id, node.position);
   };
 
@@ -186,43 +205,27 @@ const OverviewFlow = () => {
         position_Y: newPosition.y,
       }
     };
-  
+
     axios.putWithCallback(`job-steps/${nodeId}/update/`, data)
       .then((response) => {
-        // Handle the response if needed
-        console.log("Node position updated successfully:", response.data);
+        // console.log("Node position updated successfully:", response.data);
       })
       .catch((error) => {
-        // Handle errors
-        console.error("Error updating node position:", error);
+        // console.error("Error updating node position:", error);
       });
-  };
-  
-
-// ...
-
-// ...
-
-
-
-  const onConnect = useCallback(
+  }; const onConnect = useCallback(
     (params) => {
       const { sourceHandle } = params;
 
       let label;
-      let backgroundColor;
-      let textColor;
+      let color;
 
       if (sourceHandle === "ok") {
         label = "ok";
-        backgroundColor = "green";
-        textColor = "white";
-      }
-
-      else {
+        color = "green";
+      } else {
         label = "error";
-        backgroundColor = "red";
-        textColor = "white";
+        color = "red";
       }
 
       const newEdge = {
@@ -231,12 +234,12 @@ const OverviewFlow = () => {
         type: params.type || "step",
         arrowHeadType: "arrowclosed",
         style: {
-          stroke: label === "error" ? "red" : label === "ok" ? "green" : "black",
-          backgroundColor,
-          color: textColor,
+          stroke: color,
+          backgroundColor: color,
+          color: "red",
           fontSize: "12px",
           padding: "4px",
-            borderRadius: "4px",
+          borderRadius: "4px",
         },
       };
 
@@ -246,10 +249,13 @@ const OverviewFlow = () => {
   );
 
   const [nodeName, setNodeName] = useState("Node 1");
+  // console.log(nodes,"llll")
 
   useEffect(() => {
     const node = nodes.filter((node) => {
+      // console.log(nodes,"nodes Data inside useEffect Filter")
       if (node.selected) return true;
+      // console.log(node,"inside node useEffect Filter")
       return false;
     });
     if (node[0]) {
@@ -260,12 +266,15 @@ const OverviewFlow = () => {
       setIsSelected(false);
     }
   }, [nodes]);
+
   useEffect(() => {
-    setNodeName(selectedNode?.data?.content || selectedNode);
+    setNodeName(selectedNode?.data?.heading || selectedNode);
   }, [selectedNode]);
+
   useEffect(() => {
     textRef?.current?.focus();
   }, [selectedNode]);
+
   useEffect(() => {
     setNodes((nds) =>
       nds.map((node) => {
@@ -283,7 +292,7 @@ const OverviewFlow = () => {
   const saveHandler = () => {
     if (isAllNodeisConnected(nodes, edges)) {
       alert("Congrats its correct");
-  
+
       nodes.forEach((node) => {
         saveNodePosition(node.id, node.position);
       });
@@ -291,7 +300,7 @@ const OverviewFlow = () => {
       alert("Please connect source nodes (Cannot Save Flow)");
     }
   };
-  
+
   const onEdgeUpdateStart = useCallback(() => {
     edgeUpdateSuccessful.current = false;
   }, []);
@@ -305,19 +314,19 @@ const OverviewFlow = () => {
     if (!edgeUpdateSuccessful.current) {
       setEdges((eds) => eds.filter((e) => e.id !== edge.id));
     }
-
     edgeUpdateSuccessful.current = true;
   }, []);
 
-
-  const onNodeDoubleClick = () => {
+  const onNodeDoubleClick = (event) => {
+    console.log(event);
     setShowNodeMaster(true);
+    
   };
   const handleCloseNodeMaster = () => {
     setShowNodeMaster(false);
-  }
+  };
   const nodeRef = useRef();
-  const closeModel   = () => {
+  const closeModel = () => {
     setShowNodeMaster(false);
   };
 
@@ -337,13 +346,44 @@ const OverviewFlow = () => {
     };
   }, [handleCloseNodeMaster, modalRef]);
 
-  useEffect(() => {
-    axios.getWithCallback('step-type-parameter/step-type/1', (data)=>setStepId(data))    // setId((stepId.parameter.id))
-
-}, []);
-// console.log(stepId.parameter.id,"step id data")
 
 
+  const [stepParameters, setStepParameters] = useState([]);
+
+
+
+  // useEffect(() => {
+  //   const fetchStepData = async () => {
+  //     const newStepParameters = [];
+
+  //     for (const node of nodes) {
+  //       try {
+  //         const response = await axios.get(`step-type-parameter/step-type/${node.step_type_id}`);
+  //         // console.log('Received data for node:', node.id, response.data);
+
+
+  //         newStepParameters.push(response.data.parameter.id);
+  //       } catch (error) {
+  //         // console.error('Error fetching data:', error);
+
+  //       }
+  //     }
+
+  //     // setStepParameters(node.step_type_id);
+  //   };
+
+  //   fetchStepData();
+  // }, [nodes]);
+
+
+//   console.log(stepParameters, "step parameter data");
+// const nodeId= useNodeId();
+
+const nodeId = (node)=>{
+  // console.log(node.id,"Node Id");
+  setId(node.step_type_id)
+}
+console.log(id,"id");
   return (
     <>
       <button onClick={saveHandler}>Save</button>
@@ -366,20 +406,23 @@ const OverviewFlow = () => {
               attributionPosition="top  -right"
               onNodeDoubleClick={onNodeDoubleClick}
               onEdgeDoubleClick={true}
+              onNodeDragStop={onNodeDragStop}
+             onNodeClick={(event,node)=> nodeId(node)}
             >
               <Background color="#aaa" gap={16} />
+              {/* <Controls /> */}
             </ReactFlow>
 
-                <Modal modalTitle={"Save/Update Parameter"} ref={modalRef} handleClose={handleCloseNodeMaster} show={showNodeMaster}>
-                  <StepParameter
-                  //  stepId={stepId.parameter.id}
-                   />
-                 </Modal>
-              
+            <Modal modalTitle={"Save/Update Parameter"} ref={modalRef} handleClose={handleCloseNodeMaster} show={showNodeMaster}>
+            <StepParameter
+                stepId={id}
+              />
+            </Modal>
+
           </div>
 
           {/* 
-          <Sidebar  
+          <Sidebar
             isSelected={isSelected}
             textRef={textRef}
             nodeName={nodeName}
@@ -391,6 +434,5 @@ const OverviewFlow = () => {
   );
 };
 
-
-
 export default OverviewFlow;
+
