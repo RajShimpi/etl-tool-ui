@@ -55,11 +55,12 @@ const OverviewFlow = () => {
   const [isSelected, setIsSelected] = useState(false);
   // const [id, setId] = useState();
   const [draggedNodeInfo, setDraggedNodeInfo] = useState(null);
+  const [newNodes, setNewNodes] = useState(null);
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
 
   useEffect(() => {
     axios.getWithCallback("job-steps/", (data) => {
-      console.log(data,"job-step Data");
+      console.log(data, "job-step Data");
 
       const dataNodes = data.map((item) => ({
         id: "" + item.id,
@@ -106,7 +107,6 @@ const OverviewFlow = () => {
       // console.log(dataEdgesok,"dataEdgesok")
       console.log(dataEdgeserror, "dataEdgeserror");
     });
-    
   }, []);
 
   // console.log(nodes,"nodes");
@@ -162,10 +162,17 @@ const OverviewFlow = () => {
       position,
       data: { heading: name, img: img },
     };
+    console.log(newNode, "newNode");
 
     setNodes((es) => es.concat(newNode));
     setSelectedNode((newNode.a = name));
+    setNewNodes(newNode)
+    // saveNewNodes(newNodes)
+    saveNewNodes(newNode);
   };
+  console.log(newNodes,"new node darg");
+
+
 
   const onNodeDragStop = (event, node) => {
     const updatedNodes = nodes.map((n) => {
@@ -189,9 +196,9 @@ const OverviewFlow = () => {
       params: {
         position_X: newPosition.x,
         position_Y: newPosition.y,
-      }
+      },
     };
-  
+
     axios.putWithCallback(`job-steps/${nodeId}/update/`, data)
       .then((response) => {
         console.log("Node position updated successfully:", response.data);
@@ -232,9 +239,39 @@ const OverviewFlow = () => {
       };
 
       setEdges((eds) => addEdge(newEdge, eds));
+      setNewNodes(newEdge)
+      
     },
     [setEdges]
   );
+
+  const saveNewNodes = (newNode) => {
+    const newNodeData = {
+      type: "node",
+      // job_id:newNodes.job_id,
+      step_name: newNode.name,
+        
+      params: {
+           position_X: newNode.x,
+            position_Y: newNode.y,
+          },
+      source: newNode.id,
+      ok_step:  newNode.ok_step,
+      error_step: newNode.error_step,
+    } 
+    console.log(newNodeData,"newnodedata");
+
+    axios.postWithCallback("job-steps/", newNodeData)
+      .then((response) => {
+        console.log("New node saved successfully:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error saving new node:", error);
+      });
+  };
+    
+
+
 
   const [nodeName, setNodeName] = useState("Node 1");
   // console.log(nodes,"llll")
@@ -254,7 +291,7 @@ const OverviewFlow = () => {
       setIsSelected(false);
     }
   }, [nodes]);
-  
+
   useEffect(() => {
     setNodeName(selectedNode?.data?.heading || selectedNode);
   }, [selectedNode]);
@@ -280,7 +317,7 @@ const OverviewFlow = () => {
   const saveHandler = () => {
     if (isAllNodeisConnected(nodes, edges)) {
       alert("Congrats its correct");
-  
+      saveNewNodes(newNodes)
       nodes.forEach((node) => {
         saveNodePosition(node.id, node.position);
       });
@@ -288,7 +325,7 @@ const OverviewFlow = () => {
       alert("Please connect source nodes (Cannot Save Flow)");
     }
   };
-  
+
   const onEdgeUpdateStart = useCallback(() => {
     edgeUpdateSuccessful.current = false;
   }, []);
@@ -335,6 +372,10 @@ const OverviewFlow = () => {
     };
   }, [handleCloseNodeMaster, modalRef]);
 
+  // const handleNodeClick = (node) => {
+  //   console.log("Node clicked:", node.id);
+  // };
+
   return (
     <>
       <button onClick={saveHandler}>Save</button>
@@ -354,10 +395,11 @@ const OverviewFlow = () => {
               onEdgeUpdate={onEdgeUpdate}
               onEdgeUpdateStart={onEdgeUpdateStart}
               onEdgeUpdateEnd={onEdgeUpdateEnd}
-              attributionPosition="top  -right"
+              attributionPosition="top-right"
               onNodeDoubleClick={onNodeDoubleClick}
               onEdgeDoubleClick={true}
               onNodeDragStop={onNodeDragStop}
+              // onNodeClick={(event, node) => handleNodeClick(node)}
             >
               <Background color="#aaa" gap={16} />
               {/* <Controls /> */}
