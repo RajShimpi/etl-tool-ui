@@ -56,6 +56,7 @@ const OverviewFlow = () => {
   const [selectedNode, setSelectedNode] = useState(null);
   const [isSelected, setIsSelected] = useState(false);
   const [id, setId] = useState();
+  const [name,setName]=useState()
   const [draggedNodeInfo, setDraggedNodeInfo] = useState(null);
 
   const [stepId, setStepId] = useState({ parameter: {} });
@@ -318,7 +319,7 @@ const OverviewFlow = () => {
   }, []);
 
   const onNodeDoubleClick = (event) => {
-    console.log(event);
+    // console.log(event);
     setShowNodeMaster(true);
     
   };
@@ -350,8 +351,6 @@ const OverviewFlow = () => {
 
   const [stepParameters, setStepParameters] = useState([]);
 
-
-
   // useEffect(() => {
   //   const fetchStepData = async () => {
   //     const newStepParameters = [];
@@ -380,10 +379,13 @@ const OverviewFlow = () => {
 // const nodeId= useNodeId();
 
 const nodeId = (node)=>{
-  // console.log(node.id,"Node Id");
+  setName(node.data.heading,"Node Id");
   setId(node.step_type_id)
+
 }
-console.log(id,"id");
+
+// console.log(nodes[1]?.data?.heading, "id");
+
   return (
     <>
       <button onClick={saveHandler}>Save</button>
@@ -407,7 +409,7 @@ console.log(id,"id");
               onNodeDoubleClick={onNodeDoubleClick}
               onEdgeDoubleClick={true}
               onNodeDragStop={onNodeDragStop}
-             onNodeClick={(event,node)=> nodeId(node)}
+              onNodeClick={(event,node)=> nodeId(node)}
             >
               <Background color="#aaa" gap={16} />
               {/* <Controls /> */}
@@ -416,6 +418,7 @@ console.log(id,"id");
             <Modal modalTitle={"Save/Update Parameter"} ref={modalRef} handleClose={handleCloseNodeMaster} show={showNodeMaster}>
             <StepParameter
                 stepId={id}
+                name={name}
               />
             </Modal>
 

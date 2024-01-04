@@ -18,7 +18,9 @@ const Sidebar = ({ apiData }) => {
             style={{ margin: '5px', display:'flex'}}
             className="dndnode input m-10"
             onDragStart={(event) =>
-              onDragStart(event, "node", "Click to Edit message", item.img,item.name)
+              
+              onDragStart(event, "node", `/assets/images/${item.img}.png`,item.name)
+              
             }
             draggable
             key={item.id}
