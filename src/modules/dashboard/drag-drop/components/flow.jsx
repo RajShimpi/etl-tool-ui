@@ -35,7 +35,7 @@ import axios from "../../../services/axios";
 // import { post } from "jquery";
 
 let id = 0;
-const getId = () => `dndnode_${id++}`;
+const getId = () => `${id++}`;
 
 const nodeTypes = { node: Node };
 
@@ -50,12 +50,13 @@ const OverviewFlow = () => {
   // const [node, setNode] = useState([]);
   const [nodes, setNodes, onNodesChange] = useState([]);
   const [edges, setEdges, onEdgesChange] = useState([]);
-  // const [edge, setEdge] = useState([]);
+  const [edge, setEdge] = useState([]);
   const [selectedNode, setSelectedNode] = useState(null);
   const [isSelected, setIsSelected] = useState(false);
   // const [id, setId] = useState();
   const [draggedNodeInfo, setDraggedNodeInfo] = useState(null);
   const [newNodes, setNewNodes] = useState(null);
+  const [data, setData] = useState([]);
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
 
   useEffect(() => {
@@ -108,7 +109,7 @@ const OverviewFlow = () => {
     });
   }, []);
 
-  // console.log(nodes,"nodes");
+  console.log(nodes.id, "nodes");
   // console.log(edges, "edges");
 
   // useEffect(() => {
@@ -136,23 +137,20 @@ const OverviewFlow = () => {
     // ... (other state variables and functions)
   };
 
+  const [allNodes, setAllNodes] = useState([]);
+
   const onDrop = (event) => {
     event.preventDefault();
     const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
 
     const type = event.dataTransfer.getData("application/reactflow");
-    // const label = event.dataTransfer.getData("content");
     const img = event.dataTransfer.getData("img");
     const name = event.dataTransfer.getData("name");
-    // console.log(reactFlowInstance, "reactIns");
+
     const position = reactFlowInstance.project({
       x: event.clientX - reactFlowBounds.left,
       y: event.clientY - reactFlowBounds.top,
     });
-
-    // console.log(type)
-    // console.log(label)
-    // console.log(name)
 
     const newNode = {
       id: getId(),
@@ -161,41 +159,50 @@ const OverviewFlow = () => {
       position,
       data: { heading: name, img: img },
     };
-    // console.log(newNode, "newNode");
 
     setNodes((es) => es.concat(newNode));
     setSelectedNode((newNode.a = name));
-    setNewNodes(newNode);
-    // saveNewNodes(newNodes)
+    setNewNodes([newNode]);
 
-    // saveNodeToDatabase(newNode);
+    setAllNodes((prevNodes) => [...prevNodes, newNode]);
   };
 
   // console.log(newNodes,"new node darg");
-  const saveNodeToDatabase = () => {
-    console.log(edges, "jjj");
-    const data = {
-      job_id: "1",
-      // params: {
-      //   position_X: newNode.position.x,
-      //   position_Y: newNode.position.y,
-      // },
-      step_type_id: 1,
-      step_name: nodes.name,
-      ok_step: edges.label === "ok" ? edges.target : null,
-      error_step: edges.label === "error" ? edges.target : null,
-      type: "node",
-    };
-    console.log(data, "data");
 
-    axios.postWithCallback("job-steps", data);
-    // .then((response) => {
-    //   console.log("Node saved successfully:", response.data);
-    // })
-    // .catch((error) => {
-    //   console.error("Error saving node:", error);
-    // });
+  const saveNodeToDatabase = () => {
+    const dataFromNodes = newNodes.map((item) => ({
+      job_id: "1",
+      step_type_id: 1,
+      step_name: item.name,
+      type: "node",
+      params: {
+        position_X: item.position.x,
+        position_Y: item.position.y,
+      },
+    }));
+
+    const connectedEdges = [edge].filter((edge) => edge.sourceHandle);
+
+    const dataFromEdges = connectedEdges.map((item) => ({
+      ok_step: item.label === "ok" ? item.target : null,
+      error_step: item.label === "error" ? item.target : null,
+    }));
+
+    const combinedData = { ...dataFromNodes[0], ...dataFromEdges[0] };
+
+    axios.postWithCallback("job-steps", combinedData);
+    console.log("Data successfully posted to job-steps endpoint");
+    console.log(combinedData, "combinedData");
   };
+
+  const saveAllNodes = () => {
+    allNodes.forEach((node) => {
+      saveNodeToDatabase(node);
+    });
+    setAllNodes([]);
+  };
+
+  // console.log(data,"Full Data");
 
   const onNodeDragStop = (event, node) => {
     const updatedNodes = nodes.map((n) => {
@@ -212,6 +219,7 @@ const OverviewFlow = () => {
     setDraggedNodeInfo({ id: node.id, position: node.position });
     // console.log(node.position);
     // saveNodePosition(node.id, node.position);
+    // saveNodeToDatabase()
   };
 
   const saveNodePosition = (nodeId, newPosition) => {
@@ -221,8 +229,9 @@ const OverviewFlow = () => {
         position_Y: newPosition.y,
       },
     };
-
-    axios.putWithCallback(`job-steps/${nodeId}/update/`, data);
+    if (nodeId > 0) {
+      axios.putWithCallback(`job-steps/${nodeId}/update/`, data);
+    }
     // .then((response) => {
     //   // console.log("Node position updated successfully:", response.data);
     // })
@@ -262,14 +271,14 @@ const OverviewFlow = () => {
       };
 
       setEdges((eds) => addEdge(newEdge, eds));
-      setNewNodes(newEdge);
-      console.log(edges);
+      setEdge(newEdge);
+      // console.log(edge,"onConnect edges data");
     },
-    [setEdges]
+    [setEdges, setEdge]
   );
 
   const [nodeName, setNodeName] = useState("Node 1");
-  // console.log(nodes,"llll")
+  // console.log(nodes,"console line no 284")
 
   useEffect(() => {
     const node = nodes.filter((node) => {
@@ -312,10 +321,11 @@ const OverviewFlow = () => {
   const saveHandler = () => {
     if (isAllNodeisConnected(nodes, edges)) {
       alert("Congrats its correct");
-      saveNodeToDatabase();
-      // nodes.forEach((node) => {
-      //   saveNodePosition(node.id, node.position);
-      // });
+      saveAllNodes();
+
+      nodes.forEach((node) => {
+        saveNodePosition(node.id, node.position);
+      });
     } else {
       alert("Please connect source nodes (Cannot Save Flow)");
     }

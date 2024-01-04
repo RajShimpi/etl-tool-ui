@@ -5,7 +5,7 @@ export function isAllNodeisConnected(nodes, edges) {
   // const allSourceEdgesError = edges.map((edge) => edge.sourceHandle);
   let count = 0;
   for (let i = 0; i < allNodesIds.length; i++) {
-    if ( !allSourceEdges.includes(allNodesIds[i])) count++;
+    if (!allSourceEdges.includes(allNodesIds[i])) count++;
   }
   console.log(allNodesIds, allSourceEdges);
   if (count >= 2) {

@@ -16,7 +16,7 @@ const Sidebar = ({ apiData }) => {
         {apiData.map(item => (
           <div style={{ margin: '5px', display: 'flex' }} className="dndnode input m-10" onDragStart={(event) => onDragStart(event, "node", `/assets/images/${item.img}.png`, item.name)} draggable key={item.id}>
             <div style={{ marginTop: "-2px", padding: "7px" }}>
-              <img src={`/assets/images/${item.img}.png`} style={{ width: '20px', height: '20px' }} /></div>
+              <img src={`/assets/images/${item.img}.png`} style={{ width: '20px', height: '20px' }} alt='Image' /></div>
             <li>{item.name}</li>
           </div>
         ))}
