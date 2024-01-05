@@ -13,6 +13,7 @@ import CommonModel from '../../components/common-modal';
 const StepParameter = ({ stepId ,name}) => {
   // console.log(name,"name");
     const [parameter, setparameter] = useState([]);
+      const [editName, setEditName] = useState('');
     useEffect(() => {
       const fetchData = async () => {
         try {
@@ -30,11 +31,11 @@ const StepParameter = ({ stepId ,name}) => {
                   console.error(`Error fetching resource ${resource}:`, error);
                 }
               }
-              console.log(resource);
+              // console.log(resource);
             }));
             setparameter(data.parameters);
           });
-          console.log(response);
+          // console.log(response);
         } catch (error) {
           console.error('Error fetching data:', error);
         }
@@ -48,38 +49,44 @@ const StepParameter = ({ stepId ,name}) => {
   //   console.log(parameter, "parameter");
   // }, [parameter]);
 
-    let defaultObj = {type:'',name:'', img: '', group:'',parametres:''};
+    let defaultObj = {type: '', name: editName || '', img: '', group: '', parametres: '' };
     // console.log(parameter, "parameter");
-const getItemData = (itemData  ) => {
-  
-    let dt= [
-      {
-        col: 12,
-        callback: itemData.callback,
-        groups: !!parameter
-        ? parameter?.map((v) => {
-            return {
-              type: v.type.includes("text") ? "text" : v.type,
-              id: v.type+v.id,
-              label: v.description,
-              name: v.name,
-              control: v.type=="text" ? "input" : v.type,
-              options: v.options,
-              disabled: false,
-             
-              itemVal: itemData.values
-                ? itemData.values[v.name]
-                : "",
-              multiple: v.type === "select-react" ? true : "",
-            };
-          })
-        : [],
-    },
-    ];
-    // console.log(dt,"dt")
-    return dt
-  };
-  
+    const getItemData = (itemData) => {
+      let dt = [
+        {
+          col: 12,
+          callback: itemData.callback,
+          groups: !!parameter
+            ? parameter?.map((v) => {
+              return {
+                type: v.type.includes("text") ? "text" : v.type,
+                id: v.type + v.id,
+                label: v.description,
+                name: v.name,
+                control: v.type === "text" ? "input" : v.type,
+                options: v.options,
+                disabled: false,
+                itemVal: itemData.values ? itemData.values[v.name] : "",
+                multiple: v.type === "select-react" ? true : "",
+              };
+            })
+            : [],
+        },
+      ];
+    
+        const stepParameterFields = getstepparameterFields(itemData);
+        dt[0].groups = dt[0].groups.concat(stepParameterFields[0].groups);
+      
+        dt[0].groups.forEach((group) => {
+          group.name = editName; // Update the name field
+        });
+      
+        // ...
+      
+        return dt;
+      
+      };
+    
 
   // const renderList = () => {
   //   return parameter.map((item) => {
@@ -114,6 +121,17 @@ const getItemData = (itemData  ) => {
 
     return (
         <>
+ {/* <input
+  type="text"
+  value={name}
+  onChange={(e) => {
+    setEditName(e.target.value);
+    console.log('Updated editName:', e.target.value);
+  }}
+
+  
+  placeholder="Edit Name"
+/> */}
           <CommonModel
                 formDataAction={getItemData}
                 columns={config.STEP_PARAMETER}
@@ -123,10 +141,8 @@ const getItemData = (itemData  ) => {
                 title= {name}
                 defaultObj={defaultObj}
                 options={[]}
-                tableTitle='step-parameter'
-                            
-            />
-              {/* {renderList()} */}
+                tableTitle='step-parameter'                        
+            />           
         </>
 
     );
