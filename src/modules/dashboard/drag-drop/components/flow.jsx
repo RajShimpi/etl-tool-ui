@@ -68,27 +68,27 @@ const OverviewFlow = () => {
       }));
 
       const dataEdgesok = data.map((item) => ({
-        id: ""+item.id,
-        source: "" + item.id,
-        target: "" + item.ok_step,
+        id: `${item.id}_ok`, // Append '_ok' to distinguish it as an 'ok' edge
+        source: `${item.id}`,
+        target: `${item.ok_step}`,
         label: "ok",
         type: "step",
         sourceHandle: "ok",
         markerEnd: { type: MarkerType.ArrowClosed },
         style: { stroke: getlabelColor("ok") },
       }));
-
+      
       const dataEdgeserror = data.map((item) => ({
-        id: ""+item.id,
-        source: "" + item.id,
-        target: "" + item.error_step,
+        id: `${item.id}_error`, // Append '_error' to distinguish it as an 'error' edge
+        source: `${item.id}`,
+        target: `${item.error_step}`,
         label: "error",
         type: "step",
         sourceHandle: "error",
         markerEnd: { type: MarkerType.ArrowClosed },
         style: { stroke: getlabelColor("error") },
       }));
-
+      
       setNodes(dataNodes);
       setEdges([...dataEdgesok, ...dataEdgeserror]);
 
@@ -247,7 +247,7 @@ console.log(dataFromEdges,"dataedges");
 
       setEdges((eds) => addEdge(newEdge, eds));
       setEdge(newEdge);
-      console.log(edge,"onConnect edges data");
+      console.log(edges,"onConnect edges data");
     },
     [setEdges, setEdge]
   );
