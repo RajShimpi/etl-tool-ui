@@ -16,18 +16,15 @@ import { MarkerType } from "reactflow";
 // Utils
 import { isAllNodeisConnected } from "../utils";
 
-
 // Styles
 import "reactflow/dist/style.css";
 import "./dnd.css";
 import "./update-node.css";
 
-
 import Modal from "../../../components/modal-popup";
 
 import Job from "../../../masters/job";
 import axios from "../../../services/axios";
-
 
 const nodeTypes = { node: Node };
 
@@ -53,7 +50,6 @@ const OverviewFlow = () => {
 
   useEffect(() => {
     axios.getWithCallback("job-steps/", (data) => {
-
       const dataNodes = data.map((item) => ({
         id: "" + item.id,
         type: "node",
@@ -68,7 +64,7 @@ const OverviewFlow = () => {
       }));
 
       const dataEdgesok = data.map((item) => ({
-        id: ""+item.id,
+        id: "" + item.id,
         source: "" + item.id,
         target: "" + item.ok_step,
         label: "ok",
@@ -79,7 +75,7 @@ const OverviewFlow = () => {
       }));
 
       const dataEdgeserror = data.map((item) => ({
-        id: ""+item.id,
+        id: "" + item.id,
         source: "" + item.id,
         target: "" + item.error_step,
         label: "error",
@@ -95,12 +91,9 @@ const OverviewFlow = () => {
       function getlabelColor(label) {
         return label === "ok" ? "green" : label === "error" ? "red" : "black";
       }
-      
-      
     });
-    
   }, []);
-console.log(edges,"egessssS");
+  console.log(edges, "egessssS");
 
   const onDragOver = (event) => {
     event.preventDefault();
@@ -112,7 +105,7 @@ console.log(edges,"egessssS");
   };
 
   const [allNodes, setAllNodes] = useState([]);
-  
+
   const onDrop = (event) => {
     event.preventDefault();
     const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
@@ -126,19 +119,21 @@ console.log(edges,"egessssS");
       y: event.clientY - reactFlowBounds.top,
     });
 
+    const currentId = Math.max(
+      ...nodes.map((node) => parseInt(node.id, 10)),
+      0
+    );
+    const nextId = currentId + 1;
 
-  const currentId = Math.max(...nodes.map(node => parseInt(node.id, 10)), 0);
-  const nextId = currentId + 1;
+    const newNode = {
+      id: `${nextId}`,
+      name,
+      type,
+      position,
+      data: { heading: name, img: img },
+    };
 
-  const newNode = {
-    id: `${nextId}`,
-    name,
-    type,
-    position,
-    data: { heading: name, img: img },
-  };
-    
-console.log(nextId,"new id")
+    console.log(nextId, "new id");
     setNodes((es) => es.concat(newNode));
     setSelectedNode((newNode.a = name));
     // setNewNodes([newNode]);
@@ -147,44 +142,50 @@ console.log(nextId,"new id")
     // saveNodeToDatabase([...allNodes, newNode]);
   };
 
-  console.log(allNodes,"new node darg");
+  console.log(allNodes, "new node darg");
 
-  const saveNodeToDatabase = () => {
-    const dataFromNodes = allNodes.map((item) => ({
-      job_id: "1",
-      step_type_id: 1,
-      step_name: item.name,
-      type: "node",
-      params: {
-        position_X: item.position.x,
-        position_Y: item.position.y,
-      },
-    }));
+const saveNodeToDatabase = () => {
+  const dataFromNodes = allNodes.map((item) => ({
+    id: item.id,
+    job_id: 1,
+    step_type_id: 1,
+    step_name: item.name,
+    type: "node",
+    params: {
+      position_X: item.position.x,
+      position_Y: item.position.y,
+    },
+  }));
 
-    const connectedEdges = [edge].filter((edge) => edge.sourceHandle);
-console.log(connectedEdges,"connntect edgegse");
-    const dataFromEdges = connectedEdges.map((item) => ({
-      ok_step: item.label === "ok" ? item.target : null,
-      error_step: item.label === "error" ? item.target : null,
-    }));
-console.log(dataFromNodes,"datanodes");
-console.log(dataFromEdges,"dataedges");
+  
+  const dataFromEdges = edges.map((item) => ({
+    id: item.source,
+    ok_step: item.label === "ok" ? item.target : null,
+    error_step: item.label === "error" ? item.target : null,
+  }));
+  
+  console.log(dataFromNodes, "data nodes");
+  console.log(dataFromEdges, "data edges");
 
-    const combinedData = { dataFromNodes, dataFromEdges }
+  // Combine data based on node id
+  const combinedData = dataFromNodes.map((node) => ({
+    ...node,
+    ...dataFromEdges.find((edge) => edge.id === node.id),
+  }));
 
-    setAllNodes([combinedData])
-    setAllNodes((prevNodesData) => [...prevNodesData, combinedData]);
-    axios.postWithCallback("job-steps", );
-    console.log("Data successfully posted to job-steps endpoint");
-    console.log(allNodes, "combinedData");
-  };
+  setAllNodes((prevNodesData) => [...prevNodesData, ...combinedData]);
+  
+  axios.postWithCallback("job-steps", combinedData);
+  console.log("Data successfully posted to job-steps endpoint");
+  console.log(allNodes, "combinedData");
+};
 
-  const saveAllNodes = () => {
-    allNodes.forEach((node) => {
-      saveNodeToDatabase(node);
-    });
-    setAllNodes([]);
-  };
+const saveAllNodes = () => {
+  allNodes.forEach((node) => {
+    saveNodeToDatabase(node);
+  });
+  setAllNodes([]);
+};
 
 
   const onNodeDragStop = (event, node) => {
@@ -200,7 +201,6 @@ console.log(dataFromEdges,"dataedges");
 
     setNodes(updatedNodes);
     setDraggedNodeInfo({ id: node.id, position: node.position });
-
   };
 
   const saveNodePosition = (nodeId, newPosition) => {
@@ -210,9 +210,8 @@ console.log(dataFromEdges,"dataedges");
         position_Y: newPosition.y,
       },
     };
-    
-      axios.putWithCallback(`job-steps/${nodeId}/update/`, data);
 
+    axios.putWithCallback(`job-steps/${nodeId}/update/`, data);
   };
 
   const onConnect = useCallback(
@@ -246,19 +245,18 @@ console.log(dataFromEdges,"dataedges");
       };
 
       setEdges((eds) => addEdge(newEdge, eds));
-      setEdge(newEdge);
-      console.log(edge,"onConnect edges data");
+
+      console.log(edges, "onConnect edges data");
     },
     [setEdges, setEdge]
   );
 
   const [nodeName, setNodeName] = useState("Node 1");
-  
+
   useEffect(() => {
     const node = nodes.filter((node) => {
-     
       if (node.selected) return true;
-   
+
       return false;
     });
     if (node[0]) {
@@ -373,7 +371,6 @@ console.log(dataFromEdges,"dataedges");
               onNodeDoubleClick={onNodeDoubleClick}
               onEdgeDoubleClick={true}
               onNodeDragStop={onNodeDragStop}
-
             >
               <Background color="#aaa" gap={16} />
               {/* <Controls /> */}
