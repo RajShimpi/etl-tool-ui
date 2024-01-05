@@ -15,27 +15,19 @@ import Node from "./custom-node/message-node";
 import { MarkerType } from "reactflow";
 // Utils
 import { isAllNodeisConnected } from "../utils";
-// import {
-//   // nodes as initialNodes,
-//   // edges as initialEdges,
-// } from "../initial-element";
+
 
 // Styles
 import "reactflow/dist/style.css";
 import "./dnd.css";
 import "./update-node.css";
 
-// import { Class, Key, Source } from "@mui/icons-material";
-// import { data } from "jquery";
-// import AddFile from "../../../masters/popup/add-file";
+
 import Modal from "../../../components/modal-popup";
-// import { ClassNames } from "@emotion/react";
+
 import Job from "../../../masters/job";
 import axios from "../../../services/axios";
-// import { post } from "jquery";
 
-let id = 0;
-const getId = () => `${id++}`;
 
 const nodeTypes = { node: Node };
 
@@ -53,7 +45,7 @@ const OverviewFlow = () => {
   const [edge, setEdge] = useState([]);
   const [selectedNode, setSelectedNode] = useState(null);
   const [isSelected, setIsSelected] = useState(false);
-  // const [id, setId] = useState();
+  // const [currentId, setCurrentId] = useState(0);
   const [draggedNodeInfo, setDraggedNodeInfo] = useState(null);
   const [newNodes, setNewNodes] = useState(null);
   const [data, setData] = useState([]);
@@ -61,7 +53,6 @@ const OverviewFlow = () => {
 
   useEffect(() => {
     axios.getWithCallback("job-steps/", (data) => {
-      // console.log(data, "job-step Data");
 
       const dataNodes = data.map((item) => ({
         id: "" + item.id,
@@ -77,7 +68,7 @@ const OverviewFlow = () => {
       }));
 
       const dataEdgesok = data.map((item) => ({
-        id: `e${item.id}-${item.ok_step}`,
+        id: ""+item.id,
         source: "" + item.id,
         target: "" + item.ok_step,
         label: "ok",
@@ -88,7 +79,7 @@ const OverviewFlow = () => {
       }));
 
       const dataEdgeserror = data.map((item) => ({
-        id: `e${item.id}-${item.error_step}`,
+        id: ""+item.id,
         source: "" + item.id,
         target: "" + item.error_step,
         label: "error",
@@ -104,29 +95,12 @@ const OverviewFlow = () => {
       function getlabelColor(label) {
         return label === "ok" ? "green" : label === "error" ? "red" : "black";
       }
-
-      // console.log(dataEdgesok,"dataEdgesok")
+      
+      
     });
+    
   }, []);
-
-  console.log(nodes.id, "nodes");
-  // console.log(edges, "edges");
-
-  // useEffect(() => {
-  //   axios.getWithCallback('edges/',(data)=>{
-  //       const formattedData = data.map((item) => ({
-  //         // id: `e${item.source_ok}-${item.target}`,
-  //         source_ok: item.source_ok,
-  //         source_error: item.source_error,
-  //         target: item.target,
-  //         type: item.type,
-  //         label: item.label,
-  //       }));
-
-  //       console.log(formattedData);
-  //       setEdge(formattedData);
-  //     })
-  // }, []);
+console.log(edges,"egessssS");
 
   const onDragOver = (event) => {
     event.preventDefault();
@@ -138,7 +112,7 @@ const OverviewFlow = () => {
   };
 
   const [allNodes, setAllNodes] = useState([]);
-
+  
   const onDrop = (event) => {
     event.preventDefault();
     const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
@@ -152,25 +126,31 @@ const OverviewFlow = () => {
       y: event.clientY - reactFlowBounds.top,
     });
 
-    const newNode = {
-      id: getId(),
-      name,
-      type,
-      position,
-      data: { heading: name, img: img },
-    };
 
+  const currentId = Math.max(...nodes.map(node => parseInt(node.id, 10)), 0);
+  const nextId = currentId + 1;
+
+  const newNode = {
+    id: `${nextId}`,
+    name,
+    type,
+    position,
+    data: { heading: name, img: img },
+  };
+    
+console.log(nextId,"new id")
     setNodes((es) => es.concat(newNode));
     setSelectedNode((newNode.a = name));
-    setNewNodes([newNode]);
+    // setNewNodes([newNode]);
 
     setAllNodes((prevNodes) => [...prevNodes, newNode]);
+    // saveNodeToDatabase([...allNodes, newNode]);
   };
 
-  // console.log(newNodes,"new node darg");
+  console.log(allNodes,"new node darg");
 
   const saveNodeToDatabase = () => {
-    const dataFromNodes = newNodes.map((item) => ({
+    const dataFromNodes = allNodes.map((item) => ({
       job_id: "1",
       step_type_id: 1,
       step_name: item.name,
@@ -182,17 +162,21 @@ const OverviewFlow = () => {
     }));
 
     const connectedEdges = [edge].filter((edge) => edge.sourceHandle);
-
+console.log(connectedEdges,"connntect edgegse");
     const dataFromEdges = connectedEdges.map((item) => ({
       ok_step: item.label === "ok" ? item.target : null,
       error_step: item.label === "error" ? item.target : null,
     }));
+console.log(dataFromNodes,"datanodes");
+console.log(dataFromEdges,"dataedges");
 
-    const combinedData = { ...dataFromNodes[0], ...dataFromEdges[0] };
+    const combinedData = { dataFromNodes, dataFromEdges }
 
-    axios.postWithCallback("job-steps", combinedData);
+    setAllNodes([combinedData])
+    setAllNodes((prevNodesData) => [...prevNodesData, combinedData]);
+    axios.postWithCallback("job-steps", );
     console.log("Data successfully posted to job-steps endpoint");
-    console.log(combinedData, "combinedData");
+    console.log(allNodes, "combinedData");
   };
 
   const saveAllNodes = () => {
@@ -202,7 +186,6 @@ const OverviewFlow = () => {
     setAllNodes([]);
   };
 
-  // console.log(data,"Full Data");
 
   const onNodeDragStop = (event, node) => {
     const updatedNodes = nodes.map((n) => {
@@ -217,9 +200,7 @@ const OverviewFlow = () => {
 
     setNodes(updatedNodes);
     setDraggedNodeInfo({ id: node.id, position: node.position });
-    // console.log(node.position);
-    // saveNodePosition(node.id, node.position);
-    // saveNodeToDatabase()
+
   };
 
   const saveNodePosition = (nodeId, newPosition) => {
@@ -229,15 +210,9 @@ const OverviewFlow = () => {
         position_Y: newPosition.y,
       },
     };
-    if (nodeId > 0) {
+    
       axios.putWithCallback(`job-steps/${nodeId}/update/`, data);
-    }
-    // .then((response) => {
-    //   // console.log("Node position updated successfully:", response.data);
-    // })
-    // .catch((error) => {
-    //   console.error("Error updating node position:", error);
-    // });
+
   };
 
   const onConnect = useCallback(
@@ -272,19 +247,18 @@ const OverviewFlow = () => {
 
       setEdges((eds) => addEdge(newEdge, eds));
       setEdge(newEdge);
-      // console.log(edge,"onConnect edges data");
+      console.log(edge,"onConnect edges data");
     },
     [setEdges, setEdge]
   );
 
   const [nodeName, setNodeName] = useState("Node 1");
-  // console.log(nodes,"console line no 284")
-
+  
   useEffect(() => {
     const node = nodes.filter((node) => {
-      // console.log(nodes,"nodes Data inside useEffect Filter")
+     
       if (node.selected) return true;
-      // console.log(node,"inside node useEffect Filter")
+   
       return false;
     });
     if (node[0]) {
@@ -322,7 +296,6 @@ const OverviewFlow = () => {
     if (isAllNodeisConnected(nodes, edges)) {
       alert("Congrats its correct");
       saveAllNodes();
-
       nodes.forEach((node) => {
         saveNodePosition(node.id, node.position);
       });
@@ -377,10 +350,6 @@ const OverviewFlow = () => {
     };
   }, [handleCloseNodeMaster, modalRef]);
 
-  // const handleNodeClick = (node) => {
-  //   console.log("Node clicked:", node.id);
-  // };
-
   return (
     <>
       <button onClick={saveHandler}>Save</button>
@@ -404,7 +373,7 @@ const OverviewFlow = () => {
               onNodeDoubleClick={onNodeDoubleClick}
               onEdgeDoubleClick={true}
               onNodeDragStop={onNodeDragStop}
-              // onNodeClick={(event, node) => handleNodeClick(node)}
+
             >
               <Background color="#aaa" gap={16} />
               {/* <Controls /> */}
@@ -419,14 +388,6 @@ const OverviewFlow = () => {
               <Job />
             </Modal>
           </div>
-
-          {/* 
-          <Sidebar
-            isSelected={isSelected}
-            textRef={textRef}
-            nodeName={nodeName}
-            setNodeName={setNodeName}
-          /> */}
         </ReactFlowProvider>
       </div>
     </>

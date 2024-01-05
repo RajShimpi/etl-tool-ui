@@ -25,7 +25,7 @@ function ComponentTool({ textColor }) {
       }));
       setComponents(newComponents);
       data.forEach(item => {
-        console.log('ID:', item.id, 'Name:', item.name);
+        // console.log('ID:', item.id, 'Name:', item.name);
       });
 
     });
