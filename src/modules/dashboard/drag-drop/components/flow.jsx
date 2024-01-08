@@ -46,6 +46,7 @@ const OverviewFlow = () => {
   const [draggedNodeInfo, setDraggedNodeInfo] = useState(null);
   const [newNodes, setNewNodes] = useState(null);
   const [data, setData] = useState([]);
+  const [allNodes, setAllNodes] = useState([]);
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
 
   useEffect(() => {
@@ -62,6 +63,7 @@ const OverviewFlow = () => {
           y: item.params.position_Y,
         },
       }));
+      // console.log(dataNodes,"datanodes");
 
       const dataEdgesok = data.map((item) => ({
         id: "" + item.id,
@@ -87,13 +89,13 @@ const OverviewFlow = () => {
 
       setNodes(dataNodes);
       setEdges([...dataEdgesok, ...dataEdgeserror]);
-
+      setAllNodes([...dataNodes, ...dataEdgesok, ...dataEdgeserror]);
       function getlabelColor(label) {
         return label === "ok" ? "green" : label === "error" ? "red" : "black";
       }
     });
   }, []);
-  console.log(edges, "egessssS");
+  // console.log(allNodes[0].data.heading, "all data nodes");
 
   const onDragOver = (event) => {
     event.preventDefault();
@@ -104,8 +106,6 @@ const OverviewFlow = () => {
     // ... (other state variables and functions)
   };
 
-  const [allNodes, setAllNodes] = useState([]);
-
   const onDrop = (event) => {
     event.preventDefault();
     const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
@@ -113,27 +113,26 @@ const OverviewFlow = () => {
     const type = event.dataTransfer.getData("application/reactflow");
     const img = event.dataTransfer.getData("img");
     const name = event.dataTransfer.getData("name");
+    const step_type_id = event.dataTransfer.getData("id");
 
     const position = reactFlowInstance.project({
       x: event.clientX - reactFlowBounds.left,
       y: event.clientY - reactFlowBounds.top,
     });
-
-    const currentId = Math.max(
-      ...nodes.map((node) => parseInt(node.id, 10)),
-      0
-    );
+    console.log(step_type_id, "drop");
+    const currentId = Math.max(...nodes.map((node) => parseInt(node.id, 10)));
     const nextId = currentId + 1;
 
     const newNode = {
       id: `${nextId}`,
+      step_type_id,
       name,
       type,
       position,
       data: { heading: name, img: img },
     };
 
-    console.log(nextId, "new id");
+    // console.log(nextId, "new id");
     setNodes((es) => es.concat(newNode));
     setSelectedNode((newNode.a = name));
     // setNewNodes([newNode]);
@@ -142,51 +141,55 @@ const OverviewFlow = () => {
     // saveNodeToDatabase([...allNodes, newNode]);
   };
 
-  console.log(allNodes, "new node darg");
+  // console.log(allNodes,"allnodes");
+  const saveNodeToDatabase = () => {
+    console.log(allNodes, "allnodes");
+    const dataFromNodes = allNodes.map((item) => ({
+      id: item.id,
+      job_id: "1",
+      step_type_id: item.step_type_id,
+      step_name: item.data?.heading || item.name,
+      type: "node",
+      params: {
+        position_X: item.position?.x,
+        position_Y: item.position?.y,
+      },
+    }));
 
-const saveNodeToDatabase = () => {
-  const dataFromNodes = allNodes.map((item) => ({
-    id: item.id,
-    job_id: 1,
-    step_type_id: 1,
-    step_name: item.name,
-    type: "node",
-    params: {
-      position_X: item.position.x,
-      position_Y: item.position.y,
-    },
-  }));
+    const dataFromEdgesOk = edges.map((item) => ({
+      id: item.source,
+      ok_step: item.sourceHandle === "ok" ? item.target : null,
+    }));
 
-  
-  const dataFromEdges = edges.map((item) => ({
-    id: item.source,
-    ok_step: item.label === "ok" ? item.target : null,
-    error_step: item.label === "error" ? item.target : null,
-  }));
-  
-  console.log(dataFromNodes, "data nodes");
-  console.log(dataFromEdges, "data edges");
+    const dataFromEdgesError = edges.map((item) => ({
+      id: item.source,
+      error_step: item.sourceHandle === "error" ? item.target : null,
+    }));
 
-  // Combine data based on node id
-  const combinedData = dataFromNodes.map((node) => ({
-    ...node,
-    ...dataFromEdges.find((edge) => edge.id === node.id),
-  }));
+    const combinedData = dataFromNodes.map((node) => ({
+      ...node,
+      ...dataFromEdgesOk.find((edgeOk) => edgeOk.id === node.id),
+    }));
 
-  setAllNodes((prevNodesData) => [...prevNodesData, ...combinedData]);
-  
-  axios.postWithCallback("job-steps", combinedData);
-  console.log("Data successfully posted to job-steps endpoint");
-  console.log(allNodes, "combinedData");
-};
+    const combinedDatas = combinedData.map((node) => ({
+      ...node,
+      ...dataFromEdgesError.find((edgeError) => edgeError.id === node.id),
+    }));
 
-const saveAllNodes = () => {
-  allNodes.forEach((node) => {
-    saveNodeToDatabase(node);
-  });
-  setAllNodes([]);
-};
+    // setData(combinedData);
 
+    console.log("combinedData:", combinedData);
+
+    axios.postWithCallback("job-steps/data-save", combinedDatas);
+    // axios.putWithCallback("job-steps/", combinedData);
+    // setAllNodes([]);
+  };
+  // const saveAllNodes = () => {
+
+  //     saveNodeToDatabase();
+
+  //   // setAllNodes([]);
+  // };
 
   const onNodeDragStop = (event, node) => {
     const updatedNodes = nodes.map((n) => {
@@ -246,7 +249,7 @@ const saveAllNodes = () => {
 
       setEdges((eds) => addEdge(newEdge, eds));
 
-      console.log(edges, "onConnect edges data");
+      // console.log(edges, "onConnect edges data");
     },
     [setEdges, setEdge]
   );
@@ -293,7 +296,8 @@ const saveAllNodes = () => {
   const saveHandler = () => {
     if (isAllNodeisConnected(nodes, edges)) {
       alert("Congrats its correct");
-      saveAllNodes();
+      // saveAllNodes();
+      saveNodeToDatabase();
       nodes.forEach((node) => {
         saveNodePosition(node.id, node.position);
       });
