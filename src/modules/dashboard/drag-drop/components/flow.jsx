@@ -93,7 +93,7 @@ const OverviewFlow = () => {
       }
     });
   }, []);
-  console.log(edges, "egessssS");
+  // console.log(edges, "edges");
 
   const onDragOver = (event) => {
     event.preventDefault();
@@ -133,7 +133,7 @@ const OverviewFlow = () => {
       data: { heading: name, img: img },
     };
 
-    console.log(nextId, "new id");
+    // console.log(nextId, "new id");
     setNodes((es) => es.concat(newNode));
     setSelectedNode((newNode.a = name));
     // setNewNodes([newNode]);
@@ -142,7 +142,7 @@ const OverviewFlow = () => {
     // saveNodeToDatabase([...allNodes, newNode]);
   };
 
-  console.log(allNodes, "new node darg");
+  // console.log(allNodes, "new node darg");
 
 const saveNodeToDatabase = () => {
   const dataFromNodes = allNodes.map((item) => ({
@@ -164,8 +164,8 @@ const saveNodeToDatabase = () => {
     error_step: item.label === "error" ? item.target : null,
   }));
   
-  console.log(dataFromNodes, "data nodes");
-  console.log(dataFromEdges, "data edges");
+  // console.log(dataFromNodes, "data nodes");
+  // console.log(dataFromEdges, "data edges");
 
   // Combine data based on node id
   const combinedData = dataFromNodes.map((node) => ({
@@ -176,8 +176,8 @@ const saveNodeToDatabase = () => {
   setAllNodes((prevNodesData) => [...prevNodesData, ...combinedData]);
   
   axios.postWithCallback("job-steps", combinedData);
-  console.log("Data successfully posted to job-steps endpoint");
-  console.log(allNodes, "combinedData");
+  // console.log("Data successfully posted to job-steps endpoint");
+  // console.log(allNodes, "combinedData");
 };
 
 const saveAllNodes = () => {
@@ -246,7 +246,7 @@ const saveAllNodes = () => {
 
       setEdges((eds) => addEdge(newEdge, eds));
 
-      console.log(edges, "onConnect edges data");
+      // console.log(edges, "onConnect edges data");
     },
     [setEdges, setEdge]
   );
