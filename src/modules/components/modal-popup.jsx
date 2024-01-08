@@ -32,14 +32,14 @@ const Modal = (props) => {
         borderRadius: 'var(--bs-modal-border-radius)',
         outline: 0,
         color:'#00659e',
-        left: '114px',
+        // left: '114px',
       };
       
       
     return (
         <div className={props.show ? "modal d-block hide-body-scroll" : "modal d-none"} style={{ overflow: "auto", zIndex:'10000' }} tabIndex="-1" role="dialog">
             <div className={`modal-dialog modal-lg ${props.maxWidth && 'modal-top'} `} style={{ maxWidth: props.maxWidth, }} role="document">
-                <div className=" w-50  " style={modalContent}>
+                <div className="  " style={modalContent}>
                 <div className={`${props.maxWidth && 'modal-header-custom-padding'} modal-header`}>
                         <h6 className="modal-title">{props.modalTitle}</h6>
                         <button type="button" onClick={() => close()} className="btn btn-link close-btn" data-dismiss="modal" aria-label="Close">

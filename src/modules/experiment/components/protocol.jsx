@@ -305,7 +305,7 @@ const Protocol = (props) => {
 
     const checkIfImageExists = (item, callback) => {
         const img = new Image();
-        img.src = `/assets/images/${props.folder}/${item.symbol}`;
+        img.src = `/assets/images/${props.folder}/${item.img}`;
         
         if (img.complete) {
           callback(item.id, true);
@@ -349,10 +349,10 @@ const Protocol = (props) => {
                                 <div className="synthesis_protocol_icon">
                                     <ul>
                                         {templateSteps?.map((item, index) => (
-                                            <button key={item.id} className={"btn"} style={{ padding: '0px' }} onClick={() => addRow(item)} title={item.symbol}>
+                                            <button key={item.id} className={"btn"} style={{ padding: '0px' }} onClick={() => addRow(item)} title={item.img}>
                                            {/* {item.isLoaded ?  */}
-                                           <img key={'img' + item.id} className="img-fluid" alt={item.symbol} src={`/assets/images/${props.folder}/${item.symbol}`}></img> 
-                                               {/* : <span className="img-fluid"> {item.symbol}</span> } */}
+                                           <img key={'img' + item.id} className="img-fluid" alt={item.img} src={`/assets/images/${props.folder}/${item.img}`}></img> 
+                                               {/* : <span className="img-fluid"> {item.img}</span> } */}
                                             </button>
                                         ))}
                                     </ul>

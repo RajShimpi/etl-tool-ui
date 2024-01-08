@@ -53,7 +53,6 @@ export const TemplateSelect = ({ id, content, resourceName, unitName, callback, 
             setValue(itemVal);
         }
     }, [itemVal])
-
     return (<>
         {content}
         <select style={contentStyle} value={value} onChange={(e) => changeVal(e)} disabled={disable} className={experimentAccess === "VIEW" || experimentAccess === 'REVIEW' ? 'disabled-component-div' : ''}>
