@@ -25,6 +25,9 @@ import Modal from "../../../components/modal-popup";
 
 import Job from "../../../masters/job";
 import axios from "../../../services/axios";
+import { event, post } from "jquery";
+import StepParameter from "../../../masters/popup/step-parameter";
+
 
 const nodeTypes = { node: Node };
 
@@ -45,7 +48,12 @@ const OverviewFlow = () => {
   // const [currentId, setCurrentId] = useState(0);
   const [draggedNodeInfo, setDraggedNodeInfo] = useState(null);
   const [newNodes, setNewNodes] = useState(null);
+  const [editName,setName]=useState()
   const [data, setData] = useState([]);
+  const [id, setId] = useState([]);
+
+  const [stepId, setStepId] = useState({ parameter: {} });
+
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
 
   useEffect(() => {
@@ -113,7 +121,7 @@ const OverviewFlow = () => {
     const type = event.dataTransfer.getData("application/reactflow");
     const img = event.dataTransfer.getData("img");
     const name = event.dataTransfer.getData("name");
-
+    console.log(reactFlowInstance, "reactIns");
     const position = reactFlowInstance.project({
       x: event.clientX - reactFlowBounds.left,
       y: event.clientY - reactFlowBounds.top,
@@ -337,7 +345,7 @@ const saveAllNodes = () => {
       handleCloseNodeMaster();
     }
   };
-
+   
   useEffect(() => {
     const handleDocumentClick = (event) => handleClickOutside(event);
 
@@ -347,6 +355,12 @@ const saveAllNodes = () => {
       document.removeEventListener("mousedown", handleDocumentClick);
     };
   }, [handleCloseNodeMaster, modalRef]);
+  const [stepParameters, setStepParameters] = useState([]);
+  const nodeId = (node)=>{
+    setName(node.data.heading,"Node Id");
+    setId(node.step_type_id)
+
+  }
 
   return (
     <>
@@ -371,6 +385,7 @@ const saveAllNodes = () => {
               onNodeDoubleClick={onNodeDoubleClick}
               onEdgeDoubleClick={true}
               onNodeDragStop={onNodeDragStop}
+              onNodeClick={(event,node)=> nodeId(node)}
             >
               <Background color="#aaa" gap={16} />
               {/* <Controls /> */}
@@ -382,7 +397,11 @@ const saveAllNodes = () => {
               handleClose={handleCloseNodeMaster}
               show={showNodeMaster}
             >
-              <Job />
+             <StepParameter
+                  stepId={id}
+                  name={editName}
+                />
+
             </Modal>
           </div>
         </ReactFlowProvider>
