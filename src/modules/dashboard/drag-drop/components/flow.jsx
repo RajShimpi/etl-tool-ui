@@ -25,9 +25,6 @@ import Modal from "../../../components/modal-popup";
 
 import Job from "../../../masters/job";
 import axios from "../../../services/axios";
-import { event, post } from "jquery";
-import StepParameter from "../../../masters/popup/step-parameter";
-
 
 const nodeTypes = { node: Node };
 
@@ -48,12 +45,7 @@ const OverviewFlow = () => {
   // const [currentId, setCurrentId] = useState(0);
   const [draggedNodeInfo, setDraggedNodeInfo] = useState(null);
   const [newNodes, setNewNodes] = useState(null);
-  const [editName,setName]=useState()
   const [data, setData] = useState([]);
-  const [id, setId] = useState([]);
-
-  const [stepId, setStepId] = useState({ parameter: {} });
-
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
 
   useEffect(() => {
@@ -101,7 +93,7 @@ const OverviewFlow = () => {
       }
     });
   }, []);
-  // console.log(edges, "edges");
+  console.log(edges, "egessssS");
 
   const onDragOver = (event) => {
     event.preventDefault();
@@ -121,7 +113,7 @@ const OverviewFlow = () => {
     const type = event.dataTransfer.getData("application/reactflow");
     const img = event.dataTransfer.getData("img");
     const name = event.dataTransfer.getData("name");
-    console.log(reactFlowInstance, "reactIns");
+
     const position = reactFlowInstance.project({
       x: event.clientX - reactFlowBounds.left,
       y: event.clientY - reactFlowBounds.top,
@@ -141,7 +133,7 @@ const OverviewFlow = () => {
       data: { heading: name, img: img },
     };
 
-    // console.log(nextId, "new id");
+    console.log(nextId, "new id");
     setNodes((es) => es.concat(newNode));
     setSelectedNode((newNode.a = name));
     // setNewNodes([newNode]);
@@ -150,7 +142,7 @@ const OverviewFlow = () => {
     // saveNodeToDatabase([...allNodes, newNode]);
   };
 
-  // console.log(allNodes, "new node darg");
+  console.log(allNodes, "new node darg");
 
 const saveNodeToDatabase = () => {
   const dataFromNodes = allNodes.map((item) => ({
@@ -172,8 +164,8 @@ const saveNodeToDatabase = () => {
     error_step: item.label === "error" ? item.target : null,
   }));
   
-  // console.log(dataFromNodes, "data nodes");
-  // console.log(dataFromEdges, "data edges");
+  console.log(dataFromNodes, "data nodes");
+  console.log(dataFromEdges, "data edges");
 
   // Combine data based on node id
   const combinedData = dataFromNodes.map((node) => ({
@@ -184,8 +176,8 @@ const saveNodeToDatabase = () => {
   setAllNodes((prevNodesData) => [...prevNodesData, ...combinedData]);
   
   axios.postWithCallback("job-steps", combinedData);
-  // console.log("Data successfully posted to job-steps endpoint");
-  // console.log(allNodes, "combinedData");
+  console.log("Data successfully posted to job-steps endpoint");
+  console.log(allNodes, "combinedData");
 };
 
 const saveAllNodes = () => {
@@ -254,7 +246,7 @@ const saveAllNodes = () => {
 
       setEdges((eds) => addEdge(newEdge, eds));
 
-      // console.log(edges, "onConnect edges data");
+      console.log(edges, "onConnect edges data");
     },
     [setEdges, setEdge]
   );
@@ -345,7 +337,7 @@ const saveAllNodes = () => {
       handleCloseNodeMaster();
     }
   };
-   
+
   useEffect(() => {
     const handleDocumentClick = (event) => handleClickOutside(event);
 
@@ -355,12 +347,6 @@ const saveAllNodes = () => {
       document.removeEventListener("mousedown", handleDocumentClick);
     };
   }, [handleCloseNodeMaster, modalRef]);
-  const [stepParameters, setStepParameters] = useState([]);
-  const nodeId = (node)=>{
-    setName(node.data.heading,"Node Id");
-    setId(node.step_type_id)
-
-  }
 
   return (
     <>
@@ -385,7 +371,6 @@ const saveAllNodes = () => {
               onNodeDoubleClick={onNodeDoubleClick}
               onEdgeDoubleClick={true}
               onNodeDragStop={onNodeDragStop}
-              onNodeClick={(event,node)=> nodeId(node)}
             >
               <Background color="#aaa" gap={16} />
               {/* <Controls /> */}
@@ -397,11 +382,7 @@ const saveAllNodes = () => {
               handleClose={handleCloseNodeMaster}
               show={showNodeMaster}
             >
-             <StepParameter
-                  stepId={id}
-                  name={editName}
-                />
-
+              <Job />
             </Modal>
           </div>
         </ReactFlowProvider>

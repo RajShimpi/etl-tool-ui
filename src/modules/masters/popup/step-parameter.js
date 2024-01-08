@@ -12,7 +12,7 @@ import { getstepparameterFields } from './step-parameter-data';
 
 
 const StepParameter = ({ stepId ,name}) => {
-  // console.log(name,"name");
+  console.log(stepId,"name");
     const [parameter, setparameter] = useState([]);
       const [editName, setEditName] = useState('');
     useEffect(() => {
