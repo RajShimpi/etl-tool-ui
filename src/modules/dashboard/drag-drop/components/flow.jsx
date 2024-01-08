@@ -35,6 +35,7 @@
   import axios from "../../../services/axios";
   import { event, post } from "jquery";
   import StepParameter from "../../../masters/popup/step-parameter";
+import { getstepparameterFields } from "../../../masters/popup/step-paramter-data";
 
   let id = 0;
   const getId = () => `dndnode_${id++}`;
@@ -43,7 +44,19 @@
 
   const OverviewFlow = () => {
     const [showNodeMaster, setShowNodeMaster] = useState(false);
+    const handleParameterFields = (itemData) => {
+      const fields = getstepparameterFields(itemData, setName);
+      // Assuming the editName should be updated based on the parameter_name field
+      const parameterNameField = fields[0]?.groups[0]?.options;
+      if (parameterNameField) {
+        const updatedEditName = parameterNameField[0]?.value || ''; // Adjust this based on your data structure
+        setName(updatedEditName);
+      }
+      // You can handle other fields if needed
+    };
 
+    // const [editName, setEditName] = useState();
+    const [editName,setName]=useState()
     const reactFlowWrapper = useRef(null);
     const edgeUpdateSuccessful = useRef(true);
     const textRef = useRef(null);
@@ -56,7 +69,7 @@
     const [selectedNode, setSelectedNode] = useState(null);
     const [isSelected, setIsSelected] = useState(false);
     const [id, setId] = useState();
-    const [editName,setName]=useState()
+   
     const [draggedNodeInfo, setDraggedNodeInfo] = useState(null);
 
     const [stepId, setStepId] = useState({ parameter: {} });
@@ -385,7 +398,7 @@
   }
 
   // console.log(nodes[1]?.data?.heading, "id");
-
+console.log(editName,"handleParameterFieldsdata");
     return (
       <>
         <button onClick={saveHandler}>Save</button>
@@ -409,7 +422,7 @@
                 onNodeDoubleClick={onNodeDoubleClick}
                 onEdgeDoubleClick={true}
                 onNodeDragStop={onNodeDragStop}
-                onNodeClick={(event,node)=> nodeId(node)}
+                onNodeClick={(event, node) => nodeId(node)}
               >
                 <Background color="#aaa" gap={16} />
                 {/* <Controls /> */}
@@ -419,6 +432,7 @@
               <StepParameter
                   stepId={id}
                   name={editName}
+                  handleParameterFields={handleParameterFields}
                 />
               </Modal>
 
@@ -432,6 +446,7 @@
               setNodeName={setNodeName}
             /> */}
           </ReactFlowProvider>
+        
         </div>
       </>
     );

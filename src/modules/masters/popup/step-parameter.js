@@ -136,7 +136,7 @@ const StepParameter = ({ stepId ,name}) => {
                 formDataAction={getItemData}
                 columns={config.STEP_PARAMETER}
                 insertApi="step-type"
-                updateApi="step-type/parameter/get:id"
+                updateApi="step-type/:id/update"
                 getApi="step-type/parameter/get"
                 title= {name}
                 defaultObj={defaultObj}
