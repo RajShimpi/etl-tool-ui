@@ -322,6 +322,9 @@ const CommonModel = (props) => {
             setUpdate(true);
             setUpdate(false);
             setIsSubmit(false);
+            if(props.onClose) {
+              props.onClose();
+            }
             apiCall();
             e.target.classList.remove("was-validated");
             if (!!props.validationCallback) props.validationCallback(null);
