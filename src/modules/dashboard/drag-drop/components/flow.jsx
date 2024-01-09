@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState, useRef } from "react";
 import ReactFlow, {
   addEdge,
   Background,
-  Controls,
+  // Controls,
   // useNodesState,
   // useEdgesState,
   ReactFlowProvider,
@@ -39,13 +39,13 @@ const OverviewFlow = () => {
   // const [node, setNode] = useState([]);
   const [nodes, setNodes, onNodesChange] = useState([]);
   const [edges, setEdges, onEdgesChange] = useState([]);
-  const [edge, setEdge] = useState([]);
+  const [setEdge] = useState([]);
   const [selectedNode, setSelectedNode] = useState(null);
   const [isSelected, setIsSelected] = useState(false);
   // const [currentId, setCurrentId] = useState(0);
   const [draggedNodeInfo, setDraggedNodeInfo] = useState(null);
-  const [newNodes, setNewNodes] = useState(null);
-  const [data, setData] = useState([]);
+  // const [newNodes, setNewNodes] = useState(null);
+  const [position, setPosition] = useState([]);
   const [allNodes, setAllNodes] = useState([]);
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
 
@@ -53,6 +53,8 @@ const OverviewFlow = () => {
     axios.getWithCallback("job-steps/", (data) => {
       const dataNodes = data.map((item) => ({
         id: "" + item.id,
+        step_type_id: "" + item.step_type_id,
+        job_id: "" + item.job_id,
         type: "node",
         data: {
           heading: item.step_name,
@@ -63,7 +65,6 @@ const OverviewFlow = () => {
           y: item.params.position_Y,
         },
       }));
-      // console.log(dataNodes,"datanodes");
 
       const dataEdgesok = data.map((item) => ({
         id: "" + item.id,
@@ -89,13 +90,24 @@ const OverviewFlow = () => {
 
       setNodes(dataNodes);
       setEdges([...dataEdgesok, ...dataEdgeserror]);
-      setAllNodes([...dataNodes, ...dataEdgesok, ...dataEdgeserror]);
+
+      const combinedDataOk = dataNodes.map((node) => ({
+        ...node,
+        ...dataEdgesok.find((edgeOk) => edgeOk.id === node.id),
+      }));
+
+      const combinedData = combinedDataOk.map((node) => ({
+        ...node,
+        ...dataEdgeserror.find((edgeError) => edgeError.id === node.id),
+      }));
+
+      setAllNodes(combinedData);
       function getlabelColor(label) {
         return label === "ok" ? "green" : label === "error" ? "red" : "black";
       }
     });
+    // eslint-disable-next-line
   }, []);
-  // console.log(allNodes[0].data.heading, "all data nodes");
 
   const onDragOver = (event) => {
     event.preventDefault();
@@ -119,8 +131,8 @@ const OverviewFlow = () => {
       x: event.clientX - reactFlowBounds.left,
       y: event.clientY - reactFlowBounds.top,
     });
-    console.log(step_type_id, "drop");
-    const currentId = Math.max(...nodes.map((node) => parseInt(node.id, 10)));
+
+    const currentId = nodes.length;
     const nextId = currentId + 1;
 
     const newNode = {
@@ -132,38 +144,35 @@ const OverviewFlow = () => {
       data: { heading: name, img: img },
     };
 
-    // console.log(nextId, "new id");
     setNodes((es) => es.concat(newNode));
     setSelectedNode((newNode.a = name));
-    // setNewNodes([newNode]);
 
     setAllNodes((prevNodes) => [...prevNodes, newNode]);
-    // saveNodeToDatabase([...allNodes, newNode]);
   };
 
-  // console.log(allNodes,"allnodes");
   const saveNodeToDatabase = () => {
-    console.log(allNodes, "allnodes");
     const dataFromNodes = allNodes.map((item) => ({
       id: item.id,
-      job_id: "1",
-      step_type_id: item.step_type_id,
+      job_id: 1,
+      step_type_id: parseInt(item.step_type_id),
       step_name: item.data?.heading || item.name,
       type: "node",
       params: {
-        position_X: item.position?.x,
-        position_Y: item.position?.y,
+        position_X:
+          item.id === position.id ? position.position_X : item.position.x,
+        position_Y:
+          item.id === position.id ? position.position_Y : item.position.y,
       },
     }));
 
     const dataFromEdgesOk = edges.map((item) => ({
       id: item.source,
-      ok_step: item.sourceHandle === "ok" ? item.target : null,
+      ok_step: item.sourceHandle === "ok" ? parseInt(item.target) : null,
     }));
 
     const dataFromEdgesError = edges.map((item) => ({
       id: item.source,
-      error_step: item.sourceHandle === "error" ? item.target : null,
+      error_step: item.sourceHandle === "error" ? parseInt(item.target) : null,
     }));
 
     const combinedData = dataFromNodes.map((node) => ({
@@ -176,23 +185,13 @@ const OverviewFlow = () => {
       ...dataFromEdgesError.find((edgeError) => edgeError.id === node.id),
     }));
 
-    // setData(combinedData);
-
-    console.log("combinedData:", combinedData);
+    console.log("combinedData:", combinedDatas);
 
     axios.postWithCallback("job-steps/data-save", combinedDatas);
-    // axios.putWithCallback("job-steps/", combinedData);
-    // setAllNodes([]);
   };
-  // const saveAllNodes = () => {
-
-  //     saveNodeToDatabase();
-
-  //   // setAllNodes([]);
-  // };
 
   const onNodeDragStop = (event, node) => {
-    const updatedNodes = nodes.map((n) => {
+    const updatedPosition = nodes.map((n) => {
       if (n.id === node.id) {
         return {
           ...n,
@@ -202,19 +201,16 @@ const OverviewFlow = () => {
       return n;
     });
 
-    setNodes(updatedNodes);
+    setNodes(updatedPosition);
+    setPosition(updatedPosition);
     setDraggedNodeInfo({ id: node.id, position: node.position });
-  };
 
-  const saveNodePosition = (nodeId, newPosition) => {
-    const data = {
-      params: {
-        position_X: newPosition.x,
-        position_Y: newPosition.y,
-      },
-    };
-
-    axios.putWithCallback(`job-steps/${nodeId}/update/`, data);
+    const combinedDataposition = nodes.map((node) => ({
+      ...node,
+      ...position.find((id) => id.id === node.id),
+    }));
+    setAllNodes(combinedDataposition);
+    console.log(allNodes, "update");
   };
 
   const onConnect = useCallback(
@@ -248,8 +244,6 @@ const OverviewFlow = () => {
       };
 
       setEdges((eds) => addEdge(newEdge, eds));
-
-      // console.log(edges, "onConnect edges data");
     },
     [setEdges, setEdge]
   );
@@ -296,11 +290,7 @@ const OverviewFlow = () => {
   const saveHandler = () => {
     if (isAllNodeisConnected(nodes, edges)) {
       alert("Congrats its correct");
-      // saveAllNodes();
       saveNodeToDatabase();
-      nodes.forEach((node) => {
-        saveNodePosition(node.id, node.position);
-      });
     } else {
       alert("Please connect source nodes (Cannot Save Flow)");
     }
@@ -313,6 +303,7 @@ const OverviewFlow = () => {
   const onEdgeUpdate = useCallback((oldEdge, newConnection) => {
     edgeUpdateSuccessful.current = true;
     setEdges((els) => updateEdge(oldEdge, newConnection, els));
+    // eslint-disable-next-line
   }, []);
 
   const onEdgeUpdateEnd = useCallback((_, edge) => {
@@ -321,6 +312,7 @@ const OverviewFlow = () => {
     }
 
     edgeUpdateSuccessful.current = true;
+    // eslint-disable-next-line
   }, []);
 
   const onNodeDoubleClick = () => {
@@ -331,10 +323,10 @@ const OverviewFlow = () => {
     setShowNodeMaster(false);
   };
 
-  const nodeRef = useRef();
-  const closeModel = () => {
-    setShowNodeMaster(false);
-  };
+  // const nodeRef = useRef();
+  // const closeModel = () => {
+  //   setShowNodeMaster(false);
+  // };
 
   const handleClickOutside = (event) => {
     if (modalRef.current && !modalRef.current.contains(event.target)) {
