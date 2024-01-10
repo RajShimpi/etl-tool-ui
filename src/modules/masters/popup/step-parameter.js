@@ -132,7 +132,7 @@ const StepParameter = ({ step_type_id ,name}) => {
         <CommonModel
   formDataAction={getItemData}
   columns={config.STEP_PARAMETER}
-  insertApi={step_type_id ? `job-steps/${step_type_id}/name-save` : "step-type"}
+  insertApi={ `job-steps/${step_type_id}/name-save` || "step-type"}
   getApi="step-type/parameter/get"
   title={name}
   defaultObj={defaultObj}
