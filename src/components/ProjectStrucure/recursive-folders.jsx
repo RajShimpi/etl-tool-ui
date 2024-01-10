@@ -1,11 +1,3 @@
-<<<<<<< d544205104c473d7de87e81c56bc1bfecaa9afb0
-import React, { useEffect, useState, useRef } from "react";
-import FolderOpenIcon from "@mui/icons-material/FolderOpen";
-import FolderIcon from "@mui/icons-material/Folder";
-import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
-import ContextMenu from "../ContextMenu";
-import Modal from "../../modules/components/modal-popup";
-=======
 import React, { useEffect, useState, useRef } from 'react';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import FolderIcon from '@mui/icons-material/Folder';
@@ -13,31 +5,20 @@ import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import ContextMenu from '../ContextMenu';
 import Modal from '../../modules/components/modal-popup';
 import { AddUpdateDeleteFileAndFolder } from "../PopupComponent";
->>>>>>> e7fcdcb49d7bad669f7370d42ee2bec0d49b5368
 import Folder from "../../modules/masters/popup/add-folder";
 import AddFile from "../../modules/masters/popup/add-file";
 import Edit from "../../modules/masters/popup/edit-file";
 import Delete from "../../modules/masters/popup/delete";
 
-<<<<<<< d544205104c473d7de87e81c56bc1bfecaa9afb0
-const RecursiveFolder = ({ items, refreshData }) => {
-  // const [items, setItems] = useState([]);
-=======
 const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
     // const [items, setItems] = useState([]);
->>>>>>> e7fcdcb49d7bad669f7370d42ee2bec0d49b5368
 
-  // useEffect(() => {
-  //     if(data) {
-  //         setItems(data.map(x => { return { ...x, isRightClick: false }}));
-  //     }
-  // }, [data])
+    // useEffect(() => {
+    //     if(data) {
+    //         setItems(data.map(x => { return { ...x, isRightClick: false }}));
+    //     }
+    // }, [data])
 
-<<<<<<< d544205104c473d7de87e81c56bc1bfecaa9afb0
-  // useEffect(() => {
-  //   // console.log(items);
-  // }, [items]);
-=======
     useEffect(() => {
         // console.log(items);
     }, [items])
@@ -49,48 +30,8 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
     const [type, setType] = useState("AddFolder");
     // const [openContextMenuForItemId, setOpenContextMenuForItemId] = useState(null);
     const containerRef = useRef(null);
->>>>>>> e7fcdcb49d7bad669f7370d42ee2bec0d49b5368
 
-  const [showNested, setShowNested] = useState({});
-  const [contextMenuPosition, setContextMenuPosition] = useState(null);
-  const [isContextMenuOpen, setContextMenuOpen] = useState({});
-  const [isShow, setShow] = useState({});
-  // const [openContextMenuForItemId, setOpenContextMenuForItemId] = useState(null);
-  const containerRef = useRef(null);
 
-<<<<<<< d544205104c473d7de87e81c56bc1bfecaa9afb0
-  const handleContextMenu = (event, item) => {
-    event.preventDefault();
-    event.stopPropagation();
-    setContextMenuPosition({ top: event.clientY, left: event.clientX });
-    // setOpenContextMenuForItemId(item.id);
-    setContextMenuOpen({
-      [item.file_name]: !isContextMenuOpen[item.file_name],
-    });
-  };
-
-  const closeContextMenu = () => {
-    setContextMenuPosition(null);
-    setContextMenuOpen({});
-  };
-
-  const handleDocumentClick = (event) => {
-    event.stopPropagation();
-    if (containerRef.current && !containerRef.current.contains(event.target)) {
-      closeContextMenu();
-    }
-  };
-  const toggleNested = (e, name) => {
-    e.stopPropagation();
-    setShowNested({ ...showNested, [name]: !showNested[name] });
-    // closeContextMenu();
-  };
-
-  useEffect(() => {
-    document.addEventListener("click", handleDocumentClick);
-    return () => {
-      document.removeEventListener("click", handleDocumentClick);
-=======
     const handleContextMenu = (event, item) => {
         event.preventDefault();
         event.stopPropagation();
@@ -99,20 +40,8 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
         // setContextMenuOpen({ [item.file_name]: !isContextMenuOpen[item.file_name] });
         // nestedCallback(item);
         onRightCallback(item);
->>>>>>> e7fcdcb49d7bad669f7370d42ee2bec0d49b5368
     };
-  }, []);
 
-<<<<<<< d544205104c473d7de87e81c56bc1bfecaa9afb0
-  const callback = (item) => {
-    // e.stopPropagation();
-    setShow({ ...isShow, [item.file_name]: !isShow[item.file_name] });
-  };
-
-  return (
-    <>
-      {!!items && items.length && (
-=======
     const closeContextMenu = (e, item) => {
         e.stopPropagation();
         if(item) {
@@ -144,8 +73,7 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
                 closeContextMenu(e);
             }
         }
-        window.addEventListener('keydown', close)
-    
+        window.addEventListener('keydown', close) 
         document.addEventListener('click', handleDocumentClick);
         return () => {
           document.removeEventListener('click', handleDocumentClick);
@@ -182,99 +110,23 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
 
     
     return (
->>>>>>> e7fcdcb49d7bad669f7370d42ee2bec0d49b5368
         <>
-          {items.map((subItem, index) => (
-            <div
-              className="folderstyle"
-              ref={containerRef}
-              key={subItem.file_name + "rootDiv" + index}
-            >
-              <div
-                key={subItem.file_name + "contectDiv" + index}
-                className={`open`}
-                onClick={(e) => toggleNested(e, subItem.file_name)}
-                onContextMenu={(e) => handleContextMenu(e, subItem)}
-              >
-                {(subItem.type === "File" || subItem.type === "file") && (
-                  <>
-                    <InsertDriveFileIcon
-                      key={subItem.file_name + "fileIcon" + index}
-                      fontSize="small"
-                    />
-                    <>{subItem.file_name}</>
-                  </>
-                )}
+            {!!items.length && (
+                <>
+                    {items.map((subItem, index) => (
+                        <div className='folderstyle' ref={containerRef} key={subItem.file_name + "rootDiv" + index }>
+                            <div key= {subItem.file_name + "contectDiv" + index}  className={`open`}
+                                    onClick={(e) => toggleNested(e,subItem.file_name)}
+                                    onContextMenu={(e) => handleContextMenu(e, subItem)}
+                            >
+                                
+                                {subItem.type === 'File' && 
+                                <>
+                                    <InsertDriveFileIcon key={subItem.file_name + "fileIcon" + index } fontSize='small' />
+                                    <>{subItem.file_name}</>
+                                </>
+                                }
 
-<<<<<<< d544205104c473d7de87e81c56bc1bfecaa9afb0
-                {(subItem.type === "Folder" || subItem.type === "folder") &&
-                  subItem.children && (
-                    <>
-                      {contextMenuPosition &&
-                        isContextMenuOpen[subItem.file_name] && (
-                          <div
-                            style={{
-                              display:
-                                !isContextMenuOpen[subItem.file_name] && "none",
-                            }}
-                          >
-                            <ContextMenu
-                              onClose={closeContextMenu}
-                              project_id={subItem.project_id}
-                              parent_id={subItem.parent_id}
-                              id={subItem.id}
-                              item={subItem}
-                              position={contextMenuPosition}
-                              callback={callback}
-                            />
-                          </div>
-                        )}
-                      {isContextMenuOpen[subItem.file_name] && (
-                        <Modal
-                          modalTitle={"Folder"}
-                          handleClose={() => {
-                            setShow({});
-                          }}
-                          show={!isShow[subItem.file_name]}
-                        >
-                          <Folder
-                            project_id={subItem.project_id}
-                            id={subItem.id}
-                            onClose={closeContextMenu}
-                          />
-                        </Modal>
-                      )}
-
-                      {showNested[subItem.file_name] ? (
-                        <FolderOpenIcon
-                          key={subItem.file_name + "openIcon" + index}
-                          fontSize="small"
-                        />
-                      ) : (
-                        <FolderIcon
-                          key={subItem.file_name + "closeIcon" + index}
-                          fontSize="small"
-                        />
-                      )}
-                      {subItem.file_name}
-                      <div
-                        style={{
-                          display: !showNested[subItem.file_name] && "none",
-                        }}
-                      >
-                        {subItem.children && (
-                          <RecursiveFolder
-                            items={subItem.children}
-                            refreshData={refreshData}
-                          />
-                        )}
-                      </div>
-                    </>
-                  )}
-              </div>
-            </div>
-          ))}
-=======
                                 {subItem.type === 'Folder' && subItem.children && (
                                     <>
                                         {contextMenuPosition 
@@ -323,11 +175,8 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
                     ))}
                 </>
             )}
->>>>>>> e7fcdcb49d7bad669f7370d42ee2bec0d49b5368
         </>
-      )}
-    </>
-  );
-};
+    )
+}
 
 export default RecursiveFolder;

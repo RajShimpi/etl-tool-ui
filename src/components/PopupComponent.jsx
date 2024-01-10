@@ -3,41 +3,41 @@ import Folder from "../modules/masters/popup/add-folder";
 import AddFile from "../modules/masters/popup/add-file";
 import Edit from "../modules/masters/popup/edit-file";
 import Delete from "../modules/masters/popup/delete";
+// import { getFolderFields } from '../modules/masters/popup/add-folder-data';
+import axios from "../modules/services/axios";
 import FormCommon from "../modules/components/form-common";
 import { getCommonFields } from "../modules/masters/popup/common-data";
 
-const PopupComponent = ({ onClose, actionType, project_id, id, popType }) => {
+const PopupComponent = ({ onClose, actionType, project_id, id }) => {
   let contentComponent;
 
   switch (actionType) {
     case "AddFolder":
-      contentComponent = (
-        <Folder project_id={project_id} id={id} onClose={onClose} />
-      );
+      contentComponent = <Folder project_id={project_id} id={id} onClose={onClose} />;
       break;
     case "Add":
-      contentComponent = (
-        <AddFile project_id={project_id} id={id} onClose={onClose} />
-      );
+      contentComponent = <AddFile project_id={project_id} id={id} onClose={onClose} />;
       break;
     case "Edit":
-      contentComponent = (
-        <Edit project_id={project_id} parent_id={id} onClose={onClose} />
-      );
+      contentComponent = <Edit project_id={project_id} parent_id={id} onClose={onClose} />;
       break;
     case "Delete":
-      contentComponent = (
-        <Delete project_id={project_id} parent_id={id} onClose={onClose} />
-      );
+      contentComponent = <Delete project_id={project_id} parent_id={id} onClose={onClose} />;
       break;
     default:
       contentComponent = null;
   }
+  const hhh = () => {
+    console.log(project_id);
+    console.log(id);
+  };
 
   return (
     <div className="popup">
       <div className="popup-content">
-        <div style={{ flex: 1 }}>{contentComponent}</div>
+        <div style={{ flex: 1 }} onClick={hhh()}>
+          {contentComponent}
+        </div>
       </div>
     </div>
   );
@@ -63,14 +63,6 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
           }
   }
 
-  const setValues = (e, name) => {
-    if (!e) return;
-    switch (name) {
-      case "file_name":
-        setData(e.target.value);
-        break;
-    }
-  };
 
   const onsubmit = (e) => {
     e.preventDefault();
@@ -155,7 +147,7 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
                   Are you sure you want delete this folder undelaying files also will be deleted?
                  </p>  : 
                  <FormCommon
-                    data={getFolderFields({
+                    data={getCommonFields({
                       isSubmit: false,
                       update: props.update,
                       callback: setValues,
@@ -176,7 +168,8 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
                           ? "btn mx-2 btn-update w-xs waves-effect waves-light"
                           : "btn mx-1 btn-add w-xs waves-effect waves-light"
                       }
-                    >
+                      
+                      >
                       {props.type}
                       </button>
                       <button
