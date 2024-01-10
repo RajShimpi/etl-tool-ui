@@ -7,6 +7,7 @@
     // useEdgesState,
     ReactFlowProvider,
     updateEdge,
+    useNodeId,
   } from "reactflow";
 
   // Components
@@ -15,6 +16,10 @@
   import { MarkerType } from "reactflow";
   // Utils
   import { isAllNodeisConnected } from "../utils";
+  // import {
+  //   // nodes as initialNodes,
+  //   // edges as initialEdges,
+  // } from "../initial-element";
 
   // Styles
   import "reactflow/dist/style.css";
@@ -25,6 +30,19 @@
 
   import Job from "../../../masters/job";
   import axios from "../../../services/axios";
+  // import { Class, Key, Source } from "@mui/icons-material";
+  // import { data } from "jquery";
+  // import AddFile from "../../../masters/popup/add-file";
+  // import Modal from "../../../components/modal-popup";
+  // import { ClassNames } from "@emotion/react";
+  // // import Job from "../../../masters/job";
+  // import axios from "../../../services/axios";
+  import { event, post } from "jquery";
+  import StepParameter from "../../../masters/popup/step-parameter";
+import { getstepparameterFields } from "../../../masters/popup/step-paramter-data";
+
+  // let id = 0;
+  // const getId = () => `dndnode_${id++}`;
 
   const nodeTypes = { node: Node };
 
@@ -47,7 +65,15 @@
     // const [newNodes, setNewNodes] = useState(null);
     const [position, setPosition] = useState([]);
     const [allNodes, setAllNodes] = useState([]);
+    const [step_type_id, setStep_type_Id] = useState();
+    const [job_id, setJob_Id] = useState();
+    const [nodeid, setNode_Id] = useState();
+    const [editName,setName]=useState()
     const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
+    const handleParameterFields = useCallback((itemData, editName) => {
+      console.log('Edit Name:', editName);
+      const fields = getstepparameterFields(...itemData, editName);
+    }, []); 
 
     useEffect(() => {
       axios.getWithCallback("job-steps/", (data) => {
@@ -353,7 +379,41 @@
         document.removeEventListener("mousedown", handleDocumentClick);
       };
     }, [handleCloseNodeMaster, modalRef]);
+    // const [stepParameters, setStepParameters] = useState([]);
 
+    // useEffect(() => {
+    //   const fetchStepData = async () => {
+    //     const newStepParameters = [];
+
+    //     for (const node of nodes) {
+    //       try {
+    //         const response = await axios.get(`step-type-parameter/step-type/${node.step_type_id}`);
+    //         // console.log('Received data for node:', node.id, response.data);
+
+
+    //         newStepParameters.push(response.data.parameter.id);
+    //       } catch (error) {
+    //         // console.error('Error fetching data:', error);
+
+    //       }
+    //     }
+
+    //     // setStepParameters(node.step_type_id);
+    //   };
+
+    //   fetchStepData();
+    // }, [nodes]);
+
+
+  //   console.log(stepParameters, "step parameter data");
+  // const nodeId= useNodeId();
+
+  const nodeId = (node)=>{
+    setName(node.data.heading);
+    setStep_type_Id(node.step_type_id)
+    setJob_Id(node.job_id,"job_id");
+    setNode_Id(node.id,"id");
+  }
     return (
       <>
         <button onClick={saveHandler}>Save</button>
@@ -377,18 +437,20 @@
                 onNodeDoubleClick={onNodeDoubleClick}
                 onEdgeDoubleClick={true}
                 onNodeDragStop={onNodeDragStop}
+                onNodeClick={(event, node) => nodeId(node)}
               >
                 <Background color="#aaa" gap={16} />
                 {/* <Controls /> */}
               </ReactFlow>
 
-              <Modal
-                modalTitle={"Save/Update Parameter"}
-                ref={modalRef}
-                handleClose={handleCloseNodeMaster}
-                show={showNodeMaster}
-              >
-                <Job />
+              <Modal modalTitle={"Save/Update Parameter"} ref={modalRef} handleClose={handleCloseNodeMaster} show={showNodeMaster}>
+              <StepParameter
+                  step_type_id={step_type_id}
+                  setJob_Id={job_id}
+                  setNode_Id={nodeid}
+                  name={editName}
+                  handleParameterFields={(itemData) => handleParameterFields(itemData, editName)}
+                />
               </Modal>
             </div>
           </ReactFlowProvider>
@@ -397,4 +459,5 @@
     );
   };
 
+  
   export default OverviewFlow;

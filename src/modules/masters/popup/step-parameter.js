@@ -3,22 +3,21 @@ import React, { useState, useEffect } from 'react';
 // import config from "../components/config/config.json"
 // import { getProjectFields } from './project-data';
 // import axios from '../services/axios';
-// import { getstepparameterFields } from './step-paramter-data';
+import { getstepparameterFields } from './step-paramter-data';
 import axios from '../../services/axios';
 import CommonFormWithList from '../../components/common-form-with-list';
 import config from "../../components/config/config.json"
 import CommonModel from '../../components/common-modal';
-import { getstepparameterFields } from './step-parameter-data';
 
 
-const StepParameter = ({ stepId ,name}) => {
-  console.log(stepId,"name");
+const StepParameter = ({ step_type_id ,name}) => {
+  // console.log(name,"name");
     const [parameter, setparameter] = useState([]);
       const [editName, setEditName] = useState('');
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const response = await axios.getWithCallback(`step-type/parameter/get/${stepId || 0}`, (data) => {
+          const response = await axios.getWithCallback(`step-type/parameter/get/${step_type_id || 0}`, (data) => {
             const options = {};
              Promise.all(data.parameters.map(async (parameter) => {
               const resource = parameter?.resource;
@@ -43,7 +42,7 @@ const StepParameter = ({ stepId ,name}) => {
       };
     
       fetchData();
-    }, [stepId]);
+    }, [step_type_id]);
     
   
   // useEffect(() => {
@@ -79,7 +78,7 @@ const StepParameter = ({ stepId ,name}) => {
         dt[0].groups = dt[0].groups.concat(stepParameterFields[0].groups);
       
         dt[0].groups.forEach((group) => {
-          group.name = editName; // Update the name field
+          group.name = editName; 
         });
       
         // ...
@@ -117,9 +116,6 @@ const StepParameter = ({ stepId ,name}) => {
   //   fetchData();
   // }, []);
 
-
-
-
     return (
         <>
  {/* <input
@@ -133,19 +129,18 @@ const StepParameter = ({ stepId ,name}) => {
   
   placeholder="Edit Name"
 /> */}
-          <CommonModel
-                formDataAction={getItemData}
-                columns={config.STEP_PARAMETER}
-                insertApi="step-type"
-                updateApi="step-type/parameter/get:id"
-                getApi="step-type/parameter/get"
-                title= {name}
-                defaultObj={defaultObj}
-                options={[]}
-                tableTitle='step-parameter'                        
-            />           
+        <CommonModel
+  formDataAction={getItemData}
+  columns={config.STEP_PARAMETER}
+  insertApi={ `job-steps/${step_type_id}/name-save` || "step-type"}
+  getApi="step-type/parameter/get"
+  title={name}
+  defaultObj={defaultObj}
+  // options={[]}
+  tableTitle='step-parameter'
+/>
+           
         </>
-
     );
 };
 
