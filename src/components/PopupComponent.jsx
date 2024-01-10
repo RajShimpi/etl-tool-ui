@@ -10,7 +10,7 @@ import { getCommonFields } from "../modules/masters/popup/common-data";
 
 const PopupComponent = ({ onClose, actionType, project_id, id }) => {
   let contentComponent;
-
+console.log(project_id,id,"context");
   switch (actionType) {
     case "AddFolder":
       contentComponent = <Folder project_id={project_id} id={id} onClose={onClose} />;
@@ -71,7 +71,7 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
       e.target.classList.add("was-validated");
       //props.validationCallback(true);
     } else {
-      let item = {  file_name: data.file_name, project_id: props.item.project_id, type: props.type.includes("Folder") ? 'Folder' : 'File', parent_id: props.item?.id };
+      let item = { id:props.item.id, file_name: data.file_name, project_id: props.item.project_id, type: props.type.includes("Folder") ? 'Folder' : 'File', parent_id: props.item?.id };
       switch(props.type) {
         case "AddFolder":
           axios.postWithCallback("project-files",
@@ -91,7 +91,7 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
           });
           break;
         case "Edit":
-          axios.putWithCallback("project-files/",
+          axios.putWithCallback(`project-files/`,
           { ...item, id: props.item?.id },
           (resp) => {
             

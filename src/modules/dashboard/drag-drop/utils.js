@@ -1,5 +1,5 @@
 export function isAllNodeisConnected(nodes, edges) {
-  console.log(nodes, edges, "is");
+  // console.log(nodes, edges, "is");
   const allNodesIds = nodes.map((node) => node.id);
   const allSourceEdges = edges.map((edge) => edge.source);
   // const allSourceEdgesError = edges.map((edge) => edge.sourceHandle);
