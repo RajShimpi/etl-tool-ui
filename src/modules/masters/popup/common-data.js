@@ -5,17 +5,14 @@ export const getCommonFields = (itemData) => {
         disabled: itemData.disabled,
         groups: [
             {
-            type: "text",
-            id: "inputFileName",
-            label: "File Name",
-            name: "file_name",
-            control: "input",
-            isRequired: true,
-            itemVal: itemData.values ? itemData.values["file_name"] : '',  
-        },
-            
-       
+                type: "text",
+                id: "inputFileName",
+                label: "File Name",
+                name: "file_name",
+                control: "input",
+                isRequired: true,
+                itemVal: itemData.values ? itemData.values["file_name"] : '',
+            },
         ]
-    }
-    ]
+    }]
 }

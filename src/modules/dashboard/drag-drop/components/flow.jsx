@@ -2,7 +2,7 @@
   import ReactFlow, {
     addEdge,
     Background,
-    Controls,
+    // Controls,
     // useNodesState,
     // useEdgesState,
     ReactFlowProvider,
@@ -26,38 +26,29 @@
   import "./dnd.css";
   import "./update-node.css";
 
+  import Modal from "../../../components/modal-popup";
+
+  import Job from "../../../masters/job";
+  import axios from "../../../services/axios";
   // import { Class, Key, Source } from "@mui/icons-material";
   // import { data } from "jquery";
   // import AddFile from "../../../masters/popup/add-file";
-  import Modal from "../../../components/modal-popup";
+  // import Modal from "../../../components/modal-popup";
   // import { ClassNames } from "@emotion/react";
-  import Job from "../../../masters/job";
-  import axios from "../../../services/axios";
+  // // import Job from "../../../masters/job";
+  // import axios from "../../../services/axios";
   import { event, post } from "jquery";
   import StepParameter from "../../../masters/popup/step-parameter";
 import { getstepparameterFields } from "../../../masters/popup/step-paramter-data";
 
-  let id = 0;
-  const getId = () => `dndnode_${id++}`;
+  // let id = 0;
+  // const getId = () => `dndnode_${id++}`;
 
   const nodeTypes = { node: Node };
 
   const OverviewFlow = () => {
     const [showNodeMaster, setShowNodeMaster] = useState(false);
-    
-    const handleParameterFields = (itemData,editName) => {
-      console.log('Edit Name:', editName);
-      const fields = getstepparameterFields(...itemData, editName);
 
-      const parameterNameField = fields[0]?.groups[0]?.options;
-      if (parameterNameField) {
-        const updatedEditName = parameterNameField[0]?.value || '';
-        setName(updatedEditName);
-      }
-    };
-
-    // const [editName, setEditName] = useState();
-    const [editName,setName]=useState()
     const reactFlowWrapper = useRef(null);
     const edgeUpdateSuccessful = useRef(true);
     const textRef = useRef(null);
@@ -66,43 +57,43 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
     // const [node, setNode] = useState([]);
     const [nodes, setNodes, onNodesChange] = useState([]);
     const [edges, setEdges, onEdgesChange] = useState([]);
-    // const [edge, setEdge] = useState([]);
+    const [edge, setEdge] = useState([]);
     const [selectedNode, setSelectedNode] = useState(null);
     const [isSelected, setIsSelected] = useState(false);
+    // const [currentId, setCurrentId] = useState(0);
+    const [draggedNodeInfo, setDraggedNodeInfo] = useState(null);
+    // const [newNodes, setNewNodes] = useState(null);
+    const [position, setPosition] = useState([]);
+    const [allNodes, setAllNodes] = useState([]);
     const [step_type_id, setStep_type_Id] = useState();
     const [job_id, setJob_Id] = useState();
     const [nodeid, setNode_Id] = useState();
-    const [draggedNodeInfo, setDraggedNodeInfo] = useState(null);
-
-    const [stepId, setStepId] = useState({ parameter: {} });
-
+    const [editName,setName]=useState()
     const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
+    const handleParameterFields = useCallback((itemData, editName) => {
+      console.log('Edit Name:', editName);
+      const fields = getstepparameterFields(...itemData, editName);
+    }, []); 
+
     useEffect(() => {
       axios.getWithCallback("job-steps/", (data) => {
-        // console.log(data, "job-step Data");
-
         const dataNodes = data.map((item) => ({
           id: "" + item.id,
+          step_type_id: "" + item.step_type_id,
+          job_id: "" + item.job_id,
           type: "node",
-          job_id:"1",
           data: {
             heading: item.step_name,
             img: `/assets/images/${item.stepType.img}.png`,
-            stepType: item.stepType, 
           },
           position: {
             x: item.params.position_X,
             y: item.params.position_Y,
           },
-          step_type_id: item.step_type_id
         }));
 
-        // const ids= data.map((ids)=>({
-        //   step_type_id:ids.step_type_id
-        // }))
-
         const dataEdgesok = data.map((item) => ({
-          id: `e${item.id}-${item.ok_step}`,
+          id: "" + item.id,
           source: "" + item.id,
           target: "" + item.ok_step,
           label: "ok",
@@ -113,7 +104,7 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
         }));
 
         const dataEdgeserror = data.map((item) => ({
-          id: `e${item.id}-${item.error_step}`,
+          id: "" + item.id,
           source: "" + item.id,
           target: "" + item.error_step,
           label: "error",
@@ -126,36 +117,23 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
         setNodes(dataNodes);
         setEdges([...dataEdgesok, ...dataEdgeserror]);
 
+        const combinedDataOk = dataNodes.map((node) => ({
+          ...node,
+          ...dataEdgesok.find((edgeOk) => edgeOk.id === node.id),
+        }));
+
+        const combinedData = combinedDataOk.map((node) => ({
+          ...node,
+          ...dataEdgeserror.find((edgeError) => edgeError.id === node.id),
+        }));
+
+        setAllNodes(combinedData);
         function getlabelColor(label) {
           return label === "ok" ? "green" : label === "error" ? "red" : "black";
         }
-        // const ids = data.map((item) => ({
-        //   step_type_id:item.step_type_id
-        // }));
-        // setId(ids)
-        // console.log(ids,"ddddd");
       });
+      // eslint-disable-next-line
     }, []);
-    // console.log(id.step_type_id,"ddddd");
-
-    // console.log(nodes,"nodes");
-    // console.log(edges, "edges");
-
-    // useEffect(() => {
-    //   axios.getWithCallback('edges/',(data)=>{
-    //       const formattedData = data.map((item) => ({
-    //         // id: `e${item.source_ok}-${item.target}`,
-    //         source_ok: item.source_ok,
-    //         source_error: item.source_error,
-    //         target: item.target,
-    //         type: item.type,
-    //         label: item.label,
-    //       }));
-
-    //       console.log(formattedData);
-    //       setEdge(formattedData);
-    //     })
-    // }, []);
 
     const onDragOver = (event) => {
       event.preventDefault();
@@ -163,7 +141,7 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
 
       // const [showNodeMaster, setShowNodeMaster] = useState(false);
 
-    
+      // ... (other state variables and functions)
     };
 
     const onDrop = (event) => {
@@ -171,21 +149,21 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
 
       const type = event.dataTransfer.getData("application/reactflow");
-      // const label = event.dataTransfer.getData("content");
       const img = event.dataTransfer.getData("img");
       const name = event.dataTransfer.getData("name");
-      console.log(reactFlowInstance, "reactIns");
+      const step_type_id = event.dataTransfer.getData("id");
+
       const position = reactFlowInstance.project({
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
       });
 
-      // console.log(type)
-      // console.log(label)
-      // console.log(name)
+      const currentId = nodes.length;
+      const nextId = currentId + 1;
 
       const newNode = {
-        id: getId(),
+        id: `${nextId}`,
+        step_type_id,
         name,
         type,
         position,
@@ -194,9 +172,59 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
 
       setNodes((es) => es.concat(newNode));
       setSelectedNode((newNode.a = name));
+
+      setAllNodes((prevNodes) => [...prevNodes, newNode]);
     };
+
+  const saveNodeToDatabase = () => {
+    const dataFromNodes = allNodes.map((item) => ({
+      id: parseInt(item.id),
+      job_id: 1,
+      step_type_id: parseInt(item.step_type_id),
+      step_name: item.data?.heading || item.name,
+      type: "node",
+      params: {
+        position_X:
+          item.id === position.id ? position.position_X : item.position.x,
+        position_Y:
+          item.id === position.id ? position.position_Y : item.position.y,
+      },
+    }));
+
+    const dataFromEdgesOk = edges.filter((item) => item.sourceHandle === "ok" && item.target !== null && !isNaN(item.target))
+      .map((item) => ({
+        id:  parseInt(item.source),
+        ok_step: parseInt(item.target),
+      }));
+
+      const dataFromEdgesError = edges.filter((item) => item.sourceHandle === "error" && item.target !== null && !isNaN(item.target))
+      .map((item) => ({
+        id: parseInt(item.source),
+        error_step: parseInt(item.target),
+      }));
+    
+
+      const combinedData = dataFromNodes.map((node) => ({
+        ...node,
+        ...dataFromEdgesOk.find((edgeOk) => edgeOk.id === node.id),
+      }));
+      
+      const combinedDatas = combinedData.map((node) => ({
+        ...node,
+      ...dataFromEdgesError.find((edgeError) => edgeError.id === node.id),
+      }));
+      
+
+    // console.log("Updated Edges Ok:", dataFromEdgesOk);
+    // console.log("Updated Edges Error:", dataFromEdgesError);
+    // console.log("Combined Data:", combinedDatas);
+
+    axios.postWithCallback("job-steps/data-save", combinedDatas);
+  };
+
+
     const onNodeDragStop = (event, node) => {
-      const updatedNodes = nodes.map((n) => {
+      const updatedPosition = nodes.map((n) => {
         if (n.id === node.id) {
           return {
             ...n,
@@ -206,31 +234,23 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
         return n;
       });
 
-      setNodes(updatedNodes);
+      setNodes(updatedPosition);
+      setPosition(updatedPosition);
       setDraggedNodeInfo({ id: node.id, position: node.position });
-      // console.log(node.position);
-      // saveNodePosition(node.id, node.position);
+
+      const combinedDataposition = nodes.map((node) => ({
+        ...node,
+        ...position.find((id) => id.id === node.id),
+      }));
+      setAllNodes(combinedDataposition);
+      // console.log(allNodes, "update");
     };
 
-    const saveNodePosition = (nodeId, newPosition) => {
-      const data = {
-        params: {
-          position_X: newPosition.x,
-          position_Y: newPosition.y,
-        }
-      };
-
-      axios.putWithCallback(`job-steps/${nodeId}/update/`, data)
-        .then((response) => {
-          // console.log("Node position updated successfully:", response.data);
-        })
-        .catch((error) => {
-          // console.error("Error updating node position:", error);
-        });
-    }; const onConnect = useCallback(
+    const onConnect = useCallback(
       (params) => {
-        const { sourceHandle } = params;
-
+        const { sourceHandle, source, target } = params;
+        // const sourceNodeId = parseInt(source);
+        // const targetNodeId = parseInt(target);
         let label;
         let color;
 
@@ -244,6 +264,8 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
 
         const newEdge = {
           ...params,
+        //   source: sourceNodeId,
+        // target: targetNodeId,
           label,
           type: params.type || "step",
           arrowHeadType: "arrowclosed",
@@ -259,17 +281,15 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
 
         setEdges((eds) => addEdge(newEdge, eds));
       },
-      [setEdges]
+      [setEdges, setEdge]
     );
 
     const [nodeName, setNodeName] = useState("Node 1");
-    // console.log(nodes,"llll")
 
     useEffect(() => {
       const node = nodes.filter((node) => {
-        // console.log(nodes,"nodes Data inside useEffect Filter")
         if (node.selected) return true;
-        // console.log(node,"inside node useEffect Filter")
+
         return false;
       });
       if (node[0]) {
@@ -306,10 +326,7 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
     const saveHandler = () => {
       if (isAllNodeisConnected(nodes, edges)) {
         alert("Congrats its correct");
-
-        nodes.forEach((node) => {
-          saveNodePosition(node.id, node.position);
-        });
+        saveNodeToDatabase();
       } else {
         alert("Please connect source nodes (Cannot Save Flow)");
       }
@@ -322,24 +339,26 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
     const onEdgeUpdate = useCallback((oldEdge, newConnection) => {
       edgeUpdateSuccessful.current = true;
       setEdges((els) => updateEdge(oldEdge, newConnection, els));
+      // eslint-disable-next-line
     }, []);
 
     const onEdgeUpdateEnd = useCallback((_, edge) => {
       if (!edgeUpdateSuccessful.current) {
         setEdges((eds) => eds.filter((e) => e.id !== edge.id));
       }
+
       edgeUpdateSuccessful.current = true;
+      // eslint-disable-next-line
     }, []);
 
-    
-
-    const onNodeDoubleClick = (event) => {
-      // console.log(event);
-      setShowNodeMaster(true);  
+    const onNodeDoubleClick = () => {
+      setShowNodeMaster(true);
     };
+
     const handleCloseNodeMaster = () => {
       setShowNodeMaster(false);
     };
+
     // const nodeRef = useRef();
     // const closeModel = () => {
     //   setShowNodeMaster(false);
@@ -360,10 +379,7 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
         document.removeEventListener("mousedown", handleDocumentClick);
       };
     }, [handleCloseNodeMaster, modalRef]);
-
-  
-
-    const [stepParameters, setStepParameters] = useState([]);
+    // const [stepParameters, setStepParameters] = useState([]);
 
     // useEffect(() => {
     //   const fetchStepData = async () => {
@@ -398,9 +414,6 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
     setJob_Id(node.job_id,"job_id");
     setNode_Id(node.id,"id");
   }
-
-  // console.log(nodes[1]?.data?.heading, "id");
-// console.log(editName,"handleParameterFieldsdata");
     return (
       <>
         <button onClick={saveHandler}>Save</button>
@@ -420,7 +433,7 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
                 onEdgeUpdate={onEdgeUpdate}
                 onEdgeUpdateStart={onEdgeUpdateStart}
                 onEdgeUpdateEnd={onEdgeUpdateEnd}
-                attributionPosition="top  -right"
+                attributionPosition="top-right"
                 onNodeDoubleClick={onNodeDoubleClick}
                 onEdgeDoubleClick={true}
                 onNodeDragStop={onNodeDragStop}
@@ -429,7 +442,7 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
                 <Background color="#aaa" gap={16} />
                 {/* <Controls /> */}
               </ReactFlow>
-            
+
               <Modal modalTitle={"Save/Update Parameter"} ref={modalRef} handleClose={handleCloseNodeMaster} show={showNodeMaster}>
               <StepParameter
                   step_type_id={step_type_id}
@@ -439,22 +452,12 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
                   handleParameterFields={(itemData) => handleParameterFields(itemData, editName)}
                 />
               </Modal>
-
             </div>
-
-            {/* 
-            <Sidebar
-              isSelected={isSelected}
-              textRef={textRef}
-              nodeName={nodeName}
-              setNodeName={setNodeName}
-            /> */}
           </ReactFlowProvider>
-        
         </div>
       </>
     );
   };
 
+  
   export default OverviewFlow;
-
