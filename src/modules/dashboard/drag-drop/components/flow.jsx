@@ -412,7 +412,7 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
     setName(node.data.heading);
     setStep_type_Id(node.step_type_id)
     setJob_Id(node.job_id,"job_id");
-    setNode_Id(node.id,"id");
+    setNode_Id(parseInt(node.id));
   }
     return (
       <>
@@ -446,8 +446,8 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
               <Modal modalTitle={"Save/Update Parameter"} ref={modalRef} handleClose={handleCloseNodeMaster} show={showNodeMaster}>
               <StepParameter
                   step_type_id={step_type_id}
-                  setJob_Id={job_id}
-                  setNode_Id={nodeid}
+                  job_Id={job_id}
+                  node_Id={nodeid}
                   name={editName}
                   handleParameterFields={(itemData) => handleParameterFields(itemData, editName)}
                 />
