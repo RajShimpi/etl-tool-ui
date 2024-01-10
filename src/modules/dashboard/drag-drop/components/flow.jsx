@@ -44,15 +44,16 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
 
   const OverviewFlow = () => {
     const [showNodeMaster, setShowNodeMaster] = useState(false);
-    const handleParameterFields = (itemData) => {
-      const fields = getstepparameterFields(itemData, setName);
-      // Assuming the editName should be updated based on the parameter_name field
+    
+    const handleParameterFields = (itemData,editName) => {
+      console.log('Edit Name:', editName);
+      const fields = getstepparameterFields(...itemData, editName);
+
       const parameterNameField = fields[0]?.groups[0]?.options;
       if (parameterNameField) {
-        const updatedEditName = parameterNameField[0]?.value || ''; // Adjust this based on your data structure
+        const updatedEditName = parameterNameField[0]?.value || '';
         setName(updatedEditName);
       }
-      // You can handle other fields if needed
     };
 
     // const [editName, setEditName] = useState();
@@ -68,12 +69,12 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
     // const [edge, setEdge] = useState([]);
     const [selectedNode, setSelectedNode] = useState(null);
     const [isSelected, setIsSelected] = useState(false);
-    const [id, setId] = useState();
-   
+    const [step_type_id, setStep_type_Id] = useState();
+    const [job_id, setJob_Id] = useState();
+    const [nodeid, setNode_Id] = useState();
     const [draggedNodeInfo, setDraggedNodeInfo] = useState(null);
 
     const [stepId, setStepId] = useState({ parameter: {} });
-
 
     const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
     useEffect(() => {
@@ -83,10 +84,11 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
         const dataNodes = data.map((item) => ({
           id: "" + item.id,
           type: "node",
+          job_id:"1",
           data: {
             heading: item.step_name,
             img: `/assets/images/${item.stepType.img}.png`,
-            stepType: item.stepType, // Include stepType in the data object
+            stepType: item.stepType, 
           },
           position: {
             x: item.params.position_X,
@@ -132,8 +134,6 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
         // }));
         // setId(ids)
         // console.log(ids,"ddddd");
-
-
       });
     }, []);
     // console.log(id.step_type_id,"ddddd");
@@ -163,7 +163,7 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
 
       // const [showNodeMaster, setShowNodeMaster] = useState(false);
 
-      // ... (other state variables and functions)
+    
     };
 
     const onDrop = (event) => {
@@ -331,18 +331,19 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
       edgeUpdateSuccessful.current = true;
     }, []);
 
+    
+
     const onNodeDoubleClick = (event) => {
       // console.log(event);
-      setShowNodeMaster(true);
-      
+      setShowNodeMaster(true);  
     };
     const handleCloseNodeMaster = () => {
       setShowNodeMaster(false);
     };
-    const nodeRef = useRef();
-    const closeModel = () => {
-      setShowNodeMaster(false);
-    };
+    // const nodeRef = useRef();
+    // const closeModel = () => {
+    //   setShowNodeMaster(false);
+    // };
 
     const handleClickOutside = (event) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
@@ -360,7 +361,7 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
       };
     }, [handleCloseNodeMaster, modalRef]);
 
-
+  
 
     const [stepParameters, setStepParameters] = useState([]);
 
@@ -392,13 +393,14 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
   // const nodeId= useNodeId();
 
   const nodeId = (node)=>{
-    setName(node.data.heading,"Node Id");
-    setId(node.step_type_id)
-
+    setName(node.data.heading);
+    setStep_type_Id(node.step_type_id)
+    setJob_Id(node.job_id,"job_id");
+    setNode_Id(node.id,"id");
   }
 
   // console.log(nodes[1]?.data?.heading, "id");
-console.log(editName,"handleParameterFieldsdata");
+// console.log(editName,"handleParameterFieldsdata");
     return (
       <>
         <button onClick={saveHandler}>Save</button>
@@ -430,9 +432,11 @@ console.log(editName,"handleParameterFieldsdata");
             
               <Modal modalTitle={"Save/Update Parameter"} ref={modalRef} handleClose={handleCloseNodeMaster} show={showNodeMaster}>
               <StepParameter
-                  stepId={id}
+                  step_type_id={step_type_id}
+                  setJob_Id={job_id}
+                  setNode_Id={nodeid}
                   name={editName}
-                  handleParameterFields={handleParameterFields}
+                  handleParameterFields={(itemData) => handleParameterFields(itemData, editName)}
                 />
               </Modal>
 
