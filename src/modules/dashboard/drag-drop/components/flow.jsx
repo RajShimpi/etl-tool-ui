@@ -194,15 +194,16 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
     const dataFromEdgesOk = edges.filter((item) => item.sourceHandle === "ok" && item.target !== null && !isNaN(item.target))
       .map((item) => ({
         id:  parseInt(item.source),
-        ok_step: parseInt(item.target),
+        ok_step: parseInt(item.target)|| null,
       }));
 
       const dataFromEdgesError = edges.filter((item) => item.sourceHandle === "error" && item.target !== null && !isNaN(item.target))
       .map((item) => ({
         id: parseInt(item.source),
-        error_step: parseInt(item.target),
+        error_step: parseInt(item.target)|| null,
       }));
-    
+    console.log("OK :",dataFromEdgesOk);
+    console.log("Error :",dataFromEdgesError);
 
       const combinedData = dataFromNodes.map((node) => ({
         ...node,
@@ -215,9 +216,9 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
       }));
       
 
-    // console.log("Updated Edges Ok:", dataFromEdgesOk);
-    // console.log("Updated Edges Error:", dataFromEdgesError);
-    // console.log("Combined Data:", combinedDatas);
+    console.log("Updated Edges Ok:", dataFromEdgesOk);
+    console.log("Updated Edges Error:", dataFromEdgesError);
+    console.log("Combined Data:", combinedDatas);
 
     axios.postWithCallback("job-steps/data-save", combinedDatas);
   };
@@ -231,6 +232,7 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
             position: { x: node.position.x, y: node.position.y },
           };
         }
+        console.log("edges",edges);
         return n;
       });
 
@@ -437,7 +439,7 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
                 onNodeDoubleClick={onNodeDoubleClick}
                 onEdgeDoubleClick={true}
                 onNodeDragStop={onNodeDragStop}
-                onNodeClick={(event, node) => nodeId(node)}
+                // onNodeClick={(event, node) => nodeId(node)}
               >
                 <Background color="#aaa" gap={16} />
                 {/* <Controls /> */}
