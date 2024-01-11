@@ -9,6 +9,7 @@ import CommonFormWithList from '../../components/common-form-with-list';
 import config from "../../components/config/config.json"
 import CommonModel from '../../components/common-modal';
 
+
 const StepParameter = ({ node_Id, step_type_id, name }) => {
   console.log(node_Id, "name");
   const [parameter, setparameter] = useState([]);
@@ -50,22 +51,23 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
   let defaultObj = { step_name:'',  type: '', name: '', img: '', group: '', parametres: '' };
 
   // console.log(parameter, "parameter");
-  const getItemData = (itemData) => {
-    let dt = [
-      {
-        col: 12,
-        callback: itemData.callback,
-        groups: [editName]
-          ? [editName].map((v) => ({
-              id: "inputparameterFileid",
-              // label: v.step_name,
-              name: "step_name"|| v.step_name,
-              control: "input",
-              isSubmit: itemData.isSubmit,
-              itemVal: itemData.values ? itemData.values["step_name"] : v.step_name,
-            }))
-          : [],
-      },
+    const getItemData = (itemData) => {
+      let dt = [
+        {
+          col: 12,
+          callback: itemData.callback,
+          groups: [editName]
+            ? [editName].map((v) => ({
+                id: "inputparameterFileid",
+                // label: (name === "step_name" ? v.step_name : name),
+                label:"Step Name",
+                name: "step_name",
+                control: "input",
+                isSubmit: itemData.isSubmit,
+                itemVal: name === "step_name" ? v.step_name : name,                   
+              }))
+            : [],
+        },
       {
         col: 12,
         callback: itemData.callback,
@@ -90,39 +92,13 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
   
 
 
-    return (
-        <>
- {/* <input
-  type="text"
-  value={name}
-  onChange={(e) => {
-    setEditName(e.target.value);
-    console.log('Updated editName:', e.target.value);
-  }}
-
-  
-  placeholder="Edit Name"
-/> */}
-        <CommonModel
-  formDataAction={getItemData}
-  columns={config.STEP_PARAMETER}
-  insertApi={ `job-steps/${step_type_id}/name-save` || "step-type"}
-  getApi="step-type/parameter/get"
-  title={name}
-  defaultObj={defaultObj}
-  // options={[]}
-  tableTitle='step-parameter'
-/>
-           
-        </>
-    );
   return (
     <>
       <CommonModel
         formDataAction={getItemData}
         columns={config.STEPTYPE}
         insertApi={`/job-steps/${node_Id || 0}/name-save` || "step-type"}
-        getApi={`/job-steps/${node_Id || 0}/` || "step-type/parameter/get"}
+        getApi={`/job-steps/${node_Id || 0}` || "step-type/parameter/get"}
         title={name}
         defaultObj={[defaultObj]}
         // options={[]}
