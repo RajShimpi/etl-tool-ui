@@ -51,7 +51,8 @@ const OverviewFlow = () => {
 
   const reactFlowWrapper = useRef(null);
   const edgeUpdateSuccessful = useRef(true);
-  const textRef = useRef(null);
+ 
+
   const modalRef = useRef(null);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   // const [node, setNode] = useState([]);
@@ -70,10 +71,10 @@ const OverviewFlow = () => {
   const [nodeid, setNode_Id] = useState();
   const [editName,setName]=useState()
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
-  const handleParameterFields = useCallback((itemData, editName) => {
-    console.log('Edit Name:', editName);
-    const fields = getstepparameterFields(...itemData, editName);
-  }, []); 
+  // const handleParameterFields = useCallback((itemData, editName) => {
+  //   console.log('Edit Name:', editName);
+  //   const fields = getstepparameterFields(...itemData, editName);
+  // }, []); 
 
   useEffect(() => {
     axios.getWithCallback("job-steps/", (data) => {
@@ -176,51 +177,80 @@ const OverviewFlow = () => {
     setAllNodes((prevNodes) => [...prevNodes, newNode]);
   };
 
-const saveNodeToDatabase = () => {
-  const dataFromNodes = allNodes.map((item) => ({
-    id: parseInt(item.id),
-    job_id: 1,
-    step_type_id: parseInt(item.step_type_id),
-    step_name: item.data?.heading || item.name,
-    type: "node",
-    params: {
-      position_X:
-        item.id === position.id ? position.position_X : item.position.x,
-      position_Y:
-        item.id === position.id ? position.position_Y : item.position.y,
-    },
-  }));
-
-  const dataFromEdgesOk = edges.filter((item) => item.sourceHandle === "ok" && item.target !== null && !isNaN(item.target))
-    .map((item) => ({
-      id:  parseInt(item.source),
-      ok_step: parseInt(item.target),
-    }));
-
-    const dataFromEdgesError = edges.filter((item) => item.sourceHandle === "error" && item.target !== null && !isNaN(item.target))
-    .map((item) => ({
-      id: parseInt(item.source),
-      error_step: parseInt(item.target),
+  const saveNodeToDatabase = () => {
+    const dataFromNodes = allNodes.map((item) => ({
+      id: parseInt(item.id),
+      job_id: 1,
+      step_type_id: parseInt(item.step_type_id),
+      step_name: item.data?.heading || item.name,
+      type: "node",
+      params: {
+        position_X: item.id === position.id ? position.position_X : item.position.x,
+        position_Y: item.id === position.id ? position.position_Y : item.position.y,
+      },
     }));
   
+    const dataFromEdgesOk = edges.filter((item) => item.sourceHandle === "ok" && !isNaN(item.target))
+      .map((item) => ({
+        id: parseInt(item.source),
+        ok_step: parseInt(item.target) || null,
+      }));
+  
+    const dataFromEdgesError = edges.filter((item) => item.sourceHandle === "error" && !isNaN(item.target))
+      .map((item) => ({
+        id: parseInt(item.source),
+        error_step: parseInt(item.target) || null,
+      }));
+  
 
+    const updatedEdgesOk = edges.filter((item) => item.sourceHandle === "ok" && !isNaN(item.target));
+    const updatedEdgesError = edges.filter((item) => item.sourceHandle === "error" && !isNaN(item.target));
+  
+
+    allNodes.forEach((node) => {
+      const id = parseInt(node.id);
+  
+      if (!updatedEdgesOk.some((edge) => parseInt(edge.source) === id)) {
+        dataFromEdgesOk.push({ id, ok_step: null });
+      }
+  
+      if (!updatedEdgesError.some((edge) => parseInt(edge.source) === id)) {
+        dataFromEdgesError.push({ id, error_step: null });
+      }
+    });
+
+    dataFromEdgesOk.forEach((edge) => {
+      if (edge.ok_step === null) {
+        const existingEdge = dataFromEdgesOk.find((item) => item.id === edge.id && item.ok_step !== null);
+        if (existingEdge) {
+          edge.ok_step = existingEdge.ok_step;
+        }
+      }
+    });
+  
+
+    dataFromEdgesError.forEach((edge) => {
+      if (edge.error_step === null) {
+        const existingEdge = dataFromEdgesError.find((item) => item.id === edge.id && item.error_step !== null);
+        if (existingEdge) {
+          edge.error_step = existingEdge.error_step;
+        }
+      }
+    });
+  
     const combinedData = dataFromNodes.map((node) => ({
       ...node,
       ...dataFromEdgesOk.find((edgeOk) => edgeOk.id === node.id),
+      ...dataFromEdgesError.find((edgeError) => edgeError.id === node.id),
     }));
-    
-    const combinedDatas = combinedData.map((node) => ({
-      ...node,
-    ...dataFromEdgesError.find((edgeError) => edgeError.id === node.id),
-    }));
-    
+  
+    console.log("Updated Edges Ok:", updatedEdgesOk);
+    console.log("Updated Edges Error:", updatedEdgesError);
+    console.log("Combined Data:", combinedData);
 
-  // console.log("Updated Edges Ok:", dataFromEdgesOk);
-  // console.log("Updated Edges Error:", dataFromEdgesError);
-  // console.log("Combined Data:", combinedDatas);
-
-  axios.postWithCallback("job-steps/data-save", combinedDatas);
-};
+    axios.postWithCallback("job-steps/data-save", combinedData);
+  };
+  
 
 
   const onNodeDragStop = (event, node) => {
@@ -231,6 +261,7 @@ const saveNodeToDatabase = () => {
           position: { x: node.position.x, y: node.position.y },
         };
       }
+      console.log("edges",edges);
       return n;
     });
 
@@ -245,7 +276,13 @@ const saveNodeToDatabase = () => {
     setAllNodes(combinedDataposition);
     // console.log(allNodes, "update");
   };
+  // const textRef = useRef(null);
+  const textRef = useRef(null);
 
+  useEffect(() => {
+    textRef?.current?.focus();
+  }, [selectedNode]);
+  
   const onConnect = useCallback(
     (params) => {
       const { sourceHandle, source, target } = params;
@@ -283,7 +320,7 @@ const saveNodeToDatabase = () => {
     },
     [setEdges, setEdge]
   );
-
+console.log("edges:",edges);
   const [nodeName, setNodeName] = useState("Node 1");
 
   useEffect(() => {
@@ -354,15 +391,18 @@ const saveNodeToDatabase = () => {
   const onNodeDoubleClick = () => {
     setShowNodeMaster(true);
   };
+  
+  const nodeId = (node)=>{
+    setName(node.data.heading);
+    setStep_type_Id(node.step_type_id)
+    setJob_Id(node.job_id);
+    setNode_Id(parseInt(node.id));
+  }
+  
 
   const handleCloseNodeMaster = () => {
     setShowNodeMaster(false);
   };
-
-  // const nodeRef = useRef();
-  // const closeModel = () => {
-  //   setShowNodeMaster(false);
-  // };
 
   const handleClickOutside = (event) => {
     if (modalRef.current && !modalRef.current.contains(event.target)) {
@@ -379,42 +419,18 @@ const saveNodeToDatabase = () => {
       document.removeEventListener("mousedown", handleDocumentClick);
     };
   }, [handleCloseNodeMaster, modalRef]);
-  // const [stepParameters, setStepParameters] = useState([]);
-
-  // useEffect(() => {
-  //   const fetchStepData = async () => {
-  //     const newStepParameters = [];
-
-  //     for (const node of nodes) {
-  //       try {
-  //         const response = await axios.get(`step-type-parameter/step-type/${node.step_type_id}`);
-  //         // console.log('Received data for node:', node.id, response.data);
+ 
+// const handleParameterFields = useCallback((itemData, editName) => {
+//   console.log('Edit Name:', editName);
+//   const fields = getstepparameterFields(...itemData, editName);
+// }, []); 
 
 
-  //         newStepParameters.push(response.data.parameter.id);
-  //       } catch (error) {
-  //         // console.error('Error fetching data:', error);
+const handleNodeClick = (event, node) => {
+    onNodeDoubleClick();
+    nodeId(node);
+};
 
-  //       }
-  //     }
-
-  //     // setStepParameters(node.step_type_id);
-  //   };
-
-  //   fetchStepData();
-  // }, [nodes]);
-
-
-//   console.log(stepParameters, "step parameter data");
-// const nodeId= useNodeId();
-
-const nodeId = (node)=>{
-  setName(node.data.heading);
-  setStep_type_Id(node.step_type_id)
-  setJob_Id(node.job_id,"job_id");
-  setNode_Id(parseInt(node.id));
-}
-console.log(step_type_id,"step_type_id");
   return (
     <>
       <button onClick={saveHandler}>Save</button>
@@ -435,10 +451,10 @@ console.log(step_type_id,"step_type_id");
               onEdgeUpdateStart={onEdgeUpdateStart}
               onEdgeUpdateEnd={onEdgeUpdateEnd}
               attributionPosition="top-right"
+              onNodeClick={(event, node) => handleNodeClick(event, node)}
               onNodeDoubleClick={onNodeDoubleClick}
               onEdgeDoubleClick={true}
               onNodeDragStop={onNodeDragStop}
-              onNodeClick={(event, node) => nodeId(node)}
             >
               <Background color="#aaa" gap={16} />
               {/* <Controls /> */}
@@ -450,7 +466,6 @@ console.log(step_type_id,"step_type_id");
                 job_Id={job_id}
                 node_Id={nodeid}
                 name={editName}
-                handleParameterFields={(itemData) => handleParameterFields(itemData, editName)}
               />
             </Modal>
           </div>

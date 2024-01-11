@@ -51,23 +51,39 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
   let defaultObj = { step_name:'',  type: '', name: '', img: '', group: '', parametres: '' };
 
   // console.log(parameter, "parameter");
-    const getItemData = (itemData) => {
-      let dt = [
-        {
-          col: 12,
-          callback: itemData.callback,
-          groups: [editName]
-            ? [editName].map((v) => ({
-                id: "inputparameterFileid",
-                // label: (name === "step_name" ? v.step_name : name),
-                label:"Step Name",
-                name: "step_name",
-                control: "input",
-                isSubmit: itemData.isSubmit,
-                itemVal: name === "step_name" ? v.step_name : name,                   
-              }))
-            : [],
-        },
+    // const getItemData = (itemData) => {
+    //   let dt = [
+    //     {
+    //       col: 12,
+    //       callback: itemData.callback,
+    //       groups: [editName]
+    //         ? [editName].map((v) => ({
+    //             id: "inputparameterFileid",
+    //             // label: (name === "step_name" ? v.step_name : name),
+    //             label:"Step Name",
+    //             name: "step_name",
+    //             control: "input",
+    //             isSubmit: itemData.isSubmit,
+    //             itemVal: name === "step_name" ? v.step_name : name,                   
+    //           }))
+    //         : [],
+    //     },
+  const getItemData = (itemData) => {
+    let dt = [
+      {
+        col: 12,
+        callback: itemData.callback,
+        groups: [editName]
+          ? [editName].map((v) => ({
+              id: "inputparameterFileid",
+              label: (name ||"step_name"),
+              name: "step_name",
+              control: "input",
+              isSubmit: itemData.isSubmit,
+              itemVal: name === 'step_name' ? v.step_name : name,
+            }))
+          : [editName],
+      },
       {
         col: 12,
         callback: itemData.callback,
@@ -90,15 +106,13 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
     return dt;
   };
   
-
-
   return (
     <>
       <CommonModel
         formDataAction={getItemData}
         columns={config.STEPTYPE}
         insertApi={`/job-steps/${node_Id || 0}/name-save` || "step-type"}
-        getApi={`/job-steps/${node_Id || 0}` || "step-type/parameter/get"}
+        getApi="step-type/parameter/get"
         title={name}
         defaultObj={[defaultObj]}
         // options={[]}

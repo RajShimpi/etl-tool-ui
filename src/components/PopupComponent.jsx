@@ -91,7 +91,7 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
           });
           break;
         case "Edit":
-          axios.putWithCallback(`project-files/`,
+          axios.putWithCallback(`project-files/${item.id}`,
           { ...item, id: props.item?.id },
           (resp) => {
             
