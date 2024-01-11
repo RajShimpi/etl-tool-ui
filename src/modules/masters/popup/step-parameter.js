@@ -48,7 +48,8 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
   }, []);
  console.log(editName);
 
-  let defaultObj = { step_name: "", type: '', name: '', img: '', group: '', parametres: '' };
+  let defaultObj = {  type: '', name: '', img: '', group: '', parametres: '' };
+  let defaultObjs = { step_name:''};
   // console.log(parameter, "parameter");
   const getItemData = (itemData) => {
     let dt = [
@@ -56,14 +57,12 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
         col: 12,
         callback: itemData.callback,
         groups: [editName]
-          ? [editName].map((v) => ({
+          ? [editName]?.map((v) => ({
               id: "inputparameterFileid",
               label: "Step Name",
-              name: v.step_name,
-              // options: itemData.options[0],
+              name: "step_name", // Set the step_name based on the API response
               control: "input",
               isSubmit: itemData.isSubmit,
-              // isRequired: !itemData?.values?.paramters,
               itemVal: itemData.values ? itemData.values[v.step_name] : '',
             }))
           : [],
@@ -85,22 +84,6 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
             }))
           : [],
       },
-      // {
-      //   col: 12,
-      //   callback: itemData.callback,
-      //   groups: !!parameter
-      //     ? parameter?.map((v) => ({
-      //         id: "inputparameterFileid",
-      //         label: "edit Name",
-      //         name: "parameter_name",
-      //         options: itemData.options[0],
-      //         control: "input",
-      //         isSubmit: itemData.isSubmit,
-      //         isRequired: !itemData?.values?.paramters,
-      //         itemVal: itemData.values ? itemData.values["parameter_name"] : '',
-      //       }))
-      //     : [],
-      // },
     ];
   
     return dt;
@@ -112,11 +95,11 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
     <>
       <CommonModel
         formDataAction={getItemData}
-        columns={config.STEP_PARAMETER}
+        columns={config.STEPTYPE}
         insertApi={`/job-steps/${node_Id || 0}/name-save` || "step-type"}
         getApi={`/job-steps/${node_Id || 0}/` || "step-type/parameter/get"}
         title={name}
-        defaultObj={defaultObj}
+        defaultObj={[defaultObj,defaultObjs]}
         // options={[]}
         tableTitle='step-parameter'
       />
