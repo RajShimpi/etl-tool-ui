@@ -48,8 +48,8 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
   }, []);
  console.log(editName);
 
-  let defaultObj = {  type: '', name: '', img: '', group: '', parametres: '' };
-  let defaultObjs = { step_name:''};
+  let defaultObj = { step_name:'',  type: '', name: '', img: '', group: '', parametres: '' };
+
   // console.log(parameter, "parameter");
   const getItemData = (itemData) => {
     let dt = [
@@ -57,13 +57,13 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
         col: 12,
         callback: itemData.callback,
         groups: [editName]
-          ? [editName]?.map((v) => ({
+          ? [editName].map((v) => ({
               id: "inputparameterFileid",
-              label: "Step Name",
-              name: "step_name",
+              // label: v.step_name,
+              name: "step_name"|| v.step_name,
               control: "input",
               isSubmit: itemData.isSubmit,
-              itemVal: itemData.values ? itemData.values[v.step_name] : '',
+              itemVal: itemData.values ? itemData.values["step_name"] : v.step_name,
             }))
           : [],
       },
@@ -99,7 +99,7 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
         insertApi={`/job-steps/${node_Id || 0}/name-save` || "step-type"}
         getApi={`/job-steps/${node_Id || 0}/` || "step-type/parameter/get"}
         title={name}
-        defaultObj={[defaultObj,defaultObjs]}
+        defaultObj={[defaultObj]}
         // options={[]}
         tableTitle='step-parameter'
       />
