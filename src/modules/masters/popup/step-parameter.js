@@ -60,7 +60,7 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
           ? [editName]?.map((v) => ({
               id: "inputparameterFileid",
               label: "Step Name",
-              name: "step_name", // Set the step_name based on the API response
+              name: "step_name",
               control: "input",
               isSubmit: itemData.isSubmit,
               itemVal: itemData.values ? itemData.values[v.step_name] : '',
