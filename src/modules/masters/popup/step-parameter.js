@@ -49,7 +49,7 @@ const StepParameter = ({ step_type_id ,name}) => {
   //   console.log(parameter, "parameter");
   // }, [parameter]);
 
-    let defaultObj = {type: '', name: editName || '', img: '', group: '', parametres: '' };
+    let defaultObj = {type: '', name: '', img: '', group: '', parametres: '' };
     // console.log(parameter, "parameter");
     const getItemData = (itemData) => {
       let dt = [
