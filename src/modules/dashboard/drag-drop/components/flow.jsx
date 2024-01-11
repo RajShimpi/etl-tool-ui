@@ -51,7 +51,8 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
 
     const reactFlowWrapper = useRef(null);
     const edgeUpdateSuccessful = useRef(true);
-    const textRef = useRef(null);
+   
+
     const modalRef = useRef(null);
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
     // const [node, setNode] = useState([]);
@@ -70,10 +71,10 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
     const [nodeid, setNode_Id] = useState();
     const [editName,setName]=useState()
     const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
-    const handleParameterFields = useCallback((itemData, editName) => {
-      console.log('Edit Name:', editName);
-      const fields = getstepparameterFields(...itemData, editName);
-    }, []); 
+    // const handleParameterFields = useCallback((itemData, editName) => {
+    //   console.log('Edit Name:', editName);
+    //   const fields = getstepparameterFields(...itemData, editName);
+    // }, []); 
 
     useEffect(() => {
       axios.getWithCallback("job-steps/", (data) => {
@@ -247,7 +248,13 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
       setAllNodes(combinedDataposition);
       // console.log(allNodes, "update");
     };
+    // const textRef = useRef(null);
+    const textRef = useRef(null);
 
+    useEffect(() => {
+      textRef?.current?.focus();
+    }, [selectedNode]);
+    
     const onConnect = useCallback(
       (params) => {
         const { sourceHandle, source, target } = params;
@@ -356,15 +363,18 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
     const onNodeDoubleClick = () => {
       setShowNodeMaster(true);
     };
+    
+    const nodeId = (node)=>{
+      setName(node.data.heading);
+      setStep_type_Id(node.step_type_id)
+      setJob_Id(node.job_id);
+      setNode_Id(parseInt(node.id));
+    }
+    
 
     const handleCloseNodeMaster = () => {
       setShowNodeMaster(false);
     };
-
-    // const nodeRef = useRef();
-    // const closeModel = () => {
-    //   setShowNodeMaster(false);
-    // };
 
     const handleClickOutside = (event) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
@@ -381,41 +391,12 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
         document.removeEventListener("mousedown", handleDocumentClick);
       };
     }, [handleCloseNodeMaster, modalRef]);
-    // const [stepParameters, setStepParameters] = useState([]);
+   
+  // const handleParameterFields = useCallback((itemData, editName) => {
+  //   console.log('Edit Name:', editName);
+  //   const fields = getstepparameterFields(...itemData, editName);
+  // }, []); 
 
-    // useEffect(() => {
-    //   const fetchStepData = async () => {
-    //     const newStepParameters = [];
-
-    //     for (const node of nodes) {
-    //       try {
-    //         const response = await axios.get(`step-type-parameter/step-type/${node.step_type_id}`);
-    //         // console.log('Received data for node:', node.id, response.data);
-
-
-    //         newStepParameters.push(response.data.parameter.id);
-    //       } catch (error) {
-    //         // console.error('Error fetching data:', error);
-
-    //       }
-    //     }
-
-    //     // setStepParameters(node.step_type_id);
-    //   };
-
-    //   fetchStepData();
-    // }, [nodes]);
-
-
-  //   console.log(stepParameters, "step parameter data");
-  // const nodeId= useNodeId();
-
-  const nodeId = (node)=>{
-    setName(node.data.heading);
-    setStep_type_Id(node.step_type_id)
-    setJob_Id(node.job_id,"job_id");
-    setNode_Id(parseInt(node.id));
-  }
     return (
       <>
         <button onClick={saveHandler}>Save</button>
@@ -439,7 +420,7 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
                 onNodeDoubleClick={onNodeDoubleClick}
                 onEdgeDoubleClick={true}
                 onNodeDragStop={onNodeDragStop}
-                // onNodeClick={(event, node) => nodeId(node)}
+                onNodeClick={(event, node) => nodeId(node)}
               >
                 <Background color="#aaa" gap={16} />
                 {/* <Controls /> */}
@@ -451,7 +432,7 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
                   job_Id={job_id}
                   node_Id={nodeid}
                   name={editName}
-                  handleParameterFields={(itemData) => handleParameterFields(itemData, editName)}
+                  // handleParameterFields={(itemData) => handleParameterFields(itemData, editName)}
                 />
               </Modal>
             </div>

@@ -13,6 +13,7 @@ const AddFile = ({ project_id, id }) => {
                 formDataAction={getCommonFields}
                 columns={config.PROJECT_FILE}
                 insertApi="project-files"
+               
                 title="Add File"
                 defaultObj={defaultObj}
             />
