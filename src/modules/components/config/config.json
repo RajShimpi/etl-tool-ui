@@ -102,6 +102,7 @@
     "type", 
     "name", 
     "img", 
+    "step_name",
     "group"],
   "TYPE_CONFIG": [
     "category", 
