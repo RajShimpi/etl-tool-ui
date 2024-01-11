@@ -177,52 +177,80 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
       setAllNodes((prevNodes) => [...prevNodes, newNode]);
     };
 
-  const saveNodeToDatabase = () => {
-    const dataFromNodes = allNodes.map((item) => ({
-      id: parseInt(item.id),
-      job_id: 1,
-      step_type_id: parseInt(item.step_type_id),
-      step_name: item.data?.heading || item.name,
-      type: "node",
-      params: {
-        position_X:
-          item.id === position.id ? position.position_X : item.position.x,
-        position_Y:
-          item.id === position.id ? position.position_Y : item.position.y,
-      },
-    }));
-
-    const dataFromEdgesOk = edges.filter((item) => item.sourceHandle === "ok" && item.target !== null && !isNaN(item.target))
-      .map((item) => ({
-        id:  parseInt(item.source),
-        ok_step: parseInt(item.target)|| null,
+    const saveNodeToDatabase = () => {
+      const dataFromNodes = allNodes.map((item) => ({
+        id: parseInt(item.id),
+        job_id: 1,
+        step_type_id: parseInt(item.step_type_id),
+        step_name: item.data?.heading || item.name,
+        type: "node",
+        params: {
+          position_X: item.id === position.id ? position.position_X : item.position.x,
+          position_Y: item.id === position.id ? position.position_Y : item.position.y,
+        },
       }));
+    
+      const dataFromEdgesOk = edges.filter((item) => item.sourceHandle === "ok" && !isNaN(item.target))
+        .map((item) => ({
+          id: parseInt(item.source),
+          ok_step: parseInt(item.target) || null,
+        }));
+    
+      const dataFromEdgesError = edges.filter((item) => item.sourceHandle === "error" && !isNaN(item.target))
+        .map((item) => ({
+          id: parseInt(item.source),
+          error_step: parseInt(item.target) || null,
+        }));
+    
 
-      const dataFromEdgesError = edges.filter((item) => item.sourceHandle === "error" && item.target !== null && !isNaN(item.target))
-      .map((item) => ({
-        id: parseInt(item.source),
-        error_step: parseInt(item.target)|| null,
-      }));
-    console.log("OK :",dataFromEdgesOk);
-    console.log("Error :",dataFromEdgesError);
+      const updatedEdgesOk = edges.filter((item) => item.sourceHandle === "ok" && !isNaN(item.target));
+      const updatedEdgesError = edges.filter((item) => item.sourceHandle === "error" && !isNaN(item.target));
+    
 
+      allNodes.forEach((node) => {
+        const id = parseInt(node.id);
+    
+        if (!updatedEdgesOk.some((edge) => parseInt(edge.source) === id)) {
+          dataFromEdgesOk.push({ id, ok_step: null });
+        }
+    
+        if (!updatedEdgesError.some((edge) => parseInt(edge.source) === id)) {
+          dataFromEdgesError.push({ id, error_step: null });
+        }
+      });
+
+      dataFromEdgesOk.forEach((edge) => {
+        if (edge.ok_step === null) {
+          const existingEdge = dataFromEdgesOk.find((item) => item.id === edge.id && item.ok_step !== null);
+          if (existingEdge) {
+            edge.ok_step = existingEdge.ok_step;
+          }
+        }
+      });
+    
+
+      dataFromEdgesError.forEach((edge) => {
+        if (edge.error_step === null) {
+          const existingEdge = dataFromEdgesError.find((item) => item.id === edge.id && item.error_step !== null);
+          if (existingEdge) {
+            edge.error_step = existingEdge.error_step;
+          }
+        }
+      });
+    
       const combinedData = dataFromNodes.map((node) => ({
         ...node,
         ...dataFromEdgesOk.find((edgeOk) => edgeOk.id === node.id),
+        ...dataFromEdgesError.find((edgeError) => edgeError.id === node.id),
       }));
-      
-      const combinedDatas = combinedData.map((node) => ({
-        ...node,
-      ...dataFromEdgesError.find((edgeError) => edgeError.id === node.id),
-      }));
-      
+    
+      console.log("Updated Edges Ok:", updatedEdgesOk);
+      console.log("Updated Edges Error:", updatedEdgesError);
+      console.log("Combined Data:", combinedData);
 
-    console.log("Updated Edges Ok:", dataFromEdgesOk);
-    console.log("Updated Edges Error:", dataFromEdgesError);
-    console.log("Combined Data:", combinedDatas);
-
-    axios.postWithCallback("job-steps/data-save", combinedDatas);
-  };
+      axios.postWithCallback("job-steps/data-save", combinedData);
+    };
+    
 
 
     const onNodeDragStop = (event, node) => {
@@ -292,7 +320,7 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
       },
       [setEdges, setEdge]
     );
-
+console.log("edges:",edges);
     const [nodeName, setNodeName] = useState("Node 1");
 
     useEffect(() => {
@@ -396,6 +424,12 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
   //   console.log('Edit Name:', editName);
   //   const fields = getstepparameterFields(...itemData, editName);
   // }, []); 
+  
+
+  const handleNodeClick = (event, node) => {
+      onNodeDoubleClick();
+      nodeId(node);
+  };
 
     return (
       <>
@@ -417,10 +451,10 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
                 onEdgeUpdateStart={onEdgeUpdateStart}
                 onEdgeUpdateEnd={onEdgeUpdateEnd}
                 attributionPosition="top-right"
+                onNodeClick={(event, node) => handleNodeClick(event, node)}
                 onNodeDoubleClick={onNodeDoubleClick}
                 onEdgeDoubleClick={true}
                 onNodeDragStop={onNodeDragStop}
-                onNodeClick={(event, node) => nodeId(node)}
               >
                 <Background color="#aaa" gap={16} />
                 {/* <Controls /> */}
@@ -432,7 +466,6 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
                   job_Id={job_id}
                   node_Id={nodeid}
                   name={editName}
-                  // handleParameterFields={(itemData) => handleParameterFields(itemData, editName)}
                 />
               </Modal>
             </div>

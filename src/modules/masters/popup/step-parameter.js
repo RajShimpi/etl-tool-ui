@@ -11,7 +11,7 @@ import CommonModel from '../../components/common-modal';
 
 
 const StepParameter = ({ node_Id, step_type_id, name }) => {
-  console.log(node_Id, "name");
+  // console.log(node_Id, "name");
   const [parameter, setparameter] = useState([]);
   const [editName, setEditName] = useState('');
   useEffect(() => {
@@ -46,7 +46,7 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
   useEffect(() => {
     axios.getWithCallback(`job-steps/${node_Id || 0}`, (data) => setEditName(data));
   }, []);
- console.log(editName);
+//  console.log(editName);
 
   let defaultObj = { step_name:'',  type: '', name: '', img: '', group: '', parametres: '' };
 
@@ -59,13 +59,13 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
         groups: [editName]
           ? [editName].map((v) => ({
               id: "inputparameterFileid",
-              // label: v.step_name,
-              name: "step_name"|| v.step_name,
+              label: (name ||"step_name"),
+              name: "step_name",
               control: "input",
               isSubmit: itemData.isSubmit,
-              itemVal: itemData.values ? itemData.values["step_name"] : v.step_name,
+              itemVal: name === 'step_name' ? v.step_name : name,
             }))
-          : [],
+          : [editName],
       },
       {
         col: 12,
@@ -97,7 +97,7 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
         formDataAction={getItemData}
         columns={config.STEPTYPE}
         insertApi={`/job-steps/${node_Id || 0}/name-save` || "step-type"}
-        getApi={`/job-steps/${node_Id || 0}/` || "step-type/parameter/get"}
+        getApi="step-type/parameter/get"
         title={name}
         defaultObj={[defaultObj]}
         // options={[]}

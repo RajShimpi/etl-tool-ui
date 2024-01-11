@@ -3,9 +3,9 @@ import config from "../../components/config/config.json"
 import CommonModel from '../../components/common-modal';
 import { getCommonFields } from './common-data';
 
-const Edit = ({ project_id, id }) => {
+const Edit = ({ id }) => {
 
-    let defaultObj = { file_name: '', project_id: project_id, type: 'File', parent_id: id };
+    let defaultObj = { file_name: ''};
 
     return (
         <>
@@ -13,7 +13,7 @@ const Edit = ({ project_id, id }) => {
                 formDataAction={getCommonFields}
                 columns={config.PROJECT_FILE}
                 // insertApi="clients"
-                updateApi={`project-files/${id}`}
+                // updateApi={`project-files/${id}`}
                 // getApi="clients"
                 title="Edit"
                 defaultObj={defaultObj}
