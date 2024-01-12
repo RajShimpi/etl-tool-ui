@@ -50,24 +50,6 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
 
   let defaultObj = { step_name:'',  type: '', name: '', img: '', group: '', parametres: '' };
 
-  // console.log(parameter, "parameter");
-    // const getItemData = (itemData) => {
-    //   let dt = [
-    //     {
-    //       col: 12,
-    //       callback: itemData.callback,
-    //       groups: [editName]
-    //         ? [editName].map((v) => ({
-    //             id: "inputparameterFileid",
-    //             // label: (name === "step_name" ? v.step_name : name),
-    //             label:"Step Name",
-    //             name: "step_name",
-    //             control: "input",
-    //             isSubmit: itemData.isSubmit,
-    //             itemVal: name === "step_name" ? v.step_name : name,                   
-    //           }))
-    //         : [],
-    //     },
   const getItemData = (itemData) => {
     let dt = [
       {
@@ -115,7 +97,6 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
         getApi="step-type/parameter/get"
         title={name}
         defaultObj={[defaultObj]}
-        // options={[]}
         tableTitle='step-parameter'
       />
 

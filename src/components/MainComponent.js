@@ -64,7 +64,7 @@ const MainComponent = () => {
 
   const handleThemeChange = (index) => {
     setCurrentThemeIndex(index);
-    // setIsDropdownOpen(false); // Close the dropdown after selecting a theme
+    // setIsDropdownOpen(false);
   };
 
   const calculatePhotoWidth = () => {
@@ -113,7 +113,9 @@ const MainComponent = () => {
             />
           </div>
           <div style={{ width: calculatePhotoWidth() }}>
-            <OverviewFlow />
+            <OverviewFlow
+             textColor={themes[currentThemeIndex].textColor}
+              />
           </div>
           <div className={` ${isComponetToolOpen ? "open" : ""}`}>
             <ComponetTool

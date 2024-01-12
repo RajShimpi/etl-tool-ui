@@ -26,7 +26,7 @@ import { isAllNodeisConnected } from "../utils";
 import "reactflow/dist/style.css";
 import "./dnd.css";
 import "./update-node.css";
-
+import "../../../../components/MainComponent.css";
 import Modal from "../../../components/modal-popup";
 
 import Job from "../../../masters/job";
@@ -38,7 +38,7 @@ import axios from "../../../services/axios";
 // import { ClassNames } from "@emotion/react";
 // // import Job from "../../../masters/job";
 // import axios from "../../../services/axios";
-import { event, post } from "jquery";
+import { data, event, post } from "jquery";
 import StepParameter from "../../../masters/popup/step-parameter";
 import { getstepparameterFields } from "../../../masters/popup/step-paramter-data";
 // import ContextMenu from "../../../../components/ContextMenu";
@@ -49,22 +49,15 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
 const nodeTypes = { node: Node };
 function ContextMenu({
   id,
+  name,
   top,
   left,
   right,
   bottom,
+  textColor,
   ...props
 }) {
-  const { getNode, setNodes, addNodes, setEdges } = useReactFlow();
-  const duplicateNode = useCallback(() => {
-    const node = getNode(id);
-    const position = {
-      x: node.position.x + 50,
-      y: node.position.y + 50,
-    };
-
-    addNodes({ ...node, id: `${node.id}-copy`, position });
-  }, [id, getNode, addNodes]);
+  const { setNodes, setEdges } = useReactFlow();
 
   const deleteNode = useCallback(() => {
     setNodes((nodes) => nodes.filter((node) => node.id !== id));
@@ -72,16 +65,20 @@ function ContextMenu({
   }, [id, setNodes, setEdges]);
 
   return (
-    <div
-      style={{ top, left, right, bottom }}
-      className="context-menu"
-      {...props}
-    >
-      <p style={{ margin: '0.5em' }}>
-        <small>node: {id}</small>
+    <>
+      <p style={{ margin: "0.5em" }}>
+        <small style={{ textColor }}>node: {name}</small>
       </p>
-      <button onClick={deleteNode}>delete</button>
-    </div>
+      <div
+        style={{ top, left, right, bottom }}
+        className="menu-item"
+        {...props}
+      >
+        <div style={{ textColor }} onClick={deleteNode}>
+          delete
+        </div>
+      </div>
+    </>
   );
 }
 
@@ -90,7 +87,6 @@ const OverviewFlow = () => {
 
   const reactFlowWrapper = useRef(null);
   const edgeUpdateSuccessful = useRef(true);
- 
 
   const modalRef = useRef(null);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
@@ -102,7 +98,6 @@ const OverviewFlow = () => {
   const [edge, setEdge] = useState([]);
   const [selectedNode, setSelectedNode] = useState(null);
   const [isSelected, setIsSelected] = useState(false);
-  // const [currentId, setCurrentId] = useState(0);
   const [draggedNodeInfo, setDraggedNodeInfo] = useState(null);
   // const [newNodes, setNewNodes] = useState(null);
   const [position, setPosition] = useState([]);
@@ -110,13 +105,13 @@ const OverviewFlow = () => {
   const [step_type_id, setStep_type_Id] = useState();
   const [job_id, setJob_Id] = useState();
   const [nodeid, setNode_Id] = useState();
-  const [editName,setName]=useState()
+  const [editName, setName] = useState();
+  const [activeNodes, setActiveNodes] = useState([]);
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
   // const handleParameterFields = useCallback((itemData, editName) => {
   //   console.log('Edit Name:', editName);
   //   const fields = getstepparameterFields(...itemData, editName);
-  // }, []);  
-
+  // }, []);
 
   useEffect(() => {
     axios.getWithCallback("job-steps/", (data) => {
@@ -133,7 +128,10 @@ const OverviewFlow = () => {
           x: item.params.position_X,
           y: item.params.position_Y,
         },
+        node_active: item.node_active,
       }));
+
+      // console.log("dataNodes:", dataNodes);
 
       const dataEdgesok = data.map((item) => ({
         id: "" + item.id,
@@ -160,15 +158,13 @@ const OverviewFlow = () => {
       setNodes(dataNodes);
       setEdges([...dataEdgesok, ...dataEdgeserror]);
 
-      const combinedDataOk = dataNodes.map((node) => ({
+      const combinedData = dataNodes.map((node) => ({
         ...node,
         ...dataEdgesok.find((edgeOk) => edgeOk.id === node.id),
-      }));
-
-      const combinedData = combinedDataOk.map((node) => ({
-        ...node,
         ...dataEdgeserror.find((edgeError) => edgeError.id === node.id),
       }));
+
+      // console.log("combinedData:",combinedData)
 
       setAllNodes(combinedData);
       function getlabelColor(label) {
@@ -203,12 +199,13 @@ const OverviewFlow = () => {
 
     const currentId = nodes.length;
     const nextId = currentId + 1;
-
+    // console.log("nextId:",nextId);
     const newNode = {
       id: `${nextId}`,
       step_type_id,
       name,
       type,
+      node_active: true,
       position,
       data: { heading: name, img: img },
     };
@@ -227,35 +224,41 @@ const OverviewFlow = () => {
       step_name: item.data?.heading || item.name,
       type: "node",
       params: {
-        position_X: item.id === position.id ? position.position_X : item.position.x,
-        position_Y: item.id === position.id ? position.position_Y : item.position.y,
+        position_X:
+          item.id === position.id ? position.position_X : item.position.x,
+        position_Y:
+          item.id === position.id ? position.position_Y : item.position.y,
       },
     }));
-  
-    const dataFromEdgesOk = edges.filter((item) => item.sourceHandle === "ok" && !isNaN(item.target))
+
+    const dataFromEdgesOk = edges
+      .filter((item) => item.sourceHandle === "ok" && !isNaN(item.target))
       .map((item) => ({
         id: parseInt(item.source),
         ok_step: parseInt(item.target) || null,
       }));
-  
-    const dataFromEdgesError = edges.filter((item) => item.sourceHandle === "error" && !isNaN(item.target))
+
+    const dataFromEdgesError = edges
+      .filter((item) => item.sourceHandle === "error" && !isNaN(item.target))
       .map((item) => ({
         id: parseInt(item.source),
         error_step: parseInt(item.target) || null,
       }));
-  
 
-    const updatedEdgesOk = edges.filter((item) => item.sourceHandle === "ok" && !isNaN(item.target));
-    const updatedEdgesError = edges.filter((item) => item.sourceHandle === "error" && !isNaN(item.target));
-  
+    const updatedEdgesOk = edges.filter(
+      (item) => item.sourceHandle === "ok" && !isNaN(item.target)
+    );
+    const updatedEdgesError = edges.filter(
+      (item) => item.sourceHandle === "error" && !isNaN(item.target)
+    );
 
     allNodes.forEach((node) => {
       const id = parseInt(node.id);
-  
+
       if (!updatedEdgesOk.some((edge) => parseInt(edge.source) === id)) {
         dataFromEdgesOk.push({ id, ok_step: null });
       }
-  
+
       if (!updatedEdgesError.some((edge) => parseInt(edge.source) === id)) {
         dataFromEdgesError.push({ id, error_step: null });
       }
@@ -263,36 +266,40 @@ const OverviewFlow = () => {
 
     dataFromEdgesOk.forEach((edge) => {
       if (edge.ok_step === null) {
-        const existingEdge = dataFromEdgesOk.find((item) => item.id === edge.id && item.ok_step !== null);
+        const existingEdge = dataFromEdgesOk.find(
+          (item) => item.id === edge.id && item.ok_step !== null
+        );
         if (existingEdge) {
           edge.ok_step = existingEdge.ok_step;
         }
       }
     });
-  
 
     dataFromEdgesError.forEach((edge) => {
       if (edge.error_step === null) {
-        const existingEdge = dataFromEdgesError.find((item) => item.id === edge.id && item.error_step !== null);
+        const existingEdge = dataFromEdgesError.find(
+          (item) => item.id === edge.id && item.error_step !== null
+        );
         if (existingEdge) {
           edge.error_step = existingEdge.error_step;
         }
       }
     });
-  
+
     const combinedData = dataFromNodes.map((node) => ({
       ...node,
       ...dataFromEdgesOk.find((edgeOk) => edgeOk.id === node.id),
       ...dataFromEdgesError.find((edgeError) => edgeError.id === node.id),
+      // ...dataToNodeActive.find((nodeActive) => nodeActive.id === node.id),
     }));
-  
+
     console.log("Updated Edges Ok:", updatedEdgesOk);
     console.log("Updated Edges Error:", updatedEdgesError);
     console.log("Combined Data:", combinedData);
 
     axios.postWithCallback("job-steps/data-save", combinedData);
   };
-  
+
   const onNodeDragStop = (event, node) => {
     const updatedPosition = nodes.map((n) => {
       if (n.id === node.id) {
@@ -301,7 +308,7 @@ const OverviewFlow = () => {
           position: { x: node.position.x, y: node.position.y },
         };
       }
-      console.log("edges",edges);
+      // console.log("edges",edges);
       return n;
     });
 
@@ -322,12 +329,11 @@ const OverviewFlow = () => {
   useEffect(() => {
     textRef?.current?.focus();
   }, [selectedNode]);
-  
+
   const onConnect = useCallback(
     (params) => setEdges((els) => addEdge(params, els)),
-  [setEdges],
-    (params) => 
-     {
+    [setEdges],
+    (params) => {
       const { sourceHandle, source, target } = params;
       // const sourceNodeId = parseInt(source);
       // const targetNodeId = parseInt(target);
@@ -344,10 +350,10 @@ const OverviewFlow = () => {
 
       const newEdge = {
         ...params,
-      //   source: sourceNodeId,
-      // target: targetNodeId,
+        //   source: sourceNodeId,
+        // target: targetNodeId,
         label,
-        type: params.type || "step",
+        type: "step",
         arrowHeadType: "arrowclosed",
         style: {
           stroke: color,
@@ -363,7 +369,7 @@ const OverviewFlow = () => {
     },
     [setEdges, setEdge]
   );
-console.log("edges:",edges);
+  console.log("edges:", edges);
   const [nodeName, setNodeName] = useState("Node 1");
 
   useEffect(() => {
@@ -434,14 +440,13 @@ console.log("edges:",edges);
   const onNodeDoubleClick = () => {
     setShowNodeMaster(true);
   };
-  
-  const nodeId = (node)=>{
+
+  const nodeId = (node) => {
     setName(node.data.heading);
-    setStep_type_Id(node.step_type_id)
+    setStep_type_Id(node.step_type_id);
     setJob_Id(node.job_id);
     setNode_Id(parseInt(node.id));
-  }
-  
+  };
 
   const handleCloseNodeMaster = () => {
     setShowNodeMaster(false);
@@ -462,46 +467,60 @@ console.log("edges:",edges);
       document.removeEventListener("mousedown", handleDocumentClick);
     };
   }, [handleCloseNodeMaster, modalRef]);
- 
-// const handleParameterFields = useCallback((itemData, editName) => {
-//   console.log('Edit Name:', editName);
-//   const fields = getstepparameterFields(...itemData, editName);
-// }, []); 
 
-
-const handleNodeClick = (event, node) => {
+  const handleNodeClick = (event, node) => {
     onNodeDoubleClick();
     nodeId(node);
-};
+  };
 
+  const onNodeContextMenu = useCallback(
+    (event, node) => {
+      event.preventDefault();
 
-const onNodeContextMenu = useCallback(
-  (event, node) => {
-    event.preventDefault();
+      const pane = ref.current.getBoundingClientRect();
+      setMenu({
+        id: node.id,
+        name: node.data.heading,
+        top: event.clientY < pane.height - 200 && event.clientY,
+        left: event.clientX < pane.width - 200 && event.clientX,
+        right: event.clientX >= pane.width - 200 && pane.width - event.clientX,
+        bottom:
+          event.clientY >= pane.height - 200 && pane.height - event.clientY,
+      });
 
-const pane = ref.current.getBoundingClientRect();
-setMenu({
-  id: node.id,
-  top: event.clientY < pane.height - 200 && event.clientY,
-  left: event.clientX < pane.width - 200 && event.clientX,
-  right: event.clientX >= pane.width - 200 && pane.width - event.clientX,
-  bottom:
-    event.clientY >= pane.height - 200 && pane.height - event.clientY,
-});
-},
-[setMenu],
-);
+      const updatedActiveNodes = activeNodes.includes(node.id)
+        ? activeNodes.filter((id) => id !== node.id)
+        : [...activeNodes, node.id];
 
-const onPaneClick = useCallback(() => setMenu(null), [setMenu]);
+      setActiveNodes(updatedActiveNodes);
+    },
+    [setMenu, setActiveNodes, activeNodes]
+  );
+
+  // console.log("activeNodes:",parseInt(activeNodes));
+
+  const onPaneClick = useCallback(() => setMenu(null), [setMenu]);
+  const saveNodeActiveStatus = () => {
+    const dataToUpdate = {
+      node_active: false,
+    };
+
+    axios.putWithCallback(
+      `job-steps/${parseInt(activeNodes)}/node-active`,
+      dataToUpdate
+    );
+  };
+
+  const Nodes = nodes.filter((item) => item.node_active === true);
 
   return (
     <>
-      <button onClick={saveHandler}>Save</button> 
+      <button onClick={saveHandler}>Save</button>
       <div className="dndflow">
         <ReactFlowProvider>
           <div className="reactflow-wrapper" ref={reactFlowWrapper}>
             <ReactFlow
-              nodes={nodes}
+              nodes={Nodes}
               edges={edges}
               nodeTypes={nodeTypes}
               onNodesChange={onNodesChange}
@@ -518,19 +537,27 @@ const onPaneClick = useCallback(() => setMenu(null), [setMenu]);
               onNodeDoubleClick={onNodeDoubleClick}
               onEdgeDoubleClick={true}
               onNodeDragStop={onNodeDragStop}
-              onPaneClick={onPaneClick}
               onNodeContextMenu={onNodeContextMenu}
+              onPaneClick={() => {
+                saveNodeActiveStatus();
+                onPaneClick();
+              }}
               fitView
             >
               <Background color="#aaa" gap={16} />
               {menu && <ContextMenu onClick={onPaneClick} {...menu} />}
               {/* <Controls /> */}
-              <div className="reactflow-wrapper" ref={reactFlowWrapper}/>
-              <div ref={ref}/>
-            </ReactFlow>  
+              <div className="reactflow-wrapper" ref={reactFlowWrapper} />
+              <div ref={ref} />
+            </ReactFlow>
 
-            <Modal modalTitle={"Save/Update Parameter"} ref={modalRef} handleClose={handleCloseNodeMaster} show={showNodeMaster}>
-            <StepParameter
+            <Modal
+              modalTitle={"Save/Update Parameter"}
+              ref={modalRef}
+              handleClose={handleCloseNodeMaster}
+              show={showNodeMaster}
+            >
+              <StepParameter
                 step_type_id={step_type_id}
                 job_Id={job_id}
                 node_Id={nodeid}
@@ -543,6 +570,5 @@ const onPaneClick = useCallback(() => setMenu(null), [setMenu]);
     </>
   );
 };
-
 
 export default OverviewFlow;
