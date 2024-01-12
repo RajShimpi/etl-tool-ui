@@ -30,7 +30,8 @@
 
 .dndflow .reactflow-wrapper {
   flex-grow: 1;
-  height: 100%;
+  height: 100%; 
+  position: relative;
 }
 
 @media screen and (min-width: 768px) {
@@ -43,3 +44,43 @@
     max-width: 180px;
   }
 }
+
+.context-menu {
+  background-color: #ffffff4f;
+  /* border-style: solid; */
+  /* box-shadow: 10px 19px 20px rgba(0, 0, 0, 10%); */
+  position: absolute;
+  z-index: 10;
+  /* top: 0;
+  left: 0; */
+  margin-top: -250px !important;
+  height: 86px;
+  width: 100px !important;
+}
+
+.context-menu button {
+  border: none;
+  display: block;
+  padding: 0.5em;
+  text-align: left;
+  width: 100%;
+}
+
+.deleteNode{
+ text-align: center;
+}
+
+.deleteNodename{
+  text-align: center;
+  padding-top: 10px;
+}
+
+/* .context-menu button:hover {
+  background: white;
+} */
+/* 
+.context-menu button:hover {
+  background: white;
+} */
+
+

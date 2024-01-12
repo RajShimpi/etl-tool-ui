@@ -55,7 +55,7 @@ function ContextMenu({
   bottom,
   ...props
 }) {
-  const { getNode, setNodes, addNodes, setEdges } = useReactFlow();
+  const { getNode, setNodes, addNodes, setEdges} = useReactFlow();
   const duplicateNode = useCallback(() => {
     const node = getNode(id);
     const position = {
@@ -77,10 +77,10 @@ function ContextMenu({
       className="context-menu"
       {...props}
     >
-      <p style={{ margin: '0.5em' }}>
-        <small>node: {id}</small>
+      <p className="deleteNodename" >
+        <small >node: {id}</small>
       </p>
-      <button onClick={deleteNode}>delete</button>
+      <div className="deleteNode" onClick={deleteNode}>delete</div>
     </div>
   );
 }
@@ -116,7 +116,6 @@ const OverviewFlow = () => {
   //   console.log('Edit Name:', editName);
   //   const fields = getstepparameterFields(...itemData, editName);
   // }, []);  
-
 
   useEffect(() => {
     axios.getWithCallback("job-steps/", (data) => {
@@ -474,19 +473,26 @@ const handleNodeClick = (event, node) => {
     nodeId(node);
 };
 
-
 const onNodeContextMenu = useCallback(
   (event, node) => {
     event.preventDefault();
 
+    const contextMenuWidth = 150; 
+    const contextMenuHeight = 40; 
+
+    const mouseX = event.clientX;
+    const mouseY = event.clientY;
+
+    const top = mouseY - contextMenuHeight / 2;
+    const left = mouseX - contextMenuWidth / 2;
+
 const pane = ref.current.getBoundingClientRect();
 setMenu({
   id: node.id,
-  top: event.clientY < pane.height - 200 && event.clientY,
-  left: event.clientX < pane.width - 200 && event.clientX,
-  right: event.clientX >= pane.width - 200 && pane.width - event.clientX,
-  bottom:
-    event.clientY >= pane.height - 200 && pane.height - event.clientY,
+      top: top < 0 ? 0 : top,
+      left: left < 0 ? 0 : left,
+      right: left < 0 ? -left : 0,
+      bottom: top < 0 ? -top : 0, 
 });
 },
 [setMenu],
