@@ -11,7 +11,7 @@ import CommonModel from '../../components/common-modal';
 
 
 const StepParameter = ({ node_Id, step_type_id, name }) => {
-  // console.log(node_Id, "name");
+  console.log(node_Id, "name");
   const [parameter, setparameter] = useState([]);
   const [editName, setEditName] = useState('');
   useEffect(() => {
@@ -46,11 +46,28 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
   useEffect(() => {
     axios.getWithCallback(`job-steps/${node_Id || 0}`, (data) => setEditName(data));
   }, []);
-//  console.log(editName);
+ console.log(editName);
 
   let defaultObj = { step_name:'',  type: '', name: '', img: '', group: '', parametres: '' };
 
   // console.log(parameter, "parameter");
+    // const getItemData = (itemData) => {
+    //   let dt = [
+    //     {
+    //       col: 12,
+    //       callback: itemData.callback,
+    //       groups: [editName]
+    //         ? [editName].map((v) => ({
+    //             id: "inputparameterFileid",
+    //             // label: (name === "step_name" ? v.step_name : name),
+    //             label:"Step Name",
+    //             name: "step_name",
+    //             control: "input",
+    //             isSubmit: itemData.isSubmit,
+    //             itemVal: name === "step_name" ? v.step_name : name,                   
+    //           }))
+    //         : [],
+    //     },
   const getItemData = (itemData) => {
     let dt = [
       {
@@ -89,8 +106,6 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
     return dt;
   };
   
-
-
   return (
     <>
       <CommonModel
