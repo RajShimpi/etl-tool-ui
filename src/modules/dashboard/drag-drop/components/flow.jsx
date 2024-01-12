@@ -124,10 +124,7 @@ const OverviewFlow = () => {
 
   useEffect(() => {
     axios.getWithCallback("job-steps/", (data) => {
-      const dataNodes = data
-        // .filter((item) => item.node_active === true)
-        .map((item) => ({
-
+      const dataNodes = data.map((item) => ({
         id: "" + item.id,
         step_type_id: "" + item.step_type_id,
         job_id: "" + item.job_id,
@@ -143,7 +140,7 @@ const OverviewFlow = () => {
         node_active: item.node_active,
       }));
 
-      console.log("dataNodes:", dataNodes);
+      // console.log("dataNodes:", dataNodes);
 
       const dataEdgesok = data.map((item) => ({
         id: "" + item.id,
@@ -171,15 +168,13 @@ const OverviewFlow = () => {
       setNodes(dataNodes);
       setEdges([...dataEdgesok, ...dataEdgeserror]);
 
-      const combinedDataOk = dataNodes.map((node) => ({
+      const combinedData = dataNodes.map((node) => ({
         ...node,
         ...dataEdgesok.find((edgeOk) => edgeOk.id === node.id),
-      }));
-
-      const combinedData = combinedDataOk.map((node) => ({
-        ...node,
         ...dataEdgeserror.find((edgeError) => edgeError.id === node.id),
       }));
+
+    
 
       setAllNodes(combinedData);
       function getlabelColor(label) {
