@@ -1,84 +1,85 @@
-  import React, { useCallback, useEffect, useState, useRef } from "react";
-  import ReactFlow, {
-    addEdge,
-    Background,
-    // Controls,
-    // useNodesState,
-    // useEdgesState,
-    ReactFlowProvider,
-    updateEdge,
-    useNodeId,
-  } from "reactflow";
+import React, { useCallback, useEffect, useState, useRef } from "react";
+import ReactFlow, {
+  addEdge,
+  Background,
+  // Controls,
+  // useNodesState,
+  // useEdgesState,
+  ReactFlowProvider,
+  updateEdge,
+  useNodeId,
+} from "reactflow";
 
-  // Components
-  // import Sidebar from "./sidebar/sidebar";
-  import Node from "./custom-node/message-node";
-  import { MarkerType } from "reactflow";
-  // Utils
-  import { isAllNodeisConnected } from "../utils";
-  // import {
-  //   // nodes as initialNodes,
-  //   // edges as initialEdges,
-  // } from "../initial-element";
+// Components
+// import Sidebar from "./sidebar/sidebar";
+import Node from "./custom-node/message-node";
+import { MarkerType } from "reactflow";
+// Utils
+import { isAllNodeisConnected } from "../utils";
+// import {
+//   // nodes as initialNodes,
+//   // edges as initialEdges,
+// } from "../initial-element";
 
-  // Styles
-  import "reactflow/dist/style.css";
-  import "./dnd.css";
-  import "./update-node.css";
+// Styles
+import "reactflow/dist/style.css";
+import "./dnd.css";
+import "./update-node.css";
 
-  import Modal from "../../../components/modal-popup";
+import Modal from "../../../components/modal-popup";
 
-  import Job from "../../../masters/job";
-  import axios from "../../../services/axios";
-  // import { Class, Key, Source } from "@mui/icons-material";
-  // import { data } from "jquery";
-  // import AddFile from "../../../masters/popup/add-file";
-  // import Modal from "../../../components/modal-popup";
-  // import { ClassNames } from "@emotion/react";
-  // // import Job from "../../../masters/job";
-  // import axios from "../../../services/axios";
-  import { event, post } from "jquery";
-  import StepParameter from "../../../masters/popup/step-parameter";
+import Job from "../../../masters/job";
+import axios from "../../../services/axios";
+// import { Class, Key, Source } from "@mui/icons-material";
+// import { data } from "jquery";
+// import AddFile from "../../../masters/popup/add-file";
+// import Modal from "../../../components/modal-popup";
+// import { ClassNames } from "@emotion/react";
+// // import Job from "../../../masters/job";
+// import axios from "../../../services/axios";
+import { event, post } from "jquery";
+import StepParameter from "../../../masters/popup/step-parameter";
 import { getstepparameterFields } from "../../../masters/popup/step-paramter-data";
 
-  // let id = 0;
-  // const getId = () => `dndnode_${id++}`;
+// let id = 0;
+// const getId = () => `dndnode_${id++}`;
 
-  const nodeTypes = { node: Node };
+const nodeTypes = { node: Node };
 
-  const OverviewFlow = () => {
-    const [showNodeMaster, setShowNodeMaster] = useState(false);
+const OverviewFlow = () => {
+  const [showNodeMaster, setShowNodeMaster] = useState(false);
 
-    const reactFlowWrapper = useRef(null);
-    const edgeUpdateSuccessful = useRef(true);
-   
+  const reactFlowWrapper = useRef(null);
+  const edgeUpdateSuccessful = useRef(true);
 
-    const modalRef = useRef(null);
-    const [reactFlowInstance, setReactFlowInstance] = useState(null);
-    // const [node, setNode] = useState([]);
-    const [nodes, setNodes, onNodesChange] = useState([]);
-    const [edges, setEdges, onEdgesChange] = useState([]);
-    const [edge, setEdge] = useState([]);
-    const [selectedNode, setSelectedNode] = useState(null);
-    const [isSelected, setIsSelected] = useState(false);
-    // const [currentId, setCurrentId] = useState(0);
-    const [draggedNodeInfo, setDraggedNodeInfo] = useState(null);
-    // const [newNodes, setNewNodes] = useState(null);
-    const [position, setPosition] = useState([]);
-    const [allNodes, setAllNodes] = useState([]);
-    const [step_type_id, setStep_type_Id] = useState();
-    const [job_id, setJob_Id] = useState();
-    const [nodeid, setNode_Id] = useState();
-    const [editName,setName]=useState()
-    const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
-    // const handleParameterFields = useCallback((itemData, editName) => {
-    //   console.log('Edit Name:', editName);
-    //   const fields = getstepparameterFields(...itemData, editName);
-    // }, []); 
+  const modalRef = useRef(null);
+  const [reactFlowInstance, setReactFlowInstance] = useState(null);
+  // const [node, setNode] = useState([]);
+  const [nodes, setNodes, onNodesChange] = useState([]);
+  const [edges, setEdges, onEdgesChange] = useState([]);
+  const [edge, setEdge] = useState([]);
+  const [selectedNode, setSelectedNode] = useState(null);
+  const [isSelected, setIsSelected] = useState(false);
+  // const [currentId, setCurrentId] = useState(0);
+  const [draggedNodeInfo, setDraggedNodeInfo] = useState(null);
+  // const [newNodes, setNewNodes] = useState(null);
+  const [position, setPosition] = useState([]);
+  const [allNodes, setAllNodes] = useState([]);
+  const [step_type_id, setStep_type_Id] = useState();
+  const [job_id, setJob_Id] = useState();
+  const [nodeid, setNode_Id] = useState();
+  const [editName, setName] = useState();
+  const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
+  // const handleParameterFields = useCallback((itemData, editName) => {
+  //   console.log('Edit Name:', editName);
+  //   const fields = getstepparameterFields(...itemData, editName);
+  // }, []);
 
-    useEffect(() => {
-      axios.getWithCallback("job-steps/", (data) => {
-        const dataNodes = data.map((item) => ({
+  useEffect(() => {
+    axios.getWithCallback("job-steps/", (data) => {
+      const dataNodes = data
+        .filter((item) => item.node_active === true)
+        .map((item) => ({
           id: "" + item.id,
           step_type_id: "" + item.step_type_id,
           job_id: "" + item.job_id,
@@ -91,389 +92,417 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
             x: item.params.position_X,
             y: item.params.position_Y,
           },
+          node_active: item.node_active,
         }));
 
-        const dataEdgesok = data.map((item) => ({
-          id: "" + item.id,
-          source: "" + item.id,
-          target: "" + item.ok_step,
-          label: "ok",
-          type: "step",
-          sourceHandle: "ok",
-          markerEnd: { type: MarkerType.ArrowClosed },
-          style: { stroke: getlabelColor("ok") },
-        }));
+      console.log("dataNodes:", dataNodes);
 
-        const dataEdgeserror = data.map((item) => ({
-          id: "" + item.id,
-          source: "" + item.id,
-          target: "" + item.error_step,
-          label: "error",
-          type: "step",
-          sourceHandle: "error",
-          markerEnd: { type: MarkerType.ArrowClosed },
-          style: { stroke: getlabelColor("error") },
-        }));
-
-        setNodes(dataNodes);
-        setEdges([...dataEdgesok, ...dataEdgeserror]);
-
-        const combinedDataOk = dataNodes.map((node) => ({
-          ...node,
-          ...dataEdgesok.find((edgeOk) => edgeOk.id === node.id),
-        }));
-
-        const combinedData = combinedDataOk.map((node) => ({
-          ...node,
-          ...dataEdgeserror.find((edgeError) => edgeError.id === node.id),
-        }));
-
-        setAllNodes(combinedData);
-        function getlabelColor(label) {
-          return label === "ok" ? "green" : label === "error" ? "red" : "black";
-        }
-      });
-      // eslint-disable-next-line
-    }, []);
-
-    const onDragOver = (event) => {
-      event.preventDefault();
-      event.dataTransfer.dropEffect = "move";
-
-      // const [showNodeMaster, setShowNodeMaster] = useState(false);
-
-      // ... (other state variables and functions)
-    };
-
-    const onDrop = (event) => {
-      event.preventDefault();
-      const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
-
-      const type = event.dataTransfer.getData("application/reactflow");
-      const img = event.dataTransfer.getData("img");
-      const name = event.dataTransfer.getData("name");
-      const step_type_id = event.dataTransfer.getData("id");
-
-      const position = reactFlowInstance.project({
-        x: event.clientX - reactFlowBounds.left,
-        y: event.clientY - reactFlowBounds.top,
-      });
-
-      const currentId = nodes.length;
-      const nextId = currentId + 1;
-
-      const newNode = {
-        id: `${nextId}`,
-        step_type_id,
-        name,
-        type,
-        position,
-        data: { heading: name, img: img },
-      };
-
-      setNodes((es) => es.concat(newNode));
-      setSelectedNode((newNode.a = name));
-
-      setAllNodes((prevNodes) => [...prevNodes, newNode]);
-    };
-
-    const saveNodeToDatabase = () => {
-      const dataFromNodes = allNodes.map((item) => ({
-        id: parseInt(item.id),
-        job_id: 1,
-        step_type_id: parseInt(item.step_type_id),
-        step_name: item.data?.heading || item.name,
-        type: "node",
-        params: {
-          position_X: item.id === position.id ? position.position_X : item.position.x,
-          position_Y: item.id === position.id ? position.position_Y : item.position.y,
-        },
+      const dataEdgesok = data.map((item) => ({
+        id: "" + item.id,
+        source: "" + item.id,
+        target: "" + item.ok_step,
+        label: "ok",
+        type: "step",
+        sourceHandle: "ok",
+        markerEnd: { type: MarkerType.ArrowClosed },
+        style: { stroke: getlabelColor("ok") },
       }));
-    
-      const dataFromEdgesOk = edges.filter((item) => item.sourceHandle === "ok" && !isNaN(item.target))
-        .map((item) => ({
-          id: parseInt(item.source),
-          ok_step: parseInt(item.target) || null,
-        }));
-    
-      const dataFromEdgesError = edges.filter((item) => item.sourceHandle === "error" && !isNaN(item.target))
-        .map((item) => ({
-          id: parseInt(item.source),
-          error_step: parseInt(item.target) || null,
-        }));
-    
 
-      const updatedEdgesOk = edges.filter((item) => item.sourceHandle === "ok" && !isNaN(item.target));
-      const updatedEdgesError = edges.filter((item) => item.sourceHandle === "error" && !isNaN(item.target));
-    
+      const dataEdgeserror = data.map((item) => ({
+        id: "" + item.id,
+        source: "" + item.id,
+        target: "" + item.error_step,
+        label: "error",
+        type: "step",
+        sourceHandle: "error",
+        markerEnd: { type: MarkerType.ArrowClosed },
+        style: { stroke: getlabelColor("error") },
+      }));
 
-      allNodes.forEach((node) => {
-        const id = parseInt(node.id);
-    
-        if (!updatedEdgesOk.some((edge) => parseInt(edge.source) === id)) {
-          dataFromEdgesOk.push({ id, ok_step: null });
-        }
-    
-        if (!updatedEdgesError.some((edge) => parseInt(edge.source) === id)) {
-          dataFromEdgesError.push({ id, error_step: null });
-        }
-      });
+      setNodes(dataNodes);
+      setEdges([...dataEdgesok, ...dataEdgeserror]);
 
-      dataFromEdgesOk.forEach((edge) => {
-        if (edge.ok_step === null) {
-          const existingEdge = dataFromEdgesOk.find((item) => item.id === edge.id && item.ok_step !== null);
-          if (existingEdge) {
-            edge.ok_step = existingEdge.ok_step;
-          }
-        }
-      });
-    
-
-      dataFromEdgesError.forEach((edge) => {
-        if (edge.error_step === null) {
-          const existingEdge = dataFromEdgesError.find((item) => item.id === edge.id && item.error_step !== null);
-          if (existingEdge) {
-            edge.error_step = existingEdge.error_step;
-          }
-        }
-      });
-    
-      const combinedData = dataFromNodes.map((node) => ({
+      const combinedDataOk = dataNodes.map((node) => ({
         ...node,
-        ...dataFromEdgesOk.find((edgeOk) => edgeOk.id === node.id),
-        ...dataFromEdgesError.find((edgeError) => edgeError.id === node.id),
+        ...dataEdgesok.find((edgeOk) => edgeOk.id === node.id),
       }));
-    
-      console.log("Updated Edges Ok:", updatedEdgesOk);
-      console.log("Updated Edges Error:", updatedEdgesError);
-      console.log("Combined Data:", combinedData);
 
-      axios.postWithCallback("job-steps/data-save", combinedData);
-    };
-    
-
-
-    const onNodeDragStop = (event, node) => {
-      const updatedPosition = nodes.map((n) => {
-        if (n.id === node.id) {
-          return {
-            ...n,
-            position: { x: node.position.x, y: node.position.y },
-          };
-        }
-        console.log("edges",edges);
-        return n;
-      });
-
-      setNodes(updatedPosition);
-      setPosition(updatedPosition);
-      setDraggedNodeInfo({ id: node.id, position: node.position });
-
-      const combinedDataposition = nodes.map((node) => ({
+      const combinedData = combinedDataOk.map((node) => ({
         ...node,
-        ...position.find((id) => id.id === node.id),
+        ...dataEdgeserror.find((edgeError) => edgeError.id === node.id),
       }));
-      setAllNodes(combinedDataposition);
-      // console.log(allNodes, "update");
+
+      setAllNodes(combinedData);
+      function getlabelColor(label) {
+        return label === "ok" ? "green" : label === "error" ? "red" : "black";
+      }
+    });
+    // eslint-disable-next-line
+  }, []);
+
+  const onDragOver = (event) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
+
+    // const [showNodeMaster, setShowNodeMaster] = useState(false);
+
+    // ... (other state variables and functions)
+  };
+
+  const onDrop = (event) => {
+    event.preventDefault();
+    const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
+
+    const type = event.dataTransfer.getData("application/reactflow");
+    const img = event.dataTransfer.getData("img");
+    const name = event.dataTransfer.getData("name");
+    const step_type_id = event.dataTransfer.getData("id");
+
+    const position = reactFlowInstance.project({
+      x: event.clientX - reactFlowBounds.left,
+      y: event.clientY - reactFlowBounds.top,
+    });
+
+    const currentId = nodes.length;
+    const nextId = currentId + 1;
+
+    const newNode = {
+      id: `${nextId}`,
+      step_type_id,
+      name,
+      type,
+      position,
+      data: { heading: name, img: img },
     };
-    // const textRef = useRef(null);
-    const textRef = useRef(null);
 
-    useEffect(() => {
-      textRef?.current?.focus();
-    }, [selectedNode]);
-    
-    const onConnect = useCallback(
-      (params) => {
-        const { sourceHandle, source, target } = params;
-        // const sourceNodeId = parseInt(source);
-        // const targetNodeId = parseInt(target);
-        let label;
-        let color;
+    setNodes((es) => es.concat(newNode));
+    setSelectedNode((newNode.a = name));
 
-        if (sourceHandle === "ok") {
-          label = "ok";
-          color = "green";
-        } else {
-          label = "error";
-          color = "red";
+    setAllNodes((prevNodes) => [...prevNodes, newNode]);
+  };
+
+  const saveNodeToDatabase = () => {
+    const dataFromNodes = allNodes.map((item) => ({
+      id: parseInt(item.id),
+      job_id: 1,
+      step_type_id: parseInt(item.step_type_id),
+      step_name: item.data?.heading || item.name,
+      type: "node",
+      params: {
+        position_X:
+          item.id === position.id ? position.position_X : item.position.x,
+        position_Y:
+          item.id === position.id ? position.position_Y : item.position.y,
+      },
+      node_active:item.node_active
+    }));
+
+    const dataFromEdgesOk = edges
+      .filter((item) => item.sourceHandle === "ok" && !isNaN(item.target))
+      .map((item) => ({
+        id: parseInt(item.source),
+        ok_step: parseInt(item.target),
+      }));
+
+    const dataFromEdgesError = edges
+      .filter((item) => item.sourceHandle === "error" && !isNaN(item.target))
+      .map((item) => ({
+        id: parseInt(item.source),
+        error_step: parseInt(item.target),
+      }));
+
+
+    dataFromEdgesOk.forEach((item) => {
+      const targetNode = allNodes.find((node) => node.id === item.ok_step);
+      if (targetNode && !targetNode.node_active) {
+        item.ok_step = null;
+      }
+    });
+
+    dataFromEdgesError.forEach((item) => {
+      const targetNode = allNodes.find((node) => node.id === item.error_step);
+      if (targetNode && !targetNode.node_active) {
+        item.error_step = null;
+      }
+    });
+
+    const updatedEdgesOk = edges.filter(
+      (item) => item.sourceHandle === "ok" && !isNaN(item.target)
+    );
+    const updatedEdgesError = edges.filter(
+      (item) => item.sourceHandle === "error" && !isNaN(item.target)
+    );
+
+    allNodes.forEach((node) => {
+      const id = parseInt(node.id);
+
+      if (!updatedEdgesOk.some((edge) => parseInt(edge.source) === id)) {
+        dataFromEdgesOk.push({ id, ok_step: null });
+      }
+
+      if (!updatedEdgesError.some((edge) => parseInt(edge.source) === id)) {
+        dataFromEdgesError.push({ id, error_step: null });
+      }
+    });
+
+    dataFromEdgesOk.forEach((edge) => {
+      if (edge.ok_step === null) {
+        const existingEdge = dataFromEdgesOk.find(
+          (item) => item.id === edge.id && item.ok_step !== null
+        );
+        if (existingEdge) {
+          edge.ok_step = existingEdge.ok_step;
         }
+      }
+    });
 
-        const newEdge = {
-          ...params,
+    dataFromEdgesError.forEach((edge) => {
+      if (edge.error_step === null) {
+        const existingEdge = dataFromEdgesError.find(
+          (item) => item.id === edge.id && item.error_step !== null
+        );
+        if (existingEdge) {
+          edge.error_step = existingEdge.error_step;
+        }
+      }
+    });
+
+    const combinedData = dataFromNodes.map((node) => ({
+      ...node,
+      ...dataFromEdgesOk.find((edgeOk) => edgeOk.id === node.id),
+      ...dataFromEdgesError.find((edgeError) => edgeError.id === node.id),
+    }));
+
+    console.log("Updated Edges Ok:", updatedEdgesOk);
+    console.log("Updated Edges Error:", updatedEdgesError);
+    console.log("Combined Data:", combinedData);
+
+    axios.postWithCallback("job-steps/data-save", combinedData);
+  };
+
+  const onNodeDragStop = (event, node) => {
+    const updatedPosition = nodes.map((n) => {
+      if (n.id === node.id) {
+        return {
+          ...n,
+          position: { x: node.position.x, y: node.position.y },
+        };
+      }
+      console.log("edges", edges);
+      return n;
+    });
+
+    setNodes(updatedPosition);
+    setPosition(updatedPosition);
+    setDraggedNodeInfo({ id: node.id, position: node.position });
+
+    const combinedDataposition = nodes.map((node) => ({
+      ...node,
+      ...position.find((id) => id.id === node.id),
+    }));
+    setAllNodes(combinedDataposition);
+    // console.log(allNodes, "update");
+  };
+  // const textRef = useRef(null);
+  const textRef = useRef(null);
+
+  useEffect(() => {
+    textRef?.current?.focus();
+  }, [selectedNode]);
+
+  const onConnect = useCallback(
+    (params) => {
+      const { sourceHandle, source, target } = params;
+      // const sourceNodeId = parseInt(source);
+      // const targetNodeId = parseInt(target);
+      let label;
+      let color;
+
+      if (sourceHandle === "ok") {
+        label = "ok";
+        color = "green";
+      } else {
+        label = "error";
+        color = "red";
+      }
+
+      const newEdge = {
+        ...params,
         //   source: sourceNodeId,
         // target: targetNodeId,
-          label,
-          type: params.type || "step",
-          arrowHeadType: "arrowclosed",
-          style: {
-            stroke: color,
-            backgroundColor: color,
-            color: "red",
-            fontSize: "12px",
-            padding: "4px",
-            borderRadius: "4px",
-          },
-        };
-
-        setEdges((eds) => addEdge(newEdge, eds));
-      },
-      [setEdges, setEdge]
-    );
-console.log("edges:",edges);
-    const [nodeName, setNodeName] = useState("Node 1");
-
-    useEffect(() => {
-      const node = nodes.filter((node) => {
-        if (node.selected) return true;
-
-        return false;
-      });
-      if (node[0]) {
-        setSelectedNode(node[0]);
-        setIsSelected(true);
-      } else {
-        setSelectedNode("");
-        setIsSelected(false);
-      }
-    }, [nodes]);
-
-    useEffect(() => {
-      setNodeName(selectedNode?.data?.heading || selectedNode);
-    }, [selectedNode]);
-
-    useEffect(() => {
-      textRef?.current?.focus();
-    }, [selectedNode]);
-
-    useEffect(() => {
-      setNodes((nds) =>
-        nds.map((node) => {
-          if (node.id === selectedNode?.id) {
-            node.data = {
-              ...node.data,
-              content: nodeName || " ",
-            };
-          }
-          return node;
-        })
-      );
-    }, [nodeName, setNodes]);
-
-    const saveHandler = () => {
-      if (isAllNodeisConnected(nodes, edges)) {
-        alert("Congrats its correct");
-        saveNodeToDatabase();
-      } else {
-        alert("Please connect source nodes (Cannot Save Flow)");
-      }
-    };
-
-    const onEdgeUpdateStart = useCallback(() => {
-      edgeUpdateSuccessful.current = false;
-    }, []);
-
-    const onEdgeUpdate = useCallback((oldEdge, newConnection) => {
-      edgeUpdateSuccessful.current = true;
-      setEdges((els) => updateEdge(oldEdge, newConnection, els));
-      // eslint-disable-next-line
-    }, []);
-
-    const onEdgeUpdateEnd = useCallback((_, edge) => {
-      if (!edgeUpdateSuccessful.current) {
-        setEdges((eds) => eds.filter((e) => e.id !== edge.id));
-      }
-
-      edgeUpdateSuccessful.current = true;
-      // eslint-disable-next-line
-    }, []);
-
-    const onNodeDoubleClick = () => {
-      setShowNodeMaster(true);
-    };
-    
-    const nodeId = (node)=>{
-      setName(node.data.heading);
-      setStep_type_Id(node.step_type_id)
-      setJob_Id(node.job_id);
-      setNode_Id(parseInt(node.id));
-    }
-    
-
-    const handleCloseNodeMaster = () => {
-      setShowNodeMaster(false);
-    };
-
-    const handleClickOutside = (event) => {
-      if (modalRef.current && !modalRef.current.contains(event.target)) {
-        handleCloseNodeMaster();
-      }
-    };
-
-    useEffect(() => {
-      const handleDocumentClick = (event) => handleClickOutside(event);
-
-      document.addEventListener("mousedown", handleDocumentClick);
-
-      return () => {
-        document.removeEventListener("mousedown", handleDocumentClick);
+        label,
+        type: params.type || "step",
+        arrowHeadType: "arrowclosed",
+        style: {
+          stroke: color,
+          backgroundColor: color,
+          color: "red",
+          fontSize: "12px",
+          padding: "4px",
+          borderRadius: "4px",
+        },
       };
-    }, [handleCloseNodeMaster, modalRef]);
-   
+
+      setEdges((eds) => addEdge(newEdge, eds));
+    },
+    [setEdges, setEdge]
+  );
+  console.log("edges:", edges);
+  const [nodeName, setNodeName] = useState("Node 1");
+
+  useEffect(() => {
+    const node = nodes.filter((node) => {
+      if (node.selected) return true;
+
+      return false;
+    });
+    if (node[0]) {
+      setSelectedNode(node[0]);
+      setIsSelected(true);
+    } else {
+      setSelectedNode("");
+      setIsSelected(false);
+    }
+  }, [nodes]);
+
+  useEffect(() => {
+    setNodeName(selectedNode?.data?.heading || selectedNode);
+  }, [selectedNode]);
+
+  useEffect(() => {
+    textRef?.current?.focus();
+  }, [selectedNode]);
+
+  useEffect(() => {
+    setNodes((nds) =>
+      nds.map((node) => {
+        if (node.id === selectedNode?.id) {
+          node.data = {
+            ...node.data,
+            content: nodeName || " ",
+          };
+        }
+        return node;
+      })
+    );
+  }, [nodeName, setNodes]);
+
+  const saveHandler = () => {
+    if (isAllNodeisConnected(nodes, edges)) {
+      alert("Congrats its correct");
+      saveNodeToDatabase();
+    } else {
+      alert("Please connect source nodes (Cannot Save Flow)");
+    }
+  };
+
+  const onEdgeUpdateStart = useCallback(() => {
+    edgeUpdateSuccessful.current = false;
+  }, []);
+
+  const onEdgeUpdate = useCallback((oldEdge, newConnection) => {
+    edgeUpdateSuccessful.current = true;
+    setEdges((els) => updateEdge(oldEdge, newConnection, els));
+    // eslint-disable-next-line
+  }, []);
+
+  const onEdgeUpdateEnd = useCallback((_, edge) => {
+    if (!edgeUpdateSuccessful.current) {
+      setEdges((eds) => eds.filter((e) => e.id !== edge.id));
+    }
+
+    edgeUpdateSuccessful.current = true;
+    // eslint-disable-next-line
+  }, []);
+
+  const onNodeDoubleClick = () => {
+    setShowNodeMaster(true);
+  };
+
+  const nodeId = (node) => {
+    setName(node.data.heading);
+    setStep_type_Id(node.step_type_id);
+    setJob_Id(node.job_id);
+    setNode_Id(parseInt(node.id));
+  };
+
+  const handleCloseNodeMaster = () => {
+    setShowNodeMaster(false);
+  };
+
+  const handleClickOutside = (event) => {
+    if (modalRef.current && !modalRef.current.contains(event.target)) {
+      handleCloseNodeMaster();
+    }
+  };
+
+  useEffect(() => {
+    const handleDocumentClick = (event) => handleClickOutside(event);
+
+    document.addEventListener("mousedown", handleDocumentClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleDocumentClick);
+    };
+  }, [handleCloseNodeMaster, modalRef]);
+
   // const handleParameterFields = useCallback((itemData, editName) => {
   //   console.log('Edit Name:', editName);
   //   const fields = getstepparameterFields(...itemData, editName);
-  // }, []); 
-  
+  // }, []);
 
   const handleNodeClick = (event, node) => {
-      onNodeDoubleClick();
-      nodeId(node);
+    onNodeDoubleClick();
+    nodeId(node);
   };
 
-    return (
-      <>
-        <button onClick={saveHandler}>Save</button>
-        <div className="dndflow">
-          <ReactFlowProvider>
-            <div className="reactflow-wrapper" ref={reactFlowWrapper}>
-              <ReactFlow
-                nodes={nodes}
-                edges={edges}
-                nodeTypes={nodeTypes}
-                onNodesChange={onNodesChange}
-                onEdgesChange={onEdgesChange}
-                onConnect={onConnect}
-                onInit={onInit}
-                onDrop={onDrop}
-                onDragOver={onDragOver}
-                onEdgeUpdate={onEdgeUpdate}
-                onEdgeUpdateStart={onEdgeUpdateStart}
-                onEdgeUpdateEnd={onEdgeUpdateEnd}
-                attributionPosition="top-right"
-                onNodeClick={(event, node) => handleNodeClick(event, node)}
-                onNodeDoubleClick={onNodeDoubleClick}
-                onEdgeDoubleClick={true}
-                onNodeDragStop={onNodeDragStop}
-              >
-                <Background color="#aaa" gap={16} />
-                {/* <Controls /> */}
-              </ReactFlow>
+  return (
+    <>
+      <button onClick={saveHandler}>Save</button>
+      <div className="dndflow">
+        <ReactFlowProvider>
+          <div className="reactflow-wrapper" ref={reactFlowWrapper}>
+            <ReactFlow
+              nodes={nodes}
+              edges={edges}
+              nodeTypes={nodeTypes}
+              onNodesChange={onNodesChange}
+              onEdgesChange={onEdgesChange}
+              onConnect={onConnect}
+              onInit={onInit}
+              onDrop={onDrop}
+              onDragOver={onDragOver}
+              onEdgeUpdate={onEdgeUpdate}
+              onEdgeUpdateStart={onEdgeUpdateStart}
+              onEdgeUpdateEnd={onEdgeUpdateEnd}
+              attributionPosition="top-right"
+              onNodeClick={(event, node) => handleNodeClick(event, node)}
+              onNodeDoubleClick={onNodeDoubleClick}
+              onEdgeDoubleClick={true}
+              onNodeDragStop={onNodeDragStop}
+            >
+              <Background color="#aaa" gap={16} />
+              {/* <Controls /> */}
+            </ReactFlow>
 
-              <Modal modalTitle={"Save/Update Parameter"} ref={modalRef} handleClose={handleCloseNodeMaster} show={showNodeMaster}>
+            <Modal
+              modalTitle={"Save/Update Parameter"}
+              ref={modalRef}
+              handleClose={handleCloseNodeMaster}
+              show={showNodeMaster}
+            >
               <StepParameter
-                  step_type_id={step_type_id}
-                  job_Id={job_id}
-                  node_Id={nodeid}
-                  name={editName}
-                />
-              </Modal>
-            </div>
-          </ReactFlowProvider>
-        </div>
-      </>
-    );
-  };
+                step_type_id={step_type_id}
+                job_Id={job_id}
+                node_Id={nodeid}
+                name={editName}
+              />
+            </Modal>
+          </div>
+        </ReactFlowProvider>
+      </div>
+    </>
+  );
+};
 
-  
-  export default OverviewFlow;
+export default OverviewFlow;

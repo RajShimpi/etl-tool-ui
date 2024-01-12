@@ -59,7 +59,7 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
         groups: [editName]
           ? [editName].map((v) => ({
               id: "inputparameterFileid",
-              label: (name ||"step_name"),
+              label: "Step Name",
               name: "step_name",
               control: "input",
               isSubmit: itemData.isSubmit,
