@@ -8,6 +8,7 @@ import ReactFlow, {
   ReactFlowProvider,
   updateEdge,
   useNodeId,
+  useReactFlow,
 } from "reactflow";
 
 // Components
@@ -40,11 +41,49 @@ import axios from "../../../services/axios";
 import { event, post } from "jquery";
 import StepParameter from "../../../masters/popup/step-parameter";
 import { getstepparameterFields } from "../../../masters/popup/step-paramter-data";
+// import ContextMenu from "../../../../components/ContextMenu";
 
 // let id = 0;
 // const getId = () => `dndnode_${id++}`;
 
 const nodeTypes = { node: Node };
+function ContextMenu({
+  id,
+  top,
+  left,
+  right,
+  bottom,
+  ...props
+}) {
+  const { getNode, setNodes, addNodes, setEdges } = useReactFlow();
+  const duplicateNode = useCallback(() => {
+    const node = getNode(id);
+    const position = {
+      x: node.position.x + 50,
+      y: node.position.y + 50,
+    };
+
+    addNodes({ ...node, id: `${node.id}-copy`, position });
+  }, [id, getNode, addNodes]);
+
+  const deleteNode = useCallback(() => {
+    setNodes((nodes) => nodes.filter((node) => node.id !== id));
+    setEdges((edges) => edges.filter((edge) => edge.source !== id));
+  }, [id, setNodes, setEdges]);
+
+  return (
+    <div
+      style={{ top, left, right, bottom }}
+      className="context-menu"
+      {...props}
+    >
+      <p style={{ margin: '0.5em' }}>
+        <small>node: {id}</small>
+      </p>
+      <button onClick={deleteNode}>delete</button>
+    </div>
+  );
+}
 
 const OverviewFlow = () => {
   const [showNodeMaster, setShowNodeMaster] = useState(false);
@@ -58,6 +97,8 @@ const OverviewFlow = () => {
   // const [node, setNode] = useState([]);
   const [nodes, setNodes, onNodesChange] = useState([]);
   const [edges, setEdges, onEdgesChange] = useState([]);
+  const [menu, setMenu] = useState(null);
+  const ref = useRef(null);
   const [edge, setEdge] = useState([]);
   const [selectedNode, setSelectedNode] = useState(null);
   const [isSelected, setIsSelected] = useState(false);
@@ -74,7 +115,8 @@ const OverviewFlow = () => {
   // const handleParameterFields = useCallback((itemData, editName) => {
   //   console.log('Edit Name:', editName);
   //   const fields = getstepparameterFields(...itemData, editName);
-  // }, []); 
+  // }, []);  
+
 
   useEffect(() => {
     axios.getWithCallback("job-steps/", (data) => {
@@ -251,8 +293,6 @@ const OverviewFlow = () => {
     axios.postWithCallback("job-steps/data-save", combinedData);
   };
   
-
-
   const onNodeDragStop = (event, node) => {
     const updatedPosition = nodes.map((n) => {
       if (n.id === node.id) {
@@ -284,7 +324,10 @@ const OverviewFlow = () => {
   }, [selectedNode]);
   
   const onConnect = useCallback(
-    (params) => {
+    (params) => setEdges((els) => addEdge(params, els)),
+  [setEdges],
+    (params) => 
+     {
       const { sourceHandle, source, target } = params;
       // const sourceNodeId = parseInt(source);
       // const targetNodeId = parseInt(target);
@@ -431,9 +474,29 @@ const handleNodeClick = (event, node) => {
     nodeId(node);
 };
 
+
+const onNodeContextMenu = useCallback(
+  (event, node) => {
+    event.preventDefault();
+
+const pane = ref.current.getBoundingClientRect();
+setMenu({
+  id: node.id,
+  top: event.clientY < pane.height - 200 && event.clientY,
+  left: event.clientX < pane.width - 200 && event.clientX,
+  right: event.clientX >= pane.width - 200 && pane.width - event.clientX,
+  bottom:
+    event.clientY >= pane.height - 200 && pane.height - event.clientY,
+});
+},
+[setMenu],
+);
+
+const onPaneClick = useCallback(() => setMenu(null), [setMenu]);
+
   return (
     <>
-      <button onClick={saveHandler}>Save</button>
+      <button onClick={saveHandler}>Save</button> 
       <div className="dndflow">
         <ReactFlowProvider>
           <div className="reactflow-wrapper" ref={reactFlowWrapper}>
@@ -455,10 +518,16 @@ const handleNodeClick = (event, node) => {
               onNodeDoubleClick={onNodeDoubleClick}
               onEdgeDoubleClick={true}
               onNodeDragStop={onNodeDragStop}
+              onPaneClick={onPaneClick}
+              onNodeContextMenu={onNodeContextMenu}
+              fitView
             >
               <Background color="#aaa" gap={16} />
+              {menu && <ContextMenu onClick={onPaneClick} {...menu} />}
               {/* <Controls /> */}
-            </ReactFlow>
+              <div className="reactflow-wrapper" ref={reactFlowWrapper}/>
+              <div ref={ref}/>
+            </ReactFlow>  
 
             <Modal modalTitle={"Save/Update Parameter"} ref={modalRef} handleClose={handleCloseNodeMaster} show={showNodeMaster}>
             <StepParameter
