@@ -56,16 +56,7 @@ function ContextMenu({
   bottom,
   ...props
 }) {
-  const { getNode, setNodes, addNodes, setEdges } = useReactFlow();
-  // const duplicateNode = useCallback(() => {
-  //   const node = getNode(id);
-  //   const position = {
-  //     x: node.position.x + 50,
-  //     y: node.position.y + 50,
-  //   };
-
-  //   addNodes({ ...node, id: `${node.id}-copy`, position });
-  // }, [id, getNode, addNodes]);
+  const { setNodes,  setEdges } = useReactFlow();
 
   const deleteNode = useCallback(() => {
     setNodes((nodes) => nodes.filter((node) => node.id !== id));
@@ -74,15 +65,16 @@ function ContextMenu({
 
   return (
     <>
-    <p style={{ margin: '0.5em' }}>
-        <small>node: {name}</small>
-      </p>
-    <div
+    
+<div
       style={{ top, left, right, bottom }}
-      className="menu-item"
+      className="context-menu"
       {...props}
     >
-      <button onClick={deleteNode}>delete</button>
+      <p className="deleteNodename" >
+        <small >node: {name}</small>
+      </p>
+      <div className="deleteNode" onClick={deleteNode}>delete</div>
     </div>
     </>
   );
@@ -116,11 +108,6 @@ const OverviewFlow = () => {
   const [editName,setName]=useState()
   const [activeNodes, setActiveNodes] = useState([]);
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
-  // const handleParameterFields = useCallback((itemData, editName) => {
-  //   console.log('Edit Name:', editName);
-  //   const fields = getstepparameterFields(...itemData, editName);
-  // }, []);  
-
 
   useEffect(() => {
     axios.getWithCallback("job-steps/", (data) => {
@@ -479,25 +466,32 @@ console.log("edges:",edges);
     };
   }, [handleCloseNodeMaster, modalRef]);
 
-const handleNodeClick = (event, node) => {
+  const handleNodeClick = (event, node) => {
     onNodeDoubleClick();
     nodeId(node);
 };
 
 
+
 const onNodeContextMenu = useCallback(
   (event, node) => {
     event.preventDefault();
+const contextMenuWidth = 150; 
+    const contextMenuHeight = 40; 
 
-    const pane = ref.current.getBoundingClientRect();
+    const mouseX = event.clientX;
+    const mouseY = event.clientY;
+
+    const top = mouseY - contextMenuHeight / 2;
+    const left = mouseX - contextMenuWidth / 2;
+    // const pane = ref.current.getBoundingClientRect();
     setMenu({
       id: node.id,
       name:node.data.heading,
-      top: event.clientY < pane.height - 200 && event.clientY,
-      left: event.clientX < pane.width - 200 && event.clientX,
-      right: event.clientX >= pane.width - 200 && pane.width - event.clientX,
-      bottom:
-        event.clientY >= pane.height - 200 && pane.height - event.clientY,
+          top: top < 0 ? 0 : top,
+          left: left < 0 ? 0 : left,
+          right: left < 0 ? -left : 0,
+          bottom: top < 0 ? -top : 0, 
     });
 
     const updatedActiveNodes = activeNodes.includes(node.id)
@@ -546,8 +540,8 @@ const Node = nodes.filter((item) => item.node_active === true)
               onEdgeUpdateStart={onEdgeUpdateStart}
               onEdgeUpdateEnd={onEdgeUpdateEnd}
               attributionPosition="top-right"
-              onNodeClick={(event, node) => handleNodeClick(event, node)}
-              onNodeDoubleClick={onNodeDoubleClick}
+              onNodeDoubleClick={(event, node) => handleNodeClick(event, node)}
+              // onNodeDoubleClick={onNodeDoubleClick}
               onEdgeDoubleClick={true}
               onNodeDragStop={onNodeDragStop}
               // onPaneClick={onPaneClick}
