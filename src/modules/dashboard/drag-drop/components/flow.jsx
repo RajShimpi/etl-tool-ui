@@ -26,7 +26,7 @@ import { isAllNodeisConnected } from "../utils";
 import "reactflow/dist/style.css";
 import "./dnd.css";
 import "./update-node.css";
-
+import "../../../../components/MainComponent.css"
 import Modal from "../../../components/modal-popup";
 
 import Job from "../../../masters/job";
@@ -41,7 +41,7 @@ import axios from "../../../services/axios";
 import { event, post } from "jquery";
 import StepParameter from "../../../masters/popup/step-parameter";
 import { getstepparameterFields } from "../../../masters/popup/step-paramter-data";
-// import ContextMenu from "../../../../components/ContextMenu";
+import { useJobData } from "../../../../components/JobDataContext";
 
 // let id = 0;
 // const getId = () => `dndnode_${id++}`;
@@ -56,8 +56,7 @@ function ContextMenu({
   bottom,
   ...props
 }) {
-  const {  setNodes,  setEdges} = useReactFlow();
- 
+  const { setNodes,  setEdges } = useReactFlow();
 
   const deleteNode = useCallback(() => {
     setNodes((nodes) => nodes.filter((node) => node.id !== id));
@@ -65,14 +64,16 @@ function ContextMenu({
   }, [id, setNodes, setEdges]);
 
   return (
-    <div  
+    <>
+    
+<div
       style={{ top, left, right, bottom }}
       className="context-menu"
       {...props}
     >
-     
-      <button  className="deleteNode" onClick={deleteNode}>delete</button>
+      <div className="deleteNode" onClick={deleteNode}>delete</div>
     </div>
+    </>
   );
 }
 
@@ -93,7 +94,7 @@ const OverviewFlow = () => {
   const [edge, setEdge] = useState([]);
   const [selectedNode, setSelectedNode] = useState(null);
   const [isSelected, setIsSelected] = useState(false);
-  // const [currentId, setCurrentId] = useState(0);
+  const [ids, setIds] = useState();
   const [draggedNodeInfo, setDraggedNodeInfo] = useState(null);
   // const [newNodes, setNewNodes] = useState(null);
   const [position, setPosition] = useState([]);
@@ -102,15 +103,14 @@ const OverviewFlow = () => {
   const [job_id, setJob_Id] = useState();
   const [nodeid, setNode_Id] = useState();
   const [editName,setName]=useState()
-  const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
   const [activeNodes, setActiveNodes] = useState([]);
-  // const handleParameterFields = useCallback((itemData, editName) => {
-  //   console.log('Edit Name:', editName);
-  //   const fields = getstepparameterFields(...itemData, editName);
-  // }, []);  
-
+  const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
+  const { jobDataId } = useJobData();
   useEffect(() => {
-    axios.getWithCallback("job-steps/", (data) => {
+    // const jobDataId = localStorage.getItem("jobDataId");
+    if (jobDataId) {
+      axios.getWithCallback(`job-steps/${jobDataId}/job`, (data) => {
+      console.log("Data from job-steps API:", data);
       const dataNodes = data.map((item) => ({
         id: "" + item.id,
         step_type_id: "" + item.step_type_id,
@@ -127,6 +127,8 @@ const OverviewFlow = () => {
         node_active: item.node_active,
       }));
 
+      console.log("dataNodes:", dataNodes);
+
       const dataEdgesok = data.map((item) => ({
         id: "" + item.id,
         source: "" + item.id,
@@ -137,6 +139,7 @@ const OverviewFlow = () => {
         markerEnd: { type: MarkerType.ArrowClosed },
         style: { stroke: getlabelColor("ok") },
       }));
+
 
       const dataEdgeserror = data.map((item) => ({
         id: "" + item.id,
@@ -158,15 +161,20 @@ const OverviewFlow = () => {
         ...dataEdgeserror.find((edgeError) => edgeError.id === node.id),
       }));
 
+    
+
       setAllNodes(combinedData);
 
       function getlabelColor(label) {
         return label === "ok" ? "green" : label === "error" ? "red" : "black";
       }
     });
-  
-  }, []);
-console.log("nodes:",nodes);
+  } else{
+console.log("Data.data");
+  }
+    // eslint-disable-next-line
+  }, [setNodes,setAllNodes, jobDataId]);
+
   const onDragOver = (event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
@@ -210,6 +218,10 @@ console.log("nodes:",nodes);
   };
 
   const saveNodeToDatabase = () => {
+    // const dataToNodeActive = activeNodes.map((id) => ({
+    //   id: parseInt(id),
+    //   node_active: false,
+    // }));
     const dataFromNodes = allNodes.map((item) => ({
       id: parseInt(item.id),
       job_id: 1,
@@ -225,7 +237,7 @@ console.log("nodes:",nodes);
     const dataFromEdgesOk = edges.filter((item) => item.sourceHandle === "ok" && !isNaN(item.target))
       .map((item) => ({
         id: parseInt(item.source),
-        ok_step: parseInt(item.target) || null,
+        ok_step: parseInt(item.target)||null,
       }));
   
     const dataFromEdgesError = edges.filter((item) => item.sourceHandle === "error" && !isNaN(item.target))
@@ -276,9 +288,9 @@ console.log("nodes:",nodes);
       ...dataFromEdgesError.find((edgeError) => edgeError.id === node.id),
     }));
   
-    console.log("Updated Edges Ok:", updatedEdgesOk);
-    console.log("Updated Edges Error:", updatedEdgesError);
-    console.log("Combined Data:", combinedData);
+    // console.log("Updated Edges Ok:", updatedEdgesOk);
+    // console.log("Updated Edges Error:", updatedEdgesError);
+    // console.log("Combined Data:", combinedData);
 
     axios.postWithCallback("job-steps/data-save", combinedData);
   };
@@ -353,7 +365,7 @@ console.log("nodes:",nodes);
     },
     [setEdges, setEdge]
   );
-console.log("edges:",edges);
+// console.log("edges:",edges);
   const [nodeName, setNodeName] = useState("Node 1");
 
   useEffect(() => {
@@ -459,11 +471,12 @@ const handleNodeClick = (event, node) => {
     nodeId(node);
 };
 
+
+
 const onNodeContextMenu = useCallback(
   (event, node) => {
     event.preventDefault();
-
-    const contextMenuWidth = 150; 
+const contextMenuWidth = 150; 
     const contextMenuHeight = 40; 
 
     const mouseX = event.clientX;
@@ -471,17 +484,17 @@ const onNodeContextMenu = useCallback(
 
     const top = mouseY - contextMenuHeight / 2;
     const left = mouseX - contextMenuWidth / 2;
+    // const pane = ref.current.getBoundingClientRect();
+    setMenu({
+      id: node.id,
+      name:node.data.heading,
+          top: top < 0 ? 0 : top,
+          left: left < 0 ? 0 : left,
+          right: left < 0 ? -left : 0,
+          bottom: top < 0 ? -top : 0, 
+    });
 
-// const pane = ref.current.getBoundingClientRect();
-setMenu({
-  id: node.id,
-  name:node.data.heading,
-      top: top < 0 ? 0 : top,
-      left: left < 0 ? 0 : left,
-      right: left < 0 ? -left : 0,
-      bottom: top < 0 ? -top : 0, 
-});
-const updatedActiveNodes = activeNodes.includes(node.id)
+    const updatedActiveNodes = activeNodes.includes(node.id)
       ? activeNodes.filter((id) => id !== node.id)
       : [...activeNodes, node.id];
 
@@ -498,14 +511,16 @@ const saveNodeActiveStatus = () => {
   const dataToUpdate = {
     node_active: false,
   }
-  console.log("dataToUpdate:",dataToUpdate);
     axios.putWithCallback(`job-steps/${parseInt(activeNodes)}/node-active`, dataToUpdate)
-    window.location.reload()
+      .then((res) => {
+        console.log("res:",res);
+      })
+      .catch((error) => {
+        console.error('Error updating node active status:', error);
+      });
+  
 };
-// console.log("nodes:nodes",nodes);
 const Node = nodes.filter((item) => item.node_active === true)
-
-// console.log("Node:",Node);
   return (
     <>
       <button onClick={saveHandler}>Save</button> 
@@ -526,10 +541,11 @@ const Node = nodes.filter((item) => item.node_active === true)
               onEdgeUpdateStart={onEdgeUpdateStart}
               onEdgeUpdateEnd={onEdgeUpdateEnd}
               attributionPosition="top-right"
-              onNodeClick={(event, node) => handleNodeClick(event, node)}
-              onNodeDoubleClick={onNodeDoubleClick}
+              onNodeDoubleClick={(event, node) => handleNodeClick(event, node)}
+              // onNodeDoubleClick={onNodeDoubleClick}
               onEdgeDoubleClick={true}
-              onNodeDragStop={onNodeDragStop} 
+              onNodeDragStop={onNodeDragStop}
+              // onPaneClick={onPaneClick}
               onNodeContextMenu={onNodeContextMenu}
               onPaneClick={() => {
                 saveNodeActiveStatus();

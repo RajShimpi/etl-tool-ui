@@ -9,7 +9,7 @@ import ContextMenu from '../ContextMenu';
 import Modal from '../../modules/components/modal-popup';
 import { AddUpdateDeleteFileAndFolder } from '../PopupComponent';
 
-function ProjectStructure({ textColor }) {
+function ProjectStructure({ textColor,onFileClickCallback }) {
   const [isOpen, setIsOpen] = useState(false);
   const [projects, setProjects] = useState([]);
   const [contextMenuPosition, setContextMenuPosition] = useState(null);
@@ -160,7 +160,12 @@ function ProjectStructure({ textColor }) {
       });
       return data;
   } 
-
+  const handleFileClick = (file_id) => {
+    // Handle file_id in ProjectStructure
+    console.log("File ID clicked in ProjectStructure:", file_id);
+    // Add your logic here to handle the file_id
+    onFileClickCallback(file_id)
+};
   return (
     <div>
       <div className={`sidebar ${isOpen ? 'open' : ''}`}>
@@ -205,7 +210,7 @@ function ProjectStructure({ textColor }) {
                                             }
                 
                   <div style={{ display: !showNested[project.project_name] && "none" }}>
-                    <RecursiveFolder items={project.treeData} onRightCallback={onRightCallback} refreshData={getProjects} />
+                    <RecursiveFolder items={project.treeData} onRightCallback={onRightCallback} refreshData={getProjects} onFileClickCallback={handleFileClick}  />
                     {/* <FolderDropdown
                       project={project}
                       projectId={project.id}
