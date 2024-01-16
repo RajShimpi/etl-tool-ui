@@ -11,7 +11,7 @@ import CommonModel from '../../components/common-modal';
 
 
 const StepParameter = ({ node_Id, step_type_id, name }) => {
-  console.log(node_Id, "name");
+  // console.log(node_Id, "name");
   const [parameter, setparameter] = useState([]);
   const [editName, setEditName] = useState('');
   useEffect(() => {
@@ -46,7 +46,7 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
   useEffect(() => {
     axios.getWithCallback(`job-steps/${node_Id || 0}`, (data) => setEditName(data));
   }, []);
- console.log(editName);
+//  console.log(editName);
 
   let defaultObj = { step_name:'',  type: '', name: '', img: '', group: '', parametres: '' };
 

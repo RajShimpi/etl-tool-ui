@@ -41,7 +41,7 @@ import axios from "../../../services/axios";
 import { data, event, post } from "jquery";
 import StepParameter from "../../../masters/popup/step-parameter";
 import { getstepparameterFields } from "../../../masters/popup/step-paramter-data";
-// import ContextMenu from "../../../../components/ContextMenu";
+import { useJobData } from "../../../../components/JobDataContext";
 
 // let id = 0;
 // const getId = () => `dndnode_${id++}`;
@@ -72,7 +72,7 @@ function ContextMenu({
       {...props}
     >
       <p className="deleteNodename" >
-        <small >node: {name}</small>
+        <small > {name}</small>
       </p>
       <div className="deleteNode" onClick={deleteNode}>delete</div>
     </div>
@@ -108,9 +108,12 @@ const OverviewFlow = () => {
   const [editName,setName]=useState()
   const [activeNodes, setActiveNodes] = useState([]);
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
-
+  const { jobDataId } = useJobData();
   useEffect(() => {
-    axios.getWithCallback("job-steps/", (data) => {
+    // const jobDataId = localStorage.getItem("jobDataId");
+    if (jobDataId) {
+      axios.getWithCallback(`job-steps/${jobDataId}/job`, (data) => {
+      console.log("Data from job-steps API:", data);
       const dataNodes = data.map((item) => ({
         id: "" + item.id,
         step_type_id: "" + item.step_type_id,
@@ -127,7 +130,7 @@ const OverviewFlow = () => {
         node_active: item.node_active,
       }));
 
-      // console.log("dataNodes:", dataNodes);
+      console.log("dataNodes:", dataNodes);
 
       const dataEdgesok = data.map((item) => ({
         id: "" + item.id,
@@ -168,8 +171,11 @@ const OverviewFlow = () => {
         return label === "ok" ? "green" : label === "error" ? "red" : "black";
       }
     });
+  } else{
+console.log("Data.data");
+  }
     // eslint-disable-next-line
-  }, []);
+  }, [setNodes,setAllNodes, jobDataId]);
 
   const onDragOver = (event) => {
     event.preventDefault();
@@ -214,10 +220,10 @@ const OverviewFlow = () => {
   };
 
   const saveNodeToDatabase = () => {
-    const dataToNodeActive = activeNodes.map((id) => ({
-      id: parseInt(id),
-      node_active: false,
-    }));
+    // const dataToNodeActive = activeNodes.map((id) => ({
+    //   id: parseInt(id),
+    //   node_active: false,
+    // }));
     const dataFromNodes = allNodes.map((item) => ({
       id: parseInt(item.id),
       job_id: 1,
@@ -289,9 +295,9 @@ const OverviewFlow = () => {
       // ...dataToNodeActive.find((nodeActive) => nodeActive.id === node.id),
     }));
   
-    console.log("Updated Edges Ok:", updatedEdgesOk);
-    console.log("Updated Edges Error:", updatedEdgesError);
-    console.log("Combined Data:", combinedData);
+    // console.log("Updated Edges Ok:", updatedEdgesOk);
+    // console.log("Updated Edges Error:", updatedEdgesError);
+    // console.log("Combined Data:", combinedData);
 
     axios.postWithCallback("job-steps/data-save", combinedData);
   };
@@ -366,7 +372,7 @@ const OverviewFlow = () => {
     },
     [setEdges, setEdge]
   );
-console.log("edges:",edges);
+// console.log("edges:",edges);
   const [nodeName, setNodeName] = useState("Node 1");
 
   useEffect(() => {
@@ -503,7 +509,7 @@ const contextMenuWidth = 150;
   [setMenu, setActiveNodes, activeNodes]
 );
 
-console.log("activeNodes:",parseInt(activeNodes));
+// console.log("activeNodes:",parseInt(activeNodes));
 
 const onPaneClick = useCallback(() => setMenu(null), [setMenu]);
 const saveNodeActiveStatus = () => {
