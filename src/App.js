@@ -5,7 +5,7 @@ import Dashboard from './modules/dashboard/dashboard';
 import Login from './modules/user/login';
 import ProtectedRoute from './modules/user/protected-route';
 import './App.css';
-import { FileIdProvider } from './components/fileContext';
+// import { FileIdProvider } from './components/fileContext';
 
 const App = () => {
 

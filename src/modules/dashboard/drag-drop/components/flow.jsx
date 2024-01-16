@@ -99,7 +99,7 @@ const OverviewFlow = () => {
   const [isSelected, setIsSelected] = useState(false);
   const [ids, setIds] = useState();
   const [draggedNodeInfo, setDraggedNodeInfo] = useState(null);
-  // const [newNodes, setNewNodes] = useState(null);
+  const [data, setData] = useState([]);
   const [position, setPosition] = useState([]);
   const [allNodes, setAllNodes] = useState([]);
   const [step_type_id, setStep_type_Id] = useState();
@@ -111,7 +111,9 @@ const OverviewFlow = () => {
   const { jobDataId } = useJobData();
   useEffect(() => {
     // const jobDataId = localStorage.getItem("jobDataId");
+    
     if (jobDataId) {
+      axios.getWithCallback('job-steps',data=> setData(data))
       axios.getWithCallback(`job-steps/${jobDataId}/job`, (data) => {
       console.log("Data from job-steps API:", data);
       const dataNodes = data.map((item) => ({
@@ -189,35 +191,36 @@ console.log("Data.data");
   const onDrop = (event) => {
     event.preventDefault();
     const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
-
+  
     const type = event.dataTransfer.getData("application/reactflow");
     const img = event.dataTransfer.getData("img");
     const name = event.dataTransfer.getData("name");
     const step_type_id = event.dataTransfer.getData("id");
-
+  
     const position = reactFlowInstance.project({
       x: event.clientX - reactFlowBounds.left,
       y: event.clientY - reactFlowBounds.top,
     });
-
-    const currentId = nodes.length;
+  
+    // Calculate the next ID based on the existing nodes
+    const currentId = Math.max(...nodes.map(node => parseInt(node.id)), 0);
     const nextId = currentId + 1;
-
+  
     const newNode = {
       id: `${nextId}`,
       step_type_id,
       name,
       type,
-      node_active:true,
+      node_active: true,
       position,
       data: { heading: name, img: img },
     };
-
+  
     setNodes((es) => es.concat(newNode));
     setSelectedNode((newNode.a = name));
-
     setAllNodes((prevNodes) => [...prevNodes, newNode]);
   };
+  
 
   const saveNodeToDatabase = () => {
     // const dataToNodeActive = activeNodes.map((id) => ({
@@ -226,7 +229,7 @@ console.log("Data.data");
     // }));
     const dataFromNodes = allNodes.map((item) => ({
       id: parseInt(item.id),
-      job_id: 1,
+      job_id: jobDataId,
       step_type_id: parseInt(item.step_type_id),
       step_name: item.data?.heading || item.name,
       type: "node",
@@ -451,17 +454,16 @@ console.log("Data.data");
     setNode_Id(parseInt(node.id));
   }
   
-
   const handleCloseNodeMaster = () => {
     setShowNodeMaster(false);
+    setMenu(null);
   };
-
   const handleClickOutside = (event) => {
     if (modalRef.current && !modalRef.current.contains(event.target)) {
       handleCloseNodeMaster();
+      setMenu(null);
     }
   };
-
   useEffect(() => {
     const handleDocumentClick = (event) => handleClickOutside(event);
 
@@ -477,27 +479,37 @@ console.log("Data.data");
     nodeId(node);
 };
 
-
-
+const saveNodeActiveStatus = () => {
+  const dataToUpdate = {
+    node_active: false,
+  }
+    axios.putWithCallback(`job-steps/${activeNodes}/node-active`, dataToUpdate)
+      .then((res) => {
+        console.log("res:",res);
+      })
+      .catch((error) => {
+        console.error('Error updating node active status:', error);
+      });
+  
+};
 const onNodeContextMenu = useCallback(
   (event, node) => {
     event.preventDefault();
-const contextMenuWidth = 150; 
-    const contextMenuHeight = 40; 
+    const contextMenuWidth = 150;
+    const contextMenuHeight = 40;
 
     const mouseX = event.clientX;
     const mouseY = event.clientY;
 
     const top = mouseY - contextMenuHeight / 2;
     const left = mouseX - contextMenuWidth / 2;
-    // const pane = ref.current.getBoundingClientRect();
+
     setMenu({
       id: node.id,
-      name:node.data.heading,
-          top: top < 0 ? 0 : top,
-          left: left < 0 ? 0 : left,
-          right: left < 0 ? -left : 0,
-          bottom: top < 0 ? -top : 0, 
+      top: top < 0 ? 0 : top,
+      left: left < 0 ? 0 : left,
+      right: left < 0 ? -left : 0,
+      bottom: top < 0 ? -top : 0,
     });
 
     const updatedActiveNodes = activeNodes.includes(node.id)
@@ -509,22 +521,23 @@ const contextMenuWidth = 150;
   [setMenu, setActiveNodes, activeNodes]
 );
 
-// console.log("activeNodes:",parseInt(activeNodes));
-
-const onPaneClick = useCallback(() => setMenu(null), [setMenu]);
-const saveNodeActiveStatus = () => {
-  const dataToUpdate = {
-    node_active: false,
+const onPaneClick = useCallback(() => {
+  if (menu) {
+    // saveNodeActiveStatus();
+    setMenu(null);
   }
-    axios.putWithCallback(`job-steps/${parseInt(activeNodes)}/node-active`, dataToUpdate)
-      .then((res) => {
-        console.log("res:",res);
-      })
-      .catch((error) => {
-        console.error('Error updating node active status:', error);
-      });
-  
-};
+}, [menu]);
+
+const deleteNode = useCallback(() => {
+  if (menu && menu.id) {
+    // Save active status only if the delete button is clicked
+    saveNodeActiveStatus();
+    setNodes((nodes) => nodes.filter((node) => node.id !== menu.id));
+    setEdges((edges) => edges.filter((edge) => edge.source !== menu.id));
+    setMenu(null);
+  }
+}, [menu, setNodes, setEdges, saveNodeActiveStatus]);
+
 const Node = nodes.filter((item) => item.node_active === true)
   return (
     <>
@@ -552,14 +565,21 @@ const Node = nodes.filter((item) => item.node_active === true)
               onNodeDragStop={onNodeDragStop}
               // onPaneClick={onPaneClick}
               onNodeContextMenu={onNodeContextMenu}
-              onPaneClick={() => {
-                saveNodeActiveStatus();
-                onPaneClick();
-              }}
-              fitView
+              // onNodeContextMenu={onNodeContextMenu}
+          onPaneClick={onPaneClick}
+              // fitView
             >
               <Background color="#aaa" gap={16} />
-              {menu && <ContextMenu onClick={onPaneClick} {...menu} />}
+              {menu && (
+            <ContextMenu
+              id={menu.id}
+              top={menu.top}
+              left={menu.left}
+              right={menu.right}
+              bottom={menu.bottom}
+              onClick={deleteNode}
+            />
+          )}
               {/* <Controls /> */}
               <div className="reactflow-wrapper" ref={reactFlowWrapper}/>
               <div ref={ref}/>
