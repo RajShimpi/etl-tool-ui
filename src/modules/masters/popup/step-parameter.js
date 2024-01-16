@@ -46,7 +46,7 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
   useEffect(() => {
     axios.getWithCallback(`job-steps/${node_Id || 0}`, (data) => setEditName(data));
   }, []);
- console.log(editName);
+//  console.log(editName);
 
   let defaultObj = { step_name:'',  type: '', name: '', img: '', group: '', parametres: '' };
 

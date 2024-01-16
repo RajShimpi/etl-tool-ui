@@ -32,6 +32,12 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
     const containerRef = useRef(null);
 
 
+    const handleFileClick = (file) => {
+        console.log("File clicked:", file.file_name);
+        // Add your custom logic here
+    };
+
+
     const handleContextMenu = (event, item) => {
         event.preventDefault();
         event.stopPropagation();
@@ -121,10 +127,11 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
                             >
                                 
                                 {subItem.type === 'File' && 
-                                <>
+
+                                <div onClick={() => handleFileClick(subItem)}>
                                     <InsertDriveFileIcon key={subItem.file_name + "fileIcon" + index } fontSize='small' />
                                     <>{subItem.file_name}</>
-                                </>
+                                </div>
                                 }
 
                                 {subItem.type === 'Folder' && subItem.children && (

@@ -46,16 +46,17 @@
 }
 
 .context-menu {
-  background-color: #ffffff4f;
+  /* background-color: #ffffff4f; */
   /* border-style: solid; */
   /* box-shadow: 10px 19px 20px rgba(0, 0, 0, 10%); */
   position: absolute;
   z-index: 10;
+ 
   /* top: 0;
   left: 0; */
-  margin-top: -250px !important;
-  height: 86px;
-  width: 100px !important;
+  margin-top: -200px !important;
+  /* height: 86px; */
+  width: 130px !important;
 }
 
 .context-menu button {
@@ -68,11 +69,18 @@
 
 .deleteNode{
  text-align: center;
+ /* padding:8px 0px 8px 0px ; */
+ background-color: #ffffff4f;
+}
+
+:hover.deleteNode{
+background-color: rgba(235, 235, 225, 0.836);
 }
 
 .deleteNodename{
   text-align: center;
-  padding-top: 10px;
+  /* padding-top: 7px; */
+  color: white;
 }
 
 /* .context-menu button:hover {
