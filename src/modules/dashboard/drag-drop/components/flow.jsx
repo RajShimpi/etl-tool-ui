@@ -25,6 +25,7 @@ import axios from "../../../services/axios";
 import StepParameter from "../../../masters/popup/step-parameter";
 import { useJobData } from "../../../../components/JobDataContext";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { DeleteForever } from "@mui/icons-material";
 
 const nodeTypes = { node: Node };
 
@@ -45,9 +46,7 @@ function ContextMenu({ id, name, top, left, right, bottom, ...props }) {
       >
         <button className="deleteNode" onClick={deleteNode}>
           <DeleteIcon className="display-3 m-2" />
-          <div className="delete">
-          Delete
-          </div>
+          <div className="delete">Delete</div>
         </button>
       </div>
     </>
@@ -77,7 +76,7 @@ const OverviewFlow = () => {
   const [nodeid, setNode_Id] = useState();
   const [editName, setName] = useState();
   const [activeNodes, setActiveNodes] = useState([]);
-  const [nodeActive, setNodeactive] = useState([]);
+  const [nodesActive, setNodesActive] = useState([]);
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
   const { jobDataId } = useJobData();
 
@@ -191,7 +190,7 @@ const OverviewFlow = () => {
   };
 
   const saveNodeToDatabase = () => {
-    console.log("activeNodes:",activeNodes);
+    // console.log("activeNodes:",activeNodes);
     const dataFromNodes = allNodes.map((item) => ({
       id: parseInt(item.id),
       job_id: jobDataId,
@@ -274,11 +273,16 @@ const OverviewFlow = () => {
       }
     });
 
+    const dataFromNodesActive = nodesActive.map((item) => ({
+      id: parseInt(item.id),
+      node_active:item.node_active
+    }));
+
     const combinedData = dataFromNodes.map((node) => ({
       ...node,
       ...dataFromEdgesOk.find((edgeOk) => edgeOk.id === node.id),
       ...dataFromEdgesError.find((edgeError) => edgeError.id === node.id),
-      // ...dataToNodeActive.find((nodeActive) => nodeActive.id === node.id),
+      ...dataFromNodesActive.find((nodeActive) => nodeActive.id === node.id),
     }));
 
     // console.log("Updated Edges Ok:", updatedEdgesOk);
@@ -286,7 +290,7 @@ const OverviewFlow = () => {
     // console.log("Combined Data:", combinedData);
 
     axios.postWithCallback("job-steps/data-save", combinedData);
-    axios.putWithCallback(`job-steps/${activeNodes}/node-active`, nodeActive);
+    // axios.putWithCallback(`job-steps/node-active`, nodesActive);
   };
 
   const onNodeDragStop = (event, node) => {
@@ -461,12 +465,15 @@ const OverviewFlow = () => {
     nodeId(node);
   };
 
-  const saveNodeActiveStatus = () => {
-    const dataToUpdate = {
-      node_active: false,
-    };
-setNodeactive(dataToUpdate)
-  };
+  // const saveNodeActiveStatus = () => {
+  //   console.log("nodesActiveStatus:",nodesActive);
+  //   const dataToUpdate = [nodesActive].map((item)=>({
+  //     id:item.id,
+  //     node_active: false,
+  //   }));
+  //   console.log("dataToUpdate:dataToUpdate",dataToUpdate);
+  //   setNodesActive(dataToUpdate)
+  // };
 
   const onNodeContextMenu = useCallback(
     (event, node) => {
@@ -487,32 +494,33 @@ setNodeactive(dataToUpdate)
         right: left < 0 ? -left : 0,
         bottom: top < 0 ? -top : 0,
       });
-
-      const updatedActiveNodes = activeNodes.includes(node.id)
-        ? activeNodes.filter((id) => id !== node.id)
-        : [...activeNodes, node.id];
-
-      setActiveNodes(updatedActiveNodes);
+      // console.log("node.id:",node.id);
+      setActiveNodes(node);
     },
-    [setMenu, setActiveNodes, activeNodes]
+    [setMenu]
   );
 
   const onPaneClick = useCallback(() => {
     if (menu) {
-
       setMenu(null);
     }
   }, [menu]);
 
   const deleteNode = useCallback(() => {
     if (menu && menu.id) {
-      saveNodeActiveStatus();
+      setNodesActive((prevDeletedNodes) => [
+        ...prevDeletedNodes,
+        { id: menu.id, node_active: false },
+      ]);
       setNodes((nodes) => nodes.filter((node) => node.id !== menu.id));
       setEdges((edges) => edges.filter((edge) => edge.source !== menu.id));
       setMenu(null);
-    }
-  }, [menu, setNodes, setEdges, saveNodeActiveStatus]);
 
+      // console.log("activeNodes:nodes",activeNodes);
+    }
+  }, [menu, setNodes, setEdges, activeNodes]);
+
+  // console.log("nodesActive:,",nodesActive);
   const Node = nodes.filter((item) => item.node_active === true);
 
   return (
