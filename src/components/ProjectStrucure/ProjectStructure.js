@@ -57,7 +57,7 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
 
         });
       });
-      // console.log(data);
+      console.log(data);
       // setProjects(data);
     });
   };
@@ -103,7 +103,7 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
     setShow({ ...isShow, [item.file_name]: !isShow[item.file_name] });
     setType(type);
   }
-
+console.log("projects:,",projects);
   // const toggleFile = (projectIndex, file) => {
   //   const updatedProject = [...project];
   //   updatedProject[projectIndex].openFiles[file] = !updatedProject[projectIndex].openFiles[file];
