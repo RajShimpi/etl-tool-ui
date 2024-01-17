@@ -43,12 +43,12 @@ function ContextMenu({ id, name, top, left, right, bottom, ...props }) {
         className="context-menu"
         {...props}
       >
-        <div className="deleteNode" onClick={deleteNode}>
-          <DeleteIcon
-            style={{ fontSize: "medium", marginRight: "5px", marginTop: "3px" }}
-          />
-          delete
-        </div>
+        <button className="deleteNode" onClick={deleteNode}>
+          <DeleteIcon className="display-3 m-2" />
+          <div className="delete">
+          Delete
+          </div>
+        </button>
       </div>
     </>
   );
@@ -77,6 +77,7 @@ const OverviewFlow = () => {
   const [nodeid, setNode_Id] = useState();
   const [editName, setName] = useState();
   const [activeNodes, setActiveNodes] = useState([]);
+  const [nodeActive, setNodeactive] = useState([]);
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
   const { jobDataId } = useJobData();
 
@@ -190,6 +191,7 @@ const OverviewFlow = () => {
   };
 
   const saveNodeToDatabase = () => {
+    console.log("activeNodes:",activeNodes);
     const dataFromNodes = allNodes.map((item) => ({
       id: parseInt(item.id),
       job_id: jobDataId,
@@ -284,6 +286,7 @@ const OverviewFlow = () => {
     // console.log("Combined Data:", combinedData);
 
     axios.postWithCallback("job-steps/data-save", combinedData);
+    axios.putWithCallback(`job-steps/${activeNodes}/node-active`, nodeActive);
   };
 
   const onNodeDragStop = (event, node) => {
@@ -462,8 +465,7 @@ const OverviewFlow = () => {
     const dataToUpdate = {
       node_active: false,
     };
-
-    axios.putWithCallback(`job-steps/${activeNodes}/node-active`, dataToUpdate);
+setNodeactive(dataToUpdate)
   };
 
   const onNodeContextMenu = useCallback(
@@ -497,6 +499,7 @@ const OverviewFlow = () => {
 
   const onPaneClick = useCallback(() => {
     if (menu) {
+
       setMenu(null);
     }
   }, [menu]);

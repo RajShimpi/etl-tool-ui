@@ -226,3 +226,10 @@
 .sidebar.open .openf1 {
   display: block;
 }
+.folderstyle{
+  display: none;
+}
+
+.sidebar.open .folderstyle{
+  display: block;
+}

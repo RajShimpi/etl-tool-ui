@@ -99,7 +99,7 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
           });
           break;
         case "Delete":
-          axios.deleteWithCallback("project-files/" + props.item?.id,
+          axios.putWithCallback("project-files/" + props.item?.id,
           item,
           (resp) => {
             

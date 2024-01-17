@@ -23,23 +23,25 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
             const resource = parameter?.resource;
             if (resource) {
               try {
-                const resourceData = await axios.getWithCallback(`${resource}`);
-                parameter.options = resourceData;
+                axios.getWithCallback(`${resource}`,(data)=>{
+                  parameter.options =data;
+                  console.log("data:",data);
+                });
+               
               } catch (error) {
                 console.error(`Error fetching resource ${resource}:`, error);
               }
             }
+            console.log("resource:",resource);
           }));
           
           setparameter(data.parameters);
         });
-        // console.log(response);
+        console.log("response:",response);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
-    
-
     fetchData();
   }, [step_type_id]);
 
