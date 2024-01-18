@@ -76,10 +76,10 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
         case "AddFolder":
           axios.postWithCallback("project-files",
           item,
+  
           (resp) => {
             
             props.onClose(e, true);
-            
           });
           break;
         case "Add":

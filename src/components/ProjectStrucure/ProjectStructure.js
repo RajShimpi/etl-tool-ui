@@ -44,23 +44,22 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
   }, []);
 
   const getProjects = () => {
-    axios.getWithCallback('projects/', (data) => {
+    axios.getWithCallback('projects/', (data) =>  {      
       data.forEach((dt, inx) => {
-        let url = 'project-files/get-folder-hierarchy?projectId=' + dt.id;
+      let url = 'project-files/get-folder-hierarchy?projectId=' + dt.id;
         axios.getWithCallback(url, (subdata) => {
           var treeData = treefy(subdata);
           dt.treeData = treeData;
           dt.isRightClick = false;
-          dt.item = { file_name: dt.project_name, parent: null, parent_id: null, id: 0, project_id: dt.id }
+          dt.item = { file_name: dt.project_name, parent:null, parent_id:null, id: 0, project_id: dt.id }
           // setData((prevData) => [...prevData, { prjId : dt.id, heirarchy: treeData}]);
           setProjects((prevData) => [...prevData, dt])
-
         });
       });
-      console.log(data);
+      // console.log(data);
       // setProjects(data);
     });
-  };
+  };  
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -103,7 +102,7 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
     setShow({ ...isShow, [item.file_name]: !isShow[item.file_name] });
     setType(type);
   }
-console.log("projects:,",projects);
+  // console.log("projects:,", projects);
   // const toggleFile = (projectIndex, file) => {
   //   const updatedProject = [...project];
   //   updatedProject[projectIndex].openFiles[file] = !updatedProject[projectIndex].openFiles[file];

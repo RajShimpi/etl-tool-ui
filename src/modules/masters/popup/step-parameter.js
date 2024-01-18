@@ -32,12 +32,12 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
                 console.error(`Error fetching resource ${resource}:`, error);
               }
             }
-            console.log("resource:",resource);
+            // console.log("resource:",resource);
           }));
           
           setparameter(data.parameters);
         });
-        console.log("response:",response);
+        // console.log("response:",response);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
