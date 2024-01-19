@@ -8,9 +8,11 @@ import auth from "./auth";
 import axios from '../services/axios';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-
+import { useClientId } from "../../components/JobDataContext";
+// import { useClientId } from "../JobDataContext";
 const Login = () => {
-
+// const [clientid,setClientId]=useState()
+const { setClientId } = useClientId();  
     const bgStyle = {
         // backgroundImage: `url(${process.env.PUBLIC_URL + "/assets/images/login/login-bg.png"})`,
         backgroundColor: '#ffffff',
@@ -32,6 +34,8 @@ const Login = () => {
     }
 
     const onSubmit = (data) => {
+
+        setClientId(data.client_id)
         // $(".blurbackground").css("visibility", "visible");    //userName: userName, 
         axios.post("auth/login", { username: data.userName,client_id: data.client_id,  password: data.password }, false).then(data => {
             auth.setAuthData(data.data);
@@ -114,9 +118,9 @@ const Login = () => {
                                                     </div>
                                                     <div className="form-group mb-3">
                                                         <span className="has-float-label">
-                                                            <input type="text" autoComplete='off' id='user_id' className="form-control" {...register('client_id')} onKeyDown={(e) => checkCred(e)}
+                                                            <input type="text" autoComplete='off' id='client_id' className="form-control" {...register('client_id')} onKeyDown={(e) => checkCred(e)}
                                                                 placeholder=' ' />
-                                                            <label htmlFor="user_id">User Id</label>
+                                                            <label htmlFor="client_id">Client Id</label>
                                                         </span>
                                                         {errors.client_id && <span className="client-side-error">{errors.client_id.message}</span>}
                                                     </div>

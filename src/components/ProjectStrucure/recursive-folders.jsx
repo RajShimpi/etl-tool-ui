@@ -17,7 +17,6 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
   const [isContextMenuOpen, setContextMenuOpen] = useState({});
   const [isShow, setShow] = useState({});
   const [type, setType] = useState("AddFolder");
-  // const [, setJobDataId] = useJobData();
   const { setJobDataId } = useJobData();  
   const containerRef = useRef(null);
 
@@ -77,7 +76,6 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
   };
 
   const onhandelFileId = (item) => {
-    // console.log("item:",item);
     axios.getWithCallback(`job/${item.id}/file`, (data) => {
       setJobDataId(data.id); 
     });
