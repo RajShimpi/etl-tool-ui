@@ -33,7 +33,7 @@ const Login = () => {
 
     const onSubmit = (data) => {
         // $(".blurbackground").css("visibility", "visible");    //userName: userName, 
-        axios.post("auth/login", { username: data.userName,userId: data.userId,  password: data.password }, false).then(data => {
+        axios.post("auth/login", { username: data.userName,client_id: data.client_id,  password: data.password }, false).then(data => {
             auth.setAuthData(data.data);
             setValidateState({
                 isError: false,
@@ -41,7 +41,7 @@ const Login = () => {
             })
             reset({
                 userName: '',
-                userId: '',
+                client_id: '',
                 password: ''
             })
             setAuth(true);
@@ -66,8 +66,8 @@ const Login = () => {
         userName: yup
             .string()
             .required('User name is required'),
-        userId: yup
-            .number()
+            client_id: yup
+            .string()
             .required('User id is required'),
         password: yup
             .string()
@@ -114,11 +114,11 @@ const Login = () => {
                                                     </div>
                                                     <div className="form-group mb-3">
                                                         <span className="has-float-label">
-                                                            <input type="text" autoComplete='off' id='user-name' className="form-control" {...register('userId')} onKeyDown={(e) => checkCred(e)}
+                                                            <input type="text" autoComplete='off' id='user_id' className="form-control" {...register('client_id')} onKeyDown={(e) => checkCred(e)}
                                                                 placeholder=' ' />
-                                                            <label htmlFor="user-name">User Id</label>
+                                                            <label htmlFor="user_id">User Id</label>
                                                         </span>
-                                                        {errors.userId && <span className="client-side-error">{errors.userId.message}</span>}
+                                                        {errors.client_id && <span className="client-side-error">{errors.client_id.message}</span>}
                                                     </div>
                                                     <div className="form-group mb-3">
                                                         <span className="has-float-label">
