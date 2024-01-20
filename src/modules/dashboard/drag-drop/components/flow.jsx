@@ -40,6 +40,7 @@
   import { event, post } from "jquery";
   import StepParameter from "../../../masters/popup/step-parameter";
 import { getstepparameterFields } from "../../../masters/popup/step-paramter-data";
+import JobStepParameterMaster from "../../../masters/job-step-param-master";
 
   // let id = 0;
   // const getId = () => `dndnode_${id++}`;
@@ -68,7 +69,8 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
     const [step_type_id, setStep_type_Id] = useState();
     const [job_id, setJob_Id] = useState();
     const [nodeid, setNode_Id] = useState();
-    const [editName,setName]=useState()
+    const [editName,setName]=useState();
+    const [doubleClickedNode, setDoubleClickedNode] = useState(null);
     const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
     const handleParameterFields = useCallback((itemData, editName) => {
       console.log('Edit Name:', editName);
@@ -93,7 +95,7 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
         }));
 
         const dataEdgesok = data.map((item) => ({
-          id: "" + item.id,
+          id: "ok-" + item.id,
           source: "" + item.id,
           target: "" + item.ok_step,
           label: "ok",
@@ -104,7 +106,7 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
         }));
 
         const dataEdgeserror = data.map((item) => ({
-          id: "" + item.id,
+          id: "err-" + item.id,
           source: "" + item.id,
           target: "" + item.error_step,
           label: "error",
@@ -138,7 +140,7 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
     const onDragOver = (event) => {
       event.preventDefault();
       event.dataTransfer.dropEffect = "move";
-
+      
       // const [showNodeMaster, setShowNodeMaster] = useState(false);
 
       // ... (other state variables and functions)
@@ -193,13 +195,13 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
 
     const dataFromEdgesOk = edges.filter((item) => item.sourceHandle === "ok" && item.target !== null && !isNaN(item.target))
       .map((item) => ({
-        id:  parseInt(item.source),
+        id: parseInt(item.source.replace('ok-', '')),
         ok_step: parseInt(item.target),
       }));
 
       const dataFromEdgesError = edges.filter((item) => item.sourceHandle === "error" && item.target !== null && !isNaN(item.target))
       .map((item) => ({
-        id: parseInt(item.source),
+        id: parseInt(item.source.replace('err-', '')),
         error_step: parseInt(item.target),
       }));
     
@@ -223,7 +225,7 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
   };
 
 
-    const onNodeDragStop = (event, node) => {
+    const onNodeDragStop = (event, node) => {      
       const updatedPosition = nodes.map((n) => {
         if (n.id === node.id) {
           return {
@@ -232,9 +234,11 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
           };
         }
         return n;
+
       });
 
-      setNodes(updatedPosition);
+      setNodes([...updatedPosition]);
+      
       setPosition(updatedPosition);
       setDraggedNodeInfo({ id: node.id, position: node.position });
 
@@ -243,11 +247,16 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
         ...position.find((id) => id.id === node.id),
       }));
       setAllNodes(combinedDataposition);
-      // console.log(allNodes, "update");
+      
     };
+
+    useEffect(() => {
+      console.log("edges", nodes  );
+    }, [nodes])
 
     const onConnect = useCallback(
       (params) => {
+       
         const { sourceHandle, source, target } = params;
         // const sourceNodeId = parseInt(source);
         // const targetNodeId = parseInt(target);
@@ -337,23 +346,34 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
     }, []);
 
     const onEdgeUpdate = useCallback((oldEdge, newConnection) => {
+      debugger;
       edgeUpdateSuccessful.current = true;
       setEdges((els) => updateEdge(oldEdge, newConnection, els));
       // eslint-disable-next-line
-    }, []);
+    }, [nodes]);
 
     const onEdgeUpdateEnd = useCallback((_, edge) => {
+      debugger;
       if (!edgeUpdateSuccessful.current) {
         setEdges((eds) => eds.filter((e) => e.id !== edge.id));
       }
 
       edgeUpdateSuccessful.current = true;
       // eslint-disable-next-line
-    }, []);
+    }, [nodes]);
 
-    const onNodeDoubleClick = () => {
-      setShowNodeMaster(true);
+    
+
+    const onNodeDoubleClick = (event, node) => {
+      setDoubleClickedNode(node);
+      
     };
+
+    useEffect(() => {
+      if(doubleClickedNode) {
+        setShowNodeMaster(true);
+      }
+    }, [doubleClickedNode])
 
     const handleCloseNodeMaster = () => {
       setShowNodeMaster(false);
@@ -434,22 +454,23 @@ import { getstepparameterFields } from "../../../masters/popup/step-paramter-dat
                 onEdgeUpdateStart={onEdgeUpdateStart}
                 onEdgeUpdateEnd={onEdgeUpdateEnd}
                 attributionPosition="top-right"
-                onNodeDoubleClick={onNodeDoubleClick}
+                onNodeDoubleClick={(event,node) => onNodeDoubleClick(event, node)}
                 onEdgeDoubleClick={true}
                 onNodeDragStop={onNodeDragStop}
-                onNodeClick={(event, node) => nodeId(node)}
+                // onNodeClick={(event, node) => nodeId(node)}
               >
                 <Background color="#aaa" gap={16} />
                 {/* <Controls /> */}
               </ReactFlow>
 
               <Modal modalTitle={"Save/Update Parameter"} ref={modalRef} handleClose={handleCloseNodeMaster} show={showNodeMaster}>
-              <StepParameter
-                  step_type_id={step_type_id}
-                  job_Id={job_id}
-                  node_Id={nodeid}
-                  name={editName}
-                  handleParameterFields={(itemData) => handleParameterFields(itemData, editName)}
+              <JobStepParameterMaster
+                  step_type_id={parseInt(doubleClickedNode?.step_type_id)}
+                  job_id={parseInt(doubleClickedNode?.job_id)}
+                  node_Id={parseInt(doubleClickedNode?.id)}
+                  name={doubleClickedNode?.data.heading}
+                  handleClose={handleCloseNodeMaster}
+                  handleParameterFields={(itemData) => handleParameterFields(itemData, doubleClickedNode?.data.heading)}
                 />
               </Modal>
             </div>
