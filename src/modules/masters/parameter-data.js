@@ -8,10 +8,8 @@ export const getParameterFields = (itemData) => {
             id: "inputParameterName",
             label: "Name",
             name: "name",
-            // options: itemData.options[0],
             control: "input",
-            // isSubmit: itemData.isSubmit,
-            isRequired:true,
+            isRequired: true,
             itemVal: itemData.values ? itemData.values["name"] : '',
         },
         {
@@ -19,10 +17,8 @@ export const getParameterFields = (itemData) => {
             id: "inputParameterContext",
             label: "Context",
             name: "context",
-            // options: itemData.options[0],
             control: "input",
-            // isSubmit: itemData.isSubmit,
-            isRequired:true,
+            isRequired: true,
             itemVal: itemData.values ? itemData.values["context"] : '',
         },
         {
@@ -30,9 +26,7 @@ export const getParameterFields = (itemData) => {
             id: "inputParameterDisplay_name",
             label: "Display Name",
             name: "display_name",
-            // options: itemData.options[0],
             control: "input",
-            // isSubmit: itemData.isSubmit,
             isRequired: true,
             itemVal: itemData.values ? itemData.values["display_name"] : '',
         },
@@ -41,7 +35,6 @@ export const getParameterFields = (itemData) => {
             id: "inputParameterDescription",
             label: "Description",
             name: "description",
-            // options: itemData.options[0],
             control: "input",
             isSubmit: itemData.isSubmit,
             isRequired: true,
@@ -52,7 +45,6 @@ export const getParameterFields = (itemData) => {
             id: "inputParameterType",
             label: "Type",
             name: "type",
-            // options: itemData.options[0],
             control: "input",
             isSubmit: itemData.isSubmit,
             isRequired: true,
@@ -63,14 +55,21 @@ export const getParameterFields = (itemData) => {
             id: "inputParameterResource",
             label: "Resource",
             name: "resource",
-            // options: itemData.options[0],
             control: "input",
             isSubmit: itemData.isSubmit,
-            isRequired:true,
+            isRequired: true,
             itemVal: itemData.values ? itemData.values["resource"] : '',
         },
-       
+        {
+            id: "inputStepId",
+            label: "Step Name",
+            name: "step_id",
+            options: itemData.options[0],
+            control: "select",
+            isSubmit: itemData.isSubmit,
+            isRequired: !itemData?.values?.step_id,
+            itemVal: itemData.values ? itemData.values["step_id"] : '',
+        },
         ]
-    } 
-    ];
+    }];
 }

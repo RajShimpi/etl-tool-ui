@@ -24,28 +24,30 @@ const Modal = (props) => {
         display: 'flex',
         flexDirection: 'column',
         width: '100%',
-        // color: 'var(--bs-modal-color)',
+        color: 'var(--bs-modal-color)',
         pointerEvents: 'auto',
-        // backgroundColor: 'var(--bs-modal-bg)',
+        backgroundColor: 'var(--bs-modal-bg)',
         backgroundClip: 'padding-box',
-        // border: 'var(--bs-modal-border-width) solid var(--bs-modal-border-color)',
-        // borderRadius: 'var(--bs-modal-border-radius)',
+        border: 'var(--bs-modal-border-width) solid var(--bs-modal-border-color)',
+        borderRadius: 'var(--bs-modal-border-radius)',
         outline: 0,
+        color:'#00659e',
+        // left: '114px',
       };
       
       
     return (
-        <div className={props.show ? "modal d-block hide-body-scroll" : "modal d-none"} style={{ overflow: "auto" }} tabIndex="-1" role="dialog">
+        <div className={props.show ? "modal d-block hide-body-scroll" : "modal d-none"} style={{ overflow: "auto", zIndex:'10000' }} tabIndex="-1" role="dialog">
             <div className={`modal-dialog modal-lg ${props.maxWidth && 'modal-top'} `} style={{ maxWidth: props.maxWidth, }} role="document">
-                <div className=" w-50" style={modalContent}>
-                    {/* <div className={`${props.maxWidth && 'modal-header-custom-padding'} modal-header`}>
-                        {/* <h5 className="modal-title">{props.modalTitle}</h5>
+                <div className="  " style={modalContent}>
+                <div className={`${props.maxWidth && 'modal-header-custom-padding'} modal-header`}>
+                        <h6 className="modal-title">{props.modalTitle}</h6>
                         <button type="button" onClick={() => close()} className="btn btn-link close-btn" data-dismiss="modal" aria-label="Close">
-                            <i className="fa fa-2x fa-times-circle" aria-hidden="true" size='12'></i>
+                            <i className="fa fa-2x fa-times-circle" aria-hidden="true" size='12px'></i>
                         </button> 
-                    </div> */}
-                    <div className={`${props.maxWidth && 'modal-body-custom-top-padding'} modal-body`}>
-                        <div className={`${!props.maxWidth && 'container-fluid'}`}>
+                    </div> 
+                    <div className={`${props.maxWidth && 'modal-body-custom-top-padding'} `}>
+                        <div className={`${!props.maxWidth && ''}`}>
                             <ChildComponent {...childProps} />
                         </div>
                     </div>

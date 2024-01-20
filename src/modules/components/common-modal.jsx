@@ -72,6 +72,14 @@ const CommonModel = (props) => {
       case "whsId":
         setData((prevState) => ({ ...prevState, [name]: parseInt(e.value) }));
         break;
+      case "client_id": 
+      case "project_id":
+      case "parent_id":
+      case "step_id":
+      case "parameter_id":
+      case "parameters":
+          setData((prevState) => ({ ...prevState, [name]: parseInt(e.value) }));
+          break;
       case "TemplateItemId":
       case "TemplateId":
         data[name] = parseInt(e.value);
@@ -288,6 +296,7 @@ const CommonModel = (props) => {
         axios.putWithCallback(
           props.updateApi.replace(":id", postData.id),
           postData,
+          
           (resp) => {
             setUpdate(true);
             setUpdate(false);
@@ -300,6 +309,7 @@ const CommonModel = (props) => {
           null,
           props.apiCallerKey
         );
+        console.log(props.updateApi,"comman model log")
       } else {
         axios.postWithCallback(
           props.insertApi,

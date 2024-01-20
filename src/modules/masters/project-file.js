@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+ import React, { useEffect, useState } from 'react';
 import CommonFormWithList from '../components/common-form-with-list';
 import config from "../components/config/config.json"
 import { getProjectFileFields } from './project-file-data';
@@ -30,9 +30,7 @@ const ProjectFile = () => {
                 getApi="project-files"
                 title="Project-File"
                 defaultObj={defaultObj}
-                options={[projectId,
-                    parentId
-                ]}
+                options={[projectId, parentId]}
                 tableTitle='Project-File'
             />
         </>

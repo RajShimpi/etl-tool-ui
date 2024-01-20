@@ -11,7 +11,7 @@
 //   onToggleFiles,
 //   onToggleFolder,
 //   onOpenFolder,
-//   onCloseFolder,
+//   onCloseFolder,  
 //   textColor,
 //   projectId,
 //   parentId,
@@ -118,6 +118,10 @@
 //   );
 // };
 
+// Import necessary dependencies and components
+// import React, { useEffect, useState } from 'react';
+// import axios from 'axios';
+// import FolderDropdown from './FolderDropdown'; // Make sure to replace with the correct path
 
 
 

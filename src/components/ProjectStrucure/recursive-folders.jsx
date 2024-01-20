@@ -73,8 +73,7 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
                 closeContextMenu(e);
             }
         }
-        window.addEventListener('keydown', close)
-    
+        window.addEventListener('keydown', close) 
         document.addEventListener('click', handleDocumentClick);
         return () => {
           document.removeEventListener('click', handleDocumentClick);

@@ -9,21 +9,22 @@ const StepTypeParamete = () => {
     const [stepTypeParameter, setStepTypeParameter] = useState([]);
     const [stepType, setStepType] = useState([]);
     const [parameter, setParameter] = useState([]);
+    
 
     useEffect(() => {
-        axios.getWithCallback('step-type-parameter/', (data) => setStepTypeParameter(data.map(x => ({ value: x.id, label: x.step_id }))))
+        axios.getWithCallback('step-type-parameter/', (data) => setStepTypeParameter(data.map(x => ({ value: x.id, label: x.required }))))
     }, []);
+
     useEffect(() => {
-        axios.getWithCallback('step-type/', (data) => setStepType(data.map(y=> ({ value: y.id, label: y.name }))))
+        axios.getWithCallback('step-type/', (data) => setStepType(data.map(y => ({ value: y.id, label: y.name }))))
     }, []);
+
     useEffect(() => {
-        axios.getWithCallback('parameter/', (data) => setParameter(data.map(z=> ({ value: z.id, label: z.name }))))
+        axios.getWithCallback('parameter/', (data) => setParameter(data.map(z => ({ value: z.id, label: z.name }))))
     }, []);
 
-   
-    const defaultObj = { step_id: '', parameter_id: '',active: true};
 
-
+    const defaultObj = { step_id: '', parameter_id: '', active: true };
 
     return (
         <>
@@ -35,7 +36,7 @@ const StepTypeParamete = () => {
                 getApi="step-type-parameter"
                 title="Step Type Parameter"
                 defaultObj={defaultObj}
-                options={[stepType ,parameter]}
+                options={[stepType, parameter, stepTypeParameter]}
                 tableTitle='Step Type Parameter'
             />
         </>

@@ -3,6 +3,7 @@ import './ComponetTool.css';
 import DensityMediumIcon from '@mui/icons-material/DensityMedium';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import Collapse from '@mui/material/Collapse';
+import FolderIcon from '@mui/icons-material/Folder';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Sidebar from '../../modules/dashboard/drag-drop/components/sidebar/sidebar';
@@ -24,12 +25,12 @@ function ComponentTool({ textColor }) {
       }));
       setComponents(newComponents);
       data.forEach(item => {
-        console.log('ID:', item.id, 'Name:', item.name);
+        // console.log('ID:', item.id, 'Name:', item.name);
       });
 
     });
+  
   }, []);
-
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -59,14 +60,14 @@ function ComponentTool({ textColor }) {
             <li>
               <div>
                 <div href='#' className='comIcon'>
-                  <FolderOpenIcon className='bx bx-grid-alt' />
+                  {components.isOpen ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='medium' />}
                   <span className='link_name' style={{ marginLeft: '5px' }}>
                     <div
                       variant='contained'
                       className='comp'
                       onClick={() => handleCollapseToggle(index)}
                     >
-                      {component.name} {component.isCollapseOpen ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                      {component.name} {component.isCollapseOpen ? <KeyboardArrowUpIcon fontSize='small' /> : <KeyboardArrowDownIcon fontSize='small' />}
                     </div>
                   </span>
                 </div>
@@ -89,7 +90,7 @@ function groupDataBy(data, property) {
     const key = item[property];
     if (!acc[key]) {
       acc[key] = [];
-    }
+    } 
     acc[key].push(item);
     return acc;
   }, {});

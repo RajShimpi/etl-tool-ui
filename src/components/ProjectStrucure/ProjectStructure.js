@@ -46,9 +46,9 @@ function ProjectStructure({ textColor }) {
   }, []);
 
   const getProjects = () => {
-    axios.getWithCallback('projects/', (data) =>  {       
+    axios.getWithCallback('projects/', (data) => {
       data.forEach((dt, inx) => {
-      let url = 'project-files/get-folder-hierarchy?projectId=' + dt.id;
+        let url = 'project-files/get-folder-hierarchy?projectId=' + dt.id;
         axios.getWithCallback(url, (subdata) => {
           var treeData = treefy(subdata);
           dt.treeData = treeData;
@@ -96,7 +96,7 @@ function ProjectStructure({ textColor }) {
     return list.reduce((root, li) => {
       const arr = li.parent_id ? list[map[li.parent_id]].children : root;
       arr.push(li);
-      
+
       return root;
     }, []);
   }
@@ -212,7 +212,7 @@ function ProjectStructure({ textColor }) {
                       // parentId={null}
                       onToggleFolder={() => toggleProject(index)}
                       onToggleFile={(file) => toggleFile(index, file)}
-                    /> */}
+                    /> */} 
                   </div>
               
               </li>

@@ -1,6 +1,5 @@
 export const getClientFields = (itemData) => {
     return [{
-
         col: 4,
         callback: itemData.callback,
         disabled: itemData.disabled,
@@ -12,8 +11,7 @@ export const getClientFields = (itemData) => {
             control: "input",
             isRequired: true,
             itemVal: itemData.values ? itemData.values["name"] : '',
-        },
-        {
+        }, {
             type: "text",
             id: "inputDisplayabbreviation",
             label: "Client Display abbreviation",
@@ -23,6 +21,5 @@ export const getClientFields = (itemData) => {
             itemVal: itemData.values ? itemData.values["abbreviation"] : '',
         },
         ]
-    }
-    ];
+    }];
 }

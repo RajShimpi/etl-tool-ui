@@ -5,10 +5,12 @@ import EditIcon from "@mui/icons-material/Edit";
 import PopupComponent from "./PopupComponent";
 import FolderIcon from "@mui/icons-material/Folder";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import RecursiveFolder from "./ProjectStrucure/recursive-folders";
 
 const ContextMenu = ({ item, onToggleFiles, popType, project_id, parent_id,id, onClose, callback, hideDeleteUpdate }) => {
   const [popupType, setPopupType] = useState(null);
-  const [popupPosition, setPopupPosition] = useState();
+  const [popupPosition, setPopupPosition] = useState(null);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const handleContextMenuClick = (event) => {
     event.preventDefault();
@@ -36,13 +38,11 @@ const ContextMenu = ({ item, onToggleFiles, popType, project_id, parent_id,id, o
         closePopup(event);
       }
     };
-
     document.addEventListener('click', handleClickOutside);
-
     return () => {
       document.removeEventListener('click', handleClickOutside);
     };
-  }, [popupType]);
+  }, [popupType, isPopupOpen, onClose]);
 
   return (
     <div style={{zIndex:1}}
@@ -74,16 +74,8 @@ const ContextMenu = ({ item, onToggleFiles, popType, project_id, parent_id,id, o
           openPopup(e,"Add", { top: e.clientY, left: e.clientX + 10 }, project_id, id);
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-start",
-          }}
-        >
-          <InsertDriveFileIcon
-            style={{ fontSize: "medium", marginRight: "5px", marginTop: "3px" }}
-          />
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", }}>
+          <InsertDriveFileIcon style={{ fontSize: "medium", marginRight: "5px", marginTop: "3px" }} />
           Add File
         </div>
       </div>

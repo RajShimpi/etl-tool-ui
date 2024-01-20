@@ -40,7 +40,6 @@ const FormCommon = (props) => {
                   {...item}
                 />
               )}
-
               {item.control === "select" && (
                 <CustomSelect
                   key={`custom-select${index}`}

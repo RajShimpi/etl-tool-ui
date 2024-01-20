@@ -3,13 +3,14 @@ import Folder from "../modules/masters/popup/add-folder";
 import AddFile from "../modules/masters/popup/add-file";
 import Edit from "../modules/masters/popup/edit-file";
 import Delete from "../modules/masters/popup/delete";
-import { getFolderFields } from '../modules/masters/popup/add-folder-data';
+// import { getFolderFields } from '../modules/masters/popup/add-folder-data';
 import axios from "../modules/services/axios";
 import FormCommon from "../modules/components/form-common";
+import { getCommonFields } from "../modules/masters/popup/common-data";
 
 const PopupComponent = ({ onClose, actionType, project_id, id }) => {
   let contentComponent;
-
+console.log(project_id,id,"context");
   switch (actionType) {
     case "AddFolder":
       contentComponent = <Folder project_id={project_id} id={id} onClose={onClose} />;
@@ -70,7 +71,7 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
       e.target.classList.add("was-validated");
       //props.validationCallback(true);
     } else {
-      let item = {  file_name: data.file_name, project_id: props.item.project_id, type: props.type.includes("Folder") ? 'Folder' : 'File', parent_id: props.item?.id };
+      let item = { id:props.item.id, file_name: data.file_name, project_id: props.item.project_id, type: props.type.includes("Folder") ? 'Folder' : 'File', parent_id: props.item?.id };
       switch(props.type) {
         case "AddFolder":
           axios.postWithCallback("project-files",
@@ -90,7 +91,7 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
           });
           break;
         case "Edit":
-          axios.putWithCallback("project-files/",
+          axios.putWithCallback(`project-files/`,
           { ...item, id: props.item?.id },
           (resp) => {
             
@@ -146,7 +147,7 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
                   Are you sure you want delete this folder undelaying files also will be deleted?
                  </p>  : 
                  <FormCommon
-                    data={getFolderFields({
+                    data={getCommonFields({
                       isSubmit: false,
                       update: props.update,
                       callback: setValues,

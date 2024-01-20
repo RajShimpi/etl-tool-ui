@@ -128,11 +128,11 @@ export const getTemplateItems = (itemData) => {
             {
                 type: "text",
                 id: "inputTemplateIcon",
-                label: "Template symbol",
-                name:"symbol",
+                label: "Template img",
+                name:"img",
                 control: "input",
                 isRequired: false,             
-                itemVal: itemData.values ? itemData.values["symbol"] : '',
+                itemVal: itemData.values ? itemData.values["img"] : '',
             },
             {
                 type: "checkbox",
