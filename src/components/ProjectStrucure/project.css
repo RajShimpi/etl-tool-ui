@@ -1,3 +1,4 @@
+
 .sidebar {
   height: 600px;
   /* overflow-y: scroll;
@@ -7,20 +8,20 @@
   &::-webkit-scrollbar {
     width: 0.5em;
   }
-
+  
   &::-webkit-scrollbar-thumb {
     background-color: transparent;
   }
 
   &::-webkit-scrollbar-track {  
-    background-color: transparent;
+    background-color: transparent;  
   } */
 
   min-height: 100vh;
   width: 78px;
   padding: 6px 14px;
   background-color: rgba(116, 113, 113, 0.123);
-  transition: all 0.5s ease;
+  transition: all 1s ease; 
   border-radius: revert;
   top: 0;
   left: 0;
@@ -33,6 +34,7 @@
 .sidebar.open {
   width: auto;
   min-width: 220px;
+  transition: width 1s ease;
 }
 
 .sidebar .logo_details {
@@ -226,3 +228,12 @@
 .sidebar.open .openf1 {
   display: block;
 }
+
+.folderstyle{
+  display: none;
+}
+
+.sidebar.open .folderstyle{
+  display: block;
+}
+

@@ -4,8 +4,8 @@ import ProjectStructure from "./ProjectStrucure/ProjectStructure";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowUp';
 import "./MainComponent.css";
 import OverviewFlow from "../modules/dashboard/drag-drop/components/flow";
-import { FileIdProvider } from "./fileContext";
-import { JobDataProvider } from "./JobDataContext";
+// import { FileIdProvider } from "./fileContext";
+// import { JobDataProvider } from "./JobDataContext";
 
 const MainComponent = ({onFileClickCallback}) => {
   const [isProjectStructureOpen, setIsProjectStructureOpen] = useState(false);
