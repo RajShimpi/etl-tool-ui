@@ -8,9 +8,11 @@ import auth from "./auth";
 import axios from '../services/axios';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-
+import { useClientId } from "../../components/JobDataContext";
+// import { useClientId } from "../JobDataContext";
 const Login = () => {
-
+// const [clientid,setClientId]=useState()
+const { setClientId } = useClientId();  
     const bgStyle = {
         // backgroundImage: `url(${process.env.PUBLIC_URL + "/assets/images/login/login-bg.png"})`,
         backgroundColor: '#ffffff',
@@ -32,8 +34,10 @@ const Login = () => {
     }
 
     const onSubmit = (data) => {
+
+        setClientId(data.client_id)
         // $(".blurbackground").css("visibility", "visible");    //userName: userName, 
-        axios.post("auth/login", { username: data.userName, password: data.password }, false).then(data => {
+        axios.post("auth/login", { username: data.userName,client_id: data.client_id,  password: data.password }, false).then(data => {
             auth.setAuthData(data.data);
             setValidateState({
                 isError: false,
@@ -41,6 +45,7 @@ const Login = () => {
             })
             reset({
                 userName: '',
+                client_id: '',
                 password: ''
             })
             setAuth(true);
@@ -65,6 +70,9 @@ const Login = () => {
         userName: yup
             .string()
             .required('User name is required'),
+            client_id: yup
+            .string()
+            .required('User id is required'),
         password: yup
             .string()
             .required('Password is required'),
@@ -107,6 +115,14 @@ const Login = () => {
                                                             <label htmlFor="user-name">User Name</label>
                                                         </span>
                                                         {errors.userName && <span className="client-side-error">{errors.userName.message}</span>}
+                                                    </div>
+                                                    <div className="form-group mb-3">
+                                                        <span className="has-float-label">
+                                                            <input type="text" autoComplete='off' id='client_id' className="form-control" {...register('client_id')} onKeyDown={(e) => checkCred(e)}
+                                                                placeholder=' ' />
+                                                            <label htmlFor="client_id">Client Id</label>
+                                                        </span>
+                                                        {errors.client_id && <span className="client-side-error">{errors.client_id.message}</span>}
                                                     </div>
                                                     <div className="form-group mb-3">
                                                         <span className="has-float-label">

@@ -8,7 +8,8 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Sidebar from '../../modules/dashboard/drag-drop/components/sidebar/sidebar';
 import axios from '../../modules/services/axios';
-import PushPinIcon from '@mui/icons-material/PushPin';
+import { TiPin } from "react-icons/ti";
+import { RiUnpinFill } from "react-icons/ri";
 
 
 function ComponentTool({ textColor }) {
@@ -16,6 +17,10 @@ function ComponentTool({ textColor }) {
   const [apiData, setApiData] = useState([]);
   const [components, setComponents] = useState([]);
   const [fix, setFix] = useState(true);
+  const [isPinned, setIsPinned] = useState(true);
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
   useEffect(() => {
     axios.getWithCallback('step-type/', (data) => {
       setApiData(data);
@@ -77,12 +82,16 @@ function ComponentTool({ textColor }) {
         onMouseLeave={handleSidebarLeave}
     >
       <div className='logo_details' style={{ textColor }}>
-        <div className='logo_name'>Component Tool</div>
-        {isOpen && <PushPinIcon fontSize="small" className="pushPinIcon" onClick={() => setFix(!fix)} />}
+        <div className='logo_name me-2'>Component Tool</div>
+        {isOpen && (isPinned ? (
+             <TiPin size={22} className="pushPinIcon" onClick={() => {setIsPinned(!isPinned); setFix(!fix);}} />
+          ) : (
+            <RiUnpinFill size={22} className="pushPinIcon" onClick={() => {setIsPinned(!isPinned); setFix(!fix);}} />
+          ))}
         <DensityMediumIcon
           className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`}
           id='btn'
-          // onClick={toggleSidebar}
+          onClick={toggleSidebar}
         ></DensityMediumIcon>
       </div>
       <ul className='nav-list'>

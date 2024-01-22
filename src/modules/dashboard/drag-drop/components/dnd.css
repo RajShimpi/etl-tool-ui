@@ -46,28 +46,28 @@
 }
 
 .context-menu {
-	padding: 10px;
-	position: absolute;
-	z-index: 10;
-	margin-top: -235px !important;
-	height: 13%;
-	width: 130px !important;
-	margin-left: -153px !important;
+  background-color: #ffffff4f;
+  /* border-style: solid; */
+  /* box-shadow: 10px 19px 20px rgba(0, 0, 0, 10%); */
+  position: absolute;
+  z-index: 10;
+  /* top: 0;
+  left: 0; */
+  margin-top: -250px !important;
+  height: 86px;
+  width: 100px !important;
 }
 
 .context-menu button {
   border: none;
-  display: block;
-  padding: 0.5em;
+  display: flex;
+  /* padding: 0.5em; */
   text-align: left;
-  width: 100%;
+  width: 120px !important;
+  justify-content: flex-start;
 }
-
 .deleteNode{
-  color: #eee;
  text-align: center;
- /* padding:8px 0px 8px 0px ; */
- background-color: #ffffff4f;
 }
 
 /* :hover.deleteNode{
