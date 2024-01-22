@@ -52,6 +52,7 @@ useEffect(() => {
         setClientName(client)
       );
     }
+    // console.log("clientName:",clientName);
   
     axios.getWithCallback(
       "user/getUserById/" + auth.getStorageData("id"),
@@ -84,7 +85,7 @@ useEffect(() => {
     }
   }, [clientId]);
   
-  console.log("clientId:", clientId);
+  // console.log("clientId:", clientId);
   // useEffect(() => {
 
   // socket.on('connect', () => {
@@ -161,7 +162,7 @@ useEffect(() => {
         <div className="navbar-header">
           <div className="d-flex">
             <div style={{color:"white",margin:'20px', fontWeight: 'bold',fontSize:'15px', display:'flex'}}>
-                <div><PersonIcon fontSize="small"st/></div><div style={{marginLeft:'5px',marginTop:'2px'}}>{clientName.name}</div></div>
+                <div><PersonIcon fontSize="small"/></div><div style={{marginLeft:'5px',marginTop:'3px'}}>{clientName.name}</div></div>
             <div className="navbar-brand-box">
               <Link to="/dashboard" className="logo logo-light">
                 <span className="logo-sm">

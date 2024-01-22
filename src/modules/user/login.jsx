@@ -107,7 +107,14 @@ const { setClientId } = useClientId();
                                             </div>
                                             <div className="p-2 mt-4">
                                                 <form className="custom-validation" onSubmit={handleSubmit(onSubmit)} >
-
+                                                <div className="form-group mb-3">
+                                                        <span className="has-float-label">
+                                                            <input type="text" autoComplete='off' id='client_id' className="form-control" {...register('client_id')} onKeyDown={(e) => checkCred(e)}
+                                                                placeholder=' ' />
+                                                            <label htmlFor="client_id">Client Id</label>
+                                                        </span>
+                                                        {errors.client_id && <span className="client-side-error">{errors.client_id.message}</span>}
+                                                    </div>
                                                     <div className="form-group mb-3">
                                                         <span className="has-float-label">
                                                             <input type="text" autoComplete='off' id='user-name' className="form-control" {...register('userName')} onKeyDown={(e) => checkCred(e)}
@@ -115,14 +122,6 @@ const { setClientId } = useClientId();
                                                             <label htmlFor="user-name">User Name</label>
                                                         </span>
                                                         {errors.userName && <span className="client-side-error">{errors.userName.message}</span>}
-                                                    </div>
-                                                    <div className="form-group mb-3">
-                                                        <span className="has-float-label">
-                                                            <input type="text" autoComplete='off' id='client_id' className="form-control" {...register('client_id')} onKeyDown={(e) => checkCred(e)}
-                                                                placeholder=' ' />
-                                                            <label htmlFor="client_id">Client Id</label>
-                                                        </span>
-                                                        {errors.client_id && <span className="client-side-error">{errors.client_id.message}</span>}
                                                     </div>
                                                     <div className="form-group mb-3">
                                                         <span className="has-float-label">

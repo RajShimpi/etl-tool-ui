@@ -182,7 +182,7 @@ const OverviewFlow = () => {
       position,
       data: { heading: name, img: img },
     };
-
+console.log("newNode:",newNode);
     setNodes((es) => es.concat(newNode));
     setData((es) => es.concat(newNode));
     setSelectedNode((newNode.a = name));
