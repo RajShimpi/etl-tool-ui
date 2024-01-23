@@ -46,14 +46,16 @@
 }
 
 .context-menu {
-  /* padding: 5px; */
+  background-color: #ffffff4f;
+  /* border-style: solid; */
+  /* box-shadow: 10px 19px 20px rgba(0, 0, 0, 10%); */
   position: absolute;
   z-index: 10;
-
-  margin-top: -235px !important;
-  height: 13%;
-  /* width: 150px !important; */
-  margin-left: -153px !important;
+  /* top: 0;
+  left: 0; */
+  margin-top: -250px !important;
+  height: 86px;
+  width: 100px !important;
 }
 
 .context-menu button {
@@ -65,21 +67,17 @@
   justify-content: flex-start;
 }
 .deleteNode{
-  color: #eee;
-text-align: center;
-  
-font-size: 17px;
-/* padding:8px 0px 8px 0px ; */
-background-color: #ffffff4f;
- width: 100%;
+ text-align: center;
 }
-.delete{
-  margin-top: 6px;
-}
+
+/* :hover.deleteNode{
+background-color: rgba(235, 235, 225, 0.836);
+} */
 
 .deleteNodename{
   text-align: center;
-  padding-top: 10px;
+  /* padding-top: 7px; */
+  color: white;
 }
 
 /* .context-menu button:hover {

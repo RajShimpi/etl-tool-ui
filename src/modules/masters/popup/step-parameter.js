@@ -45,50 +45,54 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
     fetchData();
   }, [step_type_id]);
 
+
   useEffect(() => {
     axios.getWithCallback(`job-steps/${node_Id || 0}`, (data) => setEditName(data));
   }, []);
 //  console.log(editName);
 
   let defaultObj = { step_name:'',  type: '', name: '', img: '', group: '', parametres: '' };
-
   const getItemData = (itemData) => {
     let dt = [
       {
-        col: 12,
+        col: 6,
         callback: itemData.callback,
         groups: [editName]
           ? [editName].map((v) => ({
-              id: "inputparameterFileid",
-              label: "Step Name",
-              name: "step_name",
-              control: "input",
-              isSubmit: itemData.isSubmit,
-              itemVal: name === 'step_name' ? v.step_name : name,
-            }))
+            id: "inputparameterFileid",
+            label: "Step Name",
+            name: "step_name",
+            control: "input",
+            isSubmit: itemData.isSubmit,
+            itemVal: name === 'step_name' ? v.step_name : name,
+          }))
           : [editName],
       },
       {
-        col: 12,
+        col: parameter.length === 3 ? 6 : 12,
         callback: itemData.callback,
         groups: !!parameter
-          ? parameter?.map((v) => ({
-              type: v.type.includes("text") ? "text" : v.type,
-              id: v.type + v.id,
-              label: v.description,
-              name: v.name,
-              control: v.type === "text" ? "input" : v.type,
-              options: v.options,
-              disabled: false,
-              itemVal: itemData.values ? itemData.values[v.name] : "",
-              multiple: v.type === "select-react" ? true : "",
-            }))
+          ? parameter.map((v) => ({
+            type: v.type.includes("text") ? "text" : v.type,
+            id: v.type + v.id,
+            label: v.description,
+            name: v.name,
+            control: v.type === "text" ? "input" : v.type,
+            options: v.options,
+            disabled: false,
+            itemVal: itemData.values ? itemData.values[v.name] : "",
+            multiple: v.type === "select-react" ? true : "",
+          }))
           : [],
-      },
+      }
     ];
   
-    return dt;
+    // Use concat and spread to flatten the array
+    console.log(dt);
+    return [].concat(...dt);
   };
+  
+
   
   return (
     <>

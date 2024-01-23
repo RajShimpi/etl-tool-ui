@@ -138,6 +138,8 @@ const OverviewFlow = () => {
           ...dataEdgeserror.find((edgeError) => edgeError.id === node.id),
         }));
 
+    
+
         setAllNodes(combinedData);
         function getlabelColor(label) {
           return label === "ok" ? "green" : label === "error" ? "red" : "black";
@@ -198,10 +200,8 @@ console.log("newNode:",newNode);
       step_name: item.data?.heading || item.name,
       type: item.type,
       params: {
-        position_X:
-          item.id === position.id ? position.position_X : item.position.x,
-        position_Y:
-          item.id === position.id ? position.position_Y : item.position.y,
+        position_X: item.id === position.id ? position.position_X : item.position.x,
+        position_Y: item.id === position.id ? position.position_Y : item.position.y,
       },
     }));
 
@@ -301,7 +301,7 @@ console.log("newNode:",newNode);
           position: { x: node.position.x, y: node.position.y },
         };
       }
-      // console.log("edges",edges);
+      console.log("edges",edges);
       return n;
     });
 
@@ -352,7 +352,7 @@ console.log("newNode:",newNode);
           borderRadius: "4px",
         },
       };
-
+console.log("newEdge:",newEdge);
       setEdges((eds) => addEdge(newEdge, eds));
     },
     [setEdges]
@@ -415,7 +415,7 @@ console.log("newNode:",newNode);
   const onEdgeUpdate = useCallback((oldEdge, newConnection) => {
     edgeUpdateSuccessful.current = true;
     setEdges((els) => updateEdge(oldEdge, newConnection, els));
-    // eslint-disable-next-line
+    
   }, []);
 
   const onEdgeUpdateEnd = useCallback((_, edge) => {
@@ -424,7 +424,7 @@ console.log("newNode:",newNode);
     }
 
     edgeUpdateSuccessful.current = true;
-    // eslint-disable-next-line
+   
   }, []);
 
   const onNodeDoubleClick = () => {
@@ -459,8 +459,9 @@ console.log("newNode:",newNode);
       document.removeEventListener("mousedown", handleDocumentClick);
     };
   }, [handleCloseNodeMaster, modalRef]);
+ 
 
-  const handleNodeClick = (event, node) => {
+const handleNodeClick = (event, node) => {
     onNodeDoubleClick();
     nodeId(node);
   };

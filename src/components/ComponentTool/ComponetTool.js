@@ -8,12 +8,19 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Sidebar from '../../modules/dashboard/drag-drop/components/sidebar/sidebar';
 import axios from '../../modules/services/axios';
+import { TiPin } from "react-icons/ti";
+import { RiUnpinFill } from "react-icons/ri";
+
 
 function ComponentTool({ textColor }) {
   const [isOpen, setIsOpen] = useState(false);
   const [apiData, setApiData] = useState([]);
   const [components, setComponents] = useState([]);
-
+  const [fix, setFix] = useState(true);
+  const [isPinned, setIsPinned] = useState(true);
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
   useEffect(() => {
     axios.getWithCallback('step-type/', (data) => {
       setApiData(data);
@@ -32,9 +39,15 @@ function ComponentTool({ textColor }) {
   
   }, []);
 
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
-  };
+  // const toggleSidebar = (e) => {
+  //   e.stopPropagation();
+  //   setIsOpen(false);
+  //   setIconClicked(true);
+  // };
+
+
+
+  
 
   const handleCollapseToggle = (index) => {
     setComponents((prevComponents) =>
@@ -44,10 +57,37 @@ function ComponentTool({ textColor }) {
     );
   };
 
+  const handleSidebarHover = () => {
+    setIsOpen(true);
+    if (fix) {
+      setFix(true)
+    } else {
+      setFix(false)
+    }
+  };
+
+  const handleSidebarLeave = (e) => {
+    if (!fix) {
+      setIsOpen(true);
+    } else {
+      setIsOpen(false);
+    }
+  };
+
+  
+
   return (
-    <div className={`component-tool ${isOpen ? 'open' : ''} right-sidebar`}>
+    <div className={`component-tool ${isOpen ? 'open' : ''} right-sidebar`}
+    onMouseEnter={handleSidebarHover}
+        onMouseLeave={handleSidebarLeave}
+    >
       <div className='logo_details' style={{ textColor }}>
-        <div className='logo_name'>Component Tool</div>
+        <div className='logo_name me-2'>Component Tool</div>
+        {isOpen && (isPinned ? (
+             <RiUnpinFill size={22} className="pushPinIcon" onClick={() => {setIsPinned(!isPinned); setFix(!fix);}} />
+          ) : (
+            <TiPin size={22} className="pushPinIcon" onClick={() => {setIsPinned(!isPinned); setFix(!fix);}} />
+          ))}
         <DensityMediumIcon
           className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`}
           id='btn'

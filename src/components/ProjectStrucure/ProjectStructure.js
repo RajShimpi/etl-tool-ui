@@ -5,8 +5,11 @@ import RecursiveFolder from './recursive-folders';
 import axios from '../../modules/services/axios';
 import ContextMenu from '../ContextMenu';
 import Modal from '../../modules/components/modal-popup';
+import PushPinIcon from '@mui/icons-material/PushPin';
 import { AddUpdateDeleteFileAndFolder } from '../PopupComponent';
 import FolderIcon from '@mui/icons-material/Folder';
+import { TiPin } from "react-icons/ti";
+import { RiUnpinFill } from "react-icons/ri";
 import { useProject } from '../JobDataContext';
 function ProjectStructure({ textColor, onFileClickCallback }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,6 +18,7 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
   const [type, setType] = useState("AddFolder");
   const [showNested, setShowNested] = useState({});
   const [isShow, setShow] = useState({});
+  const [fix, setFix] = useState(true);
 // const {projects_id}=useProject
   const containerRef = useRef(null);
   // const [data, setData] = useState([]);
@@ -23,8 +27,8 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
   const handleDocumentClick = (event) => {
     event.stopPropagation();
     if (containerRef.current && !containerRef.current.contains(event.target) && !event.target.closest('.contextMenu') &&
-      !event.target.closest('.modal')) {
-      closeContextMenu(event);
+    !event.target.closest('.modal')) {
+    closeContextMenu(event);
     }
   };
 
@@ -43,6 +47,7 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
       window.removeEventListener('keydown', close);
     };
   }, [project_id]);
+
 
 
   const getProjects = () => {
@@ -130,7 +135,7 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
 
   const onRightCallback = (item, isReset, isHeaderClick) => {
     projects.forEach((prj) => {
-      // let dtIndex = project.findIndex(x => x.prjId === item.project_id);
+    
       if (isHeaderClick && prj.id === item.project_id) {
         prj.isRightClick = true;
       } else {
@@ -165,18 +170,48 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
     console.log("File ID clicked in ProjectStructure:", file_id);
     onFileClickCallback(file_id)
   };
+  const [isPinned, setIsPinned] = useState(true);
+
+  const handleSidebarHover = () => {
+    setIsOpen(true);
+    if (fix) {
+      setFix(true)
+    } else {
+      setFix(false)
+    }
+  };
+
+  const handleSidebarLeave = (e) => {
+    if (!fix) {
+      setIsOpen(true);
+    } else {
+      setIsOpen(false);
+    }
+  };
+
   return (
     <div>
-      <div className={`sidebar ${isOpen ? 'open' : ''}`}>
-        <div className='logo_details' style={{ textColor }}>
-          <div className='logo_name'>Project Structure</div>
+      <div className={`sidebar ${isOpen ? 'open' : ''}`}
+        onMouseEnter={handleSidebarHover}
+        onMouseLeave={handleSidebarLeave}
+      >
+         <div className='logo_details' style={{ textColor }}>
+          {isOpen && (isPinned ? (
+             <RiUnpinFill size={23} className="pushPinIcon" onClick={() => {setIsPinned(!isPinned); setFix(!fix);}} />
+          ) : (
+            <TiPin size={22} className="pushPinIcon" onClick={() => {setIsPinned(!isPinned); setFix(!fix);}} />
+          ))}
+          <div className='logo_name ms-2'>Project Structure</div>
+        
           <DensityMediumIcon
             className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`}
             id='btn'
             onClick={toggleSidebar}
           />
         </div>
-        <ul className='nav-list' style={{ textColor }}>
+        <ul className='nav-list' style={{ textColor }}
+       
+        >
           {projects.map((project, index) => (
             <div key={index} ref={containerRef} onClick={(e) => toggleNested(e, project.project_name)} onContextMenu={(e) => handleContextMenu(e, project.item)}>
               <li>

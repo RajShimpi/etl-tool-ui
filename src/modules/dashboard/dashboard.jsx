@@ -42,7 +42,14 @@ const Dashboard = () => {
   const {setClientId } = useClientId();
   const [project, setProject] = useState([]);
   const [selectedChildItem, setSelectedChildItem] = useState(false)
-  const {setProjects_id}=useProject()
+  const {setProjects_id}=useProject()  
+  const [isMenuOpen, setMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setMenuOpen(!isMenuOpen);
+  };
+
+
 useEffect(() => {
     const storedClientId = localStorage.getItem('clientId');
    
@@ -254,6 +261,7 @@ const onhandelProject = (item) => {
                             data-toggle="dropdown"
                             aria-haspopup="true"
                             aria-expanded="false"
+                            style={{ fontWeight: 'bold' }}
                           >
                             <i
                               key={item.menuId + "i"}
@@ -261,8 +269,8 @@ const onhandelProject = (item) => {
                             ></i>
                             {item.menuName}
                             <div
-                              key={item.menuId + "div-arrow"}
-                              className="arrow-down"
+                              key={item.menuId  }
+                              // className="arrow-down"
                             ></div>
                           </a>
                         )}
@@ -309,10 +317,10 @@ const onhandelProject = (item) => {
                             <div
                               key={item.menuId + "mega-dropdown-menu"}
                               className="dropdown-menu mega-dropdown-menu px-2 dropdown-mega-menu-xl"
-                              aria-labelledby={item.menuName}
+                              aria-labelledby={item.menuName} 
                             >
                               <div
-                                key={item.menuId + "mega-dropdown-menu-row"}
+                                key={item.menuId + "mega-dropdown-menu-row "}
                                 className="row"
                               >
                                 {splitIntoChunk(item.childMenu, 8).map(
@@ -335,6 +343,7 @@ const onhandelProject = (item) => {
                                             to={{ pathname: childItem.href }}
                                           >
                                             {childItem.itemName}
+                                            <div style={{marginLeft:'5px'}}></div>
                                           </Link>
                                         </div>
                                       ))}
