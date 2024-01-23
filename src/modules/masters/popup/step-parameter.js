@@ -86,8 +86,7 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
           : [],
       }
     ];
-  
-    // Use concat and spread to flatten the array
+
     console.log(dt);
     return [].concat(...dt);
   };
