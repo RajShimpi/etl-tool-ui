@@ -7,6 +7,7 @@ import ContextMenu from '../ContextMenu';
 import Modal from '../../modules/components/modal-popup';
 import { AddUpdateDeleteFileAndFolder } from '../PopupComponent';
 import FolderIcon from '@mui/icons-material/Folder';
+import { useClientId, useProjectId } from '../JobDataContext';
 function ProjectStructure({ textColor, onFileClickCallback }) {
   const [isOpen, setIsOpen] = useState(false);
   const [projects, setProjects] = useState([]);
@@ -14,7 +15,8 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
   const [type, setType] = useState("AddFolder");
   const [showNested, setShowNested] = useState({});
   const [isShow, setShow] = useState({});
-
+  const {projectId}=useProjectId()
+  const {clientId}=useClientId()
   const containerRef = useRef(null);
   // const [data, setData] = useState([]);
   // const [items, setItems] = useState([]);
@@ -42,9 +44,10 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
       window.removeEventListener('keydown', close)
     };
   }, []);
-
+console.log(clientId);
   const getProjects = () => {
-    axios.getWithCallback('projects/', (data) =>  {      
+    // if(clientId!== undefined){
+    axios.getWithCallback(`projects/client/${1}`, (data) =>  {      
       data.forEach((dt, inx) => {
       let url = 'project-files/get-folder-hierarchy?projectId=' + dt.id;
         axios.getWithCallback(url, (subdata) => {

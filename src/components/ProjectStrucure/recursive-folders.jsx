@@ -10,7 +10,7 @@ import AddFile from "../../modules/masters/popup/add-file";
 import Edit from "../../modules/masters/popup/edit-file";
 import Delete from "../../modules/masters/popup/delete";
 import axios from "../../modules/services/axios";
-import { useJobData } from "../JobDataContext";
+import { useJobData, useProjectId } from "../JobDataContext";
 const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
   const [showNested, setShowNested] = useState({});
   const [contextMenuPosition, setContextMenuPosition] = useState(null);
@@ -19,7 +19,7 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
   const [type, setType] = useState("AddFolder");
   const { setJobDataId } = useJobData();  
   const containerRef = useRef(null);
-
+// const {project_id}=useProjectId()
   const handleContextMenu = (event, item) => {
     event.preventDefault();
     event.stopPropagation();
