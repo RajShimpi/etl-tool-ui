@@ -273,11 +273,11 @@ useEffect(() => {
                           ) : (
                             <div
                               key={item.menuId + "mega-dropdown-menu"}
-                              className="dropdown-menu mega-dropdown-menu px-2 "
-                              aria-labelledby={item.menuName}
+                              className="dropdown-menu mega-dropdown-menu px-2 dropdown-mega-menu-xl"
+                              aria-labelledby={item.menuName} 
                             >
                               <div
-                                key={item.menuId + "mega-dropdown-menu-row"}
+                                key={item.menuId + "mega-dropdown-menu-row "}
                                 className="row"
                               >
                                 {splitIntoChunk(item.childMenu, 8).map(

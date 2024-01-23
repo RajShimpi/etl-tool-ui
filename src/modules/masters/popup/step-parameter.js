@@ -70,10 +70,10 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
           : [editName],
       },
       {
-        col: 12,
+        col: parameter.length === 3 ? 6 : 12,
         callback: itemData.callback,
         groups: !!parameter
-          ? parameter?.map((v) => ({
+          ? parameter.map((v) => ({
               type: v.type.includes("text") ? "text" : v.type,
               id: v.type + v.id,
               label: v.description,
@@ -85,7 +85,9 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
               multiple: v.type === "select-react" ? true : "",
             }))
           : [],
-      },
+      }
+      
+      
     ];
   
     return dt;

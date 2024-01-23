@@ -22,7 +22,7 @@ const MainComponent = ({onFileClickCallback}) => {
     },
     {
       // name: "blue",
-      backgroundColor: "#4842f5",
+      backgroundColor: "#5A96E3",
       textColor: "#ffffff",
     },
     {

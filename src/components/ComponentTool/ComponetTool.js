@@ -84,9 +84,9 @@ function ComponentTool({ textColor }) {
       <div className='logo_details' style={{ textColor }}>
         <div className='logo_name me-2'>Component Tool</div>
         {isOpen && (isPinned ? (
-             <TiPin size={22} className="pushPinIcon" onClick={() => {setIsPinned(!isPinned); setFix(!fix);}} />
+             <RiUnpinFill size={22} className="pushPinIcon" onClick={() => {setIsPinned(!isPinned); setFix(!fix);}} />
           ) : (
-            <RiUnpinFill size={22} className="pushPinIcon" onClick={() => {setIsPinned(!isPinned); setFix(!fix);}} />
+            <TiPin size={22} className="pushPinIcon" onClick={() => {setIsPinned(!isPinned); setFix(!fix);}} />
           ))}
         <DensityMediumIcon
           className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`}

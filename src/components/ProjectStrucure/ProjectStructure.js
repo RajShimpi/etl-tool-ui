@@ -193,9 +193,9 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
       >
          <div className='logo_details' style={{ textColor }}>
           {isOpen && (isPinned ? (
-             <TiPin size={23} className="pushPinIcon" onClick={() => {setIsPinned(!isPinned); setFix(!fix);}} />
+             <RiUnpinFill size={23} className="pushPinIcon" onClick={() => {setIsPinned(!isPinned); setFix(!fix);}} />
           ) : (
-            <RiUnpinFill size={22} className="pushPinIcon" onClick={() => {setIsPinned(!isPinned); setFix(!fix);}} />
+            <TiPin size={22} className="pushPinIcon" onClick={() => {setIsPinned(!isPinned); setFix(!fix);}} />
           ))}
           <div className='logo_name ms-2'>Project Structure</div>
         
