@@ -22,7 +22,7 @@ const MainComponent = ({onFileClickCallback}) => {
     },
     {
       // name: "blue",
-      backgroundColor: "#4842f5",
+      backgroundColor: "#21618C ",
       textColor: "#ffffff",
     },
     {
@@ -32,7 +32,7 @@ const MainComponent = ({onFileClickCallback}) => {
     },
     {
       // name: "yellow",
-      backgroundColor: "#fcf803",
+      backgroundColor: "#6495ED",
       textColor: "#000000",
     },
     {
@@ -48,6 +48,41 @@ const MainComponent = ({onFileClickCallback}) => {
     {
       // name: "yellow",
       backgroundColor: "#dd07f5",
+      textColor: "#ffffff",
+    },
+    {
+      // name: "yellow",
+      backgroundColor: "#2980B9",
+      textColor: "#ffffff",
+    },
+    {
+      // name: "yellow",
+      backgroundColor: "#5DADE2 ",
+      textColor: "#ffffff",
+    },
+    {
+      // name: "yellow",
+      backgroundColor: "#566573",
+      textColor: "#ffffff",
+    },
+    {
+      // name: "yellow",
+      backgroundColor: "#48C9B0 ",
+      textColor: "#ffffff",
+    },
+    {
+      // name: "yellow",
+      backgroundColor: "#A569BD",
+      textColor: "#ffffff",
+    },
+    {
+      // name: "yellow",
+      backgroundColor: "#27AE60",
+      textColor: "#ffffff",
+    },
+    {
+      // name: "yellow",
+      backgroundColor: "#3498DB",
       textColor: "#ffffff",
     },
   ];

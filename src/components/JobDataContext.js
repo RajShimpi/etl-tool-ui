@@ -3,6 +3,7 @@ import { createContext, useContext, useState } from "react";
 const JobDataContext = createContext();
 const ClientIdContext = createContext();
 const ProjectIdContext = createContext();
+const ProjectContext = createContext();
 
 export const JobDataProvider = ({ children }) => {
   const [jobDataId, setJobDataId] = useState(null);
@@ -62,7 +63,29 @@ export const ProjectIdProvider = ({ children }) => {
 };
 
 export const useProjectId = () => {
-  const context = useContext(ClientIdContext);
+  const context = useContext(ProjectIdContext);
+  if (!context) {
+    throw new Error("useProjectId must be used within a JobDataProvider");
+  }
+  return context;
+};
+
+export const ProjectProvider = ({ children }) => {
+  const [projects_id, setProjects_id] = useState(null);
+
+  const setProjectValue = (id) => {
+    setProjects_id(id);
+  };
+
+  return (
+    <ProjectContext.Provider value={{ projects_id, setProjects_id: setProjectValue }}>
+      {children}
+    </ProjectContext.Provider>
+  );
+};
+
+export const useProject = () => {
+  const context = useContext(ProjectContext);
   if (!context) {
     throw new Error("useProjectId must be used within a JobDataProvider");
   }

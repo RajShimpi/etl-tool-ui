@@ -11,7 +11,7 @@ import configContext from "./config-context";
 import SearchFilter from "../components/search-filter";
 import SearchResult from "../components/search-result";
 import NotificationsDropdown from "../components/notifications-dropdown";
-import { useClientId } from "../../components/JobDataContext";
+import { useClientId, useProject } from "../../components/JobDataContext";
 import PersonIcon from '@mui/icons-material/Person';
 // import { io } from 'socket.io-client';
 
@@ -20,7 +20,8 @@ import PersonIcon from '@mui/icons-material/Person';
 //     reconnectionAttempts: 3, // Limit the maximum reconnection attempts to 3
 //     timeout: 5000, // Set the timeout value to 5 seconds
 // });
-
+import FolderIcon from '@mui/icons-material/Folder';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 const Dashboard = () => {
   // const [isActiveMenu, SetActiveMenu] = useState("Dashboard");
   // const [isActiveSubMenu, SetSubMenuActive] = useState("");
@@ -39,13 +40,17 @@ const Dashboard = () => {
   const [clientName, setClientName] = useState([]);
   const { clientId } = useClientId();
   const {setClientId } = useClientId();
-
+  const [project, setProject] = useState([]);
+  const [selectedChildItem, setSelectedChildItem] = useState(false)
+  const {setProjects_id}=useProject()
 useEffect(() => {
     const storedClientId = localStorage.getItem('clientId');
+   
   
     if (clientId === null && storedClientId) {
       setClientId(storedClientId);
     }
+    
   
     if (clientId) {
       axios.getWithCallback(`clients/client/${clientId}`, (client) =>
@@ -53,7 +58,6 @@ useEffect(() => {
       );
     }
     // console.log("clientName:",clientName);
-  
     axios.getWithCallback(
       "user/getUserById/" + auth.getStorageData("id"),
       (data) => {
@@ -155,6 +159,21 @@ useEffect(() => {
     }
     return tempArray;
   };
+  useEffect(() => {
+    const storedClient_Id = localStorage.getItem('client_Id');
+
+    axios.getWithCallback(`projects/client/${storedClient_Id}`, (projectsData) => {
+    setProject(projectsData);
+  });
+}, []);
+// console.log("project:",project);
+
+const onhandelProject = (item) => {
+ console.log("item:",item);
+    setProjects_id(item); 
+    localStorage.setItem('item', item);
+
+};
   return (
     // <div id="layout-wrapper" > data-layout-mode="layout-mode-light"
     <div id="layout-wrapper">
@@ -250,20 +269,42 @@ useEffect(() => {
                         {item.hasChild &&
                           (!item.menuName.toLowerCase().includes("master") ? (
                             <div
-                              key={item.menuId + "dropdown-div-menu"}
-                              className="dropdown-menu"
-                              aria-labelledby={item.menuName}
-                            >
-                              {item.childMenu.map((childItem, chidIndex) => (
-                                <Link
-                                  key={childItem.childMenuItemId + "Link"}
-                                  className="dropdown-item"
-                                  to={{ pathname: childItem.href }}
-                                >
-                                  {childItem.itemName}
-                                </Link>
-                              ))}
-                            </div>
+                            key={item.menuId + 'dropdown-div-menu'}
+                            className="dropdown-menu"
+                            aria-labelledby={item.menuName} 
+                          >
+                            {item.childMenu.map((childItem, chidIndex) => (
+                              <div
+                                key={childItem.childMenuItemId + 'Link'}
+                                className="dropdown-item"
+                                onMouseEnter={() => setSelectedChildItem(childItem)}
+                                // onMouseLeave={() => setSelectedChildItem(false)}
+                              >
+                                {childItem.itemName} <ArrowForwardIosIcon style={{fontSize:'small',height:'25px',marginLeft:"20px" }} />
+                              </div>
+                            ))}
+                      
+                            {selectedChildItem && (
+                              <div
+                                style={{
+                                  position: 'absolute',
+                                  top: 0,
+                                  left: '100%',
+                                  minWidth: '200px',
+                                  background: '#fff',
+                                  cursor:"pointer",
+                                  boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',   
+                                  padding: '10px',
+                                  zIndex: 1,
+                                }}
+                              >
+                                {project.map((item) => (<div style={{display:'flex', margin: "2px"}}>
+                                  <FolderIcon fontSize="small" style={{marginTop:'3px'}}/><div onMouseLeave={() => setSelectedChildItem(false)} onClick={() => onhandelProject(item.id)} key={item.project_id} style={{marginLeft:'5px'}}>{item.project_name}</div></div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                          
                           ) : (
                             <div
                               key={item.menuId + "mega-dropdown-menu"}

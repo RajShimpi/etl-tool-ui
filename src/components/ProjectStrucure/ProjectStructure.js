@@ -7,7 +7,7 @@ import ContextMenu from '../ContextMenu';
 import Modal from '../../modules/components/modal-popup';
 import { AddUpdateDeleteFileAndFolder } from '../PopupComponent';
 import FolderIcon from '@mui/icons-material/Folder';
-import { useClientId, useProjectId } from '../JobDataContext';
+import { useProject } from '../JobDataContext';
 function ProjectStructure({ textColor, onFileClickCallback }) {
   const [isOpen, setIsOpen] = useState(false);
   const [projects, setProjects] = useState([]);
@@ -15,12 +15,11 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
   const [type, setType] = useState("AddFolder");
   const [showNested, setShowNested] = useState({});
   const [isShow, setShow] = useState({});
-  const {projectId}=useProjectId()
-  const {clientId}=useClientId()
+// const {projects_id}=useProject
   const containerRef = useRef(null);
   // const [data, setData] = useState([]);
   // const [items, setItems] = useState([]);
-  const client_Id = localStorage.getItem('client_Id');
+  const project_id = localStorage.getItem('item')
   const handleDocumentClick = (event) => {
     event.stopPropagation();
     if (containerRef.current && !containerRef.current.contains(event.target) && !event.target.closest('.contextMenu') &&
@@ -35,19 +34,23 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
       if (e.keyCode === 27) {
         closeContextMenu(e);
       }
-    }
-    window.addEventListener('keydown', close)
+    };
+    window.addEventListener('keydown', close);
 
     document.addEventListener('click', handleDocumentClick);
     return () => {
       document.removeEventListener('click', handleDocumentClick);
-      window.removeEventListener('keydown', close)
+      window.removeEventListener('keydown', close);
     };
-  }, []);
-// console.log("projectId:",storedrPojectId);
+  }, [project_id]);
+
+
   const getProjects = () => {
-    axios.getWithCallback(`projects/client/${client_Id}`, (data) =>  {      
-      data.forEach((dt, inx) => {
+    setProjects([]);  
+    // const project_id = localStorage.getItem('item')
+    // console.log(project_id);
+    axios.getWithCallback(`projects/${project_id}`, (dt) =>  { 
+      // data.map((dt, inx) => {
       let url = 'project-files/get-folder-hierarchy?projectId=' + dt.id;
         axios.getWithCallback(url, (subdata) => {
           var treeData = treefy(subdata);
@@ -57,8 +60,7 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
           // setData((prevData) => [...prevData, { prjId : dt.id, heirarchy: treeData}]);
           setProjects((prevData) => [...prevData, dt])
         });
-      });
-      // console.log(data);
+      // });
       // setProjects(data);
     });
   };  
