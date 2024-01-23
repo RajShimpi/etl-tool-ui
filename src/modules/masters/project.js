@@ -7,14 +7,15 @@ import { useProjectId } from '../../components/JobDataContext';
 
 const Project = () => {
   const storedClientId = localStorage.getItem('clientId');
+  // const storedrPojectId = localStorage.getItem('projectId');
   const [clientId, setClientId] = useState();
   const [project, setProject] = useState([]);
-const{setProjectId}=useProjectId()
+// const{setProjectId}=useProjectId()
   useEffect(() => {
     axios.getWithCallback(`clients/client/${storedClientId}`, (data) => {
       const clientData = { id: data.id };
       setClientId(clientData.id);
-     
+      // setProjectId(storedrPojectId);
     });
   }, [storedClientId]);
 
@@ -26,10 +27,14 @@ const{setProjectId}=useProjectId()
     }
   }, [clientId]);
 
-  // console.log("clientId:", clientId);
-  // console.log("projects:", project);
-  setProjectId(clientId);
+  console.log("clientId:", clientId);
+  console.log("projects:", project);
 
+  useEffect(() => {
+    if (clientId) {
+      localStorage.setItem('client_Id', clientId);
+    }
+  }, [clientId]);
   let defaultObj = { project_name: '', client_id: '', base_location: '', active: true };
 
   return (

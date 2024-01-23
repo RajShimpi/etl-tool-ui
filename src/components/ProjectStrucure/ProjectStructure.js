@@ -20,7 +20,7 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
   const containerRef = useRef(null);
   // const [data, setData] = useState([]);
   // const [items, setItems] = useState([]);
-
+  const client_Id = localStorage.getItem('client_Id');
   const handleDocumentClick = (event) => {
     event.stopPropagation();
     if (containerRef.current && !containerRef.current.contains(event.target) && !event.target.closest('.contextMenu') &&
@@ -44,10 +44,9 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
       window.removeEventListener('keydown', close)
     };
   }, []);
-console.log(clientId);
+// console.log("projectId:",storedrPojectId);
   const getProjects = () => {
-    // if(clientId!== undefined){
-    axios.getWithCallback(`projects/client/${1}`, (data) =>  {      
+    axios.getWithCallback(`projects/client/${client_Id}`, (data) =>  {      
       data.forEach((dt, inx) => {
       let url = 'project-files/get-folder-hierarchy?projectId=' + dt.id;
         axios.getWithCallback(url, (subdata) => {
