@@ -25,7 +25,7 @@ const Parameter = () => {
                 formDataAction={getParameterFields}
                 columns={config.PARAMETER}
                 insertApi="parameter"
-                updateApi="parameter"
+                updateApi="parameter/:id"
                 getApi="parameter"
                 title="Parameter"
                 defaultObj={defaultObj}

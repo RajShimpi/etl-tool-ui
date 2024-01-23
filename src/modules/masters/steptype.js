@@ -13,7 +13,7 @@ const StepType = () => {
                 formDataAction={getSteptypeFields}
                 columns={config.STEPTYPE}
                 insertApi="step-type"
-                updateApi="step-type/:id/update"
+                updateApi="step-type/:id"
                 getApi="step-type"
                 title="Step Type"
                 defaultObj={defaultObj}

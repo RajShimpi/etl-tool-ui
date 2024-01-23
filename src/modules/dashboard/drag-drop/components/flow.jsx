@@ -21,11 +21,23 @@ import "./update-node.css";
 import "../../../../components/MainComponent.css";
 import Modal from "../../../components/modal-popup";
 
-import axios from "../../../services/axios";
-import StepParameter from "../../../masters/popup/step-parameter";
+  import Job from "../../../masters/job";
+  import axios from "../../../services/axios";
+  // import { Class, Key, Source } from "@mui/icons-material";
+  // import { data } from "jquery";
+  // import AddFile from "../../../masters/popup/add-file";
+  // import Modal from "../../../components/modal-popup";
+  // import { ClassNames } from "@emotion/react";
+  // // import Job from "../../../masters/job";
+  // import axios from "../../../services/axios";
+  import { event, post } from "jquery";
+  import StepParameter from "../../../masters/popup/step-parameter";
+import { getstepparameterFields } from "../../../masters/popup/step-paramter-data";
+import JobStepParameterMaster from "../../../masters/job-step-param-master";
 import { useJobData } from "../../../../components/JobDataContext";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { DeleteForever } from "@mui/icons-material";
+  // let id = 0;
+  // const getId = () => `dndnode_${id++}`;
 
 const nodeTypes = { node: Node };
 
@@ -54,31 +66,37 @@ function ContextMenu({ id, name, top, left, right, bottom, ...props }) {
 }
 
 const OverviewFlow = () => {
-  const [showNodeMaster, setShowNodeMaster] = useState(false);
-
-  const reactFlowWrapper = useRef(null);
-  const edgeUpdateSuccessful = useRef(true);
-
-  const modalRef = useRef(null);
-  const [reactFlowInstance, setReactFlowInstance] = useState(null);
-  const [nodes, setNodes, onNodesChange] = useState([]);
-  const [edges, setEdges, onEdgesChange] = useState([]);
   const [menu, setMenu] = useState(null);
-  const ref = useRef(null);
-  const [selectedNode, setSelectedNode] = useState(null);
-  const [isSelected, setIsSelected] = useState(false);
-  const [draggedNodeInfo, setDraggedNodeInfo] = useState(null);
+  const [nodesActive, setNodesActive] = useState([])
   const [data, setData] = useState([]);
-  const [position, setPosition] = useState([]);
-  const [allNodes, setAllNodes] = useState([]);
-  const [step_type_id, setStep_type_Id] = useState();
-  const [job_id, setJob_Id] = useState();
-  const [nodeid, setNode_Id] = useState();
-  const [editName, setName] = useState();
-  const [activeNodes, setActiveNodes] = useState([]);
-  const [nodesActive, setNodesActive] = useState([]);
-  const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
+  const [showNodeMaster, setShowNodeMaster] = useState(false);
   const { jobDataId } = useJobData();
+    const reactFlowWrapper = useRef(null);
+    const edgeUpdateSuccessful = useRef(true);
+    const textRef = useRef(null);
+    const modalRef = useRef(null);
+    const [reactFlowInstance, setReactFlowInstance] = useState(null);
+    // const [node, setNode] = useState([]);
+    const [nodes, setNodes, onNodesChange] = useState([]);
+    const [edges, setEdges, onEdgesChange] = useState([]);
+    const [edge, setEdge] = useState([]);
+    const [selectedNode, setSelectedNode] = useState(null);
+    const [isSelected, setIsSelected] = useState(false);
+    // const [currentId, setCurrentId] = useState(0);
+    const [draggedNodeInfo, setDraggedNodeInfo] = useState(null);
+    // const [newNodes, setNewNodes] = useState(null);
+    const [position, setPosition] = useState([]);
+    const [allNodes, setAllNodes] = useState([]);
+    const [step_type_id, setStep_type_Id] = useState();
+    const [job_id, setJob_Id] = useState();
+    const [nodeid, setNode_Id] = useState();
+    const [editName,setName]=useState();
+    const [doubleClickedNode, setDoubleClickedNode] = useState(null);
+    const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
+    const handleParameterFields = useCallback((itemData, editName) => {
+      console.log('Edit Name:', editName);
+      const fields = getstepparameterFields(...itemData, editName);
+    }, []); 
 
   useEffect(() => {
     // const jobDataId = localStorage.getItem("jobDataId");
@@ -108,7 +126,7 @@ const OverviewFlow = () => {
         // console.log("dataNodes:", dataNodes);
 
         const dataEdgesok = data.map((item) => ({
-          id: "" + item.id,
+          id: "ok-" + item.id,
           source: "" + item.id,
           target: "" + item.ok_step,
           label: "ok",
@@ -119,7 +137,7 @@ const OverviewFlow = () => {
         }));
 
         const dataEdgeserror = data.map((item) => ({
-          id: "" + item.id,
+          id: "err-" + item.id,
           source: "" + item.id,
           target: "" + item.error_step,
           label: "error",
@@ -149,11 +167,11 @@ const OverviewFlow = () => {
     // eslint-disable-next-line
   }, [setNodes, setAllNodes, jobDataId]);
 
-  const onDragOver = (event) => {
-    event.preventDefault();
-    event.dataTransfer.dropEffect = "move";
-
-    // const [showNodeMaster, setShowNodeMaster] = useState(false);
+    const onDragOver = (event) => {
+      event.preventDefault();
+      event.dataTransfer.dropEffect = "move";
+      
+      // const [showNodeMaster, setShowNodeMaster] = useState(false);
 
     // ... (other state variables and functions)
   };
@@ -215,8 +233,8 @@ const OverviewFlow = () => {
           !isNaN(item.target)
       )
       .map((item) => ({
-        id: parseInt(item.source),
-        ok_step: parseInt(item.target) || null,
+        id: parseInt(item.source.replace('ok-', '')),
+        ok_step: parseInt(item.target),
       }));
 
     const dataFromEdgesError = edges
@@ -228,7 +246,7 @@ const OverviewFlow = () => {
       )
       .map((item) => ({
         id: parseInt(item.source),
-        error_step: parseInt(item.target) || null,
+        error_step: parseInt(item.target),
       }));
 
     const updatedEdgesOk = edges.filter(
@@ -293,42 +311,36 @@ const OverviewFlow = () => {
     // axios.putWithCallback(`job-steps/node-active`, nodesActive);
   };
 
-  const onNodeDragStop = (event, node) => {
-    const updatedPosition = nodes.map((n) => {
-      if (n.id === node.id) {
-        return {
-          ...n,
-          position: { x: node.position.x, y: node.position.y },
-        };
-      }
-      console.log("edges",edges);
-      return n;
-    });
+    const onNodeDragStop = (event, node) => {
+      const updatedPosition = nodes.map((n) => {
+        if (n.id === node.id) {
+          return {
+            ...n,
+            position: { x: node.position.x, y: node.position.y },
+          };
+        }
+        return n;
+      });
 
-    setNodes(updatedPosition);
-    setPosition(updatedPosition);
-    setDraggedNodeInfo({ id: node.id, position: node.position });
+      setNodes(updatedPosition);
+      setPosition(updatedPosition);
+      setDraggedNodeInfo({ id: node.id, position: node.position });
 
-    const combinedDataposition = nodes.map((node) => ({
-      ...node,
-      ...position.find((id) => id.id === node.id),
-    }));
-    setAllNodes(combinedDataposition);
-    // console.log(allNodes, "update");
-  };
+      const combinedDataposition = nodes.map((node) => ({
+        ...node,
+        ...position.find((id) => id.id === node.id),
+      }));
+      setAllNodes(combinedDataposition);
+      // console.log(allNodes, "update");
+    };
 
-  const textRef = useRef(null);
-
-  useEffect(() => {
-    textRef?.current?.focus();
-  }, [selectedNode]);
-
-  const onConnect = useCallback(
-    (params) => {
-      const { sourceHandle } = params;
-
-      let label;
-      let color;
+    const onConnect = useCallback(
+      (params) => {
+        const { sourceHandle, source, target } = params;
+        // const sourceNodeId = parseInt(source);
+        // const targetNodeId = parseInt(target);
+        let label;
+        let color;
 
       if (sourceHandle === "ok") {
         label = "ok";
@@ -412,31 +424,24 @@ console.log("newEdge:",newEdge);
     edgeUpdateSuccessful.current = false;
   }, []);
 
-  const onEdgeUpdate = useCallback((oldEdge, newConnection) => {
-    edgeUpdateSuccessful.current = true;
-    setEdges((els) => updateEdge(oldEdge, newConnection, els));
-    
-  }, []);
+    const onEdgeUpdate = useCallback((oldEdge, newConnection) => {
+      edgeUpdateSuccessful.current = true;
+      setEdges((els) => updateEdge(oldEdge, newConnection, els));
+      // eslint-disable-next-line
+    }, []);
 
-  const onEdgeUpdateEnd = useCallback((_, edge) => {
-    if (!edgeUpdateSuccessful.current) {
-      setEdges((eds) => eds.filter((e) => e.id !== edge.id));
-    }
+    const onEdgeUpdateEnd = useCallback((_, edge) => {
+      if (!edgeUpdateSuccessful.current) {
+        setEdges((eds) => eds.filter((e) => e.id !== edge.id));
+      }
 
-    edgeUpdateSuccessful.current = true;
-   
-  }, []);
+      edgeUpdateSuccessful.current = true;
+      // eslint-disable-next-line
+    }, []);
 
-  const onNodeDoubleClick = () => {
-    setShowNodeMaster(true);
-  };
-
-  const nodeId = (node) => {
-    setName(node.data.heading);
-    setStep_type_Id(node.step_type_id);
-    setJob_Id(node.job_id);
-    setNode_Id(parseInt(node.id));
-  };
+    const onNodeDoubleClick = () => {
+      setShowNodeMaster(true);
+    };
 
   const handleCloseNodeMaster = () => {
     setShowNodeMaster(false);
@@ -455,134 +460,89 @@ console.log("newEdge:",newEdge);
 
     document.addEventListener("mousedown", handleDocumentClick);
 
-    return () => {
-      document.removeEventListener("mousedown", handleDocumentClick);
-    };
-  }, [handleCloseNodeMaster, modalRef]);
- 
+      return () => {
+        document.removeEventListener("mousedown", handleDocumentClick);
+      };
+    }, [handleCloseNodeMaster, modalRef]);
+    // const [stepParameters, setStepParameters] = useState([]);
 
-const handleNodeClick = (event, node) => {
-    onNodeDoubleClick();
-    nodeId(node);
+    // useEffect(() => {
+    //   const fetchStepData = async () => {
+    //     const newStepParameters = [];
+
+    //     for (const node of nodes) {
+    //       try {
+    //         const response = await axios.get(`step-type-parameter/step-type/${node.step_type_id}`);
+    //         // console.log('Received data for node:', node.id, response.data);
+
+
+    //         newStepParameters.push(response.data.parameter.id);
+    //       } catch (error) {
+    //         // console.error('Error fetching data:', error);
+
+    //       }
+    //     }
+
+    //     // setStepParameters(node.step_type_id);
+    //   };
+
+    //   fetchStepData();
+    // }, [nodes]);
+
+
+  //   console.log(stepParameters, "step parameter data");
+  // const nodeId= useNodeId();
+
+  const nodeId = (node)=>{
+    setName(node.data.heading);
+    setStep_type_Id(node.step_type_id)
+    setJob_Id(node.job_id,"job_id");
+    setNode_Id(parseInt(node.id));
+  }
+    return (
+      <>
+        <button onClick={saveHandler}>Save</button>
+        <div className="dndflow">
+          <ReactFlowProvider>
+            <div className="reactflow-wrapper" ref={reactFlowWrapper}>
+              <ReactFlow
+                nodes={nodes}
+                edges={edges}
+                nodeTypes={nodeTypes}
+                onNodesChange={onNodesChange}
+                onEdgesChange={onEdgesChange}
+                onConnect={onConnect}
+                onInit={onInit}
+                onDrop={onDrop}
+                onDragOver={onDragOver}
+                onEdgeUpdate={onEdgeUpdate}
+                onEdgeUpdateStart={onEdgeUpdateStart}
+                onEdgeUpdateEnd={onEdgeUpdateEnd}
+                attributionPosition="top-right"
+                onNodeDoubleClick={onNodeDoubleClick}
+                onEdgeDoubleClick={true}
+                onNodeDragStop={onNodeDragStop}
+                onNodeClick={(event, node) => nodeId(node)}
+              >
+                <Background color="#aaa" gap={16} />
+                {/* <Controls /> */}
+              </ReactFlow>
+
+              <Modal modalTitle={"Save/Update Parameter"} ref={modalRef} handleClose={handleCloseNodeMaster} show={showNodeMaster}>
+              <StepParameter
+                  step_type_id={step_type_id}
+                  job_Id={job_id}
+                  node_Id={nodeid}
+                  name={editName}
+                  handleParameterFields={(itemData) => handleParameterFields(itemData, editName)}
+                />
+              </Modal>
+            </div>
+          </ReactFlowProvider>
+        </div>
+      </>
+    );
   };
 
-  // const saveNodeActiveStatus = () => {
-  //   console.log("nodesActiveStatus:",nodesActive);
-  //   const dataToUpdate = [nodesActive].map((item)=>({
-  //     id:item.id,
-  //     node_active: false,
-  //   }));
-  //   console.log("dataToUpdate:dataToUpdate",dataToUpdate);
-  //   setNodesActive(dataToUpdate)
-  // };
-
-  const onNodeContextMenu = useCallback(
-    (event, node) => {
-      event.preventDefault();
-      const contextMenuWidth = 150;
-      const contextMenuHeight = 40;
-
-      const mouseX = event.clientX;
-      const mouseY = event.clientY;
-
-      const top = mouseY - contextMenuHeight / 2;
-      const left = mouseX - contextMenuWidth / 2;
-
-      setMenu({
-        id: node.id,
-        top: top < 0 ? 0 : top,
-        left: left < 0 ? 0 : left,
-        right: left < 0 ? -left : 0,
-        bottom: top < 0 ? -top : 0,
-      });
-      // console.log("node.id:",node.id);
-      setActiveNodes(node);
-    },
-    [setMenu]
-  );
-
-  const onPaneClick = useCallback(() => {
-    if (menu) {
-      setMenu(null);
-    }
-  }, [menu]);
-
-  const deleteNode = useCallback(() => {
-    if (menu && menu.id) {
-      setNodesActive((prevDeletedNodes) => [
-        ...prevDeletedNodes,
-        { id: menu.id, node_active: false },
-      ]);
-      setNodes((nodes) => nodes.filter((node) => node.id !== menu.id));
-      setEdges((edges) => edges.filter((edge) => edge.source !== menu.id));
-      setMenu(null);
-
-      // console.log("activeNodes:nodes",activeNodes);
-    }
-  }, [menu, setNodes, setEdges, activeNodes]);
-
-  // console.log("nodesActive:,",nodesActive);
-  const Node = nodes.filter((item) => item.node_active === true);
-
-  return (
-    <>
-      <button onClick={saveHandler}>Save</button>
-      <div className="dndflow">
-        <ReactFlowProvider>
-          <div className="reactflow-wrapper" ref={reactFlowWrapper}>
-            <ReactFlow
-              nodes={Node}
-              edges={edges}
-              nodeTypes={nodeTypes}
-              onNodesChange={onNodesChange}
-              onEdgesChange={onEdgesChange}
-              onConnect={onConnect}
-              onInit={onInit}
-              onDrop={onDrop}
-              onDragOver={onDragOver}
-              onEdgeUpdate={onEdgeUpdate}
-              onEdgeUpdateStart={onEdgeUpdateStart}
-              onEdgeUpdateEnd={onEdgeUpdateEnd}
-              attributionPosition="top-right"
-              onNodeDoubleClick={(event, node) => handleNodeClick(event, node)}
-              onEdgeDoubleClick={true}
-              onNodeDragStop={onNodeDragStop}
-              onNodeContextMenu={onNodeContextMenu}
-              onPaneClick={onPaneClick}
-            >
-              <Background color="#aaa" gap={16} />
-              {menu && (
-                <ContextMenu
-                  id={menu.id}
-                  top={menu.top}
-                  left={menu.left}
-                  right={menu.right}
-                  bottom={menu.bottom}
-                  onClick={deleteNode}
-                />
-              )}
-              <div className="reactflow-wrapper" ref={reactFlowWrapper} />
-              <div ref={ref} />
-            </ReactFlow>
-
-            <Modal
-              modalTitle={"Save/Update Parameter"}
-              ref={modalRef}
-              handleClose={handleCloseNodeMaster}
-              show={showNodeMaster}
-            >
-              <StepParameter
-                step_type_id={step_type_id}
-                job_Id={job_id}
-                node_Id={nodeid}
-                name={editName}
-              />
-            </Modal>
-          </div>
-        </ReactFlowProvider>
-      </div>
-    </>
-  );
-};
-
-export default OverviewFlow;
+  
+  export default OverviewFlow;
