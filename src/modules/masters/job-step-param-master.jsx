@@ -3,6 +3,7 @@ import axios from '../services/axios';
 // import CommonModel from '../../components/common-modal';
 import React, { useState, useEffect } from 'react';
 import FormCommon from '../components/form-common';
+import _ from 'lodash';
 
 
 const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClose }) => {
@@ -13,6 +14,9 @@ const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClo
     const [jobStepParamData, setJobStepParamData] = useState([]);
     const [update, setUpdate] = useState(false);
     const [data, setData] = useState(null);
+    const [nameValue, setNameValue] = useState([]);
+    const [isOtherParamVisible, setOtherParamVisible] = useState(false);
+    
 
     useEffect(() => {
       setData((prevData) => ({ ...prevData, step_name: name }));
@@ -29,12 +33,13 @@ const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClo
               const resource = parameter?.resource;
               if (resource && resource != "NA") {
                 try {
-                  const resourceData = axios.getWithCallback(`${resource}`);
-                  parameter.options = resourceData;
+                  const resourceData = await axios.get(`${resource}`);
+                  parameter.options =  resourceData.data;
                 } catch (error) {
                   console.error(`Error fetching resource ${resource}:`, error);
                 }
               }
+              
             }));
             
             setparameter(data.parameters);
@@ -88,10 +93,10 @@ const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClo
             : [],
         },
         {
-          col: 12,
+          col: 4,
           callback: itemData.callback,
           groups: !!parameter
-            ? parameter?.map((v) => ({
+            ? parameter?.filter(x=> x.name !== "other").map((v) => ({
                 type: v.type.includes("text") ? "text" : v.type,
                 id: v.type + v.id,
                 label: v.description,
@@ -101,6 +106,7 @@ const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClo
                 disabled: false,
                 itemVal: itemData.values ? itemData.values[v.name] : "",
                 multiple: v.type === "select-react" ? true : "",
+                isGeneric: true
               }))
             : [],
         },
@@ -142,12 +148,29 @@ const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClo
           case "input":
               setData((prevData) => ({ ...prevData, [e.target.name]: e.target.value}));              
             break;
+          case "select":
+            setData((prevData) => ({ ...prevData, [e.label]: e.text, [`${e.label}_id`]: e.value }));   
+            break;
           
             }
     }
 
+    useEffect(() => {
+      let param = parameter?.find(x => x.name == "other");
+      if(!!param && jobStepParamData?.length) {
+         let dt = jobStepParamData.filter(x => x.parameter_id === param.id);
+         setNameValue(dt.map((x, index) => {
+          return {
+            id: index + 1,
+            [`name_${index + 1}`]: x.parameter_name,
+            [`value_${index + 1}`]: x.value,
+          }
+         }))
+      }
+    }, [jobStepParamData, parameter])
+
     const prepareData = () => {
-      let columns = Object.getOwnPropertyNames(data).filter(x => x != `${x}_id`);
+      let columns = Object.getOwnPropertyNames(data);
       return columns.filter(x => x != 'step_name').map((col) => {
         var param = parameter.find(x => x.name === col);
         if(!param) {
@@ -171,6 +194,44 @@ const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClo
         }
       }).filter(x => x !== null);
     }
+
+    const prepareOtherParams = () => {
+      var param = parameter.find(x => x.name === "other");
+      
+      return nameValue.map((x, index) => {
+        var item = jobStepParamData.find(y => y.parameter_name === x[`name_${index + 1}`]);
+        if(item) {
+          item.parameter_name= x[`name_${index + 1}`];  
+          item.value= x[`value_${index + 1}`]; 
+          return item;
+        } else {
+        return { job_id: job_id, 
+          step_id: node_Id, 
+          step_type_id: step_type_id, 
+          parameter_id: param.id, 
+          parameter_name: x[`name_${index + 1}`],  
+          value: x[`value_${index + 1}`], 
+            };
+          }
+        }
+      );
+    }
+
+    const onClick = (e) => {
+      e.preventDefault();
+      setNameValue((prevData) => ([ ...prevData, { id: prevData?.length ? prevData.length + 1 : 1 }]))
+    }
+
+    const onRemove = (e, id) => {
+      e.preventDefault();
+      setNameValue(nameValue.filter(x => x.id !== id));
+    }
+
+    const onChange = (e, obj) => {
+       var item = nameValue.find(x => x.id === obj.id);
+        item[e.target.name] = e.target.value;
+        setNameValue((prevData) => ([...prevData]));
+    }
   
   
     const onsubmit = (e) => {
@@ -181,9 +242,11 @@ const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClo
         //props.validationCallback(true);
       } else {
         axios.putWithCallback(`job-steps/${node_Id}/name-save`, { step_name: data["step_name"]  }, (data) => {
-
+          
         })
-        axios.postWithCallback("job-step-parameters", prepareData(), (data) => {
+        var dt = prepareOtherParams();
+        var dt1 = prepareData();
+        axios.postWithCallback("job-step-parameters", _.concat(dt1, dt), (data) => {
           setUpdate(false);
           handleClose();
         })
@@ -228,6 +291,43 @@ const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClo
                       data={controlData}                    
                     />
                   
+                  </div>
+                 {!!parameter.filter(x => x.name === "other")?.length &&  <div style={{ padding: "0px 0px 20px 20px" }}>
+                    <button type="button" className='btn btn-primary' onClick={(e) => onClick(e)}>
+                        <i className='fa fa-plus' />
+                        Additional Parameter
+                    </button>
+                  </div>}
+                  <div>
+                  {!!nameValue?.length && <table className="table table-striped table-bordered dt-responsive">
+                      <thead
+                        style={{
+                          backgroundColor: "rgb(60, 141, 188)",
+                          color: "white",
+                        }}
+                      >
+                        <tr>
+                          <th>Name</th>
+                          <th>Value</th>
+                          <th>Remove</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {nameValue.map((x, index) => (
+                        <tr>
+                          <td><input type="text" name={`name_${x.id}`} value={x[`name_${x.id}`]} onChange={(e) => {onChange(e, x)}} /></td>
+                          <td><input type="text" name={`value_${x.id}`} value={x[`value_${x.id}`]} onChange={(e) => {onChange(e, x)}} /></td>
+                          
+                          <td>
+                      
+                            <button type="button" className='btn' onClick={(e) => onRemove(e, x.id)}>
+                                <i className='fa fa-trash' />                              
+                            </button>
+                          </td>
+                        </tr>
+                        ))}
+                        </tbody>
+                    </table>}
                   </div>
                   <div className=" col-md-12 d-flex justify-content-end">
                       <button
