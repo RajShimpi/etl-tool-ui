@@ -71,14 +71,14 @@ export const useProjectId = () => {
 };
 
 export const ProjectProvider = ({ children }) => {
-  const [projects_id, setProjects_id] = useState(null);
+  const [projectsid, setProjectsid] = useState(null);
 
   const setProjectValue = (id) => {
-    setProjects_id(id);
+    setProjectsid(id);
   };
 
   return (
-    <ProjectContext.Provider value={{ projects_id, setProjects_id: setProjectValue }}>
+    <ProjectContext.Provider value={{ projectsid, setProjectsid: setProjectValue }}>
       {children}
     </ProjectContext.Provider>
   );

@@ -85,7 +85,8 @@
   ],
   "CLIENT": [
     "name", 
-    "abbreviation"
+    "abbreviation",
+    "client_id"
 ],
   "PROJECT": [
     "project_name", 

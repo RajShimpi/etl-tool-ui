@@ -20,6 +20,15 @@ export const getClientFields = (itemData) => {
             isRequired: true,
             itemVal: itemData.values ? itemData.values["abbreviation"] : '',
         },
+         {
+            type: "text",
+            id: "inputDisplayabbreviation",
+            label: "Client ID",
+            name: "client_id",
+            control: "input",
+            isRequired: true,
+            itemVal: itemData.values ? itemData.values["client_id"] : '',
+        },
         ]
     }];
 }

@@ -42,7 +42,7 @@ const Dashboard = () => {
   const {setClientId } = useClientId();
   const [project, setProject] = useState([]);
   const [selectedChildItem, setSelectedChildItem] = useState(false)
-  const {setProjects_id}=useProject()  
+  const {setProjectsid}=useProject()  
   const [isMenuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -177,7 +177,7 @@ useEffect(() => {
 
 const onhandelProject = (item) => {
  console.log("item:",item);
-    setProjects_id(item); 
+    setProjectsid(item); 
     localStorage.setItem('item', item);
 
 };

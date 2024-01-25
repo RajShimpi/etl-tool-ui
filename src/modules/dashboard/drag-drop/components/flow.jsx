@@ -23,7 +23,7 @@ import Modal from "../../../components/modal-popup";
 
 import axios from "../../../services/axios";
 import StepParameter from "../../../masters/popup/step-parameter";
-import { useJobData } from "../../../../components/JobDataContext";
+import { useJobData, useProject } from "../../../../components/JobDataContext";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { DeleteForever } from "@mui/icons-material";
 
@@ -79,11 +79,14 @@ const OverviewFlow = () => {
   const [nodesActive, setNodesActive] = useState([]);
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
   const { jobDataId } = useJobData();
-
+  const { projectsid } = useProject();
+  // const project_id = localStorage.getItem('item')
+  console.log("project_id:",projectsid);
   useEffect(() => {
     // const jobDataId = localStorage.getItem("jobDataId");
 
-    if (jobDataId) {
+    if (jobDataId ) {
+      console.log("jobDataId:",jobDataId);
       axios.getWithCallback("job-steps", (data) => setData(data));
 
       axios.getWithCallback(`job-steps/${jobDataId}/job`, (data) => {
@@ -138,17 +141,16 @@ const OverviewFlow = () => {
           ...dataEdgeserror.find((edgeError) => edgeError.id === node.id),
         }));
 
-    
-
         setAllNodes(combinedData);
         function getlabelColor(label) {
           return label === "ok" ? "green" : label === "error" ? "red" : "black";
         }
+        
       });
     }
     // eslint-disable-next-line
-  }, [setNodes, setAllNodes, jobDataId]);
-
+  }, [setNodes, setAllNodes, jobDataId,projectsid]);
+console.log(nodes);
   const onDragOver = (event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";

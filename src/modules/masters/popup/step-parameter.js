@@ -14,6 +14,25 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
   // console.log(node_Id, "name");
   const [parameter, setparameter] = useState([]);
   const [editName, setEditName] = useState('');
+  const colSize = parameter.length <= 3 ? [12, 6, 4][parameter.length - 1] : 4;
+
+  let maxWidth;
+
+if (parameter.length === 1) {
+  maxWidth = '30%';
+} else if (parameter.length === 2) {
+  maxWidth = '45%';
+} else if (parameter.length === 3) {
+  maxWidth = '60%';
+} else {
+  maxWidth = '60%';
+}
+const modalStyles = `.modal-lg, .modal-xl {max-width: ${maxWidth};}`;
+const styleTag = document.createElement('style');
+styleTag.textContent = modalStyles;
+document.head.appendChild(styleTag);
+  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -52,46 +71,45 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
 //  console.log(editName);
 
   let defaultObj = { step_name:'',  type: '', name: '', img: '', group: '', parametres: '' };
+
   const getItemData = (itemData) => {
     let dt = [
       {
-        col: 6,
+        col: 12,
         callback: itemData.callback,
         groups: [editName]
           ? [editName].map((v) => ({
-            id: "inputparameterFileid",
-            label: "Step Name",
-            name: "step_name",
-            control: "input",
-            isSubmit: itemData.isSubmit,
-            itemVal: name === 'step_name' ? v.step_name : name,
-          }))
-          : [editName],
+              id: "inputparameterFileid",
+              label: "Step Name",
+              name: "step_name",
+              control: "input",
+              isSubmit: itemData.isSubmit,
+              itemVal: name === 'step_name' ? v.step_name : name,
+            }))
+          : [],
       },
       {
-        col: parameter.length === 3 ? 6 : 12,
+       col: colSize,
         callback: itemData.callback,
         groups: !!parameter
-          ? parameter.map((v) => ({
-            type: v.type.includes("text") ? "text" : v.type,
-            id: v.type + v.id,
-            label: v.description,
-            name: v.name,
-            control: v.type === "text" ? "input" : v.type,
-            options: v.options,
-            disabled: false,
-            itemVal: itemData.values ? itemData.values[v.name] : "",
-            multiple: v.type === "select-react" ? true : "",
-          }))
+        ? parameter.map((v) => ({
+              type: v.type.includes("text") ? "text" : v.type,
+              id: v.type + v.id,
+              label: v.description,
+              name: v.name,
+              control: v.type === "text" ? "input" : v.type,
+              options: v.options,
+              disabled: false,
+              itemVal: itemData.values ? itemData.values[v.name] : "",
+              multiple: v.type === "select-react" ? true : "",
+            }))
           : [],
-      }
+      },
+      
     ];
-
-    console.log(dt);
-    return [].concat(...dt);
+    
+    return dt;
   };
-  
-
   
   return (
     <>
