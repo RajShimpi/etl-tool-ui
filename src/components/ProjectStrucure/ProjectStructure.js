@@ -235,7 +235,7 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
                   </div>
                 )}
                 {
-                  <Modal modalTitle={type} handleClose={() => { setShow({}) }} show={!!isShow[project.project_name]} maxWidth="75%">
+                  <Modal modalTitle={type} handleClose={() => { setShow({}) }} show={!!isShow[project.project_name]} maxWidth="35%">
 
                     <AddUpdateDeleteFileAndFolder title={type} item={project.item} type={type} onClose={(e, isRefreshNeeded) => { closeContextMenu(e); setShow({}); if (isRefreshNeeded) getProjects(); }} />
 

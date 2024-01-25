@@ -1,6 +1,6 @@
 export const getCommonFields = (itemData) => {
     return [{
-        col: 3,
+        col: 12,
         callback: itemData.callback,
         disabled: itemData.disabled,
         groups: [

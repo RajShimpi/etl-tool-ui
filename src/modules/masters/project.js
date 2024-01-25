@@ -11,6 +11,12 @@ const Project = () => {
   const [clientId, setClientId] = useState();
   const [project, setProject] = useState([]);
 // const{setProjectId}=useProjectId()
+const [clientIds, setClientIds] = useState([])
+
+useEffect(() => {
+    axios.getWithCallback('clients/', (data) => setClientIds(data.map(x => { return { label: x.name, value: x.id } })))
+}, [])
+
   useEffect(() => {
     axios.getWithCallback(`clients/client/${storedClientId}`, (data) => {
       const clientData = { id: data.id };
@@ -27,8 +33,8 @@ const Project = () => {
     }
   }, [clientId]);
 
-  console.log("clientId:", clientId);
-  console.log("projects:", project);
+  // console.log("clientId:", clientId);
+  // console.log("projects:", project);
 
   useEffect(() => {
     if (clientId) {
@@ -48,7 +54,7 @@ const Project = () => {
       getApi={`projects/client/${clientId}`}
       title="Project"
       defaultObj={defaultObj}
-      options={[project]}
+      options={[project,clientIds]}
       tableTitle="Projects"
     />
   )}

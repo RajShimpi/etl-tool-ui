@@ -1,7 +1,6 @@
 
 .sidebar {
-  height: 600px;
-  min-height: 100vh;
+  height: 1000px;
   width: 78px;
   padding: 6px 14px;
   background-color: rgba(116, 113, 113, 0.123);
@@ -220,7 +219,7 @@ width: 220px;
 .sidebar li i {
   height: 35px;
   line-height: 35px;
-  font-size: 10px;
+  font-size: 25px;
   border-radius: 20px;
 }
 .proicon {

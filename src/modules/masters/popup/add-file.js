@@ -15,7 +15,7 @@ const AddFile = ({ project_id, id }) => {
                 insertApi="project-files"
                
                 title="Add File"
-                defaultObj={defaultObj}
+                defaultObj={defaultObj} 
             />
         </>
     ); 

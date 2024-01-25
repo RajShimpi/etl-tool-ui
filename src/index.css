@@ -746,8 +746,9 @@ th {
  
 .modal-lg, .modal-xl {
 	/* --bs-modal-width: auto; */
-  max-width: 700px;
-  min-width: 100px;
+  /* --bs-modal-width: 300px; */
+  max-width: 30%;
+  /* max-width: 60%; */
   /* padding: 0px 200px 0px 200px; */
 }
 

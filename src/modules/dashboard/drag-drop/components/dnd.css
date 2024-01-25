@@ -54,7 +54,7 @@
   /* top: 0;
   left: 0; */
   margin-top: -250px !important;
-  height: 86px;
+  height: 41px;
   width: 100px !important;
 }
 
@@ -63,6 +63,7 @@
   display: flex;
   /* padding: 0.5em; */
   text-align: left;
+
   width: 120px !important;
   justify-content: flex-start;
 }

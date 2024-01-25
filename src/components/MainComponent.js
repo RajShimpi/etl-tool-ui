@@ -15,15 +15,20 @@ const MainComponent = ({onFileClickCallback}) => {
 
   const themes = [
     {
+      // name: "green",
+      backgroundColor: "#D3E0EA",
+      textColor: "#000000",
+    },
+    {
       // name: "dark",
       backgroundColor: "#000000",
       textColor: "#ffffff",
 
     },
     {
-      // name: "blue",
-      backgroundColor: "#21618C ",
-      textColor: "#ffffff",
+      // name: "grey",
+      backgroundColor: "#DDDDDD",
+      textColor: "#000000",
     },
     {
       // name: "light",
@@ -32,61 +37,20 @@ const MainComponent = ({onFileClickCallback}) => {
     },
     {
       // name: "yellow",
-      backgroundColor: "#6495ED",
+      backgroundColor: "#91C8E4",
       textColor: "#000000",
     },
     {
       // name: "red",
-      backgroundColor: "#ff0000",
-      textColor: "#ffffff",
-    },
-    {
-      // name: "green",
-      backgroundColor: "#34f205",
+      backgroundColor: "#748DA6",
       textColor: "#000000",
     },
     {
       // name: "yellow",
-      backgroundColor: "#dd07f5",
-      textColor: "#ffffff",
-    },
-    {
-      // name: "yellow",
-      backgroundColor: "#2980B9",
-      textColor: "#ffffff",
-    },
-    {
-      // name: "yellow",
-      backgroundColor: "#5DADE2 ",
-      textColor: "#ffffff",
-    },
-    {
-      // name: "yellow",
-      backgroundColor: "#566573",
-      textColor: "#ffffff",
-    },
-    {
-      // name: "yellow",
-      backgroundColor: "#48C9B0 ",
-      textColor: "#ffffff",
-    },
-    {
-      // name: "yellow",
-      backgroundColor: "#A569BD",
-      textColor: "#ffffff",
-    },
-    {
-      // name: "yellow",
-      backgroundColor: "#27AE60",
-      textColor: "#ffffff",
-    },
-    {
-      // name: "yellow",
-      backgroundColor: "#3498DB",
+      backgroundColor: "#3C8DAD",
       textColor: "#ffffff",
     },
   ];
-
   const handleProjectStructureToggle = () => {
     setIsProjectStructureOpen(!isProjectStructureOpen);
   };

@@ -46,7 +46,7 @@ function ContextMenu({ id, name, top, left, right, bottom, ...props }) {
       >
         <button className="deleteNode" onClick={deleteNode}>
           <DeleteIcon className="display-3 m-2" />
-          <div className="delete">Delete</div>
+          <div className="delete mt-2">Delete</div>
         </button>
       </div>
     </>
@@ -55,10 +55,8 @@ function ContextMenu({ id, name, top, left, right, bottom, ...props }) {
 
 const OverviewFlow = () => {
   const [showNodeMaster, setShowNodeMaster] = useState(false);
-
   const reactFlowWrapper = useRef(null);
   const edgeUpdateSuccessful = useRef(true);
-
   const modalRef = useRef(null);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [nodes, setNodes, onNodesChange] = useState([]);
@@ -150,7 +148,7 @@ const OverviewFlow = () => {
     }
     // eslint-disable-next-line
   }, [setNodes, setAllNodes, jobDataId,projectsid]);
-console.log(nodes);
+// console.log(nodes);
   const onDragOver = (event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
