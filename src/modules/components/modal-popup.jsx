@@ -23,7 +23,7 @@ const Modal = (props) => {
         position: 'relative',
         display: 'flex',
         flexDirection: 'column',
-        width: '100%',
+        width: '100%',  
         color: 'var(--bs-modal-color)',
         pointerEvents: 'auto',
         backgroundColor: 'var(--bs-modal-bg)',
@@ -31,6 +31,7 @@ const Modal = (props) => {
         border: 'var(--bs-modal-border-width) solid var(--bs-modal-border-color)',
         borderRadius: 'var(--bs-modal-border-radius)',
         outline: 0,
+        height:'100%',
         color:'#00659e',
         // left: '114px',
       };
@@ -38,7 +39,7 @@ const Modal = (props) => {
       
     return (
         <div className={props.show ? "modal d-block hide-body-scroll" : "modal d-none"} style={{ overflow: "auto", zIndex:'10000' }} tabIndex="-1" role="dialog">
-            <div className={`modal-dialog modal-lg ${props.maxWidth && 'modal-top'} `} style={{ maxWidth: props.maxWidth, }} role="document">
+            <div className={`modal-dialog modal-lg ${props.maxWidth &&props.maxHeight &&  'modal-top'} `} style={{ maxWidth: props.maxWidth,maxHeight:props.maxHeight }} role="document">
                 <div className="  " style={modalContent}>
                 <div className={`${props.maxWidth && 'modal-header-custom-padding'} modal-header`}>
                         <h6 className="modal-title">{props.modalTitle}</h6>

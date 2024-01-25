@@ -8,6 +8,8 @@ import axios from "../modules/services/axios";
 import FormCommon from "../modules/components/form-common";
 import { getCommonFields } from "../modules/masters/popup/common-data";
 
+
+
 const PopupComponent = ({ onClose, actionType, project_id, id }) => {
   let contentComponent;
 console.log(project_id,id,"context");
@@ -112,8 +114,9 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
     }
   }
 
-    return (<div className="row">
-    <div className="col-xl-12">
+      return (
+        <div className= "row " >
+    <div className="col-xl-12 ">
       <div className="card">
         <form
           onSubmit={(e) => onsubmit(e)}
@@ -155,6 +158,7 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
                       options: !!props.options ? props.options : [],
                       data: !!props.data ? props.data : [],
                       message: props.message,
+                      
                     })}
                   
                   />

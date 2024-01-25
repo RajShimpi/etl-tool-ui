@@ -14,6 +14,25 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
   // console.log(node_Id, "name");
   const [parameter, setparameter] = useState([]);
   const [editName, setEditName] = useState('');
+  const colSize = parameter.length <= 3 ? [12, 6, 4][parameter.length - 1] : 4;
+
+  let maxWidth;
+
+if (parameter.length === 1) {
+  maxWidth = '30%';
+} else if (parameter.length === 2) {
+  maxWidth = '45%';
+} else if (parameter.length === 3) {
+  maxWidth = '60%';
+} else {
+  maxWidth = '60%';
+}
+const modalStyles = `.modal-lg, .modal-xl {max-width: ${maxWidth};}`;
+const styleTag = document.createElement('style');
+styleTag.textContent = modalStyles;
+document.head.appendChild(styleTag);
+  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -67,13 +86,13 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
               isSubmit: itemData.isSubmit,
               itemVal: name === 'step_name' ? v.step_name : name,
             }))
-          : [editName],
+          : [],
       },
       {
-        col: parameter.length === 3 ? 6 : 12,
+       col: colSize,
         callback: itemData.callback,
         groups: !!parameter
-          ? parameter.map((v) => ({
+        ? parameter.map((v) => ({
               type: v.type.includes("text") ? "text" : v.type,
               id: v.type + v.id,
               label: v.description,
@@ -85,11 +104,10 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
               multiple: v.type === "select-react" ? true : "",
             }))
           : [],
-      }
-      
+      },
       
     ];
-  
+    
     return dt;
   };
   

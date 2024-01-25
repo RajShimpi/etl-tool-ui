@@ -132,7 +132,7 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
                           setShow({});
                         }}
                         show={!!isShow[subItem.file_name]}
-                        maxWidth="75%"
+                        maxWidth="35%"
                       >
                         <AddUpdateDeleteFileAndFolder
                           title={type}
