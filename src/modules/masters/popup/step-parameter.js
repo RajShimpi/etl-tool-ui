@@ -14,7 +14,7 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
   // console.log(node_Id, "name");
   const [parameter, setparameter] = useState([]);
   const [editName, setEditName] = useState('');
-  const colSize = parameter.length <= 3 ? [12, 6, 4][parameter.length - 1] : 4;
+  const colSize = parameter.length <= 2 ? 6 : 4;
 
   let maxWidth;
 
@@ -44,7 +44,7 @@ document.head.appendChild(styleTag);
               try {
                 axios.getWithCallback(`${resource}`,(data)=>{
                   parameter.options =data;
-                  console.log("data:",data);
+                  // console.log("data:",data);
                 });
                
               } catch (error) {

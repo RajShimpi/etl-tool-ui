@@ -76,10 +76,11 @@ const OverviewFlow = () => {
   const [activeNodes, setActiveNodes] = useState([]);
   const [nodesActive, setNodesActive] = useState([]);
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
-  const { jobDataId } = useJobData();
+  const { jobDataId } = useJobData(null);
   const { projectsid } = useProject();
-  // const project_id = localStorage.getItem('item')
-  console.log("project_id:",projectsid);
+  
+  const project_id = localStorage.getItem('item')
+  // console.log("project_id:",projectsid);
   useEffect(() => {
     // const jobDataId = localStorage.getItem("jobDataId");
 
@@ -147,7 +148,7 @@ const OverviewFlow = () => {
       });
     }
     // eslint-disable-next-line
-  }, [setNodes, setAllNodes, jobDataId,projectsid]);
+  }, [setNodes, setAllNodes, jobDataId]);
 // console.log(nodes);
   const onDragOver = (event) => {
     event.preventDefault();
