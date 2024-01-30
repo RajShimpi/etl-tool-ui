@@ -26,6 +26,7 @@ import StepParameter from "../../../masters/popup/step-parameter";
 import { useJobData, useProject } from "../../../../components/JobDataContext";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { DeleteForever } from "@mui/icons-material";
+import JobStepParameterMaster from "../../../masters/job-step-param-master";
 
 const nodeTypes = { node: Node };
 
@@ -572,7 +573,7 @@ const handleNodeClick = (event, node) => {
               handleClose={handleCloseNodeMaster}
               show={showNodeMaster}
             >
-              <StepParameter
+              <JobStepParameterMaster
                 step_type_id={step_type_id}
                 job_Id={job_id}
                 node_Id={nodeid}
