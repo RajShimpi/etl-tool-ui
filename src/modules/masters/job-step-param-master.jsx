@@ -70,9 +70,9 @@ const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClo
        });
       }
     }, [node_Id]);
-   console.log(editName);
+   
   
-    let defaultObj = { step_name: "", type: '', name: '', img: '', group: '', parametres: '' };
+    
     // console.log(parameter, "parameter");
     const getItemData = (itemData) => {
       if(!itemData)
@@ -106,6 +106,7 @@ const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClo
                 disabled: false,
                 itemVal: itemData.values ? itemData.values[v.name] : "",
                 multiple: v.type === "select-react" ? true : "",
+                
                 isGeneric: true
               }))
             : [],
@@ -157,15 +158,19 @@ const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClo
 
     useEffect(() => {
       let param = parameter?.find(x => x.name == "other");
+      if(!param) {
+        setNameValue([]);
+      }
       if(!!param && jobStepParamData?.length) {
          let dt = jobStepParamData.filter(x => x.parameter_id === param.id);
-         setNameValue(dt.map((x, index) => {
+         let so = dt.map((x, index) => {
           return {
-            id: index + 1,
-            [`name_${index + 1}`]: x.parameter_name,
-            [`value_${index + 1}`]: x.value,
+            sequence: x.sequence,
+            [`name_${x.sequence}`]: x.parameter_name,
+            [`value_${x.sequence}`]: x.value,
           }
-         }))
+         });
+         setNameValue(so);
       }
     }, [jobStepParamData, parameter])
 
@@ -199,18 +204,19 @@ const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClo
       var param = parameter.find(x => x.name === "other");
       
       return nameValue.map((x, index) => {
-        var item = jobStepParamData.find(y => y.parameter_name === x[`name_${index + 1}`]);
-        if(item) {
-          item.parameter_name= x[`name_${index + 1}`];  
-          item.value= x[`value_${index + 1}`]; 
+        var item = jobStepParamData.find(y => y.sequence === x.sequence);
+        if(item) {          
+          item.parameter_name= x[`name_${x.sequence}`];  
+          item.value= x[`value_${x.sequence}`]; 
           return item;
         } else {
         return { job_id: job_id, 
           step_id: node_Id, 
           step_type_id: step_type_id, 
           parameter_id: param.id, 
-          parameter_name: x[`name_${index + 1}`],  
-          value: x[`value_${index + 1}`], 
+          parameter_name: x[`name_${x.sequence}`],  
+          value: x[`value_${x.sequence}`], 
+          sequence: x.sequence
             };
           }
         }
@@ -219,16 +225,17 @@ const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClo
 
     const onClick = (e) => {
       e.preventDefault();
-      setNameValue((prevData) => ([ ...prevData, { id: prevData?.length ? prevData.length + 1 : 1 }]))
+      let val = _.maxBy(nameValue, x => x.sequence);
+      setNameValue((prevData) => ([ ...prevData, { sequence: val.sequence ? val.sequence + 1 : 1 }]))
     }
 
     const onRemove = (e, id) => {
       e.preventDefault();
-      setNameValue(nameValue.filter(x => x.id !== id));
+      setNameValue(nameValue.filter(x => x.sequence !== id));
     }
 
     const onChange = (e, obj) => {
-       var item = nameValue.find(x => x.id === obj.id);
+       var item = nameValue.find(x => x.sequence === obj.sequence);
         item[e.target.name] = e.target.value;
         setNameValue((prevData) => ([...prevData]));
     }
@@ -239,7 +246,6 @@ const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClo
       if (!e.target.checkValidity()) {
         e.stopPropagation();
         e.target.classList.add("was-validated");
-        //props.validationCallback(true);
       } else {
         axios.putWithCallback(`job-steps/${node_Id}/name-save`, { step_name: data["step_name"]  }, (data) => {
           
@@ -247,10 +253,10 @@ const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClo
         var dt = prepareOtherParams();
         var dt1 = prepareData();
         axios.postWithCallback("job-step-parameters", _.concat(dt1, dt), (data) => {
-          setUpdate(false);
+          // setUpdate(false);
           handleClose();
         })
-        // let item = { id:props.item.id, file_name: data.file_name, project_id: props.item.project_id, type: props.type.includes("Folder") ? 'Folder' : 'File', parent_id: props.item?.id };
+        // let item = { id:props.item.sequence, file_name: data.file_name, project_id: props.item.project_id, type: props.type.includes("Folder") ? 'Folder' : 'File', parent_id: props.item?.sequence };
         
       }
     }
@@ -315,12 +321,12 @@ const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClo
                       <tbody>
                         {nameValue.map((x, index) => (
                         <tr>
-                          <td><input type="text" name={`name_${x.id}`} value={x[`name_${x.id}`]} onChange={(e) => {onChange(e, x)}} /></td>
-                          <td><input type="text" name={`value_${x.id}`} value={x[`value_${x.id}`]} onChange={(e) => {onChange(e, x)}} /></td>
+                          <td><input type="text" name={`name_${x.sequence}`} value={x[`name_${x.sequence}`]} onChange={(e) => {onChange(e, x)}} /></td>
+                          <td><input type="text" name={`value_${x.sequence}`} value={x[`value_${x.sequence}`]} onChange={(e) => {onChange(e, x)}} /></td>
                           
                           <td>
                       
-                            <button type="button" className='btn' onClick={(e) => onRemove(e, x.id)}>
+                            <button type="button" className='btn' onClick={(e) => onRemove(e, x.sequence)}>
                                 <i className='fa fa-trash' />                              
                             </button>
                           </td>
@@ -344,7 +350,7 @@ const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClo
                         </button>
                         <button
                         type="button"
-                        onClick={(e) =>  { setUpdate(false); handleClose();}}
+                        onClick={(e) =>  { handleClose();}}
                         className="btn btn-warning w-xs waves-effect waves-light"
                           
                         
