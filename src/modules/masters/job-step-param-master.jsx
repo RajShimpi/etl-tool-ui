@@ -17,6 +17,7 @@ const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClo
     const [nameValue, setNameValue] = useState([]);
     const [isOtherParamVisible, setOtherParamVisible] = useState(false);
     
+    const colSize = parameter.length <= 2 ? 6 : 4;
 
     useEffect(() => {
       setData((prevData) => ({ ...prevData, step_name: name }));
@@ -93,7 +94,7 @@ const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClo
             : [],
         },
         {
-          col: 4,
+          col: colSize,
           callback: itemData.callback,
           groups: !!parameter
             ? parameter?.filter(x=> x.name !== "other").map((v) => ({
@@ -126,7 +127,9 @@ const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClo
         //       }))
         //     : [],
         // },
+        
       ];
+      console.log("de:",dt)
       setControlData(dt);
       return dt;
     };

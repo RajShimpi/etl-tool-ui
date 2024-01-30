@@ -572,6 +572,7 @@ const handleNodeClick = (event, node) => {
               ref={modalRef}
               handleClose={handleCloseNodeMaster}
               show={showNodeMaster}
+              maxWidth="70%"
             >
               <JobStepParameterMaster
                 step_type_id={step_type_id}
