@@ -4618,7 +4618,7 @@ left: 450px;
     color: var(--bs-card-color);
     height: 274px;
     overflow-y: scroll;
-    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    -ms-overflow-style: none;  
     scrollbar-width: none;  /* Firefox */
 }
 

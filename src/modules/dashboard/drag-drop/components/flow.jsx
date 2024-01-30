@@ -46,7 +46,7 @@ function ContextMenu({ id, name, top, left, right, bottom, ...props }) {
       >
         <button className="deleteNode" onClick={deleteNode}>
           <DeleteIcon className="display-3 m-2" />
-          <div className="delete">Delete</div>
+          <div className="delete mt-2">Delete</div>
         </button>
       </div>
     </>
