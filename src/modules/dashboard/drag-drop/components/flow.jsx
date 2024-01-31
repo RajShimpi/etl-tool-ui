@@ -86,7 +86,7 @@ const OverviewFlow = () => {
     // const jobDataId = localStorage.getItem("jobDataId");
 
     if (jobDataId ) {
-      console.log("jobDataId:",jobDataId);
+      // console.log("jobDataId:",jobDataId);
       axios.getWithCallback("job-steps", (data) => setData(data));
 
       axios.getWithCallback(`job-steps/${jobDataId}/job`, (data) => {
@@ -186,7 +186,7 @@ const OverviewFlow = () => {
       position,
       data: { heading: name, img: img },
     };
-console.log("newNode:",newNode);
+// console.log("newNode:",newNode);
     setNodes((es) => es.concat(newNode));
     setData((es) => es.concat(newNode));
     setSelectedNode((newNode.a = name));
@@ -303,7 +303,7 @@ console.log("newNode:",newNode);
           position: { x: node.position.x, y: node.position.y },
         };
       }
-      console.log("edges",edges);
+      // console.log("edges",edges);
       return n;
     });
 
@@ -354,7 +354,7 @@ console.log("newNode:",newNode);
           borderRadius: "4px",
         },
       };
-console.log("newEdge:",newEdge);
+// console.log("newEdge:",newEdge);
       setEdges((eds) => addEdge(newEdge, eds));
     },
     [setEdges]

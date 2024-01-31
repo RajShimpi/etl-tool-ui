@@ -7,7 +7,7 @@ import _ from 'lodash';
 
 
 const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClose }) => {
-    console.log(node_Id, "name");
+    // console.log(node_Id, "name");
     const [parameter, setparameter] = useState([]);
     const [editName, setEditName] = useState('');    
     const [controlData, setControlData] = useState([]);
@@ -30,8 +30,9 @@ const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClo
         try {
           await axios.getWithCallback(`step-type/parameter/get/${step_type_id || 0}`, async (data) => {
             const options = {};
-            await Promise.all(data.parameters.map(async (parameter) => {
-              const resource = parameter?.resource;
+            await Promise.all(data.stepTypeParameters.map(async (parameter) => {
+              const resource =parameter.parameter?.resource;
+              console.log(resource);
               if (resource && resource != "NA") {
                 try {
                   const resourceData = await axios.get(`${resource}`);
@@ -43,7 +44,7 @@ const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClo
               
             }));
             
-            setparameter(data.parameters);
+            setparameter(data.stepTypeParameters);
           });
           // console.log(response);
         } catch (error) {
@@ -54,7 +55,7 @@ const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClo
   
       fetchData();
     }, [step_type_id]);
-  
+    console.log(parameter);
     useEffect(() => {
       if(node_Id) {
       axios.getWithCallback(`job-steps/${node_Id || 0}`, (data) => setEditName(data));
@@ -71,7 +72,7 @@ const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClo
        });
       }
     }, [node_Id]);
-   console.log(editName);
+  //  console.log(editName);
   
     let defaultObj = { step_name: "", type: '', name: '', img: '', group: '', parametres: '' };
     // console.log(parameter, "parameter");
@@ -98,15 +99,15 @@ const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClo
           callback: itemData.callback,
           groups: !!parameter
             ? parameter?.filter(x=> x.name !== "other").map((v) => ({
-                type: v.type.includes("text") ? "text" : v.type,
-                id: v.type + v.id,
-                label: v.description,
-                name: v.name,
-                control: v.type === "text" ? "input" : v.type,
-                options: v.options,
+                type: v.parameter.type.includes("text") ? "text" : v.parameter.type,
+                id: v.parameter.type + v.parameter.id,
+                label: v.parameter.description,
+                name: v.parameter.name,
+                control:v.parameter.type === "text" ? "input" : v.parameter.type,
+                options: v.parameter.options,
                 disabled: false,
-                itemVal: itemData.values ? itemData.values[v.name] : "",
-                multiple: v.type === "select-react" ? true : "",
+                itemVal: itemData.values ? itemData.values[v.parameter.name] : "",
+                multiple: v.parameter.type === "select-react" ? true : "",
                 isGeneric: true
               }))
             : [],
@@ -129,7 +130,7 @@ const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClo
         // },
         
       ];
-      console.log("de:",dt)
+      // console.log("de:",dt)
       setControlData(dt);
       return dt;
     };
