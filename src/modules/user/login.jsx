@@ -100,7 +100,7 @@ const { setClientId } = useClientId();
                                                 {/* <img src="/assets/images/logo-dark.png" alt="Abhyeti-Logo" height="80"></img> */}
                                             </a>
                                         </div>
-                                        <div className="card-body p-4">
+                                        <div className="card-body cards-body p-4">
                                             <div className="text-center mt-2">
                                                 <h5 className="admin-text-title">Login</h5>
                                                 <p className="text-muted">Please Enter User Name and Password give by Admin</p>

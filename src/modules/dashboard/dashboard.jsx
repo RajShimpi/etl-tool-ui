@@ -341,18 +341,24 @@ const Dashboard = () => {
                                 >
                                   { project.map((item) => (
                                     <div
-                                      style={{ display: "flex", margin: "2px" }}
+                                    onMouseLeave={() =>
+                                      setSelectedChildItem(false)
+                                    }
+                                    onClick={() => onhandelProject(item.id)}
+                                    key={item.project_id}
+                                    // style={{ marginLeft: "5px" }}
+                                      style={{ display: "flex", margin: "2px",marginRight: "5px" }}
                                     >
                                       <FolderIcon
                                         fontSize="small"
                                         style={{ marginTop: "3px" }}
                                       />
                                       <div
-                                        onMouseLeave={() =>
-                                          setSelectedChildItem(false)
-                                        }
-                                        onClick={() => onhandelProject(item.id)}
-                                        key={item.project_id}
+                                        // onMouseLeave={() =>
+                                        //   setSelectedChildItem(false)
+                                        // }
+                                        // onClick={() => onhandelProject(item.id)}
+                                        // key={item.project_id}
                                         style={{ marginLeft: "5px" }}
                                       >
                                         {item.project_name}

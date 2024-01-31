@@ -11,6 +11,7 @@ import ReactFlow, {
 // import Sidebar from "./sidebar/sidebar";
 import Node from "./custom-node/message-node";
 import { MarkerType } from "reactflow";
+
 // Utils
 import { isAllNodeisConnected } from "../utils";
 
@@ -79,14 +80,23 @@ const OverviewFlow = () => {
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
   const { jobDataId } = useJobData(null);
   const { projectsid } = useProject();
-  
-  const project_id = localStorage.getItem('item')
+  const project_id = localStorage.getItem("item");
+  const [key, setKey] = useState(0);
+  const [pro, setpro] = useState();
+
+  useEffect(() => {
+    if (projectsid !== null) {
+      setpro(projectsid);
+    }
+  }, [projectsid]);
+  // const [reactFlowInstances, setReactFlowInstances] = useState(null);
   // console.log("project_id:",projectsid);
+
   useEffect(() => {
     // const jobDataId = localStorage.getItem("jobDataId");
 
-    if (jobDataId ) {
-      // console.log("jobDataId:",jobDataId);
+    if (jobDataId) {
+      console.log("jobDataId:", jobDataId);
       axios.getWithCallback("job-steps", (data) => setData(data));
 
       axios.getWithCallback(`job-steps/${jobDataId}/job`, (data) => {
@@ -145,12 +155,12 @@ const OverviewFlow = () => {
         function getlabelColor(label) {
           return label === "ok" ? "green" : label === "error" ? "red" : "black";
         }
-        
       });
     }
     // eslint-disable-next-line
   }, [setNodes, setAllNodes, jobDataId]);
-// console.log(nodes);
+  // console.log(nodes);
+
   const onDragOver = (event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
@@ -186,7 +196,7 @@ const OverviewFlow = () => {
       position,
       data: { heading: name, img: img },
     };
-// console.log("newNode:",newNode);
+    // console.log("newNode:",newNode);
     setNodes((es) => es.concat(newNode));
     setData((es) => es.concat(newNode));
     setSelectedNode((newNode.a = name));
@@ -202,8 +212,10 @@ const OverviewFlow = () => {
       step_name: item.data?.heading || item.name,
       type: item.type,
       params: {
-        position_X: item.id === position.id ? position.position_X : item.position.x,
-        position_Y: item.id === position.id ? position.position_Y : item.position.y,
+        position_X:
+          item.id === position.id ? position.position_X : item.position.x,
+        position_Y:
+          item.id === position.id ? position.position_Y : item.position.y,
       },
     }));
 
@@ -277,7 +289,7 @@ const OverviewFlow = () => {
 
     const dataFromNodesActive = nodesActive.map((item) => ({
       id: parseInt(item.id),
-      node_active:item.node_active
+      node_active: item.node_active,
     }));
 
     const combinedData = dataFromNodes.map((node) => ({
@@ -303,7 +315,7 @@ const OverviewFlow = () => {
           position: { x: node.position.x, y: node.position.y },
         };
       }
-      // console.log("edges",edges);
+      console.log("edges", edges);
       return n;
     });
 
@@ -354,7 +366,7 @@ const OverviewFlow = () => {
           borderRadius: "4px",
         },
       };
-// console.log("newEdge:",newEdge);
+      console.log("newEdge:", newEdge);
       setEdges((eds) => addEdge(newEdge, eds));
     },
     [setEdges]
@@ -417,7 +429,6 @@ const OverviewFlow = () => {
   const onEdgeUpdate = useCallback((oldEdge, newConnection) => {
     edgeUpdateSuccessful.current = true;
     setEdges((els) => updateEdge(oldEdge, newConnection, els));
-    
   }, []);
 
   const onEdgeUpdateEnd = useCallback((_, edge) => {
@@ -426,7 +437,6 @@ const OverviewFlow = () => {
     }
 
     edgeUpdateSuccessful.current = true;
-   
   }, []);
 
   const onNodeDoubleClick = () => {
@@ -461,9 +471,8 @@ const OverviewFlow = () => {
       document.removeEventListener("mousedown", handleDocumentClick);
     };
   }, [handleCloseNodeMaster, modalRef]);
- 
 
-const handleNodeClick = (event, node) => {
+  const handleNodeClick = (event, node) => {
     onNodeDoubleClick();
     nodeId(node);
   };
@@ -523,6 +532,19 @@ const handleNodeClick = (event, node) => {
     }
   }, [menu, setNodes, setEdges, activeNodes]);
 
+  useEffect(() => {
+    if (projectsid && reactFlowInstance) {
+      if (projectsid !== pro) {
+        setNodes([]);
+        setEdges([]);
+        setKey((prevKey) => prevKey + 1);
+      }
+    }
+  }, [projectsid, reactFlowInstance]);
+
+  // const onInit = (reactFlowInstance) => {
+  //   setReactFlowInstance(reactFlowInstance);
+  // };
   // console.log("nodesActive:,",nodesActive);
   const Node = nodes.filter((item) => item.node_active === true);
 
@@ -533,6 +555,7 @@ const handleNodeClick = (event, node) => {
         <ReactFlowProvider>
           <div className="reactflow-wrapper" ref={reactFlowWrapper}>
             <ReactFlow
+              // onLoad={onInit}
               nodes={Node}
               edges={edges}
               nodeTypes={nodeTypes}

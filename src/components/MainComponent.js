@@ -16,7 +16,7 @@ const MainComponent = ({onFileClickCallback}) => {
   const themes = [
     {
       // name: "green",
-      backgroundColor: "#D3E0EA",
+      backgroundColor: "#ececec",
       textColor: "#000000",
     },
     {
