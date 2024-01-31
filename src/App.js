@@ -5,6 +5,7 @@ import Dashboard from './modules/dashboard/dashboard';
 import Login from './modules/user/login';
 import ProtectedRoute from './modules/user/protected-route';
 import './App.css';
+// import { FileIdProvider } from './components/fileContext';
 
 const App = () => {
 
@@ -45,6 +46,7 @@ const App = () => {
           </div>
         )}
       </div> */}
+    
       <ToastContainer />
       <BrowserRouter>
         <Routes>
@@ -60,6 +62,7 @@ const App = () => {
           />    
         </Routes>
       </BrowserRouter>
+     
     </>
   );           
 };

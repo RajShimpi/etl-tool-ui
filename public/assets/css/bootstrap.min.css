@@ -1119,7 +1119,7 @@ progress {
         flex: 0 0 auto;
         width: 16.66666667%
     }
-    .col-md-3 {
+    .col-md-3{
         -webkit-box-flex: 0;
         -ms-flex: 0 0 auto;
         flex: 0 0 auto;
@@ -4615,10 +4615,15 @@ left: 450px;
     -ms-flex: 1 1 auto;
     flex: 1 1 auto;
     /* padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x); */
-    color: var(--bs-card-color)
+    color: var(--bs-card-color);
+    height: 274px;
+    overflow-y: scroll;
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /*Firefox*/
 }
+
 .card-title {
-    margin-bottom: var(--bs-card-title-spacer-y)
+    margin-bottom: var(--bs-card-title-spacer-y);
 }
 .card-subtitle {
     margin-top: calc(-.5 * var(--bs-card-title-spacer-y));
@@ -4858,7 +4863,9 @@ left: 450px;
 }
 .accordion-item:first-of-type {
     border-top-left-radius: var(--bs-accordion-border-radius);
-    border-top-right-radius: var(--bs-accordion-border-radius)
+    border-top-right-radius: var(--bs-accordion-border-radius);
+    z-index: 1000;
+  position: relative;
 }
 .accordion-item:first-of-type .accordion-button {
     border-top-left-radius: var(--bs-accordion-inner-border-radius);
@@ -4880,7 +4887,8 @@ left: 450px;
     border-bottom-left-radius: var(--bs-accordion-border-radius)
 }
 .accordion-body {
-    padding: var(--bs-accordion-body-padding-y) var(--bs-accordion-body-padding-x)
+    padding: var(--bs-accordion-body-padding-y) var(--bs-accordion-body-padding-x);
+    margin-top: -25px;
 }
 .accordion-flush .accordion-collapse {
     border-width: 0
@@ -5283,6 +5291,9 @@ left: 450px;
 .list-group-item-action:active {
     color: var(--bs-list-group-action-active-color);
     background-color: var(--bs-list-group-action-active-bg)
+}
+.card-body ::-webkit-scrollbar{
+    display: none;
 }
 .list-group-item {
     position: relative;

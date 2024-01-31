@@ -5,7 +5,7 @@ import { getClientFields } from './client-data';
 
 const Client = () => {
 
-    let defaultObj = { name: '', abbreviation: '', active: true };
+    let defaultObj = { name: '', abbreviation: '', active: true, client_id:""}
 
     return (
         <>
