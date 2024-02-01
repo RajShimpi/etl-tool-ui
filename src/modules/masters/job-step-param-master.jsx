@@ -55,7 +55,7 @@ const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClo
   
       fetchData();
     }, [step_type_id]);
-    console.log(parameter);
+    // console.log(parameter);
     useEffect(() => {
       if(node_Id) {
       axios.getWithCallback(`job-steps/${node_Id || 0}`, (data) => setEditName(data));

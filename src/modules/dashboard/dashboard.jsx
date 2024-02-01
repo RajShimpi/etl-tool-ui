@@ -11,7 +11,7 @@ import configContext from "./config-context";
 import SearchFilter from "../components/search-filter";
 import SearchResult from "../components/search-result";
 import NotificationsDropdown from "../components/notifications-dropdown";
-import { useClientId, useProject } from "../../components/JobDataContext";
+import { useClientId, useProject, useProjectid } from "../../components/JobDataContext";
 import PersonIcon from "@mui/icons-material/Person";
 // import { io } from 'socket.io-client';
 
@@ -42,7 +42,8 @@ const Dashboard = () => {
   const { setClientId } = useClientId();
   const [project, setProject] = useState([]);
   const [selectedChildItem, setSelectedChildItem] = useState(false);
-  const { setProjectsid } = useProject();
+  const { setProject_Id } = useProject();
+  const { setProjectID } = useProjectid();
   const [isMenuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -177,8 +178,9 @@ const Dashboard = () => {
 
   const onhandelProject = (item) => {
     // console.log("item:", item);
-    setProjectsid(item);
+    setProject_Id(item);
     localStorage.setItem("item", item);
+    setProjectID(item)
   };
   return (
     // <div id="layout-wrapper" > data-layout-mode="layout-mode-light"
@@ -307,9 +309,10 @@ const Dashboard = () => {
                                  </Link>
                                ) : (
                                  <>
+                                
                                  <div style={{cursor: "pointer"}}>
                                    {childItem.itemName}
-                                   {item.menuName.toLowerCase().includes("project") && (
+                                  
                                      <ArrowForwardIosIcon
                                        style={{
                                          fontSize: "small",
@@ -317,15 +320,16 @@ const Dashboard = () => {
                                          marginLeft: "20px",
                                        }}
                                      />
-                                   )}
+                              
                                    </div>
-                                 </>
+                                   </>
                                )}
                              </div>
                              
                               ))}
 
                               {item.menuName.toLowerCase().includes("project") && selectedChildItem && (
+                                   
                                 <div
                                   style={{
                                     position: "absolute",
@@ -340,6 +344,7 @@ const Dashboard = () => {
                                   }}
                                 >
                                   { project.map((item) => (
+                                    <Link key={'maincomponent' + "Link"} className="dropdown-item" to={{ pathname: 'maincomponent' }}>
                                     <div
                                     onMouseLeave={() =>
                                       setSelectedChildItem(false)
@@ -364,6 +369,7 @@ const Dashboard = () => {
                                         {item.project_name}
                                       </div>
                                     </div>
+                                    </Link>
                                   ))}
                                 </div>
                               )}

@@ -24,7 +24,7 @@ import Modal from "../../../components/modal-popup";
 
 import axios from "../../../services/axios";
 import StepParameter from "../../../masters/popup/step-parameter";
-import { useJobData, useProject } from "../../../../components/JobDataContext";
+import { useJobData, useProject, useProjectid } from "../../../../components/JobDataContext";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { DeleteForever } from "@mui/icons-material";
 import JobStepParameterMaster from "../../../masters/job-step-param-master";
@@ -79,24 +79,19 @@ const OverviewFlow = () => {
   const [nodesActive, setNodesActive] = useState([]);
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
   const { jobDataId } = useJobData(null);
-  const { projectsid } = useProject();
-  const project_id = localStorage.getItem("item");
-  const [key, setKey] = useState(0);
-  const [pro, setpro] = useState();
+  const { project_Id } = useProject();
+  // const project_id = localStorage.getItem("item");
 
   useEffect(() => {
-    if (projectsid !== null) {
-      setpro(projectsid);
-    }
-  }, [projectsid]);
-  // const [reactFlowInstances, setReactFlowInstances] = useState(null);
-  // console.log("project_id:",projectsid);
+    setEdges([]);
+    setNodes([])
+  }, [project_Id]);
 
   useEffect(() => {
     // const jobDataId = localStorage.getItem("jobDataId");
 
     if (jobDataId) {
-      console.log("jobDataId:", jobDataId);
+      // console.log("jobDataId:", jobDataId);
       axios.getWithCallback("job-steps", (data) => setData(data));
 
       axios.getWithCallback(`job-steps/${jobDataId}/job`, (data) => {
@@ -532,20 +527,6 @@ const OverviewFlow = () => {
     }
   }, [menu, setNodes, setEdges, activeNodes]);
 
-  useEffect(() => {
-    if (projectsid && reactFlowInstance) {
-      if (projectsid !== pro) {
-        setNodes([]);
-        setEdges([]);
-        setKey((prevKey) => prevKey + 1);
-      }
-    }
-  }, [projectsid, reactFlowInstance]);
-
-  // const onInit = (reactFlowInstance) => {
-  //   setReactFlowInstance(reactFlowInstance);
-  // };
-  // console.log("nodesActive:,",nodesActive);
   const Node = nodes.filter((item) => item.node_active === true);
 
   return (
@@ -555,14 +536,14 @@ const OverviewFlow = () => {
         <ReactFlowProvider>
           <div className="reactflow-wrapper" ref={reactFlowWrapper}>
             <ReactFlow
-              // onLoad={onInit}
+              // onLoad={onInits}
               nodes={Node}
               edges={edges}
               nodeTypes={nodeTypes}
               onNodesChange={onNodesChange}
               onEdgesChange={onEdgesChange}
               onConnect={onConnect}
-              onInit={onInit}
+              onInit={onInit }
               onDrop={onDrop}
               onDragOver={onDragOver}
               onEdgeUpdate={onEdgeUpdate}
