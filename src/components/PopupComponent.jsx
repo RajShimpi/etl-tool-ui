@@ -29,15 +29,15 @@ console.log(project_id,id,"context");
     default:
       contentComponent = null;
   }
-  const hhh = () => {
-    console.log(project_id);
-    console.log(id);
-  };
+  // const hhh = () => {
+  //   console.log(project_id);
+  //   console.log(id);
+  // };
 
   return (
     <div className="popup">
       <div className="popup-content">
-        <div style={{ flex: 1 }} onClick={hhh()}>
+        <div style={{ flex: 1 }} >
           {contentComponent}
         </div>
       </div>
@@ -65,7 +65,8 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
           }
   }
 
-
+  const client_Id = localStorage.getItem("client_Id");
+  // console.log("client_Id:",client_Id);
   const onsubmit = (e) => {
     e.preventDefault();
     if (!e.target.checkValidity()) {
@@ -73,7 +74,8 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
       e.target.classList.add("was-validated");
       //props.validationCallback(true);
     } else {
-      let item = { id:props.item.id, file_name: data.file_name, project_id: props.item.project_id, type: props.type.includes("Folder") ? 'Folder' : 'File', parent_id: props.item?.id };
+      let item = { id:props.item.id, file_name: data.file_name, project_id: props.item.project_id, type: props.type.includes("Folder") ? 'Folder' : 'File', parent_id: props.item.id === 0 ? null : props.item.id, client_Id:parseInt(client_Id)};
+      console.log("item:",item);
       switch(props.type) {
         case "AddFolder":
           axios.postWithCallback("project-files",

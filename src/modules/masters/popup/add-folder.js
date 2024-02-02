@@ -4,8 +4,8 @@ import CommonModel from '../../components/common-modal';
 import { getCommonFields } from './common-data';
 
 const Folder = ({ project_id, id }) => {
-
-    let defaultObj = { file_name: '', project_id: project_id, type: 'Folder', parent_id: id };
+console.log("id:",id);
+    let defaultObj = { file_name: '', project_id: project_id, type: 'Folder', parent_id: id === 0 ? null : id };
 
     return (
         <>
