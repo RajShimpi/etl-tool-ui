@@ -7,25 +7,29 @@ import { getJobScheduleFields } from './job-schedule-data';
 const JobSchedule = () => {
 
     const [jobschedule, setJobschedule] = useState([]);
-    const [clients, setClients] = useState([]);
+    // const [clients, setClients] = useState([]);
     const [project, setProject] = useState([]);
     const [job, setJob] = useState([]);
+
+    const client_Id = localStorage.getItem("client_Id");
 
     useEffect(() => {
         axios.getWithCallback('job-schedule/', (data) => setJobschedule(data.map(x => { return { value: x.id, label: x.name } })))
     }, []);
 
+    // useEffect(() => {
+    //     axios.getWithCallback('clients/', (data) => setClients(data.map(y => ({ value: y.id, label: y.name }))))
+    // }, []);
+
     useEffect(() => {
-        axios.getWithCallback('clients/', (data) => setClients(data.map(y => ({ value: y.id, label: y.name }))))
-    }, []);
-    useEffect(() => {
-        axios.getWithCallback('projects/', (data) => setProject(data.map(z => ({ value: z.id, label: z.project_name }))))
-    }, []);
-    useEffect(() => {
-        axios.getWithCallback('job/', (data) => setJob(data.map(e => ({ value: e.id, label: e.name }))))
+        axios.getWithCallback(`projects/client/${client_Id}`, (data) => setProject(data.map(z => ({ value: z.id, label: z.project_name }))))
     }, []);
 
-    const defaultObj = { client:'',project:'',job:'',name:'',description:'',scheduleCron:'',active:'' };
+    useEffect(() => {
+        axios.getWithCallback(`job/client/${client_Id}`, (data) => setJob(data.map(e => ({ value: e.id, label: e.name }))))
+    }, []);
+
+    const defaultObj = { client:parseInt(client_Id),project:'',job:'',name:'',description:'',scheduleCron:'',active:'' };
 
     return (
         <>
@@ -34,10 +38,10 @@ const JobSchedule = () => {
                 columns={config.Job_Schedule}
                 insertApi="job-schedule"
                 updateApi="job-schedule/:id"
-                getApi="job-schedule"
+                getApi={`job-schedule/client/${client_Id}`}
                 title="Job Schedule"
                 defaultObj={defaultObj}
-                options={[clients,project,job,jobschedule]}
+                options={[project,job,jobschedule]}
                 tableTitle='Job Schedule'
             />
         </>

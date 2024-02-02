@@ -66,7 +66,7 @@ const Dashboard = () => {
         setClientName(client)
       );
     }
-    console.log("clientName:", clientName);
+
     axios.getWithCallback(
       "user/getUserById/" + auth.getStorageData("id"),
       (data) => {
@@ -355,19 +355,27 @@ const Dashboard = () => {
                                       zIndex: 1,
                                     }}
                                   >
+                                    <div  onMouseLeave={() =>
+                                        setSelectedChildItem(false)
+                                      }>
                                     {project.map((item) => (
+                                      
                                       <Link
+                                     
                                         key={"maincomponent" + "Link"}
                                         className="dropdown-item"
                                         to={{ pathname: "maincomponent" }}
+                                        onClick={() =>
+                                          onhandelProject(item.id)
+                                        }
                                       >
                                         <div
-                                          onMouseLeave={() =>
-                                            setSelectedChildItem(false)
-                                          }
-                                          onClick={() =>
-                                            onhandelProject(item.id)
-                                          }
+                                          // onMouseLeave={() =>
+                                          //   setSelectedChildItem(false)
+                                          // }
+                                          // onClick={() =>
+                                          //   onhandelProject(item.id)
+                                          // }
                                           key={item.project_id}
                                           // style={{ marginLeft: "5px" }}
                                           style={{
@@ -392,7 +400,9 @@ const Dashboard = () => {
                                           </div>
                                         </div>
                                       </Link>
+                                     
                                     ))}
+                                     </div>
                                   </div>
                                 )}
                             </div>
