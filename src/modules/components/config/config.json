@@ -85,7 +85,8 @@
   ],
   "CLIENT": [
     "name", 
-    "abbreviation"
+    "abbreviation",
+    "client_id"
 ],
   "PROJECT": [
     "project_name", 
@@ -102,6 +103,7 @@
     "type", 
     "name", 
     "img", 
+    "step_name",
     "group"],
   "TYPE_CONFIG": [
     "category", 

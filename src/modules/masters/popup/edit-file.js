@@ -3,17 +3,17 @@ import config from "../../components/config/config.json"
 import CommonModel from '../../components/common-modal';
 import { getCommonFields } from './common-data';
 
-const Edit = () => {
+const Edit = ({ id }) => {
 
-    let defaultObj = { project_name: '', client_id: 1, base_location: "true" };
+    let defaultObj = { file_name: ''};
 
     return (
         <>
             <CommonModel   // this file create copy from common-form-with-list and Datatable componet Remove from Comman Model componete
                 formDataAction={getCommonFields}
-                columns={config.PROJECT}
+                columns={config.PROJECT_FILE}
                 // insertApi="clients"
-                updateApi="projects/:id"
+                // updateApi={`project-files/${id}`}
                 // getApi="clients"
                 title="Edit"
                 defaultObj={defaultObj}

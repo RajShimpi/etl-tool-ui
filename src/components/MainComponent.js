@@ -4,8 +4,10 @@ import ProjectStructure from "./ProjectStrucure/ProjectStructure";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowUp';
 import "./MainComponent.css";
 import OverviewFlow from "../modules/dashboard/drag-drop/components/flow";
+// import { FileIdProvider } from "./fileContext";
+// import { JobDataProvider } from "./JobDataContext";
 
-const MainComponent = () => {
+const MainComponent = ({onFileClickCallback}) => {
   const [isProjectStructureOpen, setIsProjectStructureOpen] = useState(false);
   const [isComponetToolOpen, setIsComponetToolOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -13,15 +15,20 @@ const MainComponent = () => {
 
   const themes = [
     {
+      // name: "green",
+      backgroundColor: "#D3E0EA",
+      textColor: "#000000",
+    },
+    {
       // name: "dark",
       backgroundColor: "#000000",
       textColor: "#ffffff",
 
     },
     {
-      // name: "blue",
-      backgroundColor: "#4842f5",
-      textColor: "#ffffff",
+      // name: "grey",
+      backgroundColor: "#DDDDDD",
+      textColor: "#000000",
     },
     {
       // name: "light",
@@ -30,26 +37,20 @@ const MainComponent = () => {
     },
     {
       // name: "yellow",
-      backgroundColor: "#fcf803",
+      backgroundColor: "#91C8E4",
       textColor: "#000000",
     },
     {
       // name: "red",
-      backgroundColor: "#ff0000",
-      textColor: "#ffffff",
-    },
-    {
-      // name: "green",
-      backgroundColor: "#34f205",
+      backgroundColor: "#748DA6",
       textColor: "#000000",
     },
     {
       // name: "yellow",
-      backgroundColor: "#dd07f5",
+      backgroundColor: "#3C8DAD",
       textColor: "#ffffff",
     },
   ];
-
   const handleProjectStructureToggle = () => {
     setIsProjectStructureOpen(!isProjectStructureOpen);
   };
@@ -64,7 +65,7 @@ const MainComponent = () => {
 
   const handleThemeChange = (index) => {
     setCurrentThemeIndex(index);
-    // setIsDropdownOpen(false); // Close the dropdown after selecting a theme
+    // setIsDropdownOpen(false);
   };
 
   const calculatePhotoWidth = () => {
@@ -76,6 +77,11 @@ const MainComponent = () => {
       return "100%";
     }
   };
+  const handleFileClick = (file_id) => {
+    // Handle file_id in ProjectStructure
+    console.log("File ID clicked in maincomponet:", file_id);
+    // Add your logic here to handle the file_id
+};
 
   return (
     <>
@@ -110,10 +116,15 @@ const MainComponent = () => {
             <ProjectStructure
               toggleSidebar={handleProjectStructureToggle}
               textColor={themes[currentThemeIndex].textColor}
+              onFileClickCallback={handleFileClick} 
             />
           </div>
           <div style={{ width: calculatePhotoWidth() }}>
-            <OverviewFlow />
+          {/* <JobDataProvider> */}
+            <OverviewFlow
+             textColor={themes[currentThemeIndex].textColor}
+              />
+              {/* </JobDataProvider> */}
           </div>
           <div className={` ${isComponetToolOpen ? "open" : ""}`}>
             <ComponetTool

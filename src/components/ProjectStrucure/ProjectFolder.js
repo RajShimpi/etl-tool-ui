@@ -44,7 +44,7 @@ function FolderDropdown({
         className={`${item.isOpen ? 'open' : ''}`}
       >
         {item.type === 'Folder' && (
-          item.isOpen ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='small' />
+          item.isOpen ? <FolderOpenIcon fontSize='small'/> : <FolderIcon fontSize='small' />
         )}
         {item.type === 'File' && <InsertDriveFileIcon fontSize='small' />}
         {item.file_name}

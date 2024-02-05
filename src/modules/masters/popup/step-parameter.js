@@ -11,9 +11,28 @@ import CommonModel from '../../components/common-modal';
 
 
 const StepParameter = ({ node_Id, step_type_id, name }) => {
-  console.log(node_Id, "name");
+  // console.log(node_Id, "name");
   const [parameter, setparameter] = useState([]);
   const [editName, setEditName] = useState('');
+  const colSize = parameter.length <= 2 ? 6 : 4;
+
+  let maxWidth;
+
+if (parameter.length === 1) {
+  maxWidth = '30%';
+} else if (parameter.length === 2) {
+  maxWidth = '45%';
+} else if (parameter.length === 3) {
+  maxWidth = '60%';
+} else {
+  maxWidth = '60%';
+}
+const modalStyles = `.modal-lg, .modal-xl {max-width: ${maxWidth};}`;
+const styleTag = document.createElement('style');
+styleTag.textContent = modalStyles;
+document.head.appendChild(styleTag);
+  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -23,33 +42,36 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
             const resource = parameter?.resource;
             if (resource) {
               try {
-                const resourceData = await axios.getWithCallback(`${resource}`);
-                parameter.options = resourceData;
+                axios.getWithCallback(`${resource}`,(data)=>{
+                  parameter.options =data;
+                  // console.log("data:",data);
+                });
+               
               } catch (error) {
                 console.error(`Error fetching resource ${resource}:`, error);
               }
             }
+            // console.log("resource:",resource);
           }));
           
           setparameter(data.parameters);
         });
-        // console.log(response);
+        // console.log("response:",response);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
-    
-
     fetchData();
   }, [step_type_id]);
+
 
   useEffect(() => {
     axios.getWithCallback(`job-steps/${node_Id || 0}`, (data) => setEditName(data));
   }, []);
- console.log(editName);
+//  console.log(editName);
 
-  let defaultObj = { step_name: "", type: '', name: '', img: '', group: '', parametres: '' };
-  // console.log(parameter, "parameter");
+  let defaultObj = { step_name:'',  type: '', name: '', img: '', group: '', parametres: '' };
+
   const getItemData = (itemData) => {
     let dt = [
       {
@@ -59,20 +81,18 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
           ? [editName].map((v) => ({
               id: "inputparameterFileid",
               label: "Step Name",
-              name: v.step_name,
-              // options: itemData.options[0],
+              name: "step_name",
               control: "input",
               isSubmit: itemData.isSubmit,
-              // isRequired: !itemData?.values?.paramters,
-              itemVal: itemData.values ? itemData.values[v.step_name] : '',
+              itemVal: name === 'step_name' ? v.step_name : name,
             }))
           : [],
       },
       {
-        col: 12,
+       col: colSize,
         callback: itemData.callback,
         groups: !!parameter
-          ? parameter?.map((v) => ({
+        ? parameter.map((v) => ({
               type: v.type.includes("text") ? "text" : v.type,
               id: v.type + v.id,
               label: v.description,
@@ -85,39 +105,21 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
             }))
           : [],
       },
-      // {
-      //   col: 12,
-      //   callback: itemData.callback,
-      //   groups: !!parameter
-      //     ? parameter?.map((v) => ({
-      //         id: "inputparameterFileid",
-      //         label: "edit Name",
-      //         name: "parameter_name",
-      //         options: itemData.options[0],
-      //         control: "input",
-      //         isSubmit: itemData.isSubmit,
-      //         isRequired: !itemData?.values?.paramters,
-      //         itemVal: itemData.values ? itemData.values["parameter_name"] : '',
-      //       }))
-      //     : [],
-      // },
+      
     ];
-  
+    
     return dt;
   };
   
-
-
   return (
     <>
       <CommonModel
         formDataAction={getItemData}
-        columns={config.STEP_PARAMETER}
+        columns={config.STEPTYPE}
         insertApi={`/job-steps/${node_Id || 0}/name-save` || "step-type"}
-        getApi={`/job-steps/${node_Id || 0}/` || "step-type/parameter/get"}
+        getApi="step-type/parameter/get"
         title={name}
-        defaultObj={defaultObj}
-        // options={[]}
+        defaultObj={[defaultObj]}
         tableTitle='step-parameter'
       />
 
