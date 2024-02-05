@@ -81,8 +81,6 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
     });
  
   };
-  
-  
 
   return (
     <>

@@ -70,7 +70,7 @@ const { setClientId } = useClientId();
         userName: yup
             .string()
             .required('User name is required'),
-            client_id: yup
+        client_id: yup
             .string()
             .required('User id is required'),
         password: yup

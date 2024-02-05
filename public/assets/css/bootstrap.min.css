@@ -4631,10 +4631,12 @@ left: 450px;
     overflow-y: scroll;
     -ms-overflow-style: none;
     scrollbar-width: none; */
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /*Firefox*/
 }
 
 .card-title {
-    margin-bottom: var(--bs-card-title-spacer-y)
+    margin-bottom: var(--bs-card-title-spacer-y);
 }
 .card-subtitle {
     margin-top: calc(-.5 * var(--bs-card-title-spacer-y));

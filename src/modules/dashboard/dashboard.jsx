@@ -132,6 +132,7 @@ const Dashboard = () => {
         break;
     }
   };
+  
   const getMenusRoutes = () => {
     if (!menuData?.length) return [];
     //console.log(menuData);
@@ -150,9 +151,11 @@ const Dashboard = () => {
     //   });
     return routes;
   };
+
   const logout = () => {
     auth.logOut();
   };
+
   const changeScreenMode = (mode) => {
     if (mode) {
       document.body.requestFullscreen();
@@ -161,6 +164,7 @@ const Dashboard = () => {
     }
     setFullScreenMode(mode);
   };
+
   const splitIntoChunk = (arr, chunk) => {
     let tempArray = [];
     for (let i = 0; i < arr.length; i += chunk) {
@@ -168,6 +172,7 @@ const Dashboard = () => {
     }
     return tempArray;
   };
+
   useEffect(() => {
     const storedClient_Id = localStorage.getItem("client_Id");
     if (storedClient_Id) {
@@ -187,6 +192,7 @@ const Dashboard = () => {
     localStorage.setItem("item", item);
     setProjectID(item);
   };
+
   return (
     // <div id="layout-wrapper" > data-layout-mode="layout-mode-light"
     <div id="layout-wrapper">

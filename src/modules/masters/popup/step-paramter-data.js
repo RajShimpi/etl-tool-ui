@@ -6,7 +6,6 @@ export const getstepparameterFields = (itemData) => {
       disabled: itemData.disabled,
       groups: [
         {
-        
           id: "inputparameterFileid",
           label: "edit Name",
           name: "parameter_name",

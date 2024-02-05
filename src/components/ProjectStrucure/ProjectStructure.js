@@ -48,8 +48,6 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
     };
   }, [project_id]);
 
-
-
   const getProjects = () => {
     setProjects([]);  
     // const project_id = localStorage.getItem('item')
@@ -74,13 +72,10 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
     setIsOpen(!isOpen);
   };
 
-
-
   const toggleNested = (e, name) => {
     e.stopPropagation();
     if (!e.target.closest('.contextMenu') && !e.target.closest('.modal'))
       setShowNested({ ...showNested, [name]: !showNested[name] });
-
   };
 
   const closeContextMenu = (e, item) => {
@@ -106,11 +101,13 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
       return root;
     }, []);
   }
+
   const callback = (item, type) => {
     // e.stopPropagation();
     setShow({ ...isShow, [item.file_name]: !isShow[item.file_name] });
     setType(type);
   }
+
   // console.log("projects:,", projects);
   // const toggleFile = (projectIndex, file) => {
   //   const updatedProject = [...project];
@@ -147,8 +144,6 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
     setProjects((prevData) => ([...prevData]));
   }
 
-
-
   const processData = (data, item, isReset) => {
     data.forEach((x, index) => {
       if (x.id === item.id && !isReset) {
@@ -166,6 +161,7 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
     });
     return data;
   }
+
   const handleFileClick = (file_id) => {
     console.log("File ID clicked in ProjectStructure:", file_id);
     onFileClickCallback(file_id)
@@ -209,9 +205,7 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
             onClick={toggleSidebar}
           />
         </div>
-        <ul className='nav-list' style={{ textColor }}
-       
-        >
+        <ul className='nav-list' style={{ textColor }}>
           {projects.map((project, index) => (
             <div key={index} ref={containerRef} onClick={(e) => toggleNested(e, project.project_name)} onContextMenu={(e) => handleContextMenu(e, project.item)}>
               <li>

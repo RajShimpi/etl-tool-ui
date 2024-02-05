@@ -11,16 +11,17 @@ import axios from '../../modules/services/axios';
 import { TiPin } from "react-icons/ti";
 import { RiUnpinFill } from "react-icons/ri";
 
-
 function ComponentTool({ textColor }) {
   const [isOpen, setIsOpen] = useState(false);
   const [apiData, setApiData] = useState([]);
   const [components, setComponents] = useState([]);
   const [fix, setFix] = useState(true);
   const [isPinned, setIsPinned] = useState(true);
+
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
+
   useEffect(() => {
     axios.getWithCallback('step-type/', (data) => {
       setApiData(data);
@@ -36,7 +37,7 @@ function ComponentTool({ textColor }) {
       });
 
     });
-  
+
   }, []);
 
   // const toggleSidebar = (e) => {
@@ -44,10 +45,6 @@ function ComponentTool({ textColor }) {
   //   setIsOpen(false);
   //   setIconClicked(true);
   // };
-
-
-
-  
 
   const handleCollapseToggle = (index) => {
     setComponents((prevComponents) =>
@@ -74,20 +71,18 @@ function ComponentTool({ textColor }) {
     }
   };
 
-  
-
   return (
     <div className={`component-tool ${isOpen ? 'open' : ''} right-sidebar`}
-    onMouseEnter={handleSidebarHover}
-        onMouseLeave={handleSidebarLeave}
+      onMouseEnter={handleSidebarHover}
+      onMouseLeave={handleSidebarLeave}
     >
       <div className='logo_details' style={{ textColor }}>
         <div className='logo_name me-2'>Component Tool</div>
         {isOpen && (isPinned ? (
-             <RiUnpinFill size={22} className="pushPinIcon" onClick={() => {setIsPinned(!isPinned); setFix(!fix);}} />
-          ) : (
-            <TiPin size={22} className="pushPinIcon" onClick={() => {setIsPinned(!isPinned); setFix(!fix);}} />
-          ))}
+          <RiUnpinFill size={22} className="pushPinIcon" onClick={() => { setIsPinned(!isPinned); setFix(!fix); }} />
+        ) : (
+          <TiPin size={22} className="pushPinIcon" onClick={() => { setIsPinned(!isPinned); setFix(!fix); }} />
+        ))}
         <DensityMediumIcon
           className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`}
           id='btn'
@@ -130,7 +125,7 @@ function groupDataBy(data, property) {
     const key = item[property];
     if (!acc[key]) {
       acc[key] = [];
-    } 
+    }
     acc[key].push(item);
     return acc;
   }, {});

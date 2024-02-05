@@ -155,7 +155,6 @@ const OverviewFlow = () => {
     // eslint-disable-next-line
   }, [setNodes, setAllNodes, jobDataId]);
   // console.log(nodes);
-
   const onDragOver = (event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
