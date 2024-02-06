@@ -3,23 +3,19 @@ import CommonFormWithList from '../components/common-form-with-list';
 import config from "../components/config/config.json"
 import axios from '../services/axios';
 import { getJobScheduleFields } from './job-schedule-data';
+import auth from '../user/auth';
 
 const JobSchedule = () => {
 
     const [jobschedule, setJobschedule] = useState([]);
-    // const [clients, setClients] = useState([]);
     const [project, setProject] = useState([]);
     const [job, setJob] = useState([]);
 
-    const client_Id = localStorage.getItem("client_Id");
+    const client_Id = auth.getStorageData("client_Id");
 
     useEffect(() => {
         axios.getWithCallback('job-schedule/', (data) => setJobschedule(data.map(x => { return { value: x.id, label: x.name } })))
     }, []);
-
-    // useEffect(() => {
-    //     axios.getWithCallback('clients/', (data) => setClients(data.map(y => ({ value: y.id, label: y.name }))))
-    // }, []);
 
     useEffect(() => {
         axios.getWithCallback(`projects/client/${client_Id}`, (data) => setProject(data.map(z => ({ value: z.id, label: z.project_name }))))

@@ -24,6 +24,18 @@ export const getStepTypeParameter = (itemData) => {
             itemVal: itemData.values ? itemData.values["parameter_id"] : '',
         },
         {
+            type: "text",
+            id: "inputParams",
+            label: "Params",
+            name: "params",
+            control: "textarea",
+            isRequired: false,
+            itemVal: itemData.values ? itemData.values["params"] : '',
+            span: itemData.message?.params,
+            apiDataType: "json"
+
+        },
+        {
             type: "checkbox",
             id: "inputRequired",
             label: "Required",
@@ -31,7 +43,7 @@ export const getStepTypeParameter = (itemData) => {
             control: "input",
             isRequired: false,
             itemVal: itemData.values ? itemData.values["required"] : '',
-        }
+        },
         ]
     }];
 }

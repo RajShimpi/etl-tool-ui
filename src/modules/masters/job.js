@@ -3,6 +3,7 @@ import config from "../components/config/config.json"
 import axios from '../services/axios';
 import { getJobFields } from './job-data';
 import CommonModel from '../components/common-modal';
+
 const Job = () => {
 
     const [job, setJob] = useState([]);
@@ -21,6 +22,7 @@ const Job = () => {
     useEffect(() => {
         axios.getWithCallback('projects/', (data) => setProject(data.map(z => ({ value: z.id, label: z.project_name }))))
     }, []);
+
     useEffect(() => {
         axios.getWithCallback('clients/', (data) => setClient(data.map(c => ({ value: c.id, label: c.name }))))
     }, []);

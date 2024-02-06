@@ -1,17 +1,11 @@
 import React, { useState, useEffect } from 'react';
-// import CommonFormWithList from '../components/common-form-with-list';
-// import config from "../components/config/config.json"
-// import { getProjectFields } from './project-data';
-// import axios from '../services/axios';
-import { getstepparameterFields } from './step-paramter-data';
 import axios from '../../services/axios';
-import CommonFormWithList from '../../components/common-form-with-list';
 import config from "../../components/config/config.json"
 import CommonModel from '../../components/common-modal';
 
 
 const StepParameter = ({ node_Id, step_type_id, name }) => {
-  // console.log(node_Id, "name");
+
   const [parameter, setparameter] = useState([]);
   const [editName, setEditName] = useState('');
   const colSize = parameter.length <= 2 ? 6 : 4;
@@ -27,6 +21,7 @@ if (parameter.length === 1) {
 } else {
   maxWidth = '60%';
 }
+
 const modalStyles = `.modal-lg, .modal-xl {max-width: ${maxWidth};}`;
 const styleTag = document.createElement('style');
 styleTag.textContent = modalStyles;
@@ -44,19 +39,16 @@ document.head.appendChild(styleTag);
               try {
                 axios.getWithCallback(`${resource}`,(data)=>{
                   parameter.options =data;
-                  // console.log("data:",data);
                 });
                
               } catch (error) {
                 console.error(`Error fetching resource ${resource}:`, error);
               }
             }
-            // console.log("resource:",resource);
           }));
           
           setparameter(data.parameters);
         });
-        // console.log("response:",response);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -68,7 +60,6 @@ document.head.appendChild(styleTag);
   useEffect(() => {
     axios.getWithCallback(`job-steps/${node_Id || 0}`, (data) => setEditName(data));
   }, []);
-//  console.log(editName);
 
   let defaultObj = { step_name:'',  type: '', name: '', img: '', group: '', parametres: '' };
 

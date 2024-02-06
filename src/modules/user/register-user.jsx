@@ -116,7 +116,7 @@ const RegisterUser = (props) => {
     const onsubmit = (e) => {
         let obj = prepareRegisterObj();
 
-        console.log(obj);
+        // console.log(obj);
 
         e.preventDefault();
         // setSubmit(true);

@@ -10,7 +10,8 @@ import { AddUpdateDeleteFileAndFolder } from '../PopupComponent';
 import FolderIcon from '@mui/icons-material/Folder';
 import { TiPin } from "react-icons/ti";
 import { RiUnpinFill } from "react-icons/ri";
-import { useProject } from '../JobDataContext';
+import { useProject, useProjectid } from '../JobDataContext';
+import auth from '../../modules/user/auth';
 function ProjectStructure({ textColor, onFileClickCallback }) {
   const [isOpen, setIsOpen] = useState(false);
   const [projects, setProjects] = useState([]);
@@ -19,11 +20,9 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
   const [showNested, setShowNested] = useState({});
   const [isShow, setShow] = useState({});
   const [fix, setFix] = useState(true);
-// const {projects_id}=useProject
+  const {projectID}=useProjectid([])
   const containerRef = useRef(null);
-  // const [data, setData] = useState([]);
-  // const [items, setItems] = useState([]);
-  const project_id = localStorage.getItem('item')
+
   const handleDocumentClick = (event) => {
     event.stopPropagation();
     if (containerRef.current && !containerRef.current.contains(event.target) && !event.target.closest('.contextMenu') &&
@@ -46,13 +45,12 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
       document.removeEventListener('click', handleDocumentClick);
       window.removeEventListener('keydown', close);
     };
-  }, [project_id]);
+  }, [projectID]);
 
   const getProjects = () => {
     setProjects([]);  
-    // const project_id = localStorage.getItem('item')
-    // console.log(project_id);
-    axios.getWithCallback(`projects/${project_id}`, (dt) =>  { 
+    
+    axios.getWithCallback(`projects/${projectID}`, (dt) =>  { 
       // data.map((dt, inx) => {
       let url = 'project-files/get-folder-hierarchy?projectId=' + dt.id;
         axios.getWithCallback(url, (subdata) => {
@@ -163,7 +161,7 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
   }
 
   const handleFileClick = (file_id) => {
-    console.log("File ID clicked in ProjectStructure:", file_id);
+ 
     onFileClickCallback(file_id)
   };
   const [isPinned, setIsPinned] = useState(true);

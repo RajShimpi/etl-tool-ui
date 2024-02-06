@@ -1,4 +1,3 @@
-import config from '../components/config/config.json'
 const getTypeConfigMaster = (itemData) => {
     return [{
         col: 3,

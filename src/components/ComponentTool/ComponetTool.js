@@ -32,19 +32,8 @@ function ComponentTool({ textColor }) {
         data: groupedData[group],
       }));
       setComponents(newComponents);
-      data.forEach(item => {
-        // console.log('ID:', item.id, 'Name:', item.name);
-      });
-
-    });
-
+  });
   }, []);
-
-  // const toggleSidebar = (e) => {
-  //   e.stopPropagation();
-  //   setIsOpen(false);
-  //   setIconClicked(true);
-  // };
 
   const handleCollapseToggle = (index) => {
     setComponents((prevComponents) =>

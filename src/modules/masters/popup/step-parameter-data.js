@@ -14,7 +14,6 @@ export const getstepparameterFields = (itemData) => {
         itemVal: itemData.values ? itemData.values["parameter_name"] : '',
 
       },
-      // Other field configurations...
       ]
     }];
   }

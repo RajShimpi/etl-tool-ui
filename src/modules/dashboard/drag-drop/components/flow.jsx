@@ -23,10 +23,8 @@ import "../../../../components/MainComponent.css";
 import Modal from "../../../components/modal-popup";
 
 import axios from "../../../services/axios";
-import StepParameter from "../../../masters/popup/step-parameter";
-import { useJobData, useProject, useProjectid } from "../../../../components/JobDataContext";
+import { useJobData, useProject, useProjectId, useProjectid } from "../../../../components/JobDataContext";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { DeleteForever } from "@mui/icons-material";
 import JobStepParameterMaster from "../../../masters/job-step-param-master";
 
 const nodeTypes = { node: Node };
@@ -80,22 +78,18 @@ const OverviewFlow = () => {
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
   const { jobDataId } = useJobData(null);
   const { project_Id } = useProject();
-  // const project_id = localStorage.getItem("item");
-
+  const {projectID}=useProjectid([])
   useEffect(() => {
     setEdges([]);
     setNodes([])
-  }, [project_Id]);
+  }, [projectID]);
 
   useEffect(() => {
-    // const jobDataId = localStorage.getItem("jobDataId");
 
     if (jobDataId) {
-      // console.log("jobDataId:", jobDataId);
       axios.getWithCallback("job-steps", (data) => setData(data));
 
       axios.getWithCallback(`job-steps/${jobDataId}/job`, (data) => {
-        // console.log("Data from job-steps API:", data);
 
         const dataNodes = data.map((item) => ({
           id: "" + item.id,
@@ -112,8 +106,6 @@ const OverviewFlow = () => {
           },
           node_active: item.node_active,
         }));
-
-        // console.log("dataNodes:", dataNodes);
 
         const dataEdgesok = data.map((item) => ({
           id: "" + item.id,
@@ -154,7 +146,7 @@ const OverviewFlow = () => {
     }
     // eslint-disable-next-line
   }, [setNodes, setAllNodes, jobDataId]);
-  // console.log(nodes);
+
   const onDragOver = (event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
@@ -190,7 +182,6 @@ const OverviewFlow = () => {
       position,
       data: { heading: name, img: img },
     };
-    // console.log("newNode:",newNode);
     setNodes((es) => es.concat(newNode));
     setData((es) => es.concat(newNode));
     setSelectedNode((newNode.a = name));
@@ -198,7 +189,7 @@ const OverviewFlow = () => {
   };
 
   const saveNodeToDatabase = () => {
-    // console.log("activeNodes:",activeNodes);
+
     const dataFromNodes = allNodes.map((item) => ({
       id: parseInt(item.id),
       job_id: jobDataId,
@@ -212,8 +203,6 @@ const OverviewFlow = () => {
           item.id === position.id ? position.position_Y : item.position.y,
       },
     }));
-
-    // console.log("dataFromNodes:", dataFromNodes);
 
     const dataFromEdgesOk = edges
       .filter(
@@ -293,12 +282,8 @@ const OverviewFlow = () => {
       ...dataFromNodesActive.find((nodeActive) => nodeActive.id === node.id),
     }));
 
-    // console.log("Updated Edges Ok:", updatedEdgesOk);
-    // console.log("Updated Edges Error:", updatedEdgesError);
-    // console.log("Combined Data:", combinedData);
-
     axios.postWithCallback("job-steps/data-save", combinedData);
-    // axios.putWithCallback(`job-steps/node-active`, nodesActive);
+
   };
 
   const onNodeDragStop = (event, node) => {
@@ -309,7 +294,7 @@ const OverviewFlow = () => {
           position: { x: node.position.x, y: node.position.y },
         };
       }
-      console.log("edges", edges);
+    
       return n;
     });
 
@@ -322,7 +307,7 @@ const OverviewFlow = () => {
       ...position.find((id) => id.id === node.id),
     }));
     setAllNodes(combinedDataposition);
-    // console.log(allNodes, "update");
+
   };
 
   const textRef = useRef(null);
@@ -360,13 +345,11 @@ const OverviewFlow = () => {
           borderRadius: "4px",
         },
       };
-      console.log("newEdge:", newEdge);
+       
       setEdges((eds) => addEdge(newEdge, eds));
     },
     [setEdges]
   );
-
-  // console.log("edges:", edges);
 
   const [nodeName, setNodeName] = useState("Node 1");
 
@@ -471,16 +454,6 @@ const OverviewFlow = () => {
     nodeId(node);
   };
 
-  // const saveNodeActiveStatus = () => {
-  //   console.log("nodesActiveStatus:",nodesActive);
-  //   const dataToUpdate = [nodesActive].map((item)=>({
-  //     id:item.id,
-  //     node_active: false,
-  //   }));
-  //   console.log("dataToUpdate:dataToUpdate",dataToUpdate);
-  //   setNodesActive(dataToUpdate)
-  // };
-
   const onNodeContextMenu = useCallback(
     (event, node) => {
       event.preventDefault();
@@ -500,7 +473,7 @@ const OverviewFlow = () => {
         right: left < 0 ? -left : 0,
         bottom: top < 0 ? -top : 0,
       });
-      // console.log("node.id:",node.id);
+
       setActiveNodes(node);
     },
     [setMenu]
@@ -522,7 +495,6 @@ const OverviewFlow = () => {
       setEdges((edges) => edges.filter((edge) => edge.source !== menu.id));
       setMenu(null);
 
-      // console.log("activeNodes:nodes",activeNodes);
     }
   }, [menu, setNodes, setEdges, activeNodes]);
 
@@ -535,7 +507,6 @@ const OverviewFlow = () => {
         <ReactFlowProvider>
           <div className="reactflow-wrapper" ref={reactFlowWrapper}>
             <ReactFlow
-              // onLoad={onInits}
               nodes={Node}
               edges={edges}
               nodeTypes={nodeTypes}

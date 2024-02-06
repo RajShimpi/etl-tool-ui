@@ -53,6 +53,10 @@ const getStorageData = (keyName) => {
             return localObj.expires_in;       
         case "manager":
             return localObj.user?.userProfile?.manager;
+        case "client":
+            return localObj.user.client;
+        case "projectid":
+            return localObj.user.projectid;
         
         default:
             return '';

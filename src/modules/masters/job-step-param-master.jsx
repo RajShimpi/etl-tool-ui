@@ -1,13 +1,11 @@
 import axios from '../services/axios';
-// import config from "../../components/config/config.json";
-// import CommonModel from '../../components/common-modal';
 import React, { useState, useEffect } from 'react';
 import FormCommon from '../components/form-common';
 import _ from 'lodash';
 
 
 const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClose }) => {
-    // console.log(node_Id, "name");
+
     const [parameter, setparameter] = useState([]);
     const [editName, setEditName] = useState('');    
     const [controlData, setControlData] = useState([]);
@@ -23,8 +21,6 @@ const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClo
       setData((prevData) => ({ ...prevData, step_name: name }));
     }, [name]);
 
-   
-
     useEffect(() => {
       const fetchData = async () => {
         try {
@@ -32,7 +28,7 @@ const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClo
             const options = {};
             await Promise.all(data.stepTypeParameters.map(async (parameter) => {
               const resource =parameter.parameter?.resource;
-              console.log(resource);
+              // console.log(resource);
               if (resource && resource != "NA") {
                 try {
                   const resourceData = await axios.get(`${resource}`);
@@ -46,7 +42,6 @@ const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClo
             
             setparameter(data.stepTypeParameters);
           });
-          // console.log(response);
         } catch (error) {
           console.error('Error fetching data:', error);
         }
@@ -55,7 +50,7 @@ const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClo
   
       fetchData();
     }, [step_type_id]);
-    // console.log(parameter);
+
     useEffect(() => {
       if(node_Id) {
       axios.getWithCallback(`job-steps/${node_Id || 0}`, (data) => setEditName(data));
@@ -72,10 +67,10 @@ const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClo
        });
       }
     }, [node_Id]);
-  //  console.log(editName);
+
   
     let defaultObj = { step_name: "", type: '', name: '', img: '', group: '', parametres: '' };
-    // console.log(parameter, "parameter");
+  
     const getItemData = (itemData) => {
       if(!itemData)
         return;
@@ -112,25 +107,7 @@ const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClo
               }))
             : [],
         },
-        // {
-        //   col: 12,
-        //   callback: itemData.callback,
-        //   groups: !!parameter
-        //     ? parameter?.map((v) => ({
-        //         id: "inputparameterFileid",
-        //         label: "edit Name",
-        //         name: "parameter_name",
-        //         options: itemData.options[0],
-        //         control: "input",
-        //         isSubmit: itemData.isSubmit,
-        //         isRequired: !itemData?.values?.paramters,
-        //         itemVal: itemData.values ? itemData.values["parameter_name"] : '',
-        //       }))
-        //     : [],
-        // },
-        
       ];
-      // console.log("de:",dt)
       setControlData(dt);
       return dt;
     };

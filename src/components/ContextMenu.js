@@ -2,12 +2,10 @@ import React, { useState, useEffect } from "react";
 import "./MainComponent.css";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import PopupComponent from "./PopupComponent";
 import FolderIcon from "@mui/icons-material/Folder";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
-import RecursiveFolder from "./ProjectStrucure/recursive-folders";
 
-const ContextMenu = ({ item, onToggleFiles, popType, project_id, parent_id,id, onClose, callback, hideDeleteUpdate }) => {
+const ContextMenu = ({ item, popType, project_id, parent_id,id, onClose, callback, hideDeleteUpdate }) => {
   const [popupType, setPopupType] = useState(null);
   const [popupPosition, setPopupPosition] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -17,8 +15,6 @@ const ContextMenu = ({ item, onToggleFiles, popType, project_id, parent_id,id, o
   };
 
   const openPopup = (e,type, position) => {
-    // setPopupType(type);
-    // setPopupPosition(position);
     callback(item, type); 
     onClose(e, item);
   };

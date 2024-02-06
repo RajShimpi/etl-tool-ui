@@ -98,7 +98,7 @@
     "type",
     "resource"
   ],
-  "STEP_TYPE_PARAMETERS": ["step.name", "parameter.name", "required"],
+  "STEP_TYPE_PARAMETERS": ["step.name", "parameter.name", "required","params"],
   "Job_Schedule": [
     "client.name",
     "project.project_name",

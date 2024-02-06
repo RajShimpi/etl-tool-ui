@@ -4,10 +4,8 @@ import ProjectStructure from "./ProjectStrucure/ProjectStructure";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowUp';
 import "./MainComponent.css";
 import OverviewFlow from "../modules/dashboard/drag-drop/components/flow";
-// import { FileIdProvider } from "./fileContext";
-// import { JobDataProvider } from "./JobDataContext";
 
-const MainComponent = ({onFileClickCallback}) => {
+const MainComponent = () => {
   const [isProjectStructureOpen, setIsProjectStructureOpen] = useState(false);
   const [isComponetToolOpen, setIsComponetToolOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -77,11 +75,7 @@ const MainComponent = ({onFileClickCallback}) => {
       return "100%";
     }
   };
-  const handleFileClick = (file_id) => {
-    // Handle file_id in ProjectStructure
-    console.log("File ID clicked in maincomponet:", file_id);
-    // Add your logic here to handle the file_id
-};
+
 
   return (
     <>
@@ -116,15 +110,15 @@ const MainComponent = ({onFileClickCallback}) => {
             <ProjectStructure
               toggleSidebar={handleProjectStructureToggle}
               textColor={themes[currentThemeIndex].textColor}
-              onFileClickCallback={handleFileClick} 
+         
             />
           </div>
           <div style={{ width: calculatePhotoWidth() }}>
-          {/* <JobDataProvider> */}
+      
             <OverviewFlow
              textColor={themes[currentThemeIndex].textColor}
               />
-              {/* </JobDataProvider> */}
+           
           </div>
           <div className={` ${isComponetToolOpen ? "open" : ""}`}>
             <ComponetTool

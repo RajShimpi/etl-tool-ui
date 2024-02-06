@@ -3,16 +3,14 @@ import Folder from "../modules/masters/popup/add-folder";
 import AddFile from "../modules/masters/popup/add-file";
 import Edit from "../modules/masters/popup/edit-file";
 import Delete from "../modules/masters/popup/delete";
-// import { getFolderFields } from '../modules/masters/popup/add-folder-data';
 import axios from "../modules/services/axios";
 import FormCommon from "../modules/components/form-common";
 import { getCommonFields } from "../modules/masters/popup/common-data";
-
-
+import auth from "../modules/user/auth";
 
 const PopupComponent = ({ onClose, actionType, project_id, id }) => {
   let contentComponent;
-console.log(project_id,id,"context");
+ 
   switch (actionType) {
     case "AddFolder":
       contentComponent = <Folder project_id={project_id} id={id} onClose={onClose} />;
@@ -29,10 +27,6 @@ console.log(project_id,id,"context");
     default:
       contentComponent = null;
   }
-  // const hhh = () => {
-  //   console.log(project_id);
-  //   console.log(id);
-  // };
 
   return (
     <div className="popup">
@@ -50,7 +44,6 @@ export default PopupComponent;
 export const AddUpdateDeleteFileAndFolder = (props) => {
   const [data, setData] = useState("");
 
-
     useEffect(() => {
       if(props.item?.file_name)
       setData({ file_name: props.type == 'Edit' ? props.item?.file_name : "" })
@@ -65,8 +58,7 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
           }
   }
 
-  const client_Id = localStorage.getItem("client_Id");
-  // console.log("client_Id:",client_Id);
+  const clientid = auth.getStorageData("client_id");
   const onsubmit = (e) => {
     e.preventDefault();
     if (!e.target.checkValidity()) {
@@ -74,8 +66,8 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
       e.target.classList.add("was-validated");
       //props.validationCallback(true);
     } else {
-      let item = { id:props.item.id, file_name: data.file_name, project_id: props.item.project_id, type: props.type.includes("Folder") ? 'Folder' : 'File', parent_id: props.item.id === 0 ? null : props.item.id, client_Id:parseInt(client_Id)};
-      console.log("item:",item);
+      let item = { id:props.item.id, file_name: data.file_name, project_id: props.item.project_id, type: props.type.includes("Folder") ? 'Folder' : 'File', parent_id: props.item.id === 0 ? null : props.item.id, clientid:parseInt(clientid)};
+     
       switch(props.type) {
         case "AddFolder":
           axios.postWithCallback("project-files",

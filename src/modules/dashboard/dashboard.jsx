@@ -46,7 +46,6 @@ const Dashboard = () => {
   const { setClientId } = useClientId();
   const [project, setProject] = useState([]);
   const [selectedChildItem, setSelectedChildItem] = useState(false);
-  const { setProject_Id } = useProject();
   const { setProjectID } = useProjectid();
   const [isMenuOpen, setMenuOpen] = useState(false);
 
@@ -55,10 +54,10 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    const storedClientId = localStorage.getItem("clientId");
-
-    if (clientId === null && storedClientId) {
-      setClientId(storedClientId);
+    const storedClientId = auth.getStorageData("clientId");
+    const client=storedClientId.id
+    if (clientId === null && client) {
+      setClientId(client);
     }
 
     if (clientId) {
@@ -92,11 +91,11 @@ const Dashboard = () => {
     return () => {};
   }, [clientId, setClientId]);
 
-  useEffect(() => {
-    if (clientId) {
-      localStorage.setItem("clientId", clientId);
-    }
-  }, [clientId]);
+  // useEffect(() => {
+  //   if (clientId) {
+  //     // localStorage.setItem("clientId", clientId);
+  //   }
+  // }, [clientId]);
 
   // console.log("clientId:", clientId);
   // useEffect(() => {
@@ -174,23 +173,24 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    const storedClient_Id = localStorage.getItem("client_Id");
-    if (storedClient_Id) {
+    const storedClientid = auth.getStorageData("client");
+    const id = storedClientid.id
+ 
+    if (id) {
       axios.getWithCallback(
-        `projects/client/${storedClient_Id}`,
+        `projects/client/${id}`,
         (projectsData) => {
           setProject(projectsData);
         }
       );
     }
   }, []);
-  // console.log("project:",project);
 
-  const onhandelProject = (item) => {
-    // console.log("item:", item);
-    setProject_Id(item);
-    localStorage.setItem("item", item);
-    setProjectID(item);
+
+  const onhandelProject = (projectid) => {
+    // auth.setAuthData(projectid);
+    setProjectID(projectid);
+    
   };
 
   return (
