@@ -11,8 +11,8 @@ const JobSchedule = () => {
     const [project, setProject] = useState([]);
     const [job, setJob] = useState([]);
 
-    const client_Id = auth.getStorageData("client_Id");
-
+    const client= auth.getStorageData("client");
+const client_Id=client.id
     useEffect(() => {
         axios.getWithCallback('job-schedule/', (data) => setJobschedule(data.map(x => { return { value: x.id, label: x.name } })))
     }, []);

@@ -20,14 +20,14 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
   const [showNested, setShowNested] = useState({});
   const [isShow, setShow] = useState({});
   const [fix, setFix] = useState(true);
-  const {projectID}=useProjectid([])
+  const { projectID } = useProjectid([])
   const containerRef = useRef(null);
 
   const handleDocumentClick = (event) => {
     event.stopPropagation();
     if (containerRef.current && !containerRef.current.contains(event.target) && !event.target.closest('.contextMenu') &&
-    !event.target.closest('.modal')) {
-    closeContextMenu(event);
+      !event.target.closest('.modal')) {
+      closeContextMenu(event);
     }
   };
 
@@ -48,23 +48,23 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
   }, [projectID]);
 
   const getProjects = () => {
-    setProjects([]);  
-    
-    axios.getWithCallback(`projects/${projectID}`, (dt) =>  { 
+    setProjects([]);
+if(projectID){
+    axios.getWithCallback(`projects/${projectID}`, (dt) => {
       // data.map((dt, inx) => {
       let url = 'project-files/get-folder-hierarchy?projectId=' + dt.id;
-        axios.getWithCallback(url, (subdata) => {
-          var treeData = treefy(subdata);
-          dt.treeData = treeData;
-          dt.isRightClick = false;
-          dt.item = { file_name: dt.project_name, parent:null, parent_id:null, id: 0, project_id: dt.id }
-          // setData((prevData) => [...prevData, { prjId : dt.id, heirarchy: treeData}]);
-          setProjects((prevData) => [...prevData, dt])
-        });
+      axios.getWithCallback(url, (subdata) => {
+        var treeData = treefy(subdata);
+        dt.treeData = treeData;
+        dt.isRightClick = false;
+        dt.item = { file_name: dt.project_name, parent: null, parent_id: null, id: 0, project_id: dt.id }
+        // setData((prevData) => [...prevData, { prjId : dt.id, heirarchy: treeData}]);
+        setProjects((prevData) => [...prevData, dt])
+      });
       // });
       // setProjects(data);
-    });
-  };  
+    });}
+  };
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -130,7 +130,7 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
 
   const onRightCallback = (item, isReset, isHeaderClick) => {
     projects.forEach((prj) => {
-    
+
       if (isHeaderClick && prj.id === item.project_id) {
         prj.isRightClick = true;
       } else {
@@ -161,8 +161,9 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
   }
 
   const handleFileClick = (file_id) => {
- 
+
     onFileClickCallback(file_id)
+    console.log(file_id);
   };
   const [isPinned, setIsPinned] = useState(true);
 
@@ -189,19 +190,24 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
         onMouseEnter={handleSidebarHover}
         onMouseLeave={handleSidebarLeave}
       >
-         <div className='logo_details' style={{ textColor }}>
+        <div className='logo_details' style={{ textColor }}>
           {isOpen && (isPinned ? (
-             <RiUnpinFill size={23} className="pushPinIcon" onClick={() => {setIsPinned(!isPinned); setFix(!fix);}} />
+            <RiUnpinFill size={22} className="pushPinIcon" onClick={() => { setIsPinned(!isPinned); setFix(!fix); }} />
           ) : (
-            <TiPin size={22} className="pushPinIcon" onClick={() => {setIsPinned(!isPinned); setFix(!fix);}} />
+            <TiPin size={22} className="pushPinIcon" onClick={() => { setIsPinned(!isPinned); setFix(!fix); }} />
           ))}
           <div className='logo_name ms-2'>Project Structure</div>
-        
+
           <DensityMediumIcon
             className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`}
             id='btn'
-            onClick={toggleSidebar}
+            onClick={() => {
+              toggleSidebar();
+              setIsPinned(!isPinned);
+              setFix(!fix);
+            }}
           />
+
         </div>
         <ul className='nav-list' style={{ textColor }}>
           {projects.map((project, index) => (
@@ -209,9 +215,9 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
               <li>
                 <div className='proicon'>
                   <FolderIcon fontSize='medium' />
-                  <span className='link_name' style={{ marginLeft: '5px' }}>
+                  <div className='link_name' style={{ marginLeft: '5px' }}>
                     {project.project_name}
-                  </span>
+                  </div>
                 </div>
                 {contextMenuPosition && project.isRightClick && (
                   <div style={{ display: !project.isRightClick && "none" }}>

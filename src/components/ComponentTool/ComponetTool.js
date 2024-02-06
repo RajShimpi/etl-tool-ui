@@ -72,11 +72,14 @@ function ComponentTool({ textColor }) {
         ) : (
           <TiPin size={22} className="pushPinIcon" onClick={() => { setIsPinned(!isPinned); setFix(!fix); }} />
         ))}
-        <DensityMediumIcon
-          className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`}
-          id='btn'
-          onClick={toggleSidebar}
-        ></DensityMediumIcon>
+       <DensityMediumIcon
+            className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`}
+            id='btn'
+            onClick={() => {
+              toggleSidebar();
+              setIsPinned(!isPinned);
+              setFix(!fix);
+            }}/>
       </div>
       <ul className='nav-list'>
         {components.map((component, index) => (

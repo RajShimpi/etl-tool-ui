@@ -71,18 +71,21 @@ const OverviewFlow = () => {
   const [allNodes, setAllNodes] = useState([]);
   const [step_type_id, setStep_type_Id] = useState();
   const [job_id, setJob_Id] = useState();
+  const [jobfileid, setJobFileId] = useState();
   const [nodeid, setNode_Id] = useState();
   const [editName, setName] = useState();
   const [activeNodes, setActiveNodes] = useState([]);
   const [nodesActive, setNodesActive] = useState([]);
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
   const { jobDataId } = useJobData(null);
-  const { project_Id } = useProject();
+  const { setJobDataId } = useJobData(null);
+ 
   const {projectID}=useProjectid([])
   useEffect(() => {
     setEdges([]);
     setNodes([])
-  }, [projectID,jobDataId,project_Id]);
+    setJobDataId(null)
+  }, [projectID,jobDataId]);
 
   useEffect(() => {
 
@@ -90,7 +93,7 @@ const OverviewFlow = () => {
       axios.getWithCallback("job-steps", (data) => setData(data));
 
       axios.getWithCallback(`job-steps/${jobDataId}/job`, (data) => {
-
+        setJobFileId(jobDataId)
         const dataNodes = data.map((item) => ({
           id: "" + item.id,
           step_type_id: "" + item.step_type_id,
@@ -192,7 +195,7 @@ const OverviewFlow = () => {
 
     const dataFromNodes = allNodes.map((item) => ({
       id: parseInt(item.id),
-      job_id: jobDataId,
+      job_id: jobfileid,
       step_type_id: parseInt(item.step_type_id),
       step_name: item.data?.heading || item.name,
       type: item.type,
