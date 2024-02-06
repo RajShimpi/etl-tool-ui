@@ -82,7 +82,7 @@ const OverviewFlow = () => {
   useEffect(() => {
     setEdges([]);
     setNodes([])
-  }, [projectID]);
+  }, [projectID,jobDataId,project_Id]);
 
   useEffect(() => {
 
