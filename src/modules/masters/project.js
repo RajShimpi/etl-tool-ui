@@ -6,23 +6,23 @@ import axios from '../services/axios';
 import auth from '../user/auth';
 
 const Project = () => {
-  const storedClientId = auth.getStorageData("client");
-  const client = storedClientId.client_id
+  const clientid = auth.getStorageData("client");
+
   const [clientId, setClientId] = useState();
   const [project, setProject] = useState([]);
-  const [clientIds, setClientIds] = useState([])
+  const [client, setClient] = useState([])
 
   useEffect(() => {
-    axios.getWithCallback('clients/', (data) => setClientIds(data.map(x => { return { label: x.name, value: x.id } })))
+    axios.getWithCallback('clients/', (data) => setClient(data.map(x => { return { label: x.name, value: x.id } })))
   }, [])
 
   useEffect(() => {
-    axios.getWithCallback(`clients/client/${client}`, (data) => {
+    axios.getWithCallback(`clients/client/${clientid.client_id}`, (data) => {
       const clientData = { id: data.id };
       setClientId(clientData.id);
       // setProjectId(storedrPojectId);
     });
-  }, [storedClientId]);
+  }, [clientid]);
 
   useEffect(() => {
     if (clientId) {
@@ -45,12 +45,11 @@ const Project = () => {
           getApi={`projects/client/${clientId}`}
           title="Project"
           defaultObj={defaultObj}
-          options={[project, clientIds]}
+          options={[project, client]}
           tableTitle="Projects"
         />
       )}
     </>
-
   );
 };
 

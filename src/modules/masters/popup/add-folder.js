@@ -17,7 +17,7 @@ const Folder = ({ project_id, id }) => {
                 // getApi="clients"
                 title="Add Folder"
                 defaultObj={defaultObj}
-            // tableTitle='client'
+                // tableTitle='client'
             />
         </>
     );

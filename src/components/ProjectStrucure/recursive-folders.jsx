@@ -6,7 +6,7 @@ import ContextMenu from "../ContextMenu";
 import Modal from "../../modules/components/modal-popup";
 import { AddUpdateDeleteFileAndFolder } from "../PopupComponent";
 import axios from "../../modules/services/axios";
-import { useJobData, useProjectId } from "../JobDataContext";
+import { useJobData} from "../JobDataContext";
 
 const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
   const [showNested, setShowNested] = useState({});
@@ -21,7 +21,6 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
     event.preventDefault();
     event.stopPropagation();
     setContextMenuPosition({ top: event.clientY, left: event.clientX });
-
     onRightCallback(item);
   };
 
@@ -76,7 +75,6 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
     axios.getWithCallback(`job/${item.id}/file`, (data) => {
       setJobDataId(data.id); 
     });
- 
   };
 
   return (

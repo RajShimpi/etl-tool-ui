@@ -45,7 +45,7 @@ export const ClientIdProvider = ({ children }) => {
 export const useClientId = () => {
   const context = useContext(ClientIdContext);
   if (!context) {
-    throw new Error("useJobData must be used within a JobDataProvider");
+    throw new Error("useClientId must be used within a JobDataProvider");
   }
   return context;
 };
@@ -88,7 +88,7 @@ export const ProjectProvider = ({ children }) => {
 export const useProject = () => {
   const context = useContext(ProjectContext);
   if (!context) {
-    throw new Error("useProjectId must be used within a JobDataProvider");
+    throw new Error("useProject must be used within a JobDataProvider");
   }
   return context;
 };
@@ -110,7 +110,7 @@ export const ProjectidProvider = ({ children }) => {
 export const useProjectid = () => {
   const context = useContext(ProjectIDContext);
   if (!context) {
-    throw new Error("useProjectId must be used within a JobDataProvider");
+    throw new Error("useProjectid must be used within a JobDataProvider");
   }
   return context;
 };

@@ -7,14 +7,14 @@ import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 
 const ContextMenu = ({ item, popType, project_id, parent_id,id, onClose, callback, hideDeleteUpdate }) => {
   const [popupType, setPopupType] = useState(null);
-  const [popupPosition, setPopupPosition] = useState(null);
+  // const [popupPosition, setPopupPosition] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const handleContextMenuClick = (event) => {
     event.preventDefault();
   };
 
-  const openPopup = (e,type, position) => {
+  const openPopup = (e,type) => {
     callback(item, type); 
     onClose(e, item);
   };
@@ -41,81 +41,34 @@ const ContextMenu = ({ item, popType, project_id, parent_id,id, onClose, callbac
   }, [popupType, isPopupOpen, onClose]);
 
   return (
-    <div style={{zIndex:1}}
-      className={`contextMenu ${popType === 'right' ? 'right' :''}`}
-      onContextMenu={handleContextMenuClick}
-    >
-      <div
-        className="menu-item"
-        onClick={(e) =>
-          openPopup(e,"AddFolder", { top: e.clientY, left: e.clientX + 10 }, project_id, parent_id)
-        }
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-start",
-          }}
-        >
-          <FolderIcon
-            style={{ fontSize: "medium", marginRight: "5px", marginTop: "3px" }}
-          />
+    <div style={{zIndex:1}} className={`contextMenu ${popType === 'right' ? 'right' :''}`} onContextMenu={handleContextMenuClick}>
+      <div className="menu-item" onClick={(e) => openPopup(e,"AddFolder", { top: e.clientY, left: e.clientX + 10 }, project_id, parent_id) }>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start"}}>
+          <FolderIcon style={{ fontSize: "medium", marginRight: "5px", marginTop: "3px" }}/>
           Add Folder
         </div>
       </div>
-      <div
-        className="menu-item"
-        onClick={(e) => {
-          openPopup(e,"Add", { top: e.clientY, left: e.clientX + 10 }, project_id, id);
-        }}
-      >
+      <div className="menu-item" onClick={(e) => {openPopup(e,"Add", { top: e.clientY, left: e.clientX + 10 }, project_id, id)}}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", }}>
           <InsertDriveFileIcon style={{ fontSize: "medium", marginRight: "5px", marginTop: "3px" }} />
           Add File
         </div>
       </div>
       {!hideDeleteUpdate && <>
-      <div
-        className="menu-item"
-        onClick={(e) =>
-          openPopup(e,"Edit", { top: e.clientY, left: e.clientX + 10 }, project_id, parent_id)
-        }
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-start",
-          }}
-        >
-          <EditIcon
-            style={{ fontSize: "medium", marginRight: "5px", marginTop: "3px" }}
-          />
+      <div className="menu-item" onClick={(e) => openPopup(e,"Edit", { top: e.clientY, left: e.clientX + 10 }, project_id, parent_id)}>
+        <div style={{display: "flex", alignItems: "center", justifyContent: "flex-start"}}>
+          <EditIcon style={{ fontSize: "medium", marginRight: "5px", marginTop: "3px" }}/>
           Edit
         </div>
       </div>
-      <div
-        className="menu-item"
-        onClick={(e) =>
-          openPopup(e,"Delete", { top: e.clientY, left: e.clientX + 10 }, project_id, parent_id)
-        }
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-start",
-          }}
-        >
-          <DeleteIcon
-            style={{ fontSize: "medium", marginRight: "5px", marginTop: "3px" }}
-          />
+      <div className="menu-item" onClick={(e) =>   openPopup(e,"Delete", { top: e.clientY, left: e.clientX + 10 }, project_id, parent_id) }> 
+        <div style={{display: "flex", alignItems: "center", justifyContent: "flex-start"}} > 
+          <DeleteIcon style={{ fontSize: "medium", marginRight: "5px", marginTop: "3px" }}/>
           Delete
         </div>
       </div>
       </>
-}
+      }
       {/* {popupType && (
         <PopupComponent
           onClose={closePopup}

@@ -1,4 +1,3 @@
-
 .sidebar {
   height: 1000px;
   width: 78px;
@@ -40,11 +39,9 @@ width: 220px;
 }
 
  .sidebar .logo_details .logo_name {
-  /* color: rgb(0, 0, 0);*/ 
   font-size: 15px;
   font-weight: 600;
   opacity: 0;
-  /* transition: all 0.3s ease; */
 } 
 
 .sidebar .logo_details .logo_name {
@@ -78,13 +75,9 @@ width: 220px;
 
 .folderStyle {
   list-style: none;
-  /* margin-left:20px; */
   cursor: pointer;
 }
-/* .fileName {
-  display: flex;
-  /* justify-content: center; 
-} */
+
 .folderstyle {
   list-style: none;
   margin-left: 15px;
@@ -113,10 +106,8 @@ width: 220px;
 }
 
 .sidebar i {
-  /* color: rgb(0, 0, 0); */
   height: 60px;
   line-height: 60px;
-  /* min-width: 50px; */
   font-size: 15px;
   text-align: center;
 }
@@ -135,23 +126,15 @@ width: 220px;
 
 .sidebar input {
   font-size: 15px;
-  /* color: rgb(0, 0, 0); */
   font-weight: 400;
   outline: none;
   height: 35px;
   width: 100%;
   border-radius: 5px;
-  /* background-color: rgb(0, 0, 0); */
-  /* transition: all 0.3s ease; */
 }
-
-/* .sidebar input::placeholder {
-  /* color: rgb(0, 0, 0); 
-} */
 
 .sidebar.open input {
   width: 100%;
-  /* padding: 0 -1px 0 50px; */
 }
 
 .sidebar li .proicon {
@@ -160,10 +143,8 @@ width: 220px;
   width: 100%;
   align-items: center;
   text-decoration: none;
-  /* background-color: rgba(0, 0, 0, 0); */
   position: relative;
   transition: all 0.5s ease;
-  /* color: black; */
   margin-top: 20px;
   cursor: pointer;
 }
@@ -176,17 +157,14 @@ width: 220px;
   transform: scaleX(0);
   background-color: rgba(116, 113, 113, 0.329);
   border-radius: 5px;
-  /* transition: all 0.3s ease; */
   transform-origin: left;
 }
 
 .sidebar li .proicon:hover::after {
   transform: scaleX(1);
-  /* color: rgb(0, 0, 0);  */
 }
 
 .sidebar li .proicon .link_name {
-  /* color: rgba(116, 113, 113, 0.329); */
   font-size: 15px;
   font-weight: 400;
   white-space: nowrap;
@@ -208,8 +186,8 @@ width: 220px;
   font-size: 25px;
   border-radius: 20px;
 }
+
 .proicon {
-  /* color: rgb(255, 255, 255); */
   margin-top: 20px;
 }
 

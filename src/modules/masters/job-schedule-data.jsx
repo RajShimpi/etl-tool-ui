@@ -12,8 +12,7 @@ export const getJobScheduleFields = (itemData) => {
             options: itemData.options[0],
             isRequired: true,
             itemVal: itemData.values ? itemData.values["project_id"] : '',
-        },
-        {
+        },{
             type: "text",
             id: "inputjob_id",
             label: "Job",
@@ -22,32 +21,28 @@ export const getJobScheduleFields = (itemData) => {
             options: itemData.options[1],
             isRequired: true,
             itemVal: itemData.values ? itemData.values["job_id"] : '',
-        },
-        {
+        },{
             id: "inputname",
             label: "Name",
             name: "name",
             control: "input",
             isRequired: true,
             itemVal: itemData.values ? itemData.values["name"] : '',
-        },
-        {
+        },{
             id: "inputdescription",
             label: "Description",
             name: "description",
             control: "input",
             isRequired: true,
             itemVal: itemData.values ? itemData.values["description"] : '',
-        },
-        {
+        },{
             id: "inputscheduleCron",
             label: "Schedule Cron",
             name: "scheduleCron",
             control: "input",
             isRequired: true,
             itemVal: itemData.values ? itemData.values["scheduleCron"] : '',
-        },
-        {
+        },{
             type: "checkbox",
             id: "inputactive",
             label: "Active",

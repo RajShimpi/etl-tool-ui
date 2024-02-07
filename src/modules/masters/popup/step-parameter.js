@@ -3,7 +3,6 @@ import axios from '../../services/axios';
 import config from "../../components/config/config.json"
 import CommonModel from '../../components/common-modal';
 
-
 const StepParameter = ({ node_Id, step_type_id, name }) => {
 
   const [parameter, setparameter] = useState([]);
@@ -12,21 +11,20 @@ const StepParameter = ({ node_Id, step_type_id, name }) => {
 
   let maxWidth;
 
-if (parameter.length === 1) {
-  maxWidth = '30%';
-} else if (parameter.length === 2) {
-  maxWidth = '45%';
-} else if (parameter.length === 3) {
-  maxWidth = '60%';
-} else {
-  maxWidth = '60%';
-}
+  if (parameter.length === 1) {
+    maxWidth = '30%';
+  } else if (parameter.length === 2) {
+    maxWidth = '45%';
+  } else if (parameter.length === 3) {
+    maxWidth = '60%';
+  } else {
+    maxWidth = '60%';
+  }
 
-const modalStyles = `.modal-lg, .modal-xl {max-width: ${maxWidth};}`;
-const styleTag = document.createElement('style');
-styleTag.textContent = modalStyles;
-document.head.appendChild(styleTag);
-  
+  const modalStyles = `.modal-lg, .modal-xl {max-width: ${maxWidth};}`;
+  const styleTag = document.createElement('style');
+  styleTag.textContent = modalStyles;
+  document.head.appendChild(styleTag);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,16 +35,15 @@ document.head.appendChild(styleTag);
             const resource = parameter?.resource;
             if (resource) {
               try {
-                axios.getWithCallback(`${resource}`,(data)=>{
-                  parameter.options =data;
+                axios.getWithCallback(`${resource}`, (data) => {
+                  parameter.options = data;
                 });
-               
               } catch (error) {
                 console.error(`Error fetching resource ${resource}:`, error);
               }
             }
           }));
-          
+
           setparameter(data.parameters);
         });
       } catch (error) {
@@ -56,12 +53,11 @@ document.head.appendChild(styleTag);
     fetchData();
   }, [step_type_id]);
 
-
   useEffect(() => {
     axios.getWithCallback(`job-steps/${node_Id || 0}`, (data) => setEditName(data));
   }, []);
 
-  let defaultObj = { step_name:'',  type: '', name: '', img: '', group: '', parametres: '' };
+  let defaultObj = { step_name: '', type: '', name: '', img: '', group: '', parametres: '' };
 
   const getItemData = (itemData) => {
     let dt = [
@@ -70,38 +66,36 @@ document.head.appendChild(styleTag);
         callback: itemData.callback,
         groups: [editName]
           ? [editName].map((v) => ({
-              id: "inputparameterFileid",
-              label: "Step Name",
-              name: "step_name",
-              control: "input",
-              isSubmit: itemData.isSubmit,
-              itemVal: name === 'step_name' ? v.step_name : name,
-            }))
+            id: "inputparameterFileid",
+            label: "Step Name",
+            name: "step_name",
+            control: "input",
+            isSubmit: itemData.isSubmit,
+            itemVal: name === 'step_name' ? v.step_name : name,
+          }))
           : [],
       },
       {
-       col: colSize,
+        col: colSize,
         callback: itemData.callback,
         groups: !!parameter
-        ? parameter.map((v) => ({
-              type: v.type.includes("text") ? "text" : v.type,
-              id: v.type + v.id,
-              label: v.description,
-              name: v.name,
-              control: v.type === "text" ? "input" : v.type,
-              options: v.options,
-              disabled: false,
-              itemVal: itemData.values ? itemData.values[v.name] : "",
-              multiple: v.type === "select-react" ? true : "",
-            }))
+          ? parameter.map((v) => ({
+            type: v.type.includes("text") ? "text" : v.type,
+            id: v.type + v.id,
+            label: v.description,
+            name: v.name,
+            control: v.type === "text" ? "input" : v.type,
+            options: v.options,
+            disabled: false,
+            itemVal: itemData.values ? itemData.values[v.name] : "",
+            multiple: v.type === "select-react" ? true : "",
+          }))
           : [],
       },
-      
     ];
-    
     return dt;
   };
-  
+
   return (
     <>
       <CommonModel
@@ -113,7 +107,6 @@ document.head.appendChild(styleTag);
         defaultObj={[defaultObj]}
         tableTitle='step-parameter'
       />
-
     </>
   );
 };

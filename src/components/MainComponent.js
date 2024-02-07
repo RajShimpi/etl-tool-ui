@@ -12,43 +12,15 @@ const MainComponent = () => {
   const [currentThemeIndex, setCurrentThemeIndex] = useState(0);
 
   const themes = [
-    {
-      // name: "green",
-      backgroundColor: "#ececec",
-      textColor: "#000000",
-    },
-    {
-      // name: "dark",
-      backgroundColor: "#000000",
-      textColor: "#ffffff",
-
-    },
-    {
-      // name: "grey",
-      backgroundColor: "#DDDDDD",
-      textColor: "#000000",
-    },
-    {
-      // name: "light",
-      backgroundColor: "#ffffff",
-      textColor: "#000000",
-    },
-    {
-      // name: "yellow",
-      backgroundColor: "#91C8E4",
-      textColor: "#000000",
-    },
-    {
-      // name: "red",
-      backgroundColor: "#748DA6",
-      textColor: "#000000",
-    },
-    {
-      // name: "yellow",
-      backgroundColor: "#3C8DAD",
-      textColor: "#ffffff",
-    },
+    {backgroundColor: "#ececec", textColor: "#000000"},
+    {backgroundColor: "#000000", textColor: "#ffffff"},
+    {backgroundColor: "#DDDDDD", textColor: "#000000"},
+    {backgroundColor: "#ffffff", textColor: "#000000"},
+    {backgroundColor: "#91C8E4", textColor: "#000000"},
+    {backgroundColor: "#748DA6", textColor: "#000000"},
+    {backgroundColor: "#3C8DAD", textColor: "#ffffff"},
   ];
+
   const handleProjectStructureToggle = () => {
     setIsProjectStructureOpen(!isProjectStructureOpen);
   };
@@ -76,7 +48,6 @@ const MainComponent = () => {
     }
   };
 
-
   return (
     <>
       <div className="dropdown">
@@ -86,45 +57,21 @@ const MainComponent = () => {
         {isDropdownOpen && (
           <div className="dropdown-content pcolr">
             {themes.map((theme, index) => (
-              <button className="btncolr"
-                key={index}
-                onClick={() => handleThemeChange(index)}
-                style={{
-                  backgroundColor: theme.backgroundColor,
-                  color: theme.textColor,
-                }}
-              />
+              <button className="btncolr" key={index} onClick={() => handleThemeChange(index)} style={{backgroundColor: theme.backgroundColor, color: theme.textColor}}/>
             ))}
           </div>
         )}
       </div>
-      <div
-        className="main-container"
-        style={{
-          backgroundColor: themes[currentThemeIndex].backgroundColor,
-          color: themes[currentThemeIndex].textColor,
-        }}
-      >
+      <div className="main-container"style={{backgroundColor: themes[currentThemeIndex].backgroundColor, color: themes[currentThemeIndex].textColor}}>
         <div className="d-flex justify-content-between main">
           <div className={` ${isProjectStructureOpen ? "open" : ""}`}>
-            <ProjectStructure
-              toggleSidebar={handleProjectStructureToggle}
-              textColor={themes[currentThemeIndex].textColor}
-         
-            />
+            <ProjectStructure toggleSidebar={handleProjectStructureToggle} textColor={themes[currentThemeIndex].textColor}/>
           </div>
           <div style={{ width: calculatePhotoWidth() }}>
-      
-            <OverviewFlow
-             textColor={themes[currentThemeIndex].textColor}
-              />
-           
+            <OverviewFlow textColor={themes[currentThemeIndex].textColor}/>
           </div>
           <div className={` ${isComponetToolOpen ? "open" : ""}`}>
-            <ComponetTool
-              toggleSidebar={handleComponetToolToggle}
-              textColor={themes[currentThemeIndex].textColor}
-            />
+            <ComponetTool toggleSidebar={handleComponetToolToggle} textColor={themes[currentThemeIndex].textColor}/>
           </div>
         </div>
       </div>

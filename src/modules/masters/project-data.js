@@ -3,7 +3,8 @@ export const getProjectFields = (itemData) => {
         col: 4,
         callback: itemData.callback,
         disabled: itemData.disabled,
-        groups: [{
+        groups: [
+        {
             type: "text",
             id: "inputprojectName",
             label: "Project_Name",
@@ -11,8 +12,7 @@ export const getProjectFields = (itemData) => {
             control: "input",
             isRequired: true,
             itemVal: itemData.values ? itemData.values["project_name"] : '',
-        },
-        {
+        },{
             id: "inputDisplayclientId",
             label: "Client Name",
             name: "client_id",
@@ -21,8 +21,7 @@ export const getProjectFields = (itemData) => {
             isSubmit: itemData.isSubmit,
             isRequired: !itemData?.values?.client_id,
             itemVal: itemData.values ? itemData.values["client_id"] : '',
-        },
-        {
+        },{
             type: "text",
             id: "inputDisplaybase_location",
             label: "Base Location",

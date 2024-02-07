@@ -61,25 +61,19 @@ function ComponentTool({ textColor }) {
   };
 
   return (
-    <div className={`component-tool ${isOpen ? 'open' : ''} right-sidebar`}
-      onMouseEnter={handleSidebarHover}
-      onMouseLeave={handleSidebarLeave}
-    >
+    <div className={`component-tool ${isOpen ? 'open' : ''} right-sidebar`} onMouseEnter={handleSidebarHover} onMouseLeave={handleSidebarLeave}>
       <div className='logo_details' style={{ textColor }}>
         <div className='logo_name me-2'>Component Tool</div>
         {isOpen && (isPinned ? (
-          <RiUnpinFill size={22} className="pushPinIcon" onClick={() => { setIsPinned(!isPinned); setFix(!fix); }} />
-        ) : (
-          <TiPin size={22} className="pushPinIcon" onClick={() => { setIsPinned(!isPinned); setFix(!fix); }} />
-        ))}
-       <DensityMediumIcon
-            className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`}
-            id='btn'
-            onClick={() => {
-              toggleSidebar();
-              setIsPinned(!isPinned);
-              setFix(!fix);
-            }}/>
+              <abbr title='Pin' style={{cursor: 'pointer'}}>
+                   <RiUnpinFill size={22} className="pushPinIcon" onClick={() => { setIsPinned(!isPinned); setFix(!fix); }} />
+              </abbr>
+          ) : (
+              <abbr title='UnPin' style={{cursor: 'pointer'}}>
+                   <TiPin size={22} className="pushPinIcon" onClick={() => { setIsPinned(!isPinned); setFix(!fix); }} />
+              </abbr>
+          ))}
+       <DensityMediumIcon className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`} id='btn' onClick={() => { toggleSidebar(); setIsPinned(!isPinned); setFix(!fix); }}/>
       </div>
       <ul className='nav-list'>
         {components.map((component, index) => (
@@ -89,11 +83,7 @@ function ComponentTool({ textColor }) {
                 <div href='#' className='comIcon'>
                   {components.isOpen ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='medium' />}
                   <span className='link_name' style={{ marginLeft: '5px' }}>
-                    <div
-                      variant='contained'
-                      className='comp'
-                      onClick={() => handleCollapseToggle(index)}
-                    >
+                    <div variant='contained' className='comp' onClick={() => handleCollapseToggle(index)} >
                       {component.name} {component.isCollapseOpen ? <KeyboardArrowUpIcon fontSize='small' /> : <KeyboardArrowDownIcon fontSize='small' />}
                     </div>
                   </span>

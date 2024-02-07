@@ -9,9 +9,9 @@ import axios from '../services/axios';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useClientId } from "../../components/JobDataContext";
-// import { useClientId } from "../JobDataContext";
+
 const Login = () => {
-// const [clientid,setClientId]=useState()
+
 const { setClientId } = useClientId();  
     const bgStyle = {
         // backgroundImage: `url(${process.env.PUBLIC_URL + "/assets/images/login/login-bg.png"})`,

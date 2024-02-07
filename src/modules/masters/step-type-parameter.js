@@ -4,12 +4,13 @@ import config from "../components/config/config.json"
 import axios from '../services/axios';
 import { getStepTypeParameter } from './step-type-parameter-data';
 
-const StepTypeParamete = () => {
+const StepTypeParameter = () => {
 
     const [stepTypeParameter, setStepTypeParameter] = useState([]);
     const [stepType, setStepType] = useState([]);
     const [parameter, setParameter] = useState([]);
     const [validationMsgs, setValidationMessages] = useState({});
+
     const triggerValidation = (propsName, msg) => {
         if (propsName) {
             setValidationMessages((prevState) => ({ ...prevState, [propsName]: msg }));
@@ -21,6 +22,7 @@ const StepTypeParamete = () => {
     const processListCallback = (data) => {
         return data.map(x => { return { ...x, params: JSON.stringify(x.params) } })
     }
+
     useEffect(() => {
         axios.getWithCallback('step-type-parameter/', (data) => setStepTypeParameter(data.map(x => ({ value: x.id, label: x.required, params:x.params }))))
     }, []);
@@ -56,4 +58,4 @@ const StepTypeParamete = () => {
     );
 };
 
-export default StepTypeParamete;
+export default StepTypeParameter;

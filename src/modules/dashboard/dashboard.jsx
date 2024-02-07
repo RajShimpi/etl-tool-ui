@@ -9,11 +9,10 @@ import axios from "../services/axios";
 import { routeData } from "./route-data";
 import configContext from "./config-context";
 import SearchFilter from "../components/search-filter";
-import SearchResult from "../components/search-result";
+// import SearchResult from "../components/search-result";
 import NotificationsDropdown from "../components/notifications-dropdown";
 import {
   useClientId,
-  useProject,
   useProjectid,
 } from "../../components/JobDataContext";
 import PersonIcon from "@mui/icons-material/Person";
@@ -36,7 +35,7 @@ const Dashboard = () => {
   const [fullScreenMode, setFullScreenMode] = useState(false);
   const [userFirstName, setUserFirstName] = useState("");
   const [configValues, setConfigValues] = useState({});
-  const [activeMenu, setActiveMenu] = useState(0);
+  // const [activeMenu, setActiveMenu] = useState(0);
   const [experimentIds, setExperimentIds] = useState(null);
   const [show, setShow] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -54,11 +53,11 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    const storedClientId = auth.getStorageData("client");
-    const client=storedClientId.client_id
 
-    if (clientId === null && client) {
-      setClientId(client);
+    const client = auth.getStorageData("client");
+   
+    if (clientId === null && client.client_id) {
+      setClientId(client.client_id);
     }
 
     if (clientId) {
@@ -174,12 +173,11 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    const storedClientid = auth.getStorageData("client");
-    const id = storedClientid.id
- 
-    if (id) {
+    const Clientid = auth.getStorageData("client");
+    
+    if (Clientid.id) {
       axios.getWithCallback(
-        `projects/client/${id}`,
+        `projects/client/${Clientid.id}`,
         (projectsData) => {
           setProject(projectsData);
         }
@@ -187,11 +185,9 @@ const Dashboard = () => {
     }
   }, []);
 
-
   const onhandelProject = (projectid) => {
     // auth.setAuthData(projectid);
     setProjectID(projectid);
-    
   };
 
   return (

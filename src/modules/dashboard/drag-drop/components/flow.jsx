@@ -23,13 +23,14 @@ import "../../../../components/MainComponent.css";
 import Modal from "../../../components/modal-popup";
 
 import axios from "../../../services/axios";
-import { useJobData, useProject, useProjectId, useProjectid } from "../../../../components/JobDataContext";
+import { useJobData, useProjectid } from "../../../../components/JobDataContext";
 import DeleteIcon from "@mui/icons-material/Delete";
 import JobStepParameterMaster from "../../../masters/job-step-param-master";
 
 const nodeTypes = { node: Node };
 
 function ContextMenu({ id, name, top, left, right, bottom, ...props }) {
+
   const { setNodes, setEdges } = useReactFlow();
 
   const deleteNode = useCallback(() => {
@@ -39,11 +40,7 @@ function ContextMenu({ id, name, top, left, right, bottom, ...props }) {
 
   return (
     <>
-      <div
-        style={{ top, left, right, bottom }}
-        className="context-menu"
-        {...props}
-      >
+      <div style={{ top, left, right, bottom }} className="context-menu" {...props}>
         <button className="deleteNode" onClick={deleteNode}>
           <DeleteIcon className="display-3 m-2" />
           <div className="delete mt-2">Delete</div>
@@ -54,6 +51,7 @@ function ContextMenu({ id, name, top, left, right, bottom, ...props }) {
 }
 
 const OverviewFlow = () => {
+
   const [showNodeMaster, setShowNodeMaster] = useState(false);
   const reactFlowWrapper = useRef(null);
   const edgeUpdateSuccessful = useRef(true);
@@ -81,6 +79,7 @@ const OverviewFlow = () => {
   const { setJobDataId } = useJobData(null);
  
   const {projectID}=useProjectid([])
+
   useEffect(() => {
     setEdges([]);
     setNodes([])
@@ -162,7 +161,6 @@ const OverviewFlow = () => {
   const onDrop = (event) => {
     event.preventDefault();
     const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
-
     const type = event.dataTransfer.getData("application/reactflow");
     const img = event.dataTransfer.getData("img");
     const name = event.dataTransfer.getData("name");
@@ -185,6 +183,7 @@ const OverviewFlow = () => {
       position,
       data: { heading: name, img: img },
     };
+
     setNodes((es) => es.concat(newNode));
     setData((es) => es.concat(newNode));
     setSelectedNode((newNode.a = name));
@@ -200,49 +199,27 @@ const OverviewFlow = () => {
       step_name: item.data?.heading || item.name,
       type: item.type,
       params: {
-        position_X:
-          item.id === position.id ? position.position_X : item.position.x,
-        position_Y:
-          item.id === position.id ? position.position_Y : item.position.y,
+        position_X:item.id === position.id ? position.position_X : item.position.x,
+        position_Y:item.id === position.id ? position.position_Y : item.position.y,
       },
     }));
 
     const dataFromEdgesOk = edges
-      .filter(
-        (item) =>
-          item.sourceHandle === "ok" &&
-          item.ok_step !== null &&
-          !isNaN(item.target)
-      )
-      .map((item) => ({
-        id: parseInt(item.source),
-        ok_step: parseInt(item.target) || null,
-      }));
+      .filter((item) => item.sourceHandle === "ok" && item.ok_step !== null && !isNaN(item.target))
+      .map((item) => ({id: parseInt(item.source), ok_step: parseInt(item.target) || null,}));
 
     const dataFromEdgesError = edges
-      .filter(
-        (item) =>
-          item.sourceHandle === "error" &&
-          item.error_step !== null &&
-          !isNaN(item.target)
-      )
-      .map((item) => ({
-        id: parseInt(item.source),
-        error_step: parseInt(item.target) || null,
-      }));
+      .filter((item) => item.sourceHandle === "error" && item.error_step !== null && !isNaN(item.target) )
+      .map((item) => ({ id: parseInt(item.source), error_step: parseInt(item.target) || null}));
 
-    const updatedEdgesOk = edges.filter(
-      (item) => item.sourceHandle === "ok" && !isNaN(item.target)
-    );
+    const updatedEdgesOk = edges.filter((item) => item.sourceHandle === "ok" && !isNaN(item.target));
 
-    const updatedEdgesError = edges.filter(
-      (item) => item.sourceHandle === "error" && !isNaN(item.target)
-    );
+    const updatedEdgesError = edges.filter((item) => item.sourceHandle === "error" && !isNaN(item.target));
 
     allNodes.forEach((node) => {
       const id = parseInt(node.id);
-
-      if (!updatedEdgesOk.some((edge) => parseInt(edge.source) === id)) {
+      if (
+        !updatedEdgesOk.some((edge) => parseInt(edge.source) === id)) {
         dataFromEdgesOk.push({ id, ok_step: null });
       }
 
@@ -273,10 +250,7 @@ const OverviewFlow = () => {
       }
     });
 
-    const dataFromNodesActive = nodesActive.map((item) => ({
-      id: parseInt(item.id),
-      node_active: item.node_active,
-    }));
+    const dataFromNodesActive = nodesActive.map((item) => ({ id: parseInt(item.id), node_active: item.node_active,}));
 
     const combinedData = dataFromNodes.map((node) => ({
       ...node,
@@ -286,7 +260,6 @@ const OverviewFlow = () => {
     }));
 
     axios.postWithCallback("job-steps/data-save", combinedData);
-
   };
 
   const onNodeDragStop = (event, node) => {
@@ -297,7 +270,6 @@ const OverviewFlow = () => {
           position: { x: node.position.x, y: node.position.y },
         };
       }
-    
       return n;
     });
 
@@ -309,6 +281,7 @@ const OverviewFlow = () => {
       ...node,
       ...position.find((id) => id.id === node.id),
     }));
+    
     setAllNodes(combinedDataposition);
 
   };
@@ -494,6 +467,7 @@ const OverviewFlow = () => {
         ...prevDeletedNodes,
         { id: menu.id, node_active: false },
       ]);
+
       setNodes((nodes) => nodes.filter((node) => node.id !== menu.id));
       setEdges((edges) => edges.filter((edge) => edge.source !== menu.id));
       setMenu(null);
@@ -531,32 +505,14 @@ const OverviewFlow = () => {
             >
               <Background color="#aaa" gap={16} />
               {menu && (
-                <ContextMenu
-                  id={menu.id}
-                  top={menu.top}
-                  left={menu.left}
-                  right={menu.right}
-                  bottom={menu.bottom}
-                  onClick={deleteNode}
-                />
+                <ContextMenu id={menu.id} top={menu.top} left={menu.left} right={menu.right} bottom={menu.bottom} onClick={deleteNode} />
               )}
               <div className="reactflow-wrapper" ref={reactFlowWrapper} />
               <div ref={ref} />
             </ReactFlow>
 
-            <Modal
-              modalTitle={"Save/Update Parameter"}
-              ref={modalRef}
-              handleClose={handleCloseNodeMaster}
-              show={showNodeMaster}
-              maxWidth="70%"
-            >
-              <JobStepParameterMaster
-                step_type_id={step_type_id}
-                job_Id={job_id}
-                node_Id={nodeid}
-                name={editName}
-              />
+            <Modal modalTitle={"Save/Update Parameter"} ref={modalRef} handleClose={handleCloseNodeMaster} show={showNodeMaster} maxWidth="70%" >
+              <JobStepParameterMaster step_type_id={step_type_id} job_Id={job_id} node_Id={nodeid} name={editName}/>
             </Modal>
           </div>
         </ReactFlowProvider>

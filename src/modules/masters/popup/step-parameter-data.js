@@ -12,7 +12,6 @@ export const getstepparameterFields = (itemData) => {
         isSubmit: itemData.isSubmit,
         isRequired: !itemData?.values?.paramters,
         itemVal: itemData.values ? itemData.values["parameter_name"] : '',
-
       },
       ]
     }];

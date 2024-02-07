@@ -2,7 +2,6 @@
   overflow-y: scroll;
   -ms-overflow-style: none;
   scrollbar-width: none;
-  /* scrollbar-color: transparent transparent; */
   height: 1000px;
   width: 78px;
   padding: 6px 14px;
@@ -13,7 +12,7 @@
 }
 
 .right-sidebar::-webkit-scrollbar {
-  display: none; /* Safari and Chrome */
+  display: none;
 }
 
 .right-sidebar.open {
@@ -24,6 +23,7 @@
   padding: 1px;
   margin: 2px;
 }
+
 .right-sidebar .logo_details {
   height: 60px;
   display: flex;
@@ -31,7 +31,6 @@
   position: relative;
   display: flex;
   justify-content: flex-end;
-  /* color: white; */
 }
 
 .right-sidebar .logo_details .icon {
@@ -70,7 +69,6 @@
 }
 
 .right-sidebar i {
-  /* color: rgb(0, 0, 0); */
   height: 60px;
   line-height: 60px;
   min-width: 50px;
@@ -92,37 +90,30 @@
 
 .right-sidebar input {
   font-size: 15px;
-  /* color: rgb(0, 0, 0); */
   font-weight: 400;
   outline: none;
   height: 35px;
   width: 35px;
   border: none;
   border-radius: 5px;
-  /* background-color: rgb(0, 0, 0); */
   transition: all 0.5s ease;
 }
-
-/* .right-sidebar input::placeholder {
-  color: rgb(0, 0, 0);
-} */
 
 .right-sidebar .comp {
   display: none;
 }
+
 .right-sidebar.open .comp {
   display: block;
 }
-.right-sidebar.open input {
+
+.right-sidebar
+.open input {
   width: 100%;
   padding: 0 20px 0 50px;
 }
 
 .tools {
-  /* font-size: 15px;
-  /* color: rgb(0, 0, 0); */
-  /* justify-content: center; */
-  /* display: flex; */
   text-align: center;
   margin: 10px;
 }
@@ -132,13 +123,11 @@
   height: 100%;
   width: 100%;
   align-items: center;
-  text-decoration: none;
-  /* background-color:rgba(0, 0, 0, 0); */
+  text-decoration: none; 
   position: relative;
   transition: all 0.5s ease;
   z-index: 12;
-  border: none;
-  /* color: rgb(255, 255, 255); */
+  border: none; 
 }
 
 .right-sidebar li .comIcon::after {
@@ -155,13 +144,8 @@
 }
 
 .right-sidebar li .comIcon:hover::after {
-  transform: scaleX(1);
-  /* color: rgb(0, 0, 0); */
+  transform: scaleX(1); 
 }
-
-/* .icon {
-  color:rgb(0, 0, 0);
-} */
 
 .right-sidebar li .comIcon.link_name {
   color: rgba(116, 113, 113, 0.123);
@@ -177,7 +161,6 @@
 .right-sidebar li .comIcon:hover .link_name,
 .right-sidebar li .comIcon:hover i {
   transition: all 0.5s ease;
-  /* color: rgb(0, 0, 0); */
 }
 
 .right-sidebar.open li a.link_name {
