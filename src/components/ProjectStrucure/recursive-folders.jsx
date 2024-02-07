@@ -7,7 +7,7 @@ import Modal from "../../modules/components/modal-popup";
 import { AddUpdateDeleteFileAndFolder } from "../PopupComponent";
 import axios from "../../modules/services/axios";
 import { useJobData, useProjectId } from "../JobDataContext";
-
+import "./project.css"
 const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
   const [showNested, setShowNested] = useState({});
   const [contextMenuPosition, setContextMenuPosition] = useState(null);
@@ -105,6 +105,7 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
               >
                 {subItem.type === "File" && (
                   <div
+                  className="proicons"
                     key={subItem.file_name + "fileIcon" + index}
                     onClick={() => handleFileNameClick(subItem)}
                     style={{
@@ -158,6 +159,7 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
                         />
                       </Modal>
                     }
+                    <div className="proicons">
                     {showNested[subItem.file_name] ? (
                       <FolderOpenIcon
                         key={subItem.file_name + "openIcon" + index}
@@ -170,7 +172,7 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
                         style={{marginRight:"5px"}}
                       />
                     )}
-                    <>{subItem.file_name}</>
+                    <>{subItem.file_name}</></div>
                     <div
                       style={{
                         display: !showNested[subItem.file_name] && "none",
