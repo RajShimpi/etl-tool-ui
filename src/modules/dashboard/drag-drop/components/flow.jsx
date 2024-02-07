@@ -74,6 +74,7 @@ const OverviewFlow = () => {
   const [editName, setName] = useState();
   const [activeNodes, setActiveNodes] = useState([]);
   const [nodesActive, setNodesActive] = useState([]);
+  const [startStep, setStartStep] = useState([]);
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
   const { jobDataId } = useJobData(null);
   const { setJobDataId } = useJobData(null);
@@ -87,10 +88,8 @@ const OverviewFlow = () => {
   }, [projectID,jobDataId]);
 
   useEffect(() => {
-
+    axios.getWithCallback("job-steps", (data) => setData(data));
     if (jobDataId) {
-      axios.getWithCallback("job-steps", (data) => setData(data));
-
       axios.getWithCallback(`job-steps/${jobDataId}/job`, (data) => {
         setJobFileId(jobDataId)
         const dataNodes = data.map((item) => ({
@@ -188,6 +187,7 @@ const OverviewFlow = () => {
     setData((es) => es.concat(newNode));
     setSelectedNode((newNode.a = name));
     setAllNodes((prevNodes) => [...prevNodes, newNode]);
+
   };
 
   const saveNodeToDatabase = () => {
@@ -260,8 +260,9 @@ const OverviewFlow = () => {
     }));
 
     axios.postWithCallback("job-steps/data-save", combinedData);
-  };
 
+  };
+  
   const onNodeDragStop = (event, node) => {
     const updatedPosition = nodes.map((n) => {
       if (n.id === node.id) {

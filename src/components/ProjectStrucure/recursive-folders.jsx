@@ -6,7 +6,7 @@ import ContextMenu from "../ContextMenu";
 import Modal from "../../modules/components/modal-popup";
 import { AddUpdateDeleteFileAndFolder } from "../PopupComponent";
 import axios from "../../modules/services/axios";
-import { useJobData} from "../JobDataContext";
+import { useJobData, useProjectId } from "../JobDataContext";
 
 const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
   const [showNested, setShowNested] = useState({});
@@ -14,13 +14,23 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
   const [isContextMenuOpen, setContextMenuOpen] = useState({});
   const [isShow, setShow] = useState({});
   const [type, setType] = useState("AddFolder");
-  const { setJobDataId } = useJobData();  
+  const { setJobDataId } = useJobData();
   const containerRef = useRef(null);
+  const [hoveredFileName, setHoveredFileName] = useState(null);
 
+  const handleFileNameClick = (item) => {
+    onhandelFileId(item);
+    setHoveredFileName(item.file_name);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredFileName(null);
+  };
   const handleContextMenu = (event, item) => {
     event.preventDefault();
     event.stopPropagation();
     setContextMenuPosition({ top: event.clientY, left: event.clientX });
+
     onRightCallback(item);
   };
 
@@ -73,7 +83,7 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
 
   const onhandelFileId = (item) => {
     axios.getWithCallback(`job/${item.id}/file`, (data) => {
-      setJobDataId(data.id); 
+      setJobDataId(data.id);
     });
   };
 
@@ -94,15 +104,24 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
                 onContextMenu={(e) => handleContextMenu(e, subItem)}
               >
                 {subItem.type === "File" && (
-                  <div onClick={() => onhandelFileId(subItem)}>
-                    <InsertDriveFileIcon
-                      key={subItem.file_name + "fileIcon" + index}
-                      fontSize="small"
-                    />
-                    <>{subItem.file_name}</>
+                  <div
+                    key={subItem.file_name + "fileIcon" + index}
+                    onClick={() => handleFileNameClick(subItem)}
+                    style={{
+                      backgroundColor:
+                        hoveredFileName === subItem.file_name
+                          ? "grey"
+                          : "transparent",
+                    //  color:"white",
+                      cursor: "pointer",
+                      borderRadius:"5px",
+                      // fontSize:"15px"
+                    }}
+                  >
+                    <InsertDriveFileIcon fontSize="small" style={{margin:"5px"}} />
+                    {subItem.file_name}
                   </div>
                 )}
-
                 {subItem.type === "Folder" && subItem.children && (
                   <>
                     {contextMenuPosition && subItem.isRightClick && (
@@ -142,12 +161,13 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
                     {showNested[subItem.file_name] ? (
                       <FolderOpenIcon
                         key={subItem.file_name + "openIcon" + index}
-                        fontSize="small"
+                        fontSize="medium"
                       />
                     ) : (
                       <FolderIcon
                         key={subItem.file_name + "closeIcon" + index}
-                        fontSize="small"
+                        fontSize="medium"
+                        style={{marginRight:"5px"}}
                       />
                     )}
                     <>{subItem.file_name}</>
