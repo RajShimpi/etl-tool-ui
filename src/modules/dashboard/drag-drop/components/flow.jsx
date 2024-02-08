@@ -27,6 +27,7 @@ import { useJobData, useProject } from "../../../../components/JobDataContext";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { DeleteForever } from "@mui/icons-material";
 import JobStepParameterMaster from "../../../masters/job-step-param-master";
+import JobParameterMaster from "../../../masters/job-parameter";
 
 const nodeTypes = { node: Node };
 
@@ -76,6 +77,7 @@ const OverviewFlow = () => {
   const [editName, setName] = useState();
   const [activeNodes, setActiveNodes] = useState([]);
   const [nodesActive, setNodesActive] = useState([]);
+  const [openJobParams, setOpenJobParams] = useState(false);
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
   const { jobDataId } = useJobData(null);
   const { projectsid } = useProject();
@@ -444,6 +446,10 @@ const OverviewFlow = () => {
     setMenu(null);
   };
 
+  const handleCloseJobParams = () => {
+    setOpenJobParams(false);
+  }
+
   const handleClickOutside = (event) => {
     if (modalRef.current && !modalRef.current.contains(event.target)) {
       handleCloseNodeMaster();
@@ -526,7 +532,20 @@ const OverviewFlow = () => {
 
   return (
     <>
-      <button onClick={saveHandler}>Save</button>
+      <button className="btn btn-primary" style={{ marginRight: '1px'}} onClick={saveHandler}>Save</button>
+      <button className="btn btn-secondary" onClick={() => { setOpenJobParams(true); }}>Job Params</button>
+      <Modal
+              modalTitle={"Save/Update Parameter"}
+              ref={modalRef}
+              handleClose={handleCloseJobParams}
+              show={openJobParams}
+              maxWidth="70%"
+            >
+              <JobParameterMaster                
+                project_id = {project_id}
+                job_Id={job_id} 
+              />
+            </Modal>
       <div className="dndflow">
         <ReactFlowProvider>
           <div className="reactflow-wrapper" ref={reactFlowWrapper}>
