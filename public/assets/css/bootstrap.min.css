@@ -4618,12 +4618,17 @@ left: 450px;
     color: var(--bs-card-color);
     height: 274px;
     overflow-y: scroll;
+<<<<<<< HEAD
     -ms-overflow-style: none;  
     scrollbar-width: none;  /* Firefox */
 }
 
 .card-body ::-webkit-scrollbar{
     display: none;
+=======
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  Firefox
+>>>>>>> 183bbbf0ab4c0fe976ab8eb36e8ad431844ffcf1
 }
 
 .card-title {
@@ -5295,6 +5300,9 @@ left: 450px;
 .list-group-item-action:active {
     color: var(--bs-list-group-action-active-color);
     background-color: var(--bs-list-group-action-active-bg)
+}
+.card-body ::-webkit-scrollbar{
+    display: none;
 }
 .list-group-item {
     position: relative;

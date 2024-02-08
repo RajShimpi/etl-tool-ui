@@ -52,7 +52,6 @@ const MainComponent = ({onFileClickCallback}) => {
       textColor: "#ffffff",
     },
   ];
-
   const handleProjectStructureToggle = () => {
     setIsProjectStructureOpen(!isProjectStructureOpen);
   };

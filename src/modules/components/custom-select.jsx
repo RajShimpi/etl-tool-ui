@@ -18,7 +18,7 @@ const CustomSelect = (props) => {
       props.callback(curValue, props.name, props.uniqueKey);
     }
     else
-      props.callback(curValue, props.name, props.index);
+      props.callback(curValue, props.isGeneric? "select" : props.name, props.index);
 
   }
 

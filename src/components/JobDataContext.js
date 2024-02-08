@@ -2,6 +2,8 @@ import { createContext, useContext, useState } from "react";
 
 const JobDataContext = createContext();
 const ClientIdContext = createContext();
+const ProjectIdContext = createContext();
+const ProjectContext = createContext();
 
 export const JobDataProvider = ({ children }) => {
   const [jobDataId, setJobDataId] = useState(null);
@@ -43,6 +45,49 @@ export const useClientId = () => {
   const context = useContext(ClientIdContext);
   if (!context) {
     throw new Error("useJobData must be used within a JobDataProvider");
+  }
+  return context;
+};
+export const ProjectIdProvider = ({ children }) => {
+  const [projectId, setProjectId] = useState(null);
+
+  const setProjectIdValue = (Project_id) => {
+    setProjectId(Project_id);
+  };
+
+  return (
+    <ProjectIdContext.Provider value={{ projectId, setProjectId: setProjectIdValue }}>
+      {children}
+    </ProjectIdContext.Provider>
+  );
+};
+
+export const useProjectId = () => {
+  const context = useContext(ProjectIdContext);
+  if (!context) {
+    throw new Error("useProjectId must be used within a JobDataProvider");
+  }
+  return context;
+};
+
+export const ProjectProvider = ({ children }) => {
+  const [projectsid, setProjectsid] = useState(null);
+
+  const setProjectValue = (id) => {
+    setProjectsid(id);
+  };
+
+  return (
+    <ProjectContext.Provider value={{ projectsid, setProjectsid: setProjectValue }}>
+      {children}
+    </ProjectContext.Provider>
+  );
+};
+
+export const useProject = () => {
+  const context = useContext(ProjectContext);
+  if (!context) {
+    throw new Error("useProjectId must be used within a JobDataProvider");
   }
   return context;
 };
