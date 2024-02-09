@@ -123,5 +123,10 @@
         "step.name",
         "parameter.name",
         "required"
-    ]
+    ],
+    "SYSTEM_CONFIG": [
+      "parameter",
+      "description",
+      "value"
+  ]
 }

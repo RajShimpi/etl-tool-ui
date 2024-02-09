@@ -222,7 +222,9 @@ const JobStepParameterMaster = ({ node_Id, job_id, step_type_id, name, handleClo
 
     const onClick = (e) => {
       e.preventDefault();
-      setNameValue((prevData) => ([ ...prevData, { id: prevData?.length ? prevData.length + 1 : 1 }]))
+      let val = _.maxBy(nameValue, x => x.sequence);
+      setNameValue((prevData) => ([ ...prevData, { sequence: val?.sequence ? val.sequence + 1 : 1 }]))
+      // setNameValue((prevData) => ([ ...prevData, { id: prevData?.length ? prevData.length + 1 : 1 }]))
     }
 
     const onRemove = (e, id) => {

@@ -24,6 +24,7 @@ import StepType from "../masters/steptype";
 import TypeConfigMaster from "../masters/type-config-master";
 import Parameter from "../masters/parameter";
 import StepTypeParamete from "../masters/step-type-parameter";
+import { SystemConfig } from "../masters/system-config";
 
 
 export const routeConstant = {
@@ -47,7 +48,8 @@ export const routeConstant = {
   step: "/step",
   typeconfigmaster: "/type-config",
   parameter:"/parameter",
-  steptypeparameter:"/step-type-parameter"
+  steptypeparameter:"/step-type-parameter",
+  systemConfig: "/system-config"
 };
 export const routeData = (routes) => [
   {
@@ -193,5 +195,13 @@ export const routeData = (routes) => [
     data: {},
     permissions: true,
     isUserCanView: true,
-  }
+ },
+ {
+  routeTo: routeConstant.systemConfig, // StepTypeParamete Form route
+  header: "",
+  childComp: SystemConfig,
+  data: {},
+  permissions: true,
+  isUserCanView: true,
+}
 ];
