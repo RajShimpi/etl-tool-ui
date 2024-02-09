@@ -181,5 +181,13 @@ export const routeData = (routes) => [
     data: {},
     permissions: true,
     isUserCanView: true,
-  }
+ },
+ {
+  routeTo: routeConstant.systemConfig, // StepTypeParamete Form route
+  header: "",
+  childComp: SystemConfig,
+  data: {},
+  permissions: true,
+  isUserCanView: true,
+}
 ];
