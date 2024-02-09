@@ -1,171 +1,178 @@
-  import React, { useEffect, useState, useRef } from "react";
-  import FolderOpenIcon from "@mui/icons-material/FolderOpen";
-  import FolderIcon from "@mui/icons-material/Folder";
-  import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
-  import ContextMenu from "../ContextMenu";
-  import Modal from "../../modules/components/modal-popup";
-  import { AddUpdateDeleteFileAndFolder } from "../PopupComponent";
-  import axios from "../../modules/services/axios";
-  import { useJobData } from "../JobDataContext";
-  import "./project.css"  
+import React, { useEffect, useState, useRef } from "react";
+import FolderOpenIcon from "@mui/icons-material/FolderOpen";
+import FolderIcon from "@mui/icons-material/Folder";
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import ContextMenu from "../ContextMenu";
+import Modal from "../../modules/components/modal-popup";
+import { AddUpdateDeleteFileAndFolder } from "../PopupComponent";
+import axios from "../../modules/services/axios";
+import { useJobData } from "../JobDataContext";
+import "./project.css";
 
-  const RecursiveFolder = ({ items, onRightCallback, refreshData, handleMouseLeaves}) => {
-    const [showNested, setShowNested] = useState({});
-    const [contextMenuPosition, setContextMenuPosition] = useState(null);
-    const [isContextMenuOpen, setContextMenuOpen] = useState({}); 
-    const [isShow, setShow] = useState({});
-    const [type, setType] = useState("AddFolder");
-    const { setJobDataId } = useJobData();
-    const containerRef = useRef(null);
-    const [hoveredFileName, setHoveredFileName] = useState(null);
+const RecursiveFolder = ({
+  items,
+  onRightCallback,
+  refreshData,
+  handleMouseLeaves,
+}) => {
+  const [showNested, setShowNested] = useState({});
+  const [contextMenuPosition, setContextMenuPosition] = useState(null);
+  const [isContextMenuOpen, setContextMenuOpen] = useState({});
+  const [isShow, setShow] = useState({});
+  const [type, setType] = useState("AddFolder");
+  const { setJobDataId } = useJobData();
+  const containerRef = useRef(null);
+  const [hoveredFileName, setHoveredFileName] = useState(null);
+  const [isHovered, setIsHovered] = useState(false);
 
-    const handleFileNameClick = (item) => {
-      onhandelFileId(item);
-      setHoveredFileName(item.file_name);
-      handleMouseLeaves(item)
-     
-    };
+  const handleFileNameClick = (item) => {
+    onhandelFileId(item);
+    setHoveredFileName(item.file_name);
+    handleMouseLeaves(item);
+  };
 
-    const handleMouseLeave = () => {
-      setHoveredFileName(null);
-    };
+  const handleMouseLeave = () => {
+    setHoveredFileName(null);
+  };
 
-    const handleContextMenu = (event, item) => {
-      event.preventDefault();
-      event.stopPropagation();
-      setContextMenuPosition({ top: event.clientY, left: event.clientX });
-      onRightCallback(item);
-    };
+  const handleContextMenu = (event, item) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setContextMenuPosition({ top: event.clientY, left: event.clientX });
+    onRightCallback(item);
+  };
 
-    const closeContextMenu = (e, item) => {
-      e.stopPropagation();
-      if (item) {
-        onRightCallback(item, true);
-      } else {
-        setContextMenuPosition(null);
-        setContextMenuOpen({});
-      }
-    };
+  const closeContextMenu = (e, item) => {
+    e.stopPropagation();
+    if (item) {
+      onRightCallback(item, true);
+    } else {
+      setContextMenuPosition(null);
+      setContextMenuOpen({});
+    }
+  };
 
-    const handleDocumentClick = (event) => {
-      event.stopPropagation();
-     
+  useEffect(() => {
+    const handleClickOutside = (event) => {
       if (
         containerRef.current &&
         !containerRef.current.contains(event.target) &&
         !event.target.closest(".contextMenu") &&
-        !event.target.closest(".modal")
+        !event.target.closest(".modal") &&
+        !event.target.classList.contains("proicons") &&
+        !event.target.closest(".folderstyle")
       ) {
-        closeContextMenu(event);
+        setHoveredFileName(null);
       }
     };
-
-    const toggleNested = (e, name) => {
-      e.stopPropagation();
-      if (!e.target.closest(".contextMenu") && !e.target.closest(".modal"))
-          setShowNested({ ...showNested, [name]: !showNested[name] });
-  };
   
-    useEffect(() => {
-      const close = (e) => {
-        if (e.keyCode === 27) {
-          closeContextMenu(e);
-        }
-      };
-      window.addEventListener("keydown", close);
-      document.addEventListener("click", handleDocumentClick);
-      return () => {
-        document.removeEventListener("click", handleDocumentClick);
-        window.removeEventListener("keydown", close);
-      };
-    }, []);
-
-    const callback = (item, type) => {
-      setShow({ ...isShow, [item.file_name]: !isShow[item.file_name] });
-      setType(type);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
     };
+  }, []);
+  
 
-    const onhandelFileId = (item) => {
-      axios.getWithCallback(`job/${item.id}/file`, (data) => {
-        setJobDataId(data.id);
-      });
-    };
+  const toggleNested = (e, name) => {
+    e.stopPropagation();
+    if (
+      !e.target.closest(".contextMenu") &&
+      !e.target.closest(".modal")
+    )
+      setShowNested({ ...showNested, [name]: !showNested[name] });
+  };
 
-    return (
-      <>
-        {!!items.length && (
-          <>
-            {items.map((subItem, index) => (
+  const callback = (item, type) => {
+    setShow({ ...isShow, [item.file_name]: !isShow[item.file_name] });
+    setType(type);
+  };
+
+  const onhandelFileId = (item) => {
+    axios.getWithCallback(`job/${item.id}/file`, (data) => {
+      setJobDataId(data);
+    });
+  };
+
+  return (
+    <>
+      {!!items.length && (
+        <>
+          {items.map((subItem, index) => (
+            <div
+              className="folderstyle"
+              ref={containerRef}
+              key={subItem.file_name + "rootDiv" + index}
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+            >
               <div
-                className="folderstyle"
-                ref={containerRef}
-                key={subItem.file_name + "rootDiv" + index}
+                key={subItem.file_name + "contectDiv" + index}
+                className={`open`}
+                onClick={(e) => {
+                  toggleNested(e, subItem.file_name);
+                }}
+                onContextMenu={(e) => handleContextMenu(e, subItem)}
               >
-                <div
-                  key={subItem.file_name + "contectDiv" + index}
-                  className={`open`}
-                  onClick={(e) => {toggleNested(e, subItem.file_name);handleMouseLeaves(subItem.file_name) }}
-
-                  onContextMenu={(e) => handleContextMenu(e, subItem)}
-                >
-                  {subItem.type === "File" && (
-                    <div
+                {subItem.type === "File" && (
+                  <div
                     className="proicons"
-                      key={subItem.file_name + "fileIcon" + index}
-                      onClick={() => { handleFileNameClick(subItem);}}
-
-                      style={{
-                        backgroundColor:
-                          hoveredFileName === subItem.file_name
-                            ? "grey"
-                            : "transparent",
-                        //  color:"white",
-                        cursor: "pointer",
-                        borderRadius:"5px",
-                        // fontSize:"15px"
-                      }}
-                    >
-                      <InsertDriveFileIcon fontSize="small" style={{margin:"5px"}} />
-                      {subItem.file_name}
-                    </div>
-                  )}
-                  {subItem.type === "Folder" && subItem.children && (
-                    <>
-                      {contextMenuPosition && subItem.isRightClick && (
-                        <div style={{ display: !subItem.isRightClick && "none" }}>
-                          <ContextMenu
-                            onClose={(e) => closeContextMenu(e, subItem)}
-                            project_id={subItem.project_id}
-                            parent_id={subItem.parent_id}
-                            id={subItem.id}
-                            item={subItem}
-                            position={contextMenuPosition}
-                            callback={callback}
-                          />
-                        </div>
-                      )}
-                      {
-                        <Modal
-                          modalTitle={type}
-                          handleClose={() => {
+                    key={subItem.file_name + "fileIcon" + index}
+                    onClick={() => {
+                      handleFileNameClick(subItem);
+                    }}
+                    style={{
+                      backgroundColor:
+                        hoveredFileName === subItem.file_name
+                          ? "grey"
+                          : "transparent",
+                      cursor: "pointer",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    <InsertDriveFileIcon
+                      fontSize="small"
+                      style={{ margin: "5px" }}
+                    />
+                    {subItem.file_name}
+                  </div>
+                )}
+                {subItem.type === "Folder" && subItem.children && (
+                  <>
+                    {contextMenuPosition && subItem.isRightClick && (
+                      <div style={{ display: !subItem.isRightClick && "none" }}>
+                        <ContextMenu
+                          onClose={(e) => closeContextMenu(e, subItem)}
+                          project_id={subItem.project_id}
+                          parent_id={subItem.parent_id}
+                          id={subItem.id}
+                          item={subItem}
+                          position={contextMenuPosition}
+                          callback={callback}
+                        />
+                      </div>
+                    )}
+                    {
+                      <Modal
+                        modalTitle={type}
+                        handleClose={() => {
+                          setShow({});
+                        }}
+                        show={!!isShow[subItem.file_name]}
+                        maxWidth="35%"
+                      >
+                        <AddUpdateDeleteFileAndFolder
+                          title={type}
+                          item={subItem}
+                          type={type}
+                          onClose={(e, isRefreshNeeded) => {
+                            closeContextMenu(e);
                             setShow({});
+                            if (isRefreshNeeded) refreshData();
                           }}
-                          show={!!isShow[subItem.file_name]}
-                          maxWidth="35%"
-                        >
-                          <AddUpdateDeleteFileAndFolder
-                            title={type}
-                            item={subItem}
-                            type={type}
-                            onClose={(e, isRefreshNeeded) => {
-                              closeContextMenu(e);
-                              setShow({});
-                              if (isRefreshNeeded) refreshData();
-                            }}
-                          />
-                        </Modal>
-                      }
-                      <div className="proicons">
+                        />
+                      </Modal>
+                    }
+                    <div className="proicons">
                       {showNested[subItem.file_name] ? (
                         <FolderOpenIcon
                           key={subItem.file_name + "openIcon" + index}
@@ -175,33 +182,34 @@
                         <FolderIcon
                           key={subItem.file_name + "closeIcon" + index}
                           fontSize="medium"
-                          style={{marginRight:"5px"}}
+                          style={{ marginRight: "5px" }}
                         />
                       )}
-                      <>{subItem.file_name}</></div>
-                      <div
-                        style={{
-                          display: !showNested[subItem.file_name] && "none",
-                        }}
-                      >
-                        {subItem.children && (
-                          <RecursiveFolder
-                            items={subItem.children}
-                            onRightCallback={onRightCallback}
-                            refreshData={refreshData}
-                            handleMouseLeaves={handleMouseLeave}
-                          />
-                        )}
-                      </div>
-                    </>
-                  )}
-                </div>
+                      <>{subItem.file_name}</>
+                    </div>
+                    <div
+                      style={{
+                        display: !showNested[subItem.file_name] && "none",
+                      }}
+                    >
+                      {subItem.children && (
+                        <RecursiveFolder
+                          items={subItem.children}
+                          onRightCallback={onRightCallback}
+                          refreshData={refreshData}
+                          handleMouseLeaves={handleMouseLeave}
+                        />
+                      )}
+                    </div>
+                  </>
+                )}
               </div>
-            ))}
-          </>
-        )}
-      </>
-    );
-  };
+            </div>
+          ))}
+        </>
+      )}
+    </>
+  );
+};
 
-  export default RecursiveFolder;
+export default RecursiveFolder;

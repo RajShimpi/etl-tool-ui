@@ -23,13 +23,32 @@ import "../../../../components/MainComponent.css";
 import Modal from "../../../components/modal-popup";
 
 import axios from "../../../services/axios";
-import { useJobData, useProjectid } from "../../../../components/JobDataContext";
+import {
+  useJobData,
+  useProjectid,
+} from "../../../../components/JobDataContext";
 import DeleteIcon from "@mui/icons-material/Delete";
 import JobStepParameterMaster from "../../../masters/job-step-param-master";
 
-const nodeTypes = { node: Node };
+// In OverviewFlow component where you render the Node
+const nodeTypes = {
+  node: (node) => {
+    // console.log(node);
+    return <Node id={node.id} data={node.data} start_step={node.start_step ?? null} />;
+  },
+};
 
-const ContextMenu = ({ id, name, top, left, right, jobfileid, bottom, ...props }) => {
+
+const ContextMenu = ({
+  id,
+  name,
+  top,
+  left,
+  right,
+  jobfileid,
+  bottom,
+  ...props
+}) => {
   const { setNodes, setEdges } = useReactFlow();
 
   const deleteNode = useCallback(() => {
@@ -39,15 +58,18 @@ const ContextMenu = ({ id, name, top, left, right, jobfileid, bottom, ...props }
 
   const setAsStartStepHandler = useCallback(() => {
     const startstep = {
-      start_step: parseInt(id)
+      start_step: parseInt(id),
     };
-    axios.putWithCallback(`job/${jobfileid}/startstep`, startstep);
+    axios.putWithCallback(`job/${jobfileid.id}/startstep`, startstep);
   }, [id, jobfileid]);
 
   return (
     <>
       <div style={{ top, left, right, bottom }} className="context-menu">
-        <button className="setAsStartStepHandler" onClick={setAsStartStepHandler}>
+        <button
+          className="setAsStartStepHandler"
+          onClick={setAsStartStepHandler}
+        >
           Start Step
         </button>
         <div {...props}>
@@ -62,7 +84,6 @@ const ContextMenu = ({ id, name, top, left, right, jobfileid, bottom, ...props }
 };
 
 const OverviewFlow = () => {
-
   const [showNodeMaster, setShowNodeMaster] = useState(false);
   const reactFlowWrapper = useRef(null);
   const edgeUpdateSuccessful = useRef(true);
@@ -89,21 +110,21 @@ const OverviewFlow = () => {
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
   const { jobDataId } = useJobData(null);
   const { setJobDataId } = useJobData(null);
-  const {projectID}=useProjectid([])
+  const { projectID } = useProjectid([]);
 
   useEffect(() => {
     setEdges([]);
-    setNodes([])
-    setJobDataId(null)
-  }, [projectID,jobDataId]);
-// console.log("job:",job);
+    setNodes([]);
+    setJobDataId(null);
+  
+  }, [projectID, jobDataId]);
+
   useEffect(() => {
     axios.getWithCallback("job-steps", (data) => setData(data));
- 
+
     if (jobDataId) {
-      axios.getWithCallback(`job/${jobDataId}`, (data) => setJob(data));
-      axios.getWithCallback(`job-steps/${jobDataId}/job`, (data) => {
-        setJobFileId(jobDataId)
+      axios.getWithCallback(`job-steps/${jobDataId.id}/job`, (data) => {
+        setJobFileId(jobDataId);
         const dataNodes = data.map((item) => ({
           id: "" + item.id,
           step_type_id: "" + item.step_type_id,
@@ -112,13 +133,17 @@ const OverviewFlow = () => {
           data: {
             heading: item.step_name,
             img: `/assets/images/${item.stepType.img}.png`,
+            start_step: jobDataId.start_step == item.id ? jobDataId.start_step :null,
+            id:item.id
           },
+
           position: {
             x: item.params.position_X,
             y: item.params.position_Y,
           },
           node_active: item.node_active,
         }));
+        // console.log("dataNodes:", dataNodes);
 
         const dataEdgesok = data.map((item) => ({
           id: "" + item.id,
@@ -150,7 +175,7 @@ const OverviewFlow = () => {
           ...dataEdgesok.find((edgeOk) => edgeOk.id === node.id),
           ...dataEdgeserror.find((edgeError) => edgeError.id === node.id),
         }));
-console.log();
+
         setAllNodes(combinedData);
         function getlabelColor(label) {
           return label === "ok" ? "green" : label === "error" ? "red" : "black";
@@ -199,11 +224,9 @@ console.log();
     setData((es) => es.concat(newNode));
     setSelectedNode((newNode.a = name));
     setAllNodes((prevNodes) => [...prevNodes, newNode]);
-
   };
 
   const saveNodeToDatabase = () => {
-
     const dataFromNodes = allNodes.map((item) => ({
       id: parseInt(item.id),
       job_id: jobfileid,
@@ -211,27 +234,48 @@ console.log();
       step_name: item.data?.heading || item.name,
       type: item.type,
       params: {
-        position_X:item.id === position.id ? position.position_X : item.position.x,
-        position_Y:item.id === position.id ? position.position_Y : item.position.y,
+        position_X:
+          item.id === position.id ? position.position_X : item.position.x,
+        position_Y:
+          item.id === position.id ? position.position_Y : item.position.y,
       },
     }));
 
     const dataFromEdgesOk = edges
-      .filter((item) => item.sourceHandle === "ok" && item.ok_step !== null && !isNaN(item.target))
-      .map((item) => ({id: parseInt(item.source), ok_step: parseInt(item.target) || null,}));
+      .filter(
+        (item) =>
+          item.sourceHandle === "ok" &&
+          item.ok_step !== null &&
+          !isNaN(item.target)
+      )
+      .map((item) => ({
+        id: parseInt(item.source),
+        ok_step: parseInt(item.target) || null,
+      }));
 
     const dataFromEdgesError = edges
-      .filter((item) => item.sourceHandle === "error" && item.error_step !== null && !isNaN(item.target) )
-      .map((item) => ({ id: parseInt(item.source), error_step: parseInt(item.target) || null}));
+      .filter(
+        (item) =>
+          item.sourceHandle === "error" &&
+          item.error_step !== null &&
+          !isNaN(item.target)
+      )
+      .map((item) => ({
+        id: parseInt(item.source),
+        error_step: parseInt(item.target) || null,
+      }));
 
-    const updatedEdgesOk = edges.filter((item) => item.sourceHandle === "ok" && !isNaN(item.target));
+    const updatedEdgesOk = edges.filter(
+      (item) => item.sourceHandle === "ok" && !isNaN(item.target)
+    );
 
-    const updatedEdgesError = edges.filter((item) => item.sourceHandle === "error" && !isNaN(item.target));
+    const updatedEdgesError = edges.filter(
+      (item) => item.sourceHandle === "error" && !isNaN(item.target)
+    );
 
     allNodes.forEach((node) => {
       const id = parseInt(node.id);
-      if (
-        !updatedEdgesOk.some((edge) => parseInt(edge.source) === id)) {
+      if (!updatedEdgesOk.some((edge) => parseInt(edge.source) === id)) {
         dataFromEdgesOk.push({ id, ok_step: null });
       }
 
@@ -262,7 +306,10 @@ console.log();
       }
     });
 
-    const dataFromNodesActive = nodesActive.map((item) => ({ id: parseInt(item.id), node_active: item.node_active,}));
+    const dataFromNodesActive = nodesActive.map((item) => ({
+      id: parseInt(item.id),
+      node_active: item.node_active,
+    }));
 
     const combinedData = dataFromNodes.map((node) => ({
       ...node,
@@ -272,9 +319,8 @@ console.log();
     }));
 
     axios.postWithCallback("job-steps/data-save", combinedData);
-
   };
-  
+
   const onNodeDragStop = (event, node) => {
     const updatedPosition = nodes.map((n) => {
       if (n.id === node.id) {
@@ -294,9 +340,8 @@ console.log();
       ...node,
       ...position.find((id) => id.id === node.id),
     }));
-    
-    setAllNodes(combinedDataposition);
 
+    setAllNodes(combinedDataposition);
   };
 
   const textRef = useRef(null);
@@ -334,7 +379,7 @@ console.log();
           borderRadius: "4px",
         },
       };
-       
+
       setEdges((eds) => addEdge(newEdge, eds));
     },
     [setEdges]
@@ -485,12 +530,10 @@ console.log();
       setNodes((nodes) => nodes.filter((node) => node.id !== menu.id));
       setEdges((edges) => edges.filter((edge) => edge.source !== menu.id));
       setMenu(null);
-
     }
   }, [menu, setNodes, setEdges, activeNodes]);
 
   const nodeActives = nodes.filter((item) => item.node_active === true);
-// console.log("nodeTypes:",nodeTypes);
 
   return (
     <>
@@ -505,7 +548,7 @@ console.log();
               onNodesChange={onNodesChange}
               onEdgesChange={onEdgesChange}
               onConnect={onConnect}
-              onInit={onInit }
+              onInit={onInit}
               onDrop={onDrop}
               onDragOver={onDragOver}
               onEdgeUpdate={onEdgeUpdate}
@@ -517,17 +560,34 @@ console.log();
               onNodeDragStop={onNodeDragStop}
               onNodeContextMenu={onNodeContextMenu}
               onPaneClick={onPaneClick}
-              job={job}
             >
               <Background color="#aaa" gap={16} />
               {menu && (
-                <ContextMenu id={menu.id} top={menu.top} left={menu.left} right={menu.right} jobfileid={jobfileid} bottom={menu.bottom} onClick={deleteNode} />
+                <ContextMenu
+                  id={menu.id}
+                  top={menu.top}
+                  left={menu.left}
+                  right={menu.right}
+                  jobfileid={jobfileid}
+                  bottom={menu.bottom}
+                  onClick={deleteNode}
+                />
               )}
-               
             </ReactFlow>
 
-            <Modal modalTitle={"Save/Update Parameter"} ref={modalRef} handleClose={handleCloseNodeMaster} show={showNodeMaster} maxWidth="70%" >
-              <JobStepParameterMaster step_type_id={step_type_id} job_Id={job_id} node_Id={nodeid} name={editName}/>
+            <Modal
+              modalTitle={"Save/Update Parameter"}
+              ref={modalRef}
+              handleClose={handleCloseNodeMaster}
+              show={showNodeMaster}
+              maxWidth="70%"
+            >
+              <JobStepParameterMaster
+                step_type_id={step_type_id}
+                job_Id={job_id}
+                node_Id={nodeid}
+                name={editName}
+              />
             </Modal>
           </div>
         </ReactFlowProvider>
