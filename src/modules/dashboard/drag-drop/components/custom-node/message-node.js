@@ -43,8 +43,7 @@ const Node = ({ data, id, start_step, item, isSelected, textRef, nodeName, setNo
 
   let customTitle = { ...style.title };
   customTitle.backgroundColor = "#08c9bd";
-  // const nodedata={...data}
-  // console.log("data:", data);
+ 
   return (
     <div ref={nodeRef}>
       <div style={{ textAlign: "center" }} className="text-updater-node" >
