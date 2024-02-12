@@ -174,7 +174,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     const Clientid = auth.getStorageData("client");
-    console.log("Clientid.id:",Clientid.id);
+    
     if (Clientid.id) {
       axios.getWithCallback(
         `projects/client/${Clientid.id}`,

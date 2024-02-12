@@ -2,15 +2,13 @@ import React, { useState, memo, useRef, useEffect, useCallback } from "react";
 import { Handle, Position } from "reactflow";
 import { style } from "./message-node-styles";
 import Modal from "../../../../components/modal-popup";
-import AddFile from '../../../../masters/popup/add-file'
-import axios from "../../../../services/axios";
-const Node = ({ data, id, start_step, item, isSelected, textRef, nodeName, setNodeName, ...props }) => {
+import AddFile from '../../../../masters/popup/add-file' 
+
+const Node = ({ data, id, start_step, startStep, item, isSelected, textRef, nodeName, setNodeName, ...props }) => {
   const [selected, setSelected] = useState(false);
-  const [jobData, setJobData] = useState({});
   const [showNodeMaster, setShowNodeMaster] = useState(false);
-
   const nodeRef = useRef();
-
+  const [refresh, setRefresh] = useState(false);
   const handleToggle = () => {
     setSelected(!selected);
   };
@@ -21,6 +19,7 @@ const Node = ({ data, id, start_step, item, isSelected, textRef, nodeName, setNo
 
   const handleCloseNodeMaster = () => {
     setShowNodeMaster(false);
+    setRefresh(!refresh);
   };
 
   const onNodeDoubleClick = () => {
@@ -43,32 +42,37 @@ const Node = ({ data, id, start_step, item, isSelected, textRef, nodeName, setNo
 
   let customTitle = { ...style.title };
   customTitle.backgroundColor = "#08c9bd";
- 
+
   return (
     <div ref={nodeRef}>
       <div style={{ textAlign: "center" }} className="text-updater-node" >
-        {/* {showNodeMaster && (
+        {showNodeMaster && (
           <Modal
             show={showNodeMaster}
             modalTitle={"Save/Update Parameter"}
             handleClose={handleCloseNodeMaster}
-            maxWidth={"100%"} 
+            maxWidth={"100%"}
           >
-            {data.comp? data.comp: <AddFile/>}
+            {data.comp ? data.comp : <AddFile />}
           </Modal>
-        )} */}
+        )}
 
         <div style={{ textAlign: "center" }}>
           {selected ? null : (
             <>
-              {data.start_step == data.id ? <div><img src="/assets/images/flag.png" style={{zIndex: '10', position: "absolute", marginLeft: '-26px',marginTop: '1px'}} s></img></div> : ""}
-              {/* {data.start_step == data.id ? <div><img src="/assets/images/start2.png" style={{paddingTop:'30px',zIndex:10}}  ></img></div> : ""} */}
+              {startStep == data.id && <div><img src="/assets/images/flag.png" style={{ zIndex: '10', position: "absolute", marginLeft: '-30px', marginTop: '1px' }} /></div>}
+
               <img
                 src={data.img}
                 style={{ width: "70px", height: "70px" }}
                 onClick={handleImageClick}
               />
-              <div style={style.contentWrapper}>{data.heading}</div>
+              <abbr title={data.heading} style={{ cursor: 'pointer', textDecoration: 'none' }}>
+                <div style={style.contentWrapper}>
+                  {data.heading.length > 10 ? data.heading.slice(0, 10) + '...' : data.heading}
+                </div>
+              </abbr>
+
             </>
           )}
         </div>
@@ -84,11 +88,9 @@ const Node = ({ data, id, start_step, item, isSelected, textRef, nodeName, setNo
           </div>
         )}
 
-        <Handle type="source" style={{ marginTop: '-30px',marginLeft:'-40px', backgroundColor: "green", border: "green" }} position={Position.Right} id="ok" onDoubleClick={onNodeDoubleClick} />
+        <Handle type="source" style={{ marginTop: '-30px', marginLeft: '-40px', backgroundColor: "green", border: "green" }} position={Position.Right} id="ok" onDoubleClick={onNodeDoubleClick} />
         <Handle type="source" style={{ backgroundColor: "red", border: "red" }} position={Position.Right} id="error" onDoubleClick={onNodeDoubleClick} />
         <Handle type="target" position={Position.Left} id="target" onDoubleClick={onNodeDoubleClick} />
-
-
       </div>
     </div>
   );
