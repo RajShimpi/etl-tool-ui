@@ -148,8 +148,29 @@ width: 250px;
   margin-top: 20px;
   cursor: pointer;
 }
+.sidebar li .proicons {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  text-decoration: none;
+  position: relative;
+  transition: all 0.5s ease;
+  /* margin-top: 20px; */
+  cursor: pointer;
+}
 
 .sidebar li .proicon::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform: scaleX(0);
+  background-color: rgba(116, 113, 113, 0.329);
+  border-radius: 5px;
+  transform-origin: left;
+}
+.sidebar li .proicons::after {
   content: "";
   position: absolute;
   width: 100%;
@@ -163,8 +184,20 @@ width: 250px;
 .sidebar li .proicon:hover::after {
   transform: scaleX(1);
 }
+.sidebar li .proicons:hover::after {
+  transform: scaleX(1);
+}
 
 .sidebar li .proicon .link_name {
+  font-size: 15px;
+  font-weight: 400;
+  white-space: nowrap;
+  pointer-events: auto;
+  transition: all 0.5s ease;
+  pointer-events: none;
+  opacity: 0;
+}
+.sidebar li .proicons .link_name {
   font-size: 15px;
   font-weight: 400;
   white-space: nowrap;
@@ -179,6 +212,11 @@ width: 250px;
   transition: all 0.5s ease;
   pointer-events: auto;
 }
+.sidebar.open li .proicons .link_name {
+  opacity: 1;
+  transition: all 0.5s ease;
+  pointer-events: auto;
+}
 
 .sidebar li i {
   height: 35px;
@@ -189,6 +227,9 @@ width: 250px;
 
 .proicon {
   margin-top: 20px;
+}
+.proicons {
+  margin-top: 5px;
 }
 
 .sidebar .openf1 {

@@ -10,7 +10,7 @@ const onDragStart = (event, nodeType, img, name, id) => {
 };
 
 const Sidebar = ({ apiData }) => {
-
+ 
   return (
     <div className="">
       <ul>

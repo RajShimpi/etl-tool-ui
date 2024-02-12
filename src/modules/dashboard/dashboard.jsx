@@ -55,7 +55,7 @@ const Dashboard = () => {
   useEffect(() => {
 
     const client = auth.getStorageData("client");
-   
+   console.log(client);
     if (clientId === null && client.client_id) {
       setClientId(client.client_id);
     }

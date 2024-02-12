@@ -161,7 +161,7 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
   const handleFileClick = (file_id) => {
 
     onFileClickCallback(file_id)
-    console.log(file_id);
+    // console.log(file_id);
   };
   const [isPinned, setIsPinned] = useState(true);
 
@@ -227,7 +227,7 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
                   </Modal>
                 }
                 <div style={{ display: !showNested[project.project_name] && "none" }}>
-                  <RecursiveFolder items={project.treeData} onRightCallback={onRightCallback} refreshData={getProjects} onFileClickCallback={handleFileClick} />
+                  <RecursiveFolder items={project.treeData} onRightCallback={onRightCallback} refreshData={getProjects} onFileClickCallback={handleFileClick}  isOpen={isOpen} setIsOpen={setIsOpen}/>
                   {/* <FolderDropdown
                       project={project}
                       projectId={project.id}

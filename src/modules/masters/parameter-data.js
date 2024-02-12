@@ -52,7 +52,7 @@ export const getParameterFields = (itemData) => {
             name: "resource",
             control: "input",
             isSubmit: itemData.isSubmit,
-            isRequired: true,
+            isRequired: false,
             itemVal: itemData.values ? itemData.values["resource"] : '',
         },{
             id: "inputStepId",
@@ -61,7 +61,7 @@ export const getParameterFields = (itemData) => {
             options: itemData.options[0],
             control: "select",
             isSubmit: itemData.isSubmit,
-            isRequired: !itemData?.values?.step_id,
+            isRequired: false,
             itemVal: itemData.values ? itemData.values["step_id"] : '',
         },
         ]
