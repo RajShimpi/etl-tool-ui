@@ -3,7 +3,7 @@ import config from "../../components/config/config.json"
 import CommonModel from '../../components/common-modal';
 import { getCommonFields } from './common-data';
 
-const Edit = ({ id }) => {
+const Edit = () => {
 
     let defaultObj = { file_name: ''};
 
@@ -17,7 +17,7 @@ const Edit = ({ id }) => {
                 // getApi="clients"
                 title="Edit"
                 defaultObj={defaultObj}
-            // tableTitle='client'
+                // tableTitle='client'
             />
         </>
     );

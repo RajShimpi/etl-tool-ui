@@ -4616,23 +4616,34 @@ left: 450px;
     flex: 1 1 auto;
     /* padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x); */
     color: var(--bs-card-color);
-    height: 274px;
+    height:350px;
     overflow-y: scroll;
-<<<<<<< HEAD
     -ms-overflow-style: none;  
     scrollbar-width: none;  /* Firefox */
 }
 
 .card-body ::-webkit-scrollbar{
     display: none;
-=======
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.cards-body {
+    -webkit-box-flex: 1;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    /* padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x); */
+    color: var(--bs-card-color);
+    /* height:340px;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none; */
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
-    scrollbar-width: none;  Firefox
->>>>>>> 183bbbf0ab4c0fe976ab8eb36e8ad431844ffcf1
+    scrollbar-width: none;  /*Firefox*/
+>>>>>>> 631d6a345570f871be287139ac9b9c419bd4f855
 }
 
 .card-title {
-    margin-bottom: var(--bs-card-title-spacer-y)
+    margin-bottom: var(--bs-card-title-spacer-y);
 }
 .card-subtitle {
     margin-top: calc(-.5 * var(--bs-card-title-spacer-y));

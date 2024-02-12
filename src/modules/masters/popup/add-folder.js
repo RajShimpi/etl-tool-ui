@@ -5,7 +5,7 @@ import { getCommonFields } from './common-data';
 
 const Folder = ({ project_id, id }) => {
 
-    let defaultObj = { file_name: '', project_id: project_id, type: 'Folder', parent_id: id };
+    let defaultObj = { file_name: '', project_id: project_id, type: 'Folder', parent_id: id === 0 ? null : id };
 
     return (
         <>
@@ -17,7 +17,7 @@ const Folder = ({ project_id, id }) => {
                 // getApi="clients"
                 title="Add Folder"
                 defaultObj={defaultObj}
-            // tableTitle='client'
+                // tableTitle='client'
             />
         </>
     );

@@ -69,7 +69,6 @@ function FolderContainer({ parentId, projectId, textColor }) {
       : `project-files/get-folder-hierarchy?projectId=${projectId}`;
     axios.getWithCallback(url, (data) => {
       setFolder(data);
-      console.log(data);
     });
   }, [parentId, projectId]);
 

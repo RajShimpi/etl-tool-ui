@@ -12,8 +12,7 @@ export const getJobStepFields = (itemData) => {
             options: itemData.options[0],
             isRequired: true,
             itemVal: itemData.values ? itemData.values["job_id"] : '',
-        },
-        {
+        },{
             id: "inputParameterContext",
             label: "Step Type",
             name: "step_type_id",
@@ -21,8 +20,7 @@ export const getJobStepFields = (itemData) => {
             options: itemData.options[1],
             isRequired: true,
             itemVal: itemData.values ? itemData.values["step_type_id"] : '',
-        },
-        {
+        },{
             type: "text",
             id: "inputParameterDisplay_name",
             label: "Step Name",
@@ -30,8 +28,7 @@ export const getJobStepFields = (itemData) => {
             control: "input",
             isRequired: true,
             itemVal: itemData.values ? itemData.values["step_name"] : '',
-        },
-        {
+        },{
             id: "inputParameterDescription",
             label: "Ok",
             name: "ok_step",
@@ -39,9 +36,7 @@ export const getJobStepFields = (itemData) => {
             control: "select",
             isRequired: true,
             itemVal: itemData.values ? itemData.values["ok_step"] : '',
-        },
-        {
-            // type: "text",
+        },{
             id: "inputParameterType",
             label: "Error",
             name: "error_step",

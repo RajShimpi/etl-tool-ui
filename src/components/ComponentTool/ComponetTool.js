@@ -11,16 +11,17 @@ import axios from '../../modules/services/axios';
 import { TiPin } from "react-icons/ti";
 import { RiUnpinFill } from "react-icons/ri";
 
-
 function ComponentTool({ textColor }) {
   const [isOpen, setIsOpen] = useState(false);
   const [apiData, setApiData] = useState([]);
   const [components, setComponents] = useState([]);
   const [fix, setFix] = useState(true);
   const [isPinned, setIsPinned] = useState(true);
+
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
+
   useEffect(() => {
     axios.getWithCallback('step-type/', (data) => {
       setApiData(data);
@@ -31,23 +32,8 @@ function ComponentTool({ textColor }) {
         data: groupedData[group],
       }));
       setComponents(newComponents);
-      data.forEach(item => {
-        // console.log('ID:', item.id, 'Name:', item.name);
-      });
-
-    });
-  
+  });
   }, []);
-
-  // const toggleSidebar = (e) => {
-  //   e.stopPropagation();
-  //   setIsOpen(false);
-  //   setIconClicked(true);
-  // };
-
-
-
-  
 
   const handleCollapseToggle = (index) => {
     setComponents((prevComponents) =>
@@ -74,25 +60,20 @@ function ComponentTool({ textColor }) {
     }
   };
 
-  
-
   return (
-    <div className={`component-tool ${isOpen ? 'open' : ''} right-sidebar`}
-    onMouseEnter={handleSidebarHover}
-        onMouseLeave={handleSidebarLeave}
-    >
+    <div className={`component-tool ${isOpen ? 'open' : ''} right-sidebar`} onMouseEnter={handleSidebarHover} onMouseLeave={handleSidebarLeave}>
       <div className='logo_details' style={{ textColor }}>
         <div className='logo_name me-2'>Component Tool</div>
         {isOpen && (isPinned ? (
-             <RiUnpinFill size={22} className="pushPinIcon" onClick={() => {setIsPinned(!isPinned); setFix(!fix);}} />
+              <abbr title='Pin' style={{cursor: 'pointer'}}>
+                   <RiUnpinFill size={22} className="pushPinIcon" onClick={() => { setIsPinned(!isPinned); setFix(!fix); }} />
+              </abbr>
           ) : (
-            <TiPin size={22} className="pushPinIcon" onClick={() => {setIsPinned(!isPinned); setFix(!fix);}} />
+              <abbr title='UnPin' style={{cursor: 'pointer'}}>
+                   <TiPin size={22} className="pushPinIcon" onClick={() => { setIsPinned(!isPinned); setFix(!fix); }} />
+              </abbr>
           ))}
-        <DensityMediumIcon
-          className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`}
-          id='btn'
-          onClick={toggleSidebar}
-        ></DensityMediumIcon>
+       <DensityMediumIcon className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`} id='btn' onClick={() => { toggleSidebar(); setIsPinned(!isPinned); setFix(!fix); }}/>
       </div>
       <ul className='nav-list'>
         {components.map((component, index) => (
@@ -102,11 +83,7 @@ function ComponentTool({ textColor }) {
                 <div href='#' className='comIcon'>
                   {components.isOpen ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='medium' />}
                   <span className='link_name' style={{ marginLeft: '5px' }}>
-                    <div
-                      variant='contained'
-                      className='comp'
-                      onClick={() => handleCollapseToggle(index)}
-                    >
+                    <div variant='contained' className='comp' onClick={() => handleCollapseToggle(index)} >
                       {component.name} {component.isCollapseOpen ? <KeyboardArrowUpIcon fontSize='small' /> : <KeyboardArrowDownIcon fontSize='small' />}
                     </div>
                   </span>
@@ -130,7 +107,7 @@ function groupDataBy(data, property) {
     const key = item[property];
     if (!acc[key]) {
       acc[key] = [];
-    } 
+    }
     acc[key].push(item);
     return acc;
   }, {});

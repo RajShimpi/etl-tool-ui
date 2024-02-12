@@ -14,10 +14,7 @@
 
   "BRNACH_COLUMNS": ["name"],
   "DEPARTMENT_COLUMNS": ["name"],
-  "ROLE_COLUMNS": [
-    "name",
-    "displayname"
-],
+  "ROLE_COLUMNS": ["name", "displayname"],
   "EMPLOYEE_COLUMNS": [
     "emp_code",
     "firstname",
@@ -83,45 +80,32 @@
     "binLocation",
     "role"
   ],
-  "CLIENT": [
-    "name", 
-    "abbreviation",
-    "client_id"
-],
-  "PROJECT": [
-    "project_name", 
-    "client.name", 
-    "base_location"
-],
+  "CLIENT": ["name", "abbreviation", "client_id"],
+  "PROJECT": ["project_name", "client.name", "base_location"],
   "PROJECT_FILE": [
     "project.project_name",
     "type",
     "file_name",
     "parent.file_name"
   ],
-  "STEPTYPE": [
-    "type", 
-    "name", 
-    "img", 
-    "step_name",
-    "group"],
-  "TYPE_CONFIG": [
-    "category", 
-    "value", 
-    "isActive", 
-    "params"
-],
-    "PARAMETER":[
-        "name",
-        "context",
-        "display_name",
-        "description",
-        "type",
-        "resource"
-    ],
-    "STEP_TYPE_PARAMETERS":[
-        "step.name",
-        "parameter.name",
-        "required"
-    ]
+  "STEPTYPE": ["type", "name", "img", "step_name", "group"],
+  "TYPE_CONFIG": ["category", "value", "isActive", "params"],
+  "PARAMETER": [
+    "name",
+    "context",
+    "display_name",
+    "description",
+    "type",
+    "resource"
+  ],
+  "STEP_TYPE_PARAMETERS": ["step.name", "parameter.name", "required","params"],
+  "Job_Schedule": [
+    "client.name",
+    "project.project_name",
+    "job.name",
+    "name",
+    "description",
+    "scheduleCron",
+    "active"
+  ]
 }

@@ -17,7 +17,7 @@ const Delete = () => {
                 // getApi="clients"
                 title="Delete"
                 defaultObj={defaultObj}
-            // tableTitle='client'
+                // tableTitle='client'
             />
         </>
     );
