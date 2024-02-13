@@ -53,6 +53,12 @@
  
   
 }
+.setAsStartStepHandler:hover {
+ background-color: gray; 
+}
+.deleteNode:hover {
+ background-color: gray; 
+}
 .hi{
   margin:200px ;
 }

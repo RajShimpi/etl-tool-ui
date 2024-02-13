@@ -39,7 +39,6 @@ const JobParameterMaster = ({ job_id, project_id, handleClose }) => {
             }));
             setparameter(data);
           });
-          // console.log(response);
         } catch (error) {
           console.error('Error fetching data:', error);
         }

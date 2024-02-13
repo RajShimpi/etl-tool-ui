@@ -104,7 +104,6 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
     setType(type);
   }
 
-  // console.log("projects:,", projects);
   // const toggleFile = (projectIndex, file) => {
   //   const updatedProject = [...project];
   //   updatedProject[projectIndex].openFiles[file] = !updatedProject[projectIndex].openFiles[file];
@@ -161,7 +160,6 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
   const handleFileClick = (file_id) => {
 
     onFileClickCallback(file_id)
-    // console.log(file_id);
   };
   const [isPinned, setIsPinned] = useState(true);
 

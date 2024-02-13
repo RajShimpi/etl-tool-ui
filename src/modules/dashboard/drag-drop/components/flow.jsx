@@ -33,7 +33,7 @@ import JobParameterMaster from "../../../masters/job-parameter";
 
 const nodeTypes = {
   node: (node) => {
-    // console.log(node);
+    
     return (
       <Node
         id={node.id}
@@ -118,9 +118,7 @@ const ContextMenu = ({
             </div>
           </button>
         </div>
-      
-  
-        <div {...props} style={{ height: "50px" }}>
+        <div  {...props} style={{ height: "50px" }}>
           <button
             className="deleteNode"
             onClick={deleteNode}
@@ -185,6 +183,7 @@ const OverviewFlow = (textColor) => {
     setNodes([]);
     setJobDataId(null);
     setStartStep(null);
+    setMenu(null)
   }, [projectID, jobDataId, setStartStep, setMenu]);
 
   useEffect(() => {
@@ -212,7 +211,6 @@ const OverviewFlow = (textColor) => {
           },
           node_active: item.node_active,
         }));
-        console.log("dataNodes:", dataNodes);
 
         const dataEdgesok = data.map((item) => ({
           id: "" + item.id,

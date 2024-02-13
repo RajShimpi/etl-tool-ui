@@ -46,7 +46,7 @@ const Node = ({ data, id, start_step, startStep, item, isSelected, textRef, node
   return (
     <div ref={nodeRef}>
       <div style={{ textAlign: "center" }} className="text-updater-node" >
-        {showNodeMaster && (
+        {/* {showNodeMaster && (
           <Modal
             show={showNodeMaster}
             modalTitle={"Save/Update Parameter"}
@@ -55,7 +55,7 @@ const Node = ({ data, id, start_step, startStep, item, isSelected, textRef, node
           >
             {data.comp ? data.comp : <AddFile />}
           </Modal>
-        )}
+        )} */}
 
         <div style={{ textAlign: "center" }}>
           {selected ? null : (
@@ -67,7 +67,7 @@ const Node = ({ data, id, start_step, startStep, item, isSelected, textRef, node
                 style={{ width: "70px", height: "70px" }}
                 onClick={handleImageClick}
               />
-              <abbr title={data.heading} style={{ cursor: 'pointer', textDecoration: 'none' }}>
+             <abbr title={data.heading} style={{ cursor: 'pointer', textDecoration: 'none', borderRadius:'50px'}}>
                 <div style={style.contentWrapper}>
                   {data.heading.length > 10 ? data.heading.slice(0, 10) + '...' : data.heading}
                 </div>
