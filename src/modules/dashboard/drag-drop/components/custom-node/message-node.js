@@ -2,7 +2,7 @@ import React, { useState, memo, useRef, useEffect, useCallback } from "react";
 import { Handle, Position } from "reactflow";
 import { style } from "./message-node-styles";
 import Modal from "../../../../components/modal-popup";
-import AddFile from '../../../../masters/popup/add-file' 
+import AddFile from '../../../../masters/popup/add-file'
 
 const Node = ({ data, id, start_step, startStep, item, isSelected, textRef, nodeName, setNodeName, ...props }) => {
   const [selected, setSelected] = useState(false);
@@ -42,7 +42,7 @@ const Node = ({ data, id, start_step, startStep, item, isSelected, textRef, node
 
   let customTitle = { ...style.title };
   customTitle.backgroundColor = "#08c9bd";
-
+console.log(data);
   return (
     <div ref={nodeRef}>
       <div style={{ textAlign: "center" }} className="text-updater-node" >
@@ -60,14 +60,20 @@ const Node = ({ data, id, start_step, startStep, item, isSelected, textRef, node
         <div style={{ textAlign: "center" }}>
           {selected ? null : (
             <>
-              {startStep == data.id && <div><img src="/assets/images/flag.png" style={{ zIndex: '10', position: "absolute", marginLeft: '-30px', marginTop: '1px' }} /></div>}
-
+              {startStep === data.id ? (
+                <div>
+                  <img
+                    src="/assets/images/flag.png"
+                    style={{ zIndex: '10', position: "absolute", marginLeft: '-30px', marginTop: '1px' }}
+                  />
+                </div>
+              ) : ''}
               <img
                 src={data.img}
                 style={{ width: "70px", height: "70px" }}
                 onClick={handleImageClick}
               />
-             <abbr title={data.heading} style={{ cursor: 'pointer', textDecoration: 'none', borderRadius:'50px'}}>
+              <abbr title={data.heading} style={{ cursor: 'pointer', textDecoration: 'none', borderRadius: '50px' }}>
                 <div style={style.contentWrapper}>
                   {data.heading.length > 10 ? data.heading.slice(0, 10) + '...' : data.heading}
                 </div>

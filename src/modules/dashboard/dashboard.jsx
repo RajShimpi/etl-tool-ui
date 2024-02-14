@@ -90,7 +90,7 @@ const Dashboard = () => {
 
     return () => {};
   }, [clientId, setClientId]);
-
+console.log("menuData:",menuData);
   // useEffect(() => {
   //   if (clientId) {
   //     // localStorage.setItem("clientId", clientId);
