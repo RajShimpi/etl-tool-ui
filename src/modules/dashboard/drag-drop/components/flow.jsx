@@ -209,7 +209,7 @@ const OverviewFlow = (textColor) => {
           type: "node",
           data: {
             heading: item.step_name,
-            img: `/assets/images/${item.stepType.img}.png`,
+            img: `/assets/images/${item.stepType.img}`,
             start_step:
               jobDataId.start_step == item.id ? jobDataId.start_step : null,
             id: item.id,

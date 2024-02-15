@@ -88,7 +88,7 @@
     "file_name",
     "parent.file_name"
   ],
-  "STEPTYPE": ["type", "name", "img", "step_name", "group"],
+  "STEPTYPE": ["type", "name", "img", "step_name", "group", "params"],
   "TYPE_CONFIG": ["category", "value", "isActive", "params"],
   "PARAMETER": [
     "name",

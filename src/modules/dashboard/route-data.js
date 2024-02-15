@@ -76,7 +76,8 @@ export const routeData = (routes) => [
     childComp: ChangePassword,
     data: {},
     permissions: true,
-    isUserCanView: routes.includes(routeConstant.changePassword),
+    isUserCanView: true,
+    // isUserCanView: routes.includes(routeConstant.changePassword),
   },
   {
     routeTo: routeConstant.addMenu,
@@ -182,7 +183,7 @@ export const routeData = (routes) => [
     childComp: JobSchedule,
     data: {},
     permissions: true,
-    isUserCanView: routes.includes(routeConstant.jobschedule),
+    isUserCanView:true,
  },
 //  {
 //   routeTo: routeConstant.systemConfig, // StepTypeParamete Form route

@@ -15,7 +15,7 @@ export const getStepTypeParameter = (itemData) => {
             itemVal: itemData.values ? itemData.values["step_id"] : '',
         },{
             id: "inputParameterId",
-            label: "Parameter Id",
+            label: "Parameter Name",
             name: "parameter_id",
             options: itemData.options[1],
             control: "select",

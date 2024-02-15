@@ -169,7 +169,7 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
                       </Modal>
                     }
                     <div
-                      style={{ height: "30px" }}
+                      style={{ height: "25px" }}
                       className={`file_name ${
                         hoveredItem === subItem.file_name ? "hovered" : ""
                       } ${clickedItem === subItem.file_name ? "clicked" : ""}`}

@@ -5,7 +5,7 @@ import { getSteptypeFields } from './steptype-data';
 
 const StepType = () => {
 
-    let defaultObj = { type: '', name: '', img: '', group: '' };
+    let defaultObj = { type: '', name: '', img: '', group: '' ,params:''};
 
     return (
         <>
