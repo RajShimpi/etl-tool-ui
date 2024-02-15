@@ -81,6 +81,7 @@
   .folderstyle {
     list-style: none;
     margin-left: 15px;
+    margin-top:4px;
     cursor: pointer;
     text-wrap: nowrap;
   }
@@ -252,7 +253,7 @@
   
   }
   .sidebar.open .file-name {
-    height: 30px;
+    height: 30px; 
   }
   .sidebar.open .folderstyle {
     list-style: none;
@@ -262,9 +263,11 @@
   .sidebar.open .file_name.hovered {
     background-color: rgba(116, 113, 113, 0.329);
     border-radius: 4px;
+   
   }
   
   .sidebar.open .file_name.clicked {
-    background-color: rgb(0, 191, 255);
+    background-color: rgba(116, 113, 113, 0.329);
     border-radius: 4px;
+    
   }

@@ -115,13 +115,14 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
               >
                 {subItem.type === "File" && (
                   <div
-                    className={`file_name ${
-                      hoveredItem === subItem.file_name ? "hovered" : ""
-                    } ${clickedItem === subItem.file_name ? "clicked" : ""}`}
+                  className={`file_name ${
+                    hoveredItem === subItem.file_name ? "hovered" : ""
+                  } ${clickedItem === subItem.file_name ? "clicked" : ""}`}
+                  onMouseEnter={() => handleMouseEnter(subItem.file_name)}
                     ref={containerRef}
                     key={subItem.file_name + "rootDiv" + index}
                     onClick={() => onhandelFileId(subItem)}
-                    style={{ height: "30px" }}
+                    
                   >
                     <InsertDriveFileIcon
                       key={subItem.file_name + "fileIcon" + index}
@@ -134,7 +135,7 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
                 {subItem.type === "Folder" && subItem.children && (
                   <>
                     {contextMenuPosition && subItem.isRightClick && (
-                      <div style={{ display: !subItem.isRightClick && "none" }}>
+                      <div style={{ display: !subItem.isRightClick && "none"}}>
                         <ContextMenu
                           onClose={(e) => closeContextMenu(e, subItem)}
                           project_id={subItem.project_id}
@@ -169,8 +170,11 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
                     }
                     <div
                       style={{ height: "30px" }}
-                      className={`file_name`}
+                      className={`file_name ${
+                        hoveredItem === subItem.file_name ? "hovered" : ""
+                      } ${clickedItem === subItem.file_name ? "clicked" : ""}`}
                       onMouseEnter={() => handleMouseEnter(subItem.file_name)}
+                      
                     >
                       {showNested[subItem.file_name] ? (
                         <FolderOpenIcon

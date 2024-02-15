@@ -199,8 +199,7 @@ const OverviewFlow = (textColor) => {
   }, [projectID, jobDataId, setStartStep, setMenu]);
 
   useEffect(() => {
-    axios.getWithCallback("job-steps", (data) => setData(data));
-
+    
     if (jobDataId) {
       axios.getWithCallback(`job-steps/${jobDataId.id}/job`, (data) => {
         setJobFileId(jobDataId);
