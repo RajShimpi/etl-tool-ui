@@ -309,7 +309,7 @@ const CommonModel = (props) => {
           null,
           props.apiCallerKey
         );
-        console.log(props.updateApi,"comman model log")
+        // console.log(props.updateApi,"comman model log")
       } else {
         axios.postWithCallback(
           props.insertApi,

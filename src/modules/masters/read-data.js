@@ -3,7 +3,8 @@ export const getReadFields = (itemData) => {
         col: 12,
         callback: itemData.callback,
         disabled: itemData.disabled,
-        groups: [{
+        groups: [
+        {
             type: "select",
             id: "inputprojectName",
             label: "Type",
@@ -11,8 +12,7 @@ export const getReadFields = (itemData) => {
             control: "select",
             isRequired: true,
             itemVal: itemData.values ? itemData.values["type"] : '',
-        },
-        {
+        },{
             type: "text",
             id: "inputDisplayabbreviation",
             label: "Location",
@@ -20,8 +20,7 @@ export const getReadFields = (itemData) => {
             control: "input",
             isRequired: true,
             itemVal: itemData.values ? itemData.values["location"] : '',
-        },
-        {
+        },{
             type: "radio",
             id: "inputDisplaybase_location",
             label: "Cache?",

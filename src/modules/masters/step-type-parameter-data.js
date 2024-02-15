@@ -3,7 +3,8 @@ export const getStepTypeParameter = (itemData) => {
         col: 4,
         callback: itemData.callback,
         disabled: itemData.disabled,
-        groups: [{
+        groups: [
+        {
             id: "inputStepId",
             label: "Step Name",
             name: "step_id",
@@ -12,8 +13,7 @@ export const getStepTypeParameter = (itemData) => {
             isSubmit: itemData.isSubmit,
             isRequired: !itemData?.values?.step_id,
             itemVal: itemData.values ? itemData.values["step_id"] : '',
-        },
-        {
+        },{
             id: "inputParameterId",
             label: "Parameter Id",
             name: "parameter_id",
@@ -22,8 +22,17 @@ export const getStepTypeParameter = (itemData) => {
             isSubmit: itemData.isSubmit,
             isRequired: !itemData?.values?.parameter_id,
             itemVal: itemData.values ? itemData.values["parameter_id"] : '',
-        },
-        {
+        },{
+            type: "text",
+            id: "inputParams",
+            label: "Params",
+            name: "params",
+            control: "textarea",
+            isRequired: false,
+            itemVal: itemData.values ? itemData.values["params"] : '',
+            span: itemData.message?.params,
+            apiDataType: "json"
+        },{
             type: "checkbox",
             id: "inputRequired",
             label: "Required",
@@ -31,7 +40,7 @@ export const getStepTypeParameter = (itemData) => {
             control: "input",
             isRequired: false,
             itemVal: itemData.values ? itemData.values["required"] : '',
-        }
+        },
         ]
     }];
 }

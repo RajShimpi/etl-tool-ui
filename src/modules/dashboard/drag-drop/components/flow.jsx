@@ -11,6 +11,7 @@ import ReactFlow, {
 // import Sidebar from "./sidebar/sidebar";
 import Node from "./custom-node/message-node";
 import { MarkerType } from "reactflow";
+
 // Utils
 import { isAllNodeisConnected } from "../utils";
 
@@ -22,40 +23,125 @@ import "../../../../components/MainComponent.css";
 import Modal from "../../../components/modal-popup";
 
 import axios from "../../../services/axios";
-import StepParameter from "../../../masters/popup/step-parameter";
-import { useJobData, useProject } from "../../../../components/JobDataContext";
+import {
+  useJobData,
+  useProjectid,
+} from "../../../../components/JobDataContext";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { DeleteForever } from "@mui/icons-material";
 import JobStepParameterMaster from "../../../masters/job-step-param-master";
 import JobParameterMaster from "../../../masters/job-parameter";
 
-const nodeTypes = { node: Node };
+const nodeTypes = {
+  node: (node) => {
+    
+    return (
+      <Node
+        id={node.id}
+        startStep={node.data.start_step}
+        data={node.data}
+        start_step={node.start_step ?? null}
+      />
+    );
+  },
+};
 
-function ContextMenu({ id, name, top, left, right, bottom, ...props }) {
+const ContextMenu = ({
+  id,
+  name,
+  top,
+  left,
+  right,
+  jobfileid,
+  bottom,
+  menu,
+  setAsStartStepHandler,
+  textColor,
+  ...props
+}) => {
   const { setNodes, setEdges } = useReactFlow();
+  const [startStepChecked, setStartStepChecked] = useState(
+    menu.startstep === id
+  );
+
+  useEffect(() => {
+    setNodes([]);
+    setEdges([]);
+  }, [setNodes, setEdges, setStartStepChecked]);
+
+  useEffect(() => {
+    setStartStepChecked(menu.startstep === id);
+  }, [menu.startstep, id]);
+
+  const handleStartStepClick = () => {
+    setAsStartStepHandler();
+  };
 
   const deleteNode = useCallback(() => {
     setNodes((nodes) => nodes.filter((node) => node.id !== id));
     setEdges((edges) => edges.filter((edge) => edge.source !== id));
-  }, [id, setNodes, setEdges]);
+  }, [id, setNodes, setEdges,menu]);
 
   return (
     <>
-      <div
-        style={{ top, left, right, bottom }}
-        className="context-menu"
-        {...props}
-      >
-        <button className="deleteNode" onClick={deleteNode}>
-          <DeleteIcon className="display-3 m-2" />
-          <div className="delete mt-2">Delete</div>
-        </button>
+    <div style={{ top, left, right, bottom ,marginTop:'-125px',marginLeft:'100px'}} className="context-menu">
+           <div className="d-flex" style={{ height: "50px" }}>
+          <button className="setAsStartStepHandler">
+            {menu.start_step == id ? (
+              <input
+                type="checkbox"
+                id="startstep"
+                style={{ margin: "-6px", height: "20px", width: "15px",cursor:"pointer" }}
+                name="startstep"
+                value="startstep"
+                onClick={handleStartStepClick}
+                checked
+              />
+            ) : (
+              <input
+                type="checkbox"
+                id="startstep"
+                style={{ margin: "-6px", height: "20px", width: "15px" ,cursor:"pointer"}}
+                name="startstep"
+                value="startstep"
+                onClick={handleStartStepClick}
+              />
+            )}
+            <div
+              style={{
+                margin: "2px",
+                marginLeft: "20px",
+                fontSize: "18px",
+                color: textColor?.textColor,
+              }}
+            >
+              Start
+            </div>
+          </button>
+        </div>
+        <div  {...props} style={{ height: "50px" }}>
+          <button
+            className="deleteNode"
+            onClick={deleteNode}
+            style={{ height: "50px" }}
+          >
+            <DeleteIcon
+              className="display-3 m-2"
+              style={{ color: textColor?.textColor }}
+            />
+            <div
+              className="delete mt-2"
+              style={{ fontSize: "18px", color: textColor?.textColor }}
+            >
+              Delete
+            </div>
+          </button>
+        </div>
       </div>
-    </>
+      </>
   );
-}
+};
 
-const OverviewFlow = () => {
+const OverviewFlow = (textColor) => {
   const [showNodeMaster, setShowNodeMaster] = useState(false);
   const reactFlowWrapper = useRef(null);
   const edgeUpdateSuccessful = useRef(true);
@@ -73,6 +159,7 @@ const OverviewFlow = () => {
   const [allNodes, setAllNodes] = useState([]);
   const [step_type_id, setStep_type_Id] = useState();
   const [job_id, setJob_Id] = useState();
+  const [jobfileid, setJobFileId] = useState();
   const [nodeid, setNode_Id] = useState();
   const [editName, setName] = useState();
   const [activeNodes, setActiveNodes] = useState([]);
@@ -80,20 +167,31 @@ const OverviewFlow = () => {
   const [openJobParams, setOpenJobParams] = useState(false);
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
   const { jobDataId } = useJobData(null);
-  const { projectsid } = useProject();
+  const { setJobDataId } = useJobData(null);
+  const { projectID } = useProjectid([]);
+  const [startStep, setStartStep] = useState(null);
 
-  const project_id = localStorage.getItem("item");
-  // console.log("project_id:",projectsid);
+  const setAsStartStepHandler = useCallback(() => {
+    const startstep = {
+      start_step: parseInt(menu.id),
+    };
+    axios.putWithCallback(`job/${jobfileid.id}/startstep`, startstep);
+  }, [menu, jobfileid, startStep, setStartStep, nodes]);
+
   useEffect(() => {
-    // const jobDataId = localStorage.getItem("jobDataId");
+    setEdges([]);
+    setNodes([]);
+    setJobDataId(null);
+    setStartStep(null);
+    setMenu(null)
+  }, [projectID, jobDataId, setStartStep, setMenu]);
+
+  useEffect(() => {
+    axios.getWithCallback("job-steps", (data) => setData(data));
 
     if (jobDataId) {
-      console.log("jobDataId:", jobDataId);
-      axios.getWithCallback("job-steps", (data) => setData(data));
-
-      axios.getWithCallback(`job-steps/${jobDataId}/job`, (data) => {
-        // console.log("Data from job-steps API:", data);
-
+      axios.getWithCallback(`job-steps/${jobDataId.id}/job`, (data) => {
+        setJobFileId(jobDataId);
         const dataNodes = data.map((item) => ({
           id: "" + item.id,
           step_type_id: "" + item.step_type_id,
@@ -102,15 +200,17 @@ const OverviewFlow = () => {
           data: {
             heading: item.step_name,
             img: `/assets/images/${item.stepType.img}.png`,
+            start_step:
+              jobDataId.start_step == item.id ? jobDataId.start_step : null,
+            id: item.id,
           },
+
           position: {
             x: item.params.position_X,
             y: item.params.position_Y,
           },
           node_active: item.node_active,
         }));
-
-        // console.log("dataNodes:", dataNodes);
 
         const dataEdgesok = data.map((item) => ({
           id: "" + item.id,
@@ -150,8 +250,16 @@ const OverviewFlow = () => {
       });
     }
     // eslint-disable-next-line
-  }, [setNodes, setAllNodes, jobDataId]);
-  // console.log(nodes);
+  }, [
+    setNodes,
+    setAllNodes,
+    jobDataId,
+    startStep,
+    setStartStep,
+    setMenu,
+    setAsStartStepHandler,
+  ]);
+
   const onDragOver = (event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
@@ -164,7 +272,6 @@ const OverviewFlow = () => {
   const onDrop = (event) => {
     event.preventDefault();
     const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
-
     const type = event.dataTransfer.getData("application/reactflow");
     const img = event.dataTransfer.getData("img");
     const name = event.dataTransfer.getData("name");
@@ -187,7 +294,7 @@ const OverviewFlow = () => {
       position,
       data: { heading: name, img: img },
     };
-    console.log("newNode:", newNode);
+
     setNodes((es) => es.concat(newNode));
     setData((es) => es.concat(newNode));
     setSelectedNode((newNode.a = name));
@@ -195,10 +302,9 @@ const OverviewFlow = () => {
   };
 
   const saveNodeToDatabase = () => {
-    // console.log("activeNodes:",activeNodes);
     const dataFromNodes = allNodes.map((item) => ({
       id: parseInt(item.id),
-      job_id: jobDataId,
+      job_id: jobfileid,
       step_type_id: parseInt(item.step_type_id),
       step_name: item.data?.heading || item.name,
       type: item.type,
@@ -209,8 +315,6 @@ const OverviewFlow = () => {
           item.id === position.id ? position.position_Y : item.position.y,
       },
     }));
-
-    // console.log("dataFromNodes:", dataFromNodes);
 
     const dataFromEdgesOk = edges
       .filter(
@@ -246,7 +350,6 @@ const OverviewFlow = () => {
 
     allNodes.forEach((node) => {
       const id = parseInt(node.id);
-
       if (!updatedEdgesOk.some((edge) => parseInt(edge.source) === id)) {
         dataFromEdgesOk.push({ id, ok_step: null });
       }
@@ -290,12 +393,7 @@ const OverviewFlow = () => {
       ...dataFromNodesActive.find((nodeActive) => nodeActive.id === node.id),
     }));
 
-    // console.log("Updated Edges Ok:", updatedEdgesOk);
-    // console.log("Updated Edges Error:", updatedEdgesError);
-    // console.log("Combined Data:", combinedData);
-
     axios.postWithCallback("job-steps/data-save", combinedData);
-    // axios.putWithCallback(`job-steps/node-active`, nodesActive);
   };
 
   const onNodeDragStop = (event, node) => {
@@ -306,7 +404,6 @@ const OverviewFlow = () => {
           position: { x: node.position.x, y: node.position.y },
         };
       }
-      console.log("edges", edges);
       return n;
     });
 
@@ -318,8 +415,8 @@ const OverviewFlow = () => {
       ...node,
       ...position.find((id) => id.id === node.id),
     }));
+
     setAllNodes(combinedDataposition);
-    // console.log(allNodes, "update");
   };
 
   const textRef = useRef(null);
@@ -357,13 +454,11 @@ const OverviewFlow = () => {
           borderRadius: "4px",
         },
       };
-      console.log("newEdge:", newEdge);
+
       setEdges((eds) => addEdge(newEdge, eds));
     },
     [setEdges]
   );
-
-  // console.log("edges:", edges);
 
   const [nodeName, setNodeName] = useState("Node 1");
 
@@ -448,7 +543,7 @@ const OverviewFlow = () => {
 
   const handleCloseJobParams = () => {
     setOpenJobParams(false);
-  }
+  };
 
   const handleClickOutside = (event) => {
     if (modalRef.current && !modalRef.current.contains(event.target)) {
@@ -472,41 +567,34 @@ const OverviewFlow = () => {
     nodeId(node);
   };
 
-  // const saveNodeActiveStatus = () => {
-  //   console.log("nodesActiveStatus:",nodesActive);
-  //   const dataToUpdate = [nodesActive].map((item)=>({
-  //     id:item.id,
-  //     node_active: false,
-  //   }));
-  //   console.log("dataToUpdate:dataToUpdate",dataToUpdate);
-  //   setNodesActive(dataToUpdate)
-  // };
-
   const onNodeContextMenu = useCallback(
     (event, node) => {
       event.preventDefault();
-      const contextMenuWidth = 150;
-      const contextMenuHeight = 40;
-
+      const contextMenuWidth = 120;
+      const contextMenuHeight = 50;
+  
+      const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
       const mouseX = event.clientX;
       const mouseY = event.clientY;
-
-      const top = mouseY - contextMenuHeight / 2;
-      const left = mouseX - contextMenuWidth / 2;
-
+  
+      const top = mouseY - reactFlowBounds.top - contextMenuHeight / 2;
+      const left = mouseX - reactFlowBounds.left - contextMenuWidth / 2;
+  
       setMenu({
         id: node.id,
         top: top < 0 ? 0 : top,
         left: left < 0 ? 0 : left,
         right: left < 0 ? -left : 0,
         bottom: top < 0 ? -top : 0,
+        start_step: node.data.start_step,
       });
-      // console.log("node.id:",node.id);
+  
       setActiveNodes(node);
+      setSelectedNode(node);
     },
-    [setMenu]
+    [setMenu, setAsStartStepHandler]
   );
-
+  
   const onPaneClick = useCallback(() => {
     if (menu) {
       setMenu(null);
@@ -519,39 +607,48 @@ const OverviewFlow = () => {
         ...prevDeletedNodes,
         { id: menu.id, node_active: false },
       ]);
+
       setNodes((nodes) => nodes.filter((node) => node.id !== menu.id));
       setEdges((edges) => edges.filter((edge) => edge.source !== menu.id));
       setMenu(null);
-
-      // console.log("activeNodes:nodes",activeNodes);
     }
   }, [menu, setNodes, setEdges, activeNodes]);
 
-  // console.log("nodesActive:,",nodesActive);
-  const Node = nodes.filter((item) => item.node_active === true);
+  const nodeActives = nodes.filter((item) => item.node_active === true);
 
   return (
     <>
-      <button className="btn btn-primary" style={{ marginRight: '1px'}} onClick={saveHandler}>Save</button>
-      <button className="btn btn-secondary" onClick={() => { setOpenJobParams(true); }}>Job Params</button>
+      <button
+        className="btn btn-primary"
+        style={{ marginRight: "1px" }}
+        onClick={saveHandler}
+      >
+        Save
+      </button>
+      <button
+        className="btn btn-secondary"
+        onClick={() => {
+          setOpenJobParams(true);
+        }}
+      >
+        Job Params
+      </button>
       <Modal
-              modalTitle={"Save/Update Parameter"}
-              ref={modalRef}
-              handleClose={handleCloseJobParams}
-              show={openJobParams}
-              maxWidth="70%"
-            >
-              <JobParameterMaster                
-                project_id = {project_id}
-                job_Id={job_id} 
-              />
-            </Modal>
+        modalTitle={"Save/Update Parameter"}
+        ref={modalRef}
+        handleClose={handleCloseJobParams}
+        show={openJobParams}
+        maxWidth="70%"
+      >
+        <JobParameterMaster project_id={projectID} job_Id={job_id} />
+      </Modal>
       <div className="dndflow">
         <ReactFlowProvider>
           <div className="reactflow-wrapper" ref={reactFlowWrapper}>
             <ReactFlow
-              nodes={Node}
+              nodes={nodeActives}
               edges={edges}
+              startStep={startStep}
               nodeTypes={nodeTypes}
               onNodesChange={onNodesChange}
               onEdgesChange={onEdgesChange}
@@ -576,12 +673,14 @@ const OverviewFlow = () => {
                   top={menu.top}
                   left={menu.left}
                   right={menu.right}
+                  jobfileid={jobfileid}
                   bottom={menu.bottom}
                   onClick={deleteNode}
+                  setAsStartStepHandler={setAsStartStepHandler}
+                  menu={menu}
+                  textColor={textColor}
                 />
               )}
-              <div className="reactflow-wrapper" ref={reactFlowWrapper} />
-              <div ref={ref} />
             </ReactFlow>
 
             <Modal

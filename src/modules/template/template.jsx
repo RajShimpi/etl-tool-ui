@@ -81,7 +81,7 @@ export const Template = ({ templates, experimentId, callback, deleteCallback, ex
 
     useEffect(() => {
         callback(templateData);
-        console.log(templateData);
+        // console.log(templateData);
     }, [templateData])
 
     // const contentStyle = {

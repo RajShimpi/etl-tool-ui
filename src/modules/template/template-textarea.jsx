@@ -6,7 +6,7 @@ export const TemplateTextArea = ({ id, content, unitName, itemVal, callback,disa
     const [value, setValue] = useState('');
 
     useEffect(() => {
-        console.log(itemVal);
+        // console.log(itemVal);
         setValue(itemVal || '');
     }, [itemVal])
 

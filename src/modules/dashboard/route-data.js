@@ -1,12 +1,10 @@
 
-import { Branch } from "../hrms/branch";
+// import { Branch } from "../hrms/branch";
 import ChangePassword from "../user/change-password";
 import DashboardContent from "./dashboard-content";
 // import Dashboard from "./dashboard";
-import { Department } from "../hrms/department";
-import { Employees } from "../hrms/employee";
-
-
+// import { Department } from "../hrms/department";
+// import { Employees } from "../hrms/employee";
 
 import RegisterUser from "../user/register-user";
 import { Roles } from "../user/roles";
@@ -14,8 +12,6 @@ import AddMenu from "../user/add-menu";
 import { DashboardBuilder } from "./dashboard-builder";
 import UserMaster from "../masters/user-master";
 import ResetPassword from "../user/reset-password";
-import ProjecStructure from "../../components/ProjectStrucure/ProjectStructure";
-import ComponetTool from "../../components/ComponentTool/ComponetTool";
 import MainComponent from "../../components/MainComponent";
 import Client from "../masters/client";
 import Project from "../masters/project";
@@ -23,9 +19,8 @@ import ProjectFile from "../masters/project-file";
 import StepType from "../masters/steptype";
 import TypeConfigMaster from "../masters/type-config-master";
 import Parameter from "../masters/parameter";
-import StepTypeParamete from "../masters/step-type-parameter";
-import { SystemConfig } from "../masters/system-config";
-
+import StepTypeParameter from "../masters/step-type-parameter";
+import JobSchedule from "../masters/job-schedule";
 
 export const routeConstant = {
   dashboard: "/dashboard",
@@ -39,8 +34,6 @@ export const routeConstant = {
   dashboardBuilder: "/dashboard-builder",
   userMaster: "/user-master",
   resetPassword: "/reset-password",
-  projectstructure: "/projectstructure",
-  componettool: "/componettool",
   maincomponent: "/maincomponent",
   client: "/client",
   project: "/project",
@@ -49,8 +42,9 @@ export const routeConstant = {
   typeconfigmaster: "/type-config",
   parameter:"/parameter",
   steptypeparameter:"/step-type-parameter",
-  systemConfig: "/system-config"
+  jobschedule:"/job-schedule"
 };
+
 export const routeData = (routes) => [
   {
     routeTo: routeConstant.dashboard,
@@ -66,7 +60,7 @@ export const routeData = (routes) => [
     childComp: Roles,
     data: {},
     permissions: true,
-    isUserCanView: true,
+    isUserCanView: routes.includes(routeConstant.registerUser),
   },
   {
     routeTo: routeConstant.registerUser,
@@ -117,22 +111,6 @@ export const routeData = (routes) => [
     isUserCanView: routes.includes(routeConstant.resetPassword),
   },
   {
-    routeTo: routeConstant.projectstructure, // ProjecStructure route
-    header: "",
-    childComp: ProjecStructure,
-    data: {},
-    permissions: true,
-    isUserCanView: true,
-  },
-  {
-    routeTo: routeConstant.componettool, // ComponetTool route
-    header: "",
-    childComp: ComponetTool,
-    data: {},
-    permissions: true,
-    isUserCanView: true,
-  },
-  {
     routeTo: routeConstant.maincomponent, // Main Component route
     header: "",
     childComp: MainComponent,
@@ -146,7 +124,7 @@ export const routeData = (routes) => [
     childComp: Client,
     data: {},
     permissions: true,
-    isUserCanView: true,
+    isUserCanView: routes.includes(routeConstant.resetPassword),
   },
   {
     routeTo: routeConstant.project, // Project Form route
@@ -154,7 +132,7 @@ export const routeData = (routes) => [
     childComp: Project,
     data: {},
     permissions: true,
-    isUserCanView: true,
+    isUserCanView:  routes.includes(routeConstant.resetPassword),
   },
   {
     routeTo: routeConstant.projectfile, // Project File Form route
@@ -162,7 +140,7 @@ export const routeData = (routes) => [
     childComp: ProjectFile,
     data: {},
     permissions: true,
-    isUserCanView: true,
+    isUserCanView:  routes.includes(routeConstant.resetPassword),
   },
   {
     routeTo: routeConstant.step, // StepType Form route
@@ -170,7 +148,7 @@ export const routeData = (routes) => [
     childComp: StepType,
     data: {},
     permissions: true,
-    isUserCanView: true,
+    isUserCanView: routes.includes(routeConstant.resetPassword),
   },
   {
     routeTo: routeConstant.typeconfigmaster, // TypeConfigs Form route
@@ -178,10 +156,10 @@ export const routeData = (routes) => [
     childComp: TypeConfigMaster,
     data: {},
     permissions: true,
-    isUserCanView: true,
+    isUserCanView: routes.includes(routeConstant.resetPassword),
   },
   {
-    routeTo: routeConstant.parameter, // Paramete Form route
+    routeTo: routeConstant.parameter, // Parameter Form route
     header: "",
     childComp: Parameter,
     data: {},
@@ -189,19 +167,27 @@ export const routeData = (routes) => [
     isUserCanView: true,
   },
   {
-    routeTo: routeConstant.steptypeparameter, // StepTypeParamete Form route
+    routeTo: routeConstant.steptypeparameter, // StepTypeParameter Form route
     header: "",
-    childComp: StepTypeParamete,
+    childComp: StepTypeParameter,
+    data: {},
+    permissions: true,
+    isUserCanView: true,
+  },
+  {
+    routeTo: routeConstant.jobschedule, // job-schedule Form route
+    header: "",
+    childComp: JobSchedule,
     data: {},
     permissions: true,
     isUserCanView: true,
  },
- {
-  routeTo: routeConstant.systemConfig, // StepTypeParamete Form route
-  header: "",
-  childComp: SystemConfig,
-  data: {},
-  permissions: true,
-  isUserCanView: true,
-}
+//  {
+//   routeTo: routeConstant.systemConfig, // StepTypeParamete Form route
+//   header: "",
+//   childComp: SystemConfig,
+//   data: {},
+//   permissions: true,
+//   isUserCanView: true,
+// }
 ];

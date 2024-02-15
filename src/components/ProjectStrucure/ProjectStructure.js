@@ -5,12 +5,12 @@ import RecursiveFolder from './recursive-folders';
 import axios from '../../modules/services/axios';
 import ContextMenu from '../ContextMenu';
 import Modal from '../../modules/components/modal-popup';
-import PushPinIcon from '@mui/icons-material/PushPin';
 import { AddUpdateDeleteFileAndFolder } from '../PopupComponent';
 import FolderIcon from '@mui/icons-material/Folder';
 import { TiPin } from "react-icons/ti";
 import { RiUnpinFill } from "react-icons/ri";
-import { useProject } from '../JobDataContext';
+import { useProjectid } from '../JobDataContext';
+
 function ProjectStructure({ textColor, onFileClickCallback }) {
   const [isOpen, setIsOpen] = useState(false);
   const [projects, setProjects] = useState([]);
@@ -19,16 +19,14 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
   const [showNested, setShowNested] = useState({});
   const [isShow, setShow] = useState({});
   const [fix, setFix] = useState(true);
-// const {projects_id}=useProject
+  const { projectID } = useProjectid([])
   const containerRef = useRef(null);
-  // const [data, setData] = useState([]);
-  // const [items, setItems] = useState([]);
-  const project_id = localStorage.getItem('item')
+
   const handleDocumentClick = (event) => {
     event.stopPropagation();
     if (containerRef.current && !containerRef.current.contains(event.target) && !event.target.closest('.contextMenu') &&
-    !event.target.closest('.modal')) {
-    closeContextMenu(event);
+      !event.target.closest('.modal')) {
+      closeContextMenu(event);
     }
   };
 
@@ -46,27 +44,26 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
       document.removeEventListener('click', handleDocumentClick);
       window.removeEventListener('keydown', close);
     };
-  }, [project_id]);
+  }, [projectID]);
 
   const getProjects = () => {
-    setProjects([]);  
-    // const project_id = localStorage.getItem('item')
-    // console.log(project_id);
-    axios.getWithCallback(`projects/${project_id}`, (dt) =>  { 
-      // data.map((dt, inx) => {
-      let url = 'project-files/get-folder-hierarchy?projectId=' + dt.id;
-        axios.getWithCallback(url, (subdata) => {
-          var treeData = treefy(subdata);
-          dt.treeData = treeData;
-          dt.isRightClick = false;
-          dt.item = { file_name: dt.project_name, parent:null, parent_id:null, id: 0, project_id: dt.id }
-          // setData((prevData) => [...prevData, { prjId : dt.id, heirarchy: treeData}]);
-          setProjects((prevData) => [...prevData, dt])
-        });
-      // });
-      // setProjects(data);
-    });
-  };  
+    setProjects([]);
+    if(projectID){
+       axios.getWithCallback(`projects/${projectID}`, (dt) => {
+       // data.map((dt, inx) => {
+       let url = 'project-files/get-folder-hierarchy?projectId=' + dt.id;
+           axios.getWithCallback(url, (subdata) => {
+           var treeData = treefy(subdata);
+               dt.treeData = treeData;
+               dt.isRightClick = false;
+               dt.item = { file_name: dt.project_name, parent: null, parent_id: null, id: 0, project_id: dt.id }
+               // setData((prevData) => [...prevData, { prjId : dt.id, heirarchy: treeData}]);
+               setProjects((prevData) => [...prevData, dt])
+            });
+          // });
+          // setProjects(data);
+        });}
+  };
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -84,7 +81,6 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
       onRightCallback(item, true);
     }
     setContextMenuPosition(null);
-
   };
 
   const treefy = (list) => {
@@ -108,7 +104,6 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
     setType(type);
   }
 
-  // console.log("projects:,", projects);
   // const toggleFile = (projectIndex, file) => {
   //   const updatedProject = [...project];
   //   updatedProject[projectIndex].openFiles[file] = !updatedProject[projectIndex].openFiles[file];
@@ -132,7 +127,7 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
 
   const onRightCallback = (item, isReset, isHeaderClick) => {
     projects.forEach((prj) => {
-    
+
       if (isHeaderClick && prj.id === item.project_id) {
         prj.isRightClick = true;
       } else {
@@ -163,7 +158,7 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
   }
 
   const handleFileClick = (file_id) => {
-    console.log("File ID clicked in ProjectStructure:", file_id);
+
     onFileClickCallback(file_id)
   };
   const [isPinned, setIsPinned] = useState(true);
@@ -187,23 +182,19 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
 
   return (
     <div>
-      <div className={`sidebar ${isOpen ? 'open' : ''}`}
-        onMouseEnter={handleSidebarHover}
-        onMouseLeave={handleSidebarLeave}
-      >
-         <div className='logo_details' style={{ textColor }}>
+      <div className={`sidebar ${isOpen ? 'open' : ''}`} onMouseEnter={handleSidebarHover} onMouseLeave={handleSidebarLeave}>
+        <div className='logo_details' style={{ textColor }}>
           {isOpen && (isPinned ? (
-             <RiUnpinFill size={23} className="pushPinIcon" onClick={() => {setIsPinned(!isPinned); setFix(!fix);}} />
+              <abbr title='Pin' style={{cursor: 'pointer'}}>
+                   <RiUnpinFill size={22} className="pushPinIcon" onClick={() => { setIsPinned(!isPinned); setFix(!fix); }} />
+              </abbr>
           ) : (
-            <TiPin size={22} className="pushPinIcon" onClick={() => {setIsPinned(!isPinned); setFix(!fix);}} />
+              <abbr title='UnPin' style={{cursor: 'pointer'}}>
+                   <TiPin size={22} className="pushPinIcon" onClick={() => { setIsPinned(!isPinned); setFix(!fix); }} />
+              </abbr>
           ))}
           <div className='logo_name ms-2'>Project Structure</div>
-        
-          <DensityMediumIcon
-            className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`}
-            id='btn'
-            onClick={toggleSidebar}
-          />
+          <DensityMediumIcon className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`} id='btn' onClick={() => { toggleSidebar(); setIsPinned(!isPinned); setFix(!fix); }} />
         </div>
         <ul className='nav-list' style={{ textColor }}>
           {projects.map((project, index) => (
@@ -211,9 +202,9 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
               <li>
                 <div className='proicon'>
                   <FolderIcon fontSize='medium' />
-                  <span className='link_name' style={{ marginLeft: '5px' }}>
+                  <div className='link_name' style={{ marginLeft: '5px' }}>
                     {project.project_name}
-                  </span>
+                  </div>
                 </div>
                 {contextMenuPosition && project.isRightClick && (
                   <div style={{ display: !project.isRightClick && "none" }}>
@@ -230,15 +221,11 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
                 )}
                 {
                   <Modal modalTitle={type} handleClose={() => { setShow({}) }} show={!!isShow[project.project_name]} maxWidth="35%">
-
                     <AddUpdateDeleteFileAndFolder title={type} item={project.item} type={type} onClose={(e, isRefreshNeeded) => { closeContextMenu(e); setShow({}); if (isRefreshNeeded) getProjects(); }} />
-
-
                   </Modal>
                 }
-
                 <div style={{ display: !showNested[project.project_name] && "none" }}>
-                  <RecursiveFolder items={project.treeData} onRightCallback={onRightCallback} refreshData={getProjects} onFileClickCallback={handleFileClick} />
+                  <RecursiveFolder items={project.treeData} onRightCallback={onRightCallback} refreshData={getProjects} onFileClickCallback={handleFileClick}  isOpen={isOpen} setIsOpen={setIsOpen}/>
                   {/* <FolderDropdown
                       project={project}
                       projectId={project.id}
@@ -247,7 +234,6 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
                       onToggleFile={(file) => toggleFile(index, file)}
                     /> */}
                 </div>
-
               </li>
             </div>
           ))}

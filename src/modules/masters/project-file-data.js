@@ -3,7 +3,8 @@ export const getProjectFileFields = (itemData) => {
         col: 4,
         callback: itemData.callback,
         disabled: itemData.disabled,
-        groups: [{
+        groups: [
+        {
             id: "inputProjectFileid",
             label: "project Name",
             name: "project_id",
@@ -12,8 +13,7 @@ export const getProjectFileFields = (itemData) => {
             isSubmit: itemData.isSubmit,
             isRequired: !itemData?.values?.project_id,
             itemVal: itemData.values ? itemData.values["project_id"] : '',
-        },
-        {
+        },{
             type: "text",
             id: "inputDisplayType",
             label: "Project File Display Type",
@@ -21,8 +21,7 @@ export const getProjectFileFields = (itemData) => {
             control: "input",
             isRequired: true,
             itemVal: itemData.values ? itemData.values["type"] : '',
-        },
-        {
+        },{
             type: "text",
             id: "inputDisplayFileName",
             label: "Project File Display Name",
@@ -30,8 +29,7 @@ export const getProjectFileFields = (itemData) => {
             control: "input",
             isRequired: true,
             itemVal: itemData.values ? itemData.values["file_name"] : '',
-        },
-        {
+        },{
             id: "inputDisplayParentId",
             label: "Parent Id",
             name: "parent_id",
