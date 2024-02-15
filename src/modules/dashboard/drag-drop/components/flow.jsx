@@ -145,7 +145,6 @@ let id = 0;
 
 axios.getWithCallback('job-steps', (response) => {
   id = response.length;
-  console.log("id:", id);
 });
 
 const getId = () => {
@@ -199,7 +198,7 @@ const OverviewFlow = (textColor) => {
   }, [projectID, jobDataId, setStartStep, setMenu]);
 
   useEffect(() => {
-    
+
     if (jobDataId) {
       axios.getWithCallback(`job-steps/${jobDataId.id}/job`, (data) => {
         setJobFileId(jobDataId);

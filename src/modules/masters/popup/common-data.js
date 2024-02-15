@@ -1,4 +1,5 @@
 export const getCommonFields = (itemData) => {
+    
     return [{
         col: 12,
         callback: itemData.callback,
@@ -7,7 +8,7 @@ export const getCommonFields = (itemData) => {
             {
                 type: "text",
                 id: "inputFileName",
-                label: "File Name",
+                label: (itemData.type === "Folder"?"Folder Name":"File Name"),
                 name: "file_name",
                 control: "input",
                 isRequired: true,
