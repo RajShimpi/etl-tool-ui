@@ -25,6 +25,7 @@ import TypeConfigMaster from "../masters/type-config-master";
 import Parameter from "../masters/parameter";
 import StepTypeParamete from "../masters/step-type-parameter";
 import { SystemConfig } from "../masters/system-config";
+import UserManagement from "../masters/user-management";
 
 
 export const routeConstant = {
@@ -49,7 +50,8 @@ export const routeConstant = {
   typeconfigmaster: "/type-config",
   parameter:"/parameter",
   steptypeparameter:"/step-type-parameter",
-  systemConfig: "/system-config"
+  systemConfig: "/system-config",
+  usermgmt: "/user-management"
 };
 export const routeData = (routes) => [
   {
@@ -200,6 +202,14 @@ export const routeData = (routes) => [
   routeTo: routeConstant.systemConfig, // StepTypeParamete Form route
   header: "",
   childComp: SystemConfig,
+  data: {},
+  permissions: true,
+  isUserCanView: true,
+},
+{
+  routeTo: routeConstant.usermgmt, // StepTypeParamete Form route
+  header: "",
+  childComp: UserManagement,
   data: {},
   permissions: true,
   isUserCanView: true,

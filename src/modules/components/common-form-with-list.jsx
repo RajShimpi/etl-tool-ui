@@ -374,6 +374,7 @@ const CommonFormWithList = (props) => {
                         options: !!props.options ? props.options : [],
                         data: !!props.data ? props.data : [],
                         message: props.message,
+                        isSuperAdmin: props.isSuperAdmin
                       })}
                     />
                   </div>

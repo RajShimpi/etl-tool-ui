@@ -74,14 +74,14 @@
   },
 
   "USER_MASTER_COLUMNS": [
-    "emp_code",
-    "firstname",
-    "middlename",
-    "lastname",
-    "manager",
-    "warehouse",
-    "binLocation",
-    "role"
+    "userName",
+    "roles",
+    "firstName",
+    "middleName",
+    "lastName",
+    "client_id",
+    "usersToRoles.role.name",
+    "isActive"
   ],
   "CLIENT": [
     "name", 
