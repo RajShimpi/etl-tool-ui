@@ -12,6 +12,7 @@ import { TiPin } from "react-icons/ti";
 import { RiUnpinFill } from "react-icons/ri";
 
 function ComponentTool({ textColor }) {
+  
   const [isOpen, setIsOpen] = useState(false);
   const [apiData, setApiData] = useState([]);
   const [components, setComponents] = useState([]);
@@ -24,6 +25,9 @@ function ComponentTool({ textColor }) {
 
   useEffect(() => {
     axios.getWithCallback('step-type/', (data) => {
+
+      data.sort((a, b) => a.params.sequence - b.params.sequence);
+  
       setApiData(data);
       const groupedData = groupDataBy(data, 'group');
       const newComponents = Object.keys(groupedData).map((group) => ({
@@ -32,8 +36,8 @@ function ComponentTool({ textColor }) {
         data: groupedData[group],
       }));
       setComponents(newComponents);
-  });
-  }, []);
+    });
+  }, []);  
 
   const handleCollapseToggle = (index) => {
     setComponents((prevComponents) =>

@@ -23,17 +23,13 @@ import "../../../../components/MainComponent.css";
 import Modal from "../../../components/modal-popup";
 
 import axios from "../../../services/axios";
-import {
-  useJobData,
-  useProjectid,
-} from "../../../../components/JobDataContext";
+import {useJobData, useProjectid} from "../../../../components/JobDataContext";
 import DeleteIcon from "@mui/icons-material/Delete";
 import JobStepParameterMaster from "../../../masters/job-step-param-master";
 import JobParameterMaster from "../../../masters/job-parameter";
 
 const nodeTypes = {
   node: (node) => {
-
     return (
       <Node
         id={node.id}
@@ -55,25 +51,30 @@ const ContextMenu = ({
   bottom,
   menu,
   setAsStartStepHandler,
+  setAsStartStepnullHandler,
   textColor,
+  setMenu,
   ...props
 }) => {
-  const { setNodes, setEdges } = useReactFlow();
-  const [startStepChecked, setStartStepChecked] = useState(
-    menu.startstep === id
-  );
 
+  const { setNodes, setEdges } = useReactFlow();
+  const [startStepChecked, setStartStepChecked] = useState(menu.startstep === id);
+  
   useEffect(() => {
     setNodes([]);
     setEdges([]);
-  }, [setNodes, setEdges, setStartStepChecked]);
+  }, [setNodes, setEdges,setStartStepChecked]);
 
   useEffect(() => {
     setStartStepChecked(menu.startstep === id);
-  }, [menu.startstep, id]);
+  }, [menu, id]);
 
   const handleStartStepClick = () => {
     setAsStartStepHandler();
+  };
+
+  const handleStartStepNullClick = () => {
+    setAsStartStepnullHandler();
   };
 
   const deleteNode = useCallback(() => {
@@ -82,18 +83,18 @@ const ContextMenu = ({
   }, [id, setNodes, setEdges,menu]);
 
   return (
-    <>
+  <>
     <div style={{ top, left, right, bottom ,marginTop:'-125px',marginLeft:'100px'}} className="context-menu">
            <div className="d-flex" style={{ height: "50px" }}>
           <button className="setAsStartStepHandler">
-            {menu.start_step == id ? (
+            {menu.start_step !== null ? (
               <input
                 type="checkbox"
                 id="startstep"
                 style={{ margin: "-6px", height: "20px", width: "15px",cursor:"pointer" }}
                 name="startstep"
                 value="startstep"
-                onClick={handleStartStepClick}
+                onClick={handleStartStepNullClick}
                 checked
               />
             ) : (
@@ -106,45 +107,28 @@ const ContextMenu = ({
                 onClick={handleStartStepClick}
               />
             )}
-            <div
-              style={{
-                margin: "2px",
-                marginLeft: "20px",
-                fontSize: "18px",
-                color: textColor?.textColor,
-              }}
-            >
+            <div style={{ margin: "2px", marginLeft: "20px", fontSize: "18px", color: textColor?.textColor, }}>
               Start
             </div>
           </button>
         </div>
         <div  {...props} style={{ height: "50px" }}>
-          <button
-            className="deleteNode"
-            onClick={deleteNode}
-            style={{ height: "50px" }}
-          >
-            <DeleteIcon
-              className="display-3 m-2"
-              style={{ color: textColor?.textColor }}
-            />
-            <div
-              className="delete mt-2"
-              style={{ fontSize: "18px", color: textColor?.textColor }}
-            >
+          <button className="deleteNode" onClick={deleteNode} style={{ height: "50px" }} >
+            <DeleteIcon className="display-3 m-2" style={{ color: textColor?.textColor }} />
+            <div className="delete mt-2" style={{ fontSize: "18px", color: textColor?.textColor }} >
               Delete
             </div>
           </button>
         </div>
       </div>
-      </>
+  </>
   );
 };
 
 let id = 0;
 
-axios.getWithCallback('job-steps', (response) => {
-  id = response.length;
+axios.getWithCallback('job-steps', (data) => {
+  id = data.length;
 });
 
 const getId = () => {
@@ -187,7 +171,14 @@ const OverviewFlow = (textColor) => {
       start_step: parseInt(menu.id),
     };
     axios.putWithCallback(`job/${jobfileid.id}/startstep`, startstep);
-  }, [menu, jobfileid, startStep, setStartStep, nodes]);
+  }, [menu,setMenu, jobfileid, startStep, setStartStep, nodes]);
+
+  const setAsStartStepnullHandler = useCallback(() => {
+    const startstep = {
+      start_step: null,
+    };
+    axios.putWithCallback(`job/${jobfileid.id}/startstep`, startstep);
+  }, [menu,setMenu, jobfileid, startStep, setStartStep, nodes]);
 
   useEffect(() => {
     setEdges([]);
@@ -198,7 +189,6 @@ const OverviewFlow = (textColor) => {
   }, [projectID, jobDataId, setStartStep, setMenu]);
 
   useEffect(() => {
-
     if (jobDataId) {
       axios.getWithCallback(`job-steps/${jobDataId.id}/job`, (data) => {
         setJobFileId(jobDataId);
@@ -210,11 +200,9 @@ const OverviewFlow = (textColor) => {
           data: {
             heading: item.step_name,
             img: `/assets/images/${item.stepType.img}`,
-            start_step:
-              jobDataId.start_step == item.id ? jobDataId.start_step : null,
+            start_step: jobDataId.start_step == item.id ? jobDataId.start_step : null,
             id: item.id,
           },
-
           position: {
             x: item.params.position_X,
             y: item.params.position_Y,
@@ -266,7 +254,7 @@ const OverviewFlow = (textColor) => {
     jobDataId,
     startStep,
     setStartStep,
-    setMenu,
+    setAsStartStepnullHandler,
     setAsStartStepHandler,
   ]);
 
@@ -299,7 +287,7 @@ const OverviewFlow = (textColor) => {
       type,
       node_active: true,
       position,
-      data: { heading: name, img: img ,start_step:null,},
+      data: { heading: name, img: img , start_step:null},
     };
 
     setNodes((es) => es.concat(newNode));
@@ -316,36 +304,18 @@ const OverviewFlow = (textColor) => {
       step_name: item.data?.heading || item.name,
       type: item.type,
       params: {
-        position_X:
-          item.id === position.id ? position.position_X : item.position.x,
-        position_Y:
-          item.id === position.id ? position.position_Y : item.position.y,
+        position_X:item.id === position.id ? position.position_X : item.position.x,
+        position_Y:item.id === position.id ? position.position_Y : item.position.y,
       },
     }));
 
     const dataFromEdgesOk = edges
-      .filter(
-        (item) =>
-          item.sourceHandle === "ok" &&
-          item.ok_step !== null &&
-          !isNaN(item.target)
-      )
-      .map((item) => ({
-        id: parseInt(item.source),
-        ok_step: parseInt(item.target) || null,
-      }));
+      .filter((item) =>item.sourceHandle === "ok" && item.ok_step !== null && !isNaN(item.target))
+      .map((item) => ({ id: parseInt(item.source), ok_step: parseInt(item.target) || null, }));
 
     const dataFromEdgesError = edges
-      .filter(
-        (item) =>
-          item.sourceHandle === "error" &&
-          item.error_step !== null &&
-          !isNaN(item.target)
-      )
-      .map((item) => ({
-        id: parseInt(item.source),
-        error_step: parseInt(item.target) || null,
-      }));
+      .filter( (item) => item.sourceHandle === "error" && item.error_step !== null && !isNaN(item.target))
+      .map((item) => ({ id: parseInt(item.source), error_step: parseInt(item.target) || null, }));
 
     const updatedEdgesOk = edges.filter(
       (item) => item.sourceHandle === "ok" && !isNaN(item.target)
@@ -388,10 +358,7 @@ const OverviewFlow = (textColor) => {
       }
     });
 
-    const dataFromNodesActive = nodesActive.map((item) => ({
-      id: parseInt(item.id),
-      node_active: item.node_active,
-    }));
+    const dataFromNodesActive = nodesActive.map((item) => ({id: parseInt(item.id),node_active: item.node_active,}));
 
     const combinedData = dataFromNodes.map((node) => ({
       ...node,
@@ -599,7 +566,7 @@ const OverviewFlow = (textColor) => {
       setActiveNodes(node);
       setSelectedNode(node);
     },
-    [setMenu, setAsStartStepHandler]
+    [setMenu, setAsStartStepHandler,setAsStartStepnullHandler]
   );
   
   const onPaneClick = useCallback(() => {
@@ -625,21 +592,8 @@ const OverviewFlow = (textColor) => {
 
   return (
     <>
-      <button
-        className="btn btn-primary"
-        style={{ marginRight: "1px" }}
-        onClick={saveHandler}
-      >
-        Save
-      </button>
-      <button
-        className="btn btn-secondary"
-        onClick={() => {
-          setOpenJobParams(true);
-        }}
-      >
-        Job Params
-      </button>
+      <button className="btn btn-primary" style={{ marginRight: "1px" }} onClick={saveHandler} >Save</button>
+      <button className="btn btn-secondary" onClick={() => {setOpenJobParams(true)}}>Job Params</button>
       <Modal
         modalTitle={"Save/Update Parameter"}
         ref={modalRef}
@@ -684,7 +638,9 @@ const OverviewFlow = (textColor) => {
                   bottom={menu.bottom}
                   onClick={deleteNode}
                   setAsStartStepHandler={setAsStartStepHandler}
+                  setAsStartStepnullHandler={setAsStartStepnullHandler}
                   menu={menu}
+                  setMenu={setMenu}
                   textColor={textColor}
                 />
               )}

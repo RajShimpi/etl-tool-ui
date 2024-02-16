@@ -158,7 +158,8 @@ export const routeData = (routes) => [
     childComp: TypeConfigMaster,
     data: {},
     permissions: true,
-    isUserCanView: routes.includes(routeConstant.typeconfigmaster),
+    // isUserCanView: routes.includes(routeConstant.typeconfigmaster),
+    isUserCanView:true,
   },
   {
     routeTo: routeConstant.parameter, // Parameter Form route
