@@ -177,16 +177,16 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    transform: scaleX(0);
-    background-color: rgba(116, 113, 113, 0.329);
+    /* transform: scaleX(0); */
+    /* background-color: rgba(116, 113, 113, 0.329); */
     border-radius: 5px;
     transform-origin: left;
   }
 
-  .sidebar li .proicon:hover::after {
+  /* .sidebar li .proicon:hover::after {
     transform: scaleX(1);
 
-  }
+  } */
 
   .sidebar li .proicon .link_name {
     font-size: 15px;

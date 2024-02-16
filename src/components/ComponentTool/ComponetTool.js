@@ -84,10 +84,10 @@ function ComponentTool({ textColor }) {
           <div key={index} className='component' draggable>
             <li>
               <div>
-                <div href='#' className='comIcon'>
+                <div href='#' className='comIcon' onClick={() => handleCollapseToggle(index)} >
                   {components.isOpen ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='medium' />}
                   <span className='link_name' style={{ marginLeft: '5px' }}>
-                    <div variant='contained' className='comp' onClick={() => handleCollapseToggle(index)} >
+                    <div variant='contained' className='comp' >
                       {component.name} {component.isCollapseOpen ? <KeyboardArrowUpIcon fontSize='small' /> : <KeyboardArrowDownIcon fontSize='small' />}
                     </div>
                   </span>

@@ -201,6 +201,7 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
               <li>
                 <div className='proicon'>
                   <FolderIcon fontSize='medium' />
+                  {/* <img src='/assets/images/open-folder.png' style={{height:"20px"}} /> */}
                   <div className='link_name' style={{ marginLeft: '5px' }}>
                     {project.project_name}
                   </div>

@@ -14,6 +14,7 @@ const Client = () => {
                 columns={config.CLIENT}
                 insertApi="clients"
                 updateApi="clients/:id"
+                deleteApi="clients/:id"
                 getApi="clients"
                 title="Client"
                 defaultObj={defaultObj}

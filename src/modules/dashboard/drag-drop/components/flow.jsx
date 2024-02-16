@@ -51,7 +51,7 @@ const ContextMenu = ({
   bottom,
   menu,
   setAsStartStepHandler,
-  setAsStartStepnullHandler,
+  setAsStartStepNullHandler,
   textColor,
   setMenu,
   ...props
@@ -74,7 +74,7 @@ const ContextMenu = ({
   };
 
   const handleStartStepNullClick = () => {
-    setAsStartStepnullHandler();
+    setAsStartStepNullHandler();
   };
 
   const deleteNode = useCallback(() => {
@@ -173,7 +173,7 @@ const OverviewFlow = (textColor) => {
     axios.putWithCallback(`job/${jobfileid.id}/startstep`, startstep);
   }, [menu,setMenu, jobfileid, startStep, setStartStep, nodes]);
 
-  const setAsStartStepnullHandler = useCallback(() => {
+  const setAsStartStepNullHandler = useCallback(() => {
     const startstep = {
       start_step: null,
     };
@@ -254,7 +254,7 @@ const OverviewFlow = (textColor) => {
     jobDataId,
     startStep,
     setStartStep,
-    setAsStartStepnullHandler,
+    setAsStartStepNullHandler,
     setAsStartStepHandler,
   ]);
 
@@ -566,7 +566,7 @@ const OverviewFlow = (textColor) => {
       setActiveNodes(node);
       setSelectedNode(node);
     },
-    [setMenu, setAsStartStepHandler,setAsStartStepnullHandler]
+    [setMenu]
   );
   
   const onPaneClick = useCallback(() => {
@@ -638,7 +638,7 @@ const OverviewFlow = (textColor) => {
                   bottom={menu.bottom}
                   onClick={deleteNode}
                   setAsStartStepHandler={setAsStartStepHandler}
-                  setAsStartStepnullHandler={setAsStartStepnullHandler}
+                  setAsStartStepNullHandler={setAsStartStepNullHandler}
                   menu={menu}
                   setMenu={setMenu}
                   textColor={textColor}

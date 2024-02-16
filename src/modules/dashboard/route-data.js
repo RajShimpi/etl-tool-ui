@@ -85,7 +85,8 @@ export const routeData = (routes) => [
     childComp: AddMenu,
     data: {},
     permissions: true,
-    isUserCanView: routes.includes(routeConstant.addMenu),
+    isUserCanView: true,
+    // isUserCanView: routes.includes(routeConstant.addMenu),
   },
   {
     routeTo: routeConstant.dashboardBuilder,
@@ -125,7 +126,8 @@ export const routeData = (routes) => [
     childComp: Client,
     data: {},
     permissions: true,
-    isUserCanView: routes.includes(routeConstant.client),
+    isUserCanView: true,
+    // isUserCanView: routes.includes(routeConstant.client),
   },
   {
     routeTo: routeConstant.project, // Project Form route

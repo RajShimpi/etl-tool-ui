@@ -48,7 +48,7 @@ const ContextMenu = ({ item, popType, project_id, parent_id,id, onClose, callbac
           Add Folder
         </div>
       </div>
-      <div className="menu-item" onClick={(e) => {openPopup(e,"Add", { top: e.clientY, left: e.clientX + 10 }, project_id, id)}}>
+      <div className="menu-item" onClick={(e) => {openPopup(e,"AddFile", { top: e.clientY, left: e.clientX + 10 }, project_id, id)}}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", }}>
           <InsertDriveFileIcon style={{ fontSize: "medium", marginRight: "5px", marginTop: "3px" }} />
           Add File

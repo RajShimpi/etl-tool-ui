@@ -1,64 +1,47 @@
-import React, { useEffect, useState } from "react";
-import CommonFormWithList from "../components/common-form-with-list";
-import config from "../components/config/config.json";
-import axios from "../services/axios";
-import { getJobScheduleFields } from "./job-schedule-data";
-import auth from "../user/auth";
+import React, { useEffect, useState } from 'react';
+import CommonFormWithList from '../components/common-form-with-list';
+import config from "../components/config/config.json"
+import axios from '../services/axios';
+import { getJobScheduleFields } from './job-schedule-data';
+import auth from '../user/auth';
 
 const JobSchedule = () => {
-  const [jobschedule, setJobschedule] = useState([]);
-  const [project, setProject] = useState([]);
-  const [job, setJob] = useState([]);
 
-  const client = auth.getStorageData("client");
+    const [jobschedule, setJobschedule] = useState([]);
+    const [project, setProject] = useState([]);
+    const [job, setJob] = useState([]);
 
-  useEffect(() => {
-    axios.getWithCallback("job-schedule/", (data) =>
-      setJobschedule(
-        data.map((x) => {
-          return { value: x.id, label: x.name };
-        })
-      )
+    const client= auth.getStorageData("client");
+    
+    useEffect(() => {
+        axios.getWithCallback('job-schedule/', (data) => setJobschedule(data.map(x => { return { value: x.id, label: x.name } })))
+    }, []);
+
+    useEffect(() => {
+        axios.getWithCallback(`projects/client/${client.id}`, (data) => setProject(data.map(z => ({ value: z.id, label: z.project_name }))))
+    }, []);
+
+    useEffect(() => {
+        axios.getWithCallback(`job/client/${client.id}`, (data) => setJob(data.map(e => ({ value: e.id, label: e.name }))))
+    }, []);
+
+    const defaultObj = { client:parseInt(client.id), project:'', job:'', name:'', description:'', scheduleCron:'', active:'' };
+
+    return (
+        <>
+            <CommonFormWithList
+                formDataAction={getJobScheduleFields}
+                columns={config.Job_Schedule}
+                insertApi="job-schedule"
+                updateApi="job-schedule/:id"
+                getApi={`job-schedule/client/${client.id}`}
+                title="Job Schedule"
+                defaultObj={defaultObj}
+                options={[project, job, jobschedule]}
+                tableTitle='Job Schedule'
+            />
+        </>
     );
-  }, []);
-
-  useEffect(() => {
-    axios.getWithCallback(`projects/client/${client.id}`, (data) =>
-      setProject(data.map((z) => ({ value: z.id, label: z.project_name })))
-    );
-  }, []);
-
-  useEffect(() => {
-    axios.getWithCallback(`job/client/${client.id}`, (data) =>
-      setJob(data.map((e) => ({ value: e.id, label: e.name })))
-    );
-  }, []);
-
-  const defaultObj = {
-    client: parseInt(client.id),
-    project: "",
-    job: "",
-    name: "",
-    description: "",
-    scheduleCron: "",
-    active: "",
-  };
-
-  return (
-    <>
-      <CommonFormWithList
-        formDataAction={getJobScheduleFields}
-        columns={config.Job_Schedule}
-        insertApi="job-schedule"
-        updateApi="job-schedule/:id"
-        getApi={`job-schedule/client/${client.id}`}
-        title="Job Schedule"
-        defaultObj={defaultObj}
-        options={[project, job, jobschedule]}
-        tableTitle="Job Schedule"
-      />
-    </>
-  );
 };
 
-export default JobSchedule;
+export default JobSchedule; 
