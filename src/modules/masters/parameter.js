@@ -17,7 +17,7 @@ const Parameter = () => {
         axios.getWithCallback('step-type/', (data) => setStepType(data.map(y => { return { value: y.id, label: y.name } })))
     }, []);
 
-    const defaultObj = { name: '', context: '', display_name: '', description: '', type: '', resource: '' };
+    const defaultObj = { name: '', context: '', display_name: '', description: '', type: '', resource: '' ,step_id:''};
 
     return (
         <>
@@ -25,7 +25,7 @@ const Parameter = () => {
                 formDataAction={getParameterFields}
                 columns={config.PARAMETER}
                 insertApi="parameter"
-                updateApi="parameter"
+                updateApi="parameter/:id"
                 getApi="parameter"
                 title="Parameter"
                 defaultObj={defaultObj}

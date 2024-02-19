@@ -12,6 +12,7 @@ import { RiUnpinFill } from "react-icons/ri";
 import { useProjectid } from '../JobDataContext';
 
 function ProjectStructure({ textColor, onFileClickCallback }) {
+
   const [isOpen, setIsOpen] = useState(false);
   const [projects, setProjects] = useState([]);
   const [contextMenuPosition, setContextMenuPosition] = useState(null);
@@ -38,7 +39,6 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
       }
     };
     window.addEventListener('keydown', close);
-
     document.addEventListener('click', handleDocumentClick);
     return () => {
       document.removeEventListener('click', handleDocumentClick);
@@ -93,7 +93,6 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
     return list.reduce((root, li) => {
       const arr = li.parent_id ? list[map[li.parent_id]].children : root;
       arr.push(li);
-
       return root;
     }, []);
   }
@@ -202,6 +201,7 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
               <li>
                 <div className='proicon'>
                   <FolderIcon fontSize='medium' />
+                  {/* <img src='/assets/images/open-folder.png' style={{height:"20px"}} /> */}
                   <div className='link_name' style={{ marginLeft: '5px' }}>
                     {project.project_name}
                   </div>

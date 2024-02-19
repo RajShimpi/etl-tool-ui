@@ -83,12 +83,12 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
 
       switch (props.type) {
         case "AddFolder":
-          axios.postWithCallback("project-files", item, (resp) => {
+          axios.postWithCallback("project-files/", item, (resp) => {
             props.onClose(e, true);
           });
           break;
         case "AddFile":
-          axios.postWithCallback("project-files", item, (resp) => {
+          axios.postWithCallback("project-files/", item, (resp) => {
             props.onClose(e, true);
           });
           break;

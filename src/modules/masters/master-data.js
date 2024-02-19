@@ -11,7 +11,7 @@ const getTypeConfigMaster = (itemData) => {
             control: "input",
             isRequired: true,
             itemVal: itemData.values ? itemData.values["category"] : '',
-        },{
+        }, {
             type: "text",
             id: "inputValue",
             label: "Value",
@@ -19,7 +19,7 @@ const getTypeConfigMaster = (itemData) => {
             control: "input",
             isRequired: true,
             itemVal: itemData.values ? itemData.values["value"] : '',
-        },{
+        }, {
             type: "text",
             id: "inputParams",
             label: "Params",
@@ -30,7 +30,7 @@ const getTypeConfigMaster = (itemData) => {
             span: itemData.message?.params,
             apiDataType: "json"
 
-        },{
+        }, {
             type: "checkbox",
             id: "inputIsActive",
             label: "Active",

@@ -45,7 +45,8 @@ const ChangePassword = () => {
 
     const onSubmit = (data) => {
         const registerData = {
-            employeeCode: auth.getStorageData('userName'),
+            // username:"ABH001",
+            username: auth.getStorageData('username'),
             currentPassword: data.currentPassword,
             newPassword: data.newPassword
         }
@@ -59,7 +60,7 @@ const ChangePassword = () => {
         }, (err) => {
         });
     };
-
+console.log( auth.getStorageData("username"))
     return (<div style={bgStyle} className="admin-login-bg">
         <div className="account-pages form-center-align">
             <div className="container">
@@ -76,7 +77,7 @@ const ChangePassword = () => {
                                         <div className="mb-4 row">
                                             <div className="col-md-12">
                                                 <span className="has-float-label">
-                                                    <input type="text" className="form-control" value={auth.getStorageData('userName')} id="user-name" placeholder={' '} autoComplete={'off'} disabled></input>
+                                                    <input type="text" className="form-control" value={auth.getStorageData('username')} id="user-name" placeholder={' '} autoComplete={'off'} disabled></input>
                                                     <label htmlFor="user-name">User name<span style={{ color: 'red' }}>*</span></label>
                                                 </span>
                                             </div>

@@ -53,7 +53,7 @@ const JobStepParameterMaster = ({
       }
     };
     fetchData();
-  }, [step_type_id]);
+  }, [step_type_id,setparameter]);
 
   useEffect(() => {
     if (node_Id) {

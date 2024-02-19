@@ -30,15 +30,15 @@ const getStorageData = (keyName) => {
             return localObj.user?.firstName
             // case 'fullName':
             // return localObj.user?.firstNameLastName
-        case 'userName':
-            const { user: { employeeCode } } = localObj
-            return employeeCode;
+        // case 'username':
+        //     const { user: { employeeCode } } = localObj
+        //     return employeeCode;
         // case 'userRoleKey':
         //     const { user: {usersToRoles} } = localObj
         //     return usersToRoles[0].role.name
         case 'role':
             
-                return localObj?.user?.role?.displayName
+                return localObj?.user?.usersToRoles?.role?.displayName
             return ''
         // return !!localObj.user?.userRoles?.length ? localObj.user.userRoles.map(x => x.role?.name) : [];
         case 'roleId':            
@@ -57,6 +57,10 @@ const getStorageData = (keyName) => {
             return localObj.user.client;
         case "projectid":
             return localObj.user.projectid;
+        case "usersToRoles":
+            return localObj.user.usersToRoles;
+        case "username":
+            return localObj.user.username;
         
         default:
             return '';

@@ -75,10 +75,9 @@ const Node = ({ data, id, start_step, startStep, item, isSelected, textRef, node
               />
               <abbr title={data.heading} style={{ cursor: 'pointer', textDecoration: 'none', borderRadius: '50px' }}>
                 <div style={style.contentWrapper}>
-                  {data.heading.length > 10 ? data.heading.slice(0, 10) + '...' : data.heading}
+                  {data.heading.length > 10 ? data.heading.slice(0, 9) + '...' : data.heading}
                 </div>
               </abbr>
-
             </>
           )}
         </div>

@@ -80,7 +80,8 @@ export const routeData = (routes) => [
     childComp: ChangePassword,
     data: {},
     permissions: true,
-    isUserCanView: routes.includes(routeConstant.changePassword),
+    isUserCanView: true,
+    // isUserCanView: routes.includes(routeConstant.changePassword),
   },
   {
     routeTo: routeConstant.addMenu,
@@ -88,7 +89,8 @@ export const routeData = (routes) => [
     childComp: AddMenu,
     data: {},
     permissions: true,
-    isUserCanView: routes.includes(routeConstant.addMenu),
+    isUserCanView: true,
+    // isUserCanView: routes.includes(routeConstant.addMenu),
   },
   {
     routeTo: routeConstant.dashboardBuilder,
@@ -128,7 +130,8 @@ export const routeData = (routes) => [
     childComp: Client,
     data: {},
     permissions: true,
-    isUserCanView: routes.includes(routeConstant.client),
+    isUserCanView: true,
+    // isUserCanView: routes.includes(routeConstant.client),
   },
   {
     routeTo: routeConstant.project, // Project Form route
@@ -161,7 +164,8 @@ export const routeData = (routes) => [
     childComp: TypeConfigMaster,
     data: {},
     permissions: true,
-    isUserCanView: routes.includes(routeConstant.typeconfigmaster),
+    // isUserCanView: routes.includes(routeConstant.typeconfigmaster),
+    isUserCanView:true,
   },
   {
     routeTo: routeConstant.parameter, // Parameter Form route
@@ -186,7 +190,7 @@ export const routeData = (routes) => [
     childComp: JobSchedule,
     data: {},
     permissions: true,
-    isUserCanView: routes.includes(routeConstant.jobschedule),
+    isUserCanView:true,
  },
  {
   routeTo: routeConstant.systemConfig, // StepTypeParamete Form route

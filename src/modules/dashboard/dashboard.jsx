@@ -194,7 +194,9 @@ const Dashboard = () => {
     // auth.setAuthData(projectid);
     setProjectID(projectid);
   };
-
+  
+  const roles = auth.getStorageData("usersToRoles");
+  
   return (
     // <div id="layout-wrapper" > data-layout-mode="layout-mode-light"
     <div id="layout-wrapper">
@@ -264,7 +266,7 @@ const Dashboard = () => {
           </div>
           <div className="d-flex">
             <div className="topnav responsive-topnav">
-              <nav className="navbar navbar-light navbar-expand-lg topnav-menu">
+              <nav className="navbar navbar-expand-lg topnav-menu">
                 <div
                   className="collapse navbar-collapse"
                   id="topnav-menu-content"
@@ -316,7 +318,6 @@ const Dashboard = () => {
                                   onMouseEnter={() =>
                                     setSelectedChildItem(childItem)
                                   }
-                                  // onMouseLeave={() => setSelectedChildItem(false)}
                                 >
                                   {!item.menuName
                                     .toLowerCase()
@@ -397,11 +398,6 @@ const Dashboard = () => {
                                             style={{ marginTop: "3px" }}
                                           />
                                           <div
-                                            // onMouseLeave={() =>
-                                            //   setSelectedChildItem(false)
-                                            // }
-                                            // onClick={() => onhandelProject(item.id)}
-                                            // key={item.project_id}
                                             style={{ marginLeft: "5px" }}
                                           >
                                             {item.project_name}
@@ -501,7 +497,7 @@ const Dashboard = () => {
             <div className="dropdown d-none d-lg-inline-block ms-1">
               <button
                 type="button"
-                className="btn header-item noti-icon waves-effect"
+                className="btn header-item noti-icon waves-effect border-0"
                 data-bs-toggle="fullscreen"
                 onClick={() => {
                   changeScreenMode(!fullScreenMode);
@@ -514,7 +510,7 @@ const Dashboard = () => {
             <div className="dropdown d-inline-block">
               <button
                 type="button"
-                className="btn header-item waves-effect d-flex align-items-center"
+                className="btn header-item waves-effect d-flex align-items-center border-0"
                 id="page-header-user-dropdown"
                 data-bs-toggle="dropdown"
                 aria-haspopup="true"
@@ -522,15 +518,15 @@ const Dashboard = () => {
               >
                 {/* <img className="rounded-circle header-profile-user" src="/assets/images/users/avatar-2.jpg" alt="Header Avatar"></img> */}
                 <Avatar
-                  name={auth.getStorageData("fullName")}
+                  name={auth.getStorageData("firstName")}
                   size="45"
                   round={true}
                 />
                 <span className="d-none d-xl-inline-block ms-1 fw-medium font-size-15">
                   <div>
-                    <div>{userFirstName}</div>
+                    <div>{auth.getStorageData("firstName")}</div>
                   </div>{" "}
-                  {auth.getStorageData("role")}
+                  {roles.role}
                   <div className="arrow-down"></div>
                 </span>
               </button>

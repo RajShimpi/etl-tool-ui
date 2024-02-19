@@ -103,8 +103,8 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
               className={`folderstyle`}
               ref={containerRef}
               key={subItem.file_name + "rootDiv" + index}
-              onMouseEnter={() => handleMouseEnter(subItem.file_name)}
-              onMouseLeave={handleMouseLeave}
+              // onMouseEnter={() => handleMouseEnter(subItem.file_name)}
+              // onMouseLeave={handleMouseLeave}
               onClick={() => handleClick(subItem.file_name)}
             >
               <div
@@ -115,10 +115,10 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
               >
                 {subItem.type === "File" && (
                   <div
-                  className={`file_name ${
-                    hoveredItem === subItem.file_name ? "hovered" : ""
-                  } ${clickedItem === subItem.file_name ? "clicked" : ""}`}
-                  onMouseEnter={() => handleMouseEnter(subItem.file_name)}
+                  // className={`file_name ${
+                  //   hoveredItem === subItem.file_name ? "hovered" : ""
+                  // } ${clickedItem === subItem.file_name ? "clicked" : ""}`}
+                  // onMouseEnter={() => handleMouseEnter(subItem.file_name)}
                     ref={containerRef}
                     key={subItem.file_name + "rootDiv" + index}
                     onClick={() => onhandelFileId(subItem)}
@@ -169,11 +169,11 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
                       </Modal>
                     }
                     <div
-                      style={{ height: "30px" }}
-                      className={`file_name ${
-                        hoveredItem === subItem.file_name ? "hovered" : ""
-                      } ${clickedItem === subItem.file_name ? "clicked" : ""}`}
-                      onMouseEnter={() => handleMouseEnter(subItem.file_name)}
+                      style={{ height: "25px" }}
+                      // className={`file_name ${
+                      //   hoveredItem === subItem.file_name ? "hovered" : ""
+                      // } ${clickedItem === subItem.file_name ? "clicked" : ""}`}
+                      // onMouseEnter={() => handleMouseEnter(subItem.file_name)}
                       
                     >
                       {showNested[subItem.file_name] ? (
