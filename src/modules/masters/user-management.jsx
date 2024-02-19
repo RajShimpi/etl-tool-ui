@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import CommonFormWithList from "../components/common-form-with-list";
 import config from "../components/config/config.json";
 import axios from "../services/axios";
 import { getUserMasterControl } from "./user-master-data";
 import auth from "../user/auth";
+import configContext from "../dashboard/config-context";
 
 const UserManagement = () => {
 
@@ -20,6 +21,7 @@ const UserManagement = () => {
     const [binLocation, setBinLocations] = useState([]);
     const [role, setRoles] = useState([]);
     const [clients, setClients] = useState([]);
+    const contextData = useContext(configContext);
 
     useEffect(() => {
 
@@ -36,7 +38,7 @@ const UserManagement = () => {
         
 
     },[])
-    const isSuperAdmin = auth.getStorageData("role") == "SUPERADMIN";
+    const isSuperAdmin = auth.getStorageData("role") == contextData?.SUPER_ADMIN;
     // const processData=(data)=>{
     //     const newData = data.map(x => {
     //         return {
