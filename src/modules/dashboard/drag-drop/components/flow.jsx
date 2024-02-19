@@ -33,7 +33,7 @@ import JobParameterMaster from "../../../masters/job-parameter";
 
 const nodeTypes = {
   node: (node) => {
-    
+
     return (
       <Node
         id={node.id}
@@ -51,7 +51,7 @@ const ContextMenu = ({
   top,
   left,
   right,
-  jobfileid,
+  jobfileid,          
   bottom,
   menu,
   setAsStartStepHandler,
@@ -141,6 +141,17 @@ const ContextMenu = ({
   );
 };
 
+let id = 0;
+
+axios.getWithCallback('job-steps', (response) => {
+  id = response.length;
+});
+
+const getId = () => {
+  id++;
+  return `${id}`;
+};
+
 const OverviewFlow = (textColor) => {
   const [showNodeMaster, setShowNodeMaster] = useState(false);
   const reactFlowWrapper = useRef(null);
@@ -187,7 +198,6 @@ const OverviewFlow = (textColor) => {
   }, [projectID, jobDataId, setStartStep, setMenu]);
 
   useEffect(() => {
-    axios.getWithCallback("job-steps", (data) => setData(data));
 
     if (jobDataId) {
       axios.getWithCallback(`job-steps/${jobDataId.id}/job`, (data) => {
@@ -282,21 +292,18 @@ const OverviewFlow = (textColor) => {
       y: event.clientY - reactFlowBounds.top,
     });
 
-    const currentId = Math.max(...data.map((node) => parseInt(node.id)), 0);
-    const nextId = currentId + 1;
-
     const newNode = {
-      id: `${nextId}`,
+      id: getId(),
       step_type_id,
       name,
       type,
       node_active: true,
       position,
-      data: { heading: name, img: img },
+      data: { heading: name, img: img ,start_step:null,},
     };
 
     setNodes((es) => es.concat(newNode));
-    setData((es) => es.concat(newNode));
+    setData((prevData) => [...prevData, newNode])
     setSelectedNode((newNode.a = name));
     setAllNodes((prevNodes) => [...prevNodes, newNode]);
   };
@@ -304,7 +311,7 @@ const OverviewFlow = (textColor) => {
   const saveNodeToDatabase = () => {
     const dataFromNodes = allNodes.map((item) => ({
       id: parseInt(item.id),
-      job_id: jobfileid,
+      job_id: jobfileid.id,
       step_type_id: parseInt(item.step_type_id),
       step_name: item.data?.heading || item.name,
       type: item.type,

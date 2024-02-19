@@ -14,12 +14,12 @@ const PopupComponent = ({ onClose, actionType, project_id, id }) => {
   switch (actionType) {
     case "AddFolder":
       contentComponent = (
-        <Folder project_id={project_id} id={id} onClose={onClose} />
+        <Folder project_id={project_id} id={id} type="Folder" onClose={onClose} />
       );
       break;
-    case "Add":
+    case "AddFile":
       contentComponent = (
-        <AddFile project_id={project_id} id={id} onClose={onClose} />
+        <AddFile project_id={project_id} id={id} type="File" onClose={onClose} />
       );
       break;
     case "Edit":
@@ -87,7 +87,7 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
             props.onClose(e, true);
           });
           break;
-        case "Add":
+        case "AddFile":
           axios.postWithCallback("project-files", item, (resp) => {
             props.onClose(e, true);
           });
@@ -144,6 +144,7 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
                           update: props.update,
                           callback: setValues,
                           values: data,
+                          type: props.type.includes("Folder") ? "Folder" : "File",
                           options: !!props.options ? props.options : [],
                           data: !!props.data ? props.data : [],
                           message: props.message,
