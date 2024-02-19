@@ -19,6 +19,8 @@ import ProjectFile from "../masters/project-file";
 import StepType from "../masters/steptype";
 import TypeConfigMaster from "../masters/type-config-master";
 import Parameter from "../masters/parameter";
+import { SystemConfig } from "../masters/system-config";
+import UserManagement from "../masters/user-management";
 import StepTypeParameter from "../masters/step-type-parameter";
 import JobSchedule from "../masters/job-schedule";
 
@@ -42,6 +44,8 @@ export const routeConstant = {
   typeconfigmaster: "/type-config",
   parameter:"/parameter",
   steptypeparameter:"/step-type-parameter",
+  systemConfig: "/system-config",
+  usermgmt: "/user-management",
   jobschedule:"/job-schedule"
 };
 
@@ -184,12 +188,20 @@ export const routeData = (routes) => [
     permissions: true,
     isUserCanView: routes.includes(routeConstant.jobschedule),
  },
-//  {
-//   routeTo: routeConstant.systemConfig, // StepTypeParamete Form route
-//   header: "",
-//   childComp: SystemConfig,
-//   data: {},
-//   permissions: true,
-//   isUserCanView: true,
-// }
+ {
+  routeTo: routeConstant.systemConfig, // StepTypeParamete Form route
+  header: "",
+  childComp: SystemConfig,
+  data: {},
+  permissions: true,
+  isUserCanView: true,
+},
+{
+  routeTo: routeConstant.usermgmt, // StepTypeParamete Form route
+  header: "",
+  childComp: UserManagement,
+  data: {},
+  permissions: true,
+  isUserCanView: true,
+}
 ];

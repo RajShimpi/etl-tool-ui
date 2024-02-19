@@ -47,6 +47,7 @@ const Dashboard = () => {
   const [selectedChildItem, setSelectedChildItem] = useState(false);
   const { setProjectID } = useProjectid();
   const [isMenuOpen, setMenuOpen] = useState(false);
+  
 
   const toggleMenu = () => {
     setMenuOpen(!isMenuOpen);
@@ -66,6 +67,10 @@ const Dashboard = () => {
       );
     }
 
+    axios.getWithCallback("system-config/all", (data) => {
+      setConfigValues({ config: data });
+  });
+    // console.log("clientName:",clientName);
     axios.getWithCallback(
       "user/getUserById/" + auth.getStorageData("id"),
       (data) => {
