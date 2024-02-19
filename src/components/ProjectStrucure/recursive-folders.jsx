@@ -5,26 +5,25 @@ import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import ContextMenu from "../ContextMenu";
 import Modal from "../../modules/components/modal-popup";
 import { AddUpdateDeleteFileAndFolder } from "../PopupComponent";
-import Folder from "../../modules/masters/popup/add-folder";
-import AddFile from "../../modules/masters/popup/add-file";
-import Edit from "../../modules/masters/popup/edit-file";
-import Delete from "../../modules/masters/popup/delete";
 import axios from "../../modules/services/axios";
-import { useJobData, useProjectId } from "../JobDataContext";
+import { useJobData } from "../JobDataContext";
+import "./project.css";
+
 const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
   const [showNested, setShowNested] = useState({});
   const [contextMenuPosition, setContextMenuPosition] = useState(null);
   const [isContextMenuOpen, setContextMenuOpen] = useState({});
   const [isShow, setShow] = useState({});
   const [type, setType] = useState("AddFolder");
-  const { setJobDataId } = useJobData();  
+  const { setJobDataId } = useJobData();
   const containerRef = useRef(null);
-// const {project_id}=useProjectId()
+  const [hoveredItem, setHoveredItem] = useState(null);
+  const [clickedItem, setClickedItem] = useState(false);
+
   const handleContextMenu = (event, item) => {
     event.preventDefault();
     event.stopPropagation();
     setContextMenuPosition({ top: event.clientY, left: event.clientX });
-
     onRightCallback(item);
   };
 
@@ -56,6 +55,20 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
       setShowNested({ ...showNested, [name]: !showNested[name] });
   };
 
+  const handleMouseEnter = (name) => {
+    if (clickedItem !== name) {
+      setHoveredItem(name);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredItem(null);
+  };
+
+  const handleClick = (name) => {
+    setClickedItem(name);
+  };
+
   useEffect(() => {
     const close = (e) => {
       if (e.keyCode === 27) {
@@ -77,9 +90,8 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
 
   const onhandelFileId = (item) => {
     axios.getWithCallback(`job/${item.id}/file`, (data) => {
-      setJobDataId(data.id); 
+      setJobDataId(data);
     });
- 
   };
 
   return (
@@ -88,9 +100,12 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
         <>
           {items.map((subItem, index) => (
             <div
-              className="folderstyle"
+              className={`folderstyle`}
               ref={containerRef}
               key={subItem.file_name + "rootDiv" + index}
+              onMouseEnter={() => handleMouseEnter(subItem.file_name)}
+              onMouseLeave={handleMouseLeave}
+              onClick={() => handleClick(subItem.file_name)}
             >
               <div
                 key={subItem.file_name + "contectDiv" + index}
@@ -99,19 +114,28 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
                 onContextMenu={(e) => handleContextMenu(e, subItem)}
               >
                 {subItem.type === "File" && (
-                  <div onClick={() => onhandelFileId(subItem)}>
+                  <div
+                  className={`file_name ${
+                    hoveredItem === subItem.file_name ? "hovered" : ""
+                  } ${clickedItem === subItem.file_name ? "clicked" : ""}`}
+                  onMouseEnter={() => handleMouseEnter(subItem.file_name)}
+                    ref={containerRef}
+                    key={subItem.file_name + "rootDiv" + index}
+                    onClick={() => onhandelFileId(subItem)}
+                    
+                  >
                     <InsertDriveFileIcon
                       key={subItem.file_name + "fileIcon" + index}
                       fontSize="small"
                     />
-                    <>{subItem.file_name}</>
+                    <span>{subItem.file_name}</span>
                   </div>
                 )}
 
                 {subItem.type === "Folder" && subItem.children && (
                   <>
                     {contextMenuPosition && subItem.isRightClick && (
-                      <div style={{ display: !subItem.isRightClick && "none" }}>
+                      <div style={{ display: !subItem.isRightClick && "none"}}>
                         <ContextMenu
                           onClose={(e) => closeContextMenu(e, subItem)}
                           project_id={subItem.project_id}
@@ -144,18 +168,27 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
                         />
                       </Modal>
                     }
-                    {showNested[subItem.file_name] ? (
-                      <FolderOpenIcon
-                        key={subItem.file_name + "openIcon" + index}
-                        fontSize="small"
-                      />
-                    ) : (
-                      <FolderIcon
-                        key={subItem.file_name + "closeIcon" + index}
-                        fontSize="small"
-                      />
-                    )}
-                    <>{subItem.file_name}</>
+                    <div
+                      style={{ height: "30px" }}
+                      className={`file_name ${
+                        hoveredItem === subItem.file_name ? "hovered" : ""
+                      } ${clickedItem === subItem.file_name ? "clicked" : ""}`}
+                      onMouseEnter={() => handleMouseEnter(subItem.file_name)}
+                      
+                    >
+                      {showNested[subItem.file_name] ? (
+                        <FolderOpenIcon
+                          key={subItem.file_name + "openIcon" + index}
+                          fontSize="small"
+                        />
+                      ) : (
+                        <FolderIcon
+                          key={subItem.file_name + "closeIcon" + index}
+                          fontSize="small"
+                        />
+                      )}
+                      <span>{subItem.file_name}</span>
+                    </div>
                     <div
                       style={{
                         display: !showNested[subItem.file_name] && "none",

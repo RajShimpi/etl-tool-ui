@@ -1,4 +1,3 @@
-import config from '../components/config/config.json'
 const getTypeConfigMaster = (itemData) => {
     return [{
         col: 3,
@@ -12,7 +11,7 @@ const getTypeConfigMaster = (itemData) => {
             control: "input",
             isRequired: true,
             itemVal: itemData.values ? itemData.values["category"] : '',
-        }, {
+        },{
             type: "text",
             id: "inputValue",
             label: "Value",
@@ -20,7 +19,7 @@ const getTypeConfigMaster = (itemData) => {
             control: "input",
             isRequired: true,
             itemVal: itemData.values ? itemData.values["value"] : '',
-        }, {
+        },{
             type: "text",
             id: "inputParams",
             label: "Params",
@@ -31,7 +30,7 @@ const getTypeConfigMaster = (itemData) => {
             span: itemData.message?.params,
             apiDataType: "json"
 
-        }, {
+        },{
             type: "checkbox",
             id: "inputIsActive",
             label: "Active",

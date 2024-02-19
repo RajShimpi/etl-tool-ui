@@ -9,9 +9,12 @@ import axios from "../services/axios";
 import { routeData } from "./route-data";
 import configContext from "./config-context";
 import SearchFilter from "../components/search-filter";
-import SearchResult from "../components/search-result";
+// import SearchResult from "../components/search-result";
 import NotificationsDropdown from "../components/notifications-dropdown";
-import { useClientId, useProject } from "../../components/JobDataContext";
+import {
+  useClientId,
+  useProjectid,
+} from "../../components/JobDataContext";
 import PersonIcon from "@mui/icons-material/Person";
 // import { io } from 'socket.io-client';
 
@@ -32,7 +35,7 @@ const Dashboard = () => {
   const [fullScreenMode, setFullScreenMode] = useState(false);
   const [userFirstName, setUserFirstName] = useState("");
   const [configValues, setConfigValues] = useState({});
-  const [activeMenu, setActiveMenu] = useState(0);
+  // const [activeMenu, setActiveMenu] = useState(0);
   const [experimentIds, setExperimentIds] = useState(null);
   const [show, setShow] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -42,7 +45,7 @@ const Dashboard = () => {
   const { setClientId } = useClientId();
   const [project, setProject] = useState([]);
   const [selectedChildItem, setSelectedChildItem] = useState(false);
-  const { setProjectsid } = useProject();
+  const { setProjectID } = useProjectid();
   const [isMenuOpen, setMenuOpen] = useState(false);
   
 
@@ -51,10 +54,11 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    const storedClientId = localStorage.getItem("clientId");
 
-    if (clientId === null && storedClientId) {
-      setClientId(storedClientId);
+    const client = auth.getStorageData("client");
+   
+    if (clientId === null && client.client_id) {
+      setClientId(client.client_id);
     }
 
     if (clientId) {
@@ -92,11 +96,11 @@ const Dashboard = () => {
     return () => {};
   }, [clientId, setClientId]);
 
-  useEffect(() => {
-    if (clientId) {
-      localStorage.setItem("clientId", clientId);
-    }
-  }, [clientId]);
+  // useEffect(() => {
+  //   if (clientId) {
+  //     // localStorage.setItem("clientId", clientId);
+  //   }
+  // }, [clientId]);
 
   // console.log("clientId:", clientId);
   // useEffect(() => {
@@ -174,21 +178,21 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    const storedClient_Id = localStorage.getItem("client_Id");
-
-    axios.getWithCallback(
-      `projects/client/${storedClient_Id}`,
-      (projectsData) => {
-        setProject(projectsData);
-      }
-    );
+    const Clientid = auth.getStorageData("client");
+    
+    if (Clientid.id) {
+      axios.getWithCallback(
+        `projects/client/${Clientid.id}`,
+        (projectsData) => {
+          setProject(projectsData);
+        }
+      );
+    }
   }, []);
-  // console.log("project:",project);
 
-  const onhandelProject = (item) => {
-    // console.log("item:", item);
-    setProjectsid(item);
-    localStorage.setItem("item", item);
+  const onhandelProject = (projectid) => {
+    // auth.setAuthData(projectid);
+    setProjectID(projectid);
   };
 
   return (
@@ -306,72 +310,109 @@ const Dashboard = () => {
                               aria-labelledby={item.menuName}
                             >
                               {item.childMenu.map((childItem, chidIndex) => (
-                               <div
-                               key={childItem.childMenuItemId + "Link"}
-                               className="dropdown-item"
-                               onMouseEnter={() => setSelectedChildItem(childItem)}
-                               // onMouseLeave={() => setSelectedChildItem(false)}
-                             >
-                               {!item.menuName.toLowerCase().includes("project") ? (
-                                 <Link key={childItem.childMenuItemId + "Link"} className="dropdown-item" to={{ pathname: childItem.href }}>
-                                   {childItem.itemName}
-                                 </Link>
-                               ) : (
-                                 <>
-                                 <div style={{cursor: "pointer"}}>
-                                   {childItem.itemName}
-                                   {item.menuName.toLowerCase().includes("project") && (
-                                     <ArrowForwardIosIcon
-                                       style={{
-                                         fontSize: "small",
-                                         height: "25px",
-                                         marginLeft: "20px",
-                                       }}
-                                     />
-                                   )}
-                                   </div>
-                                 </>
-                               )}
-                             </div>
-                             
+                                <div
+                                  key={childItem.childMenuItemId + "Link"}
+                                  className="dropdown-item"
+                                  onMouseEnter={() =>
+                                    setSelectedChildItem(childItem)
+                                  }
+                                  // onMouseLeave={() => setSelectedChildItem(false)}
+                                >
+                                  {!item.menuName
+                                    .toLowerCase()
+                                    .includes("project") ? (
+                                    <Link
+                                      key={childItem.childMenuItemId + "Link"}
+                                      className="dropdown-item"
+                                      to={{ pathname: childItem.href }}
+                                    >
+                                      {childItem.itemName}
+                                    </Link>
+                                  ) : (
+                                    <>
+                                      <div style={{ cursor: "pointer" }}>
+                                        {childItem.itemName}
+
+                                        <ArrowForwardIosIcon
+                                          style={{
+                                            fontSize: "small",
+                                            height: "25px",
+                                            marginLeft: "20px",
+                                          }}
+                                        />
+                                      </div>
+                                    </>
+                                  )}
+                                </div>
                               ))}
 
-                              {item.menuName.toLowerCase().includes("project") && selectedChildItem && (
-                                <div
-                                  style={{
-                                    position: "absolute",
-                                    top: 0,
-                                    left: "100%",
-                                    minWidth: "200px",
-                                    background: "#fff",
-                                    cursor: "pointer",
-                                    boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
-                                    padding: "10px",
-                                    zIndex: 1,
-                                  }}
-                                >
-                                  { project.map((item) => (
-                                    <div
-                                      style={{ display: "flex", margin: "2px" }}
-                                    >
-                                      <FolderIcon
-                                        fontSize="small"
-                                        style={{ marginTop: "3px" }}
-                                      />
-                                      <div
-                                        onMouseLeave={() =>
-                                          setSelectedChildItem(false)
+                              {item.menuName
+                                .toLowerCase()
+                                .includes("project") &&
+                                selectedChildItem && (
+                                  <div
+                                    style={{
+                                      position: "absolute",
+                                      top: 0,
+                                      left: "100%",
+                                      minWidth: "200px",
+                                      background: "#fff",
+                                      cursor: "pointer",
+                                      boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+                                      padding: "10px",
+                                      zIndex: 1,
+                                    }}
+                                  >
+                                    <div  onMouseLeave={() =>
+                                        setSelectedChildItem(false)
+                                      }>
+                                    {project.map((item) => (
+                                      
+                                      <Link
+                                     
+                                        key={"maincomponent" + "Link"}
+                                        className="dropdown-item"
+                                        to={{ pathname: "maincomponent" }}
+                                        onClick={() =>
+                                          onhandelProject(item.id)
                                         }
-                                        onClick={() => onhandelProject(item.id)}
-                                        key={item.project_id}
-                                        style={{ marginLeft: "5px" }}
                                       >
-                                        {item.project_name}
-                                      </div>
-                                    </div>
-                                  ))}
-                                </div>
-                              )}
+                                        <div
+                                          // onMouseLeave={() =>
+                                          //   setSelectedChildItem(false)
+                                          // }
+                                          // onClick={() =>
+                                          //   onhandelProject(item.id)
+                                          // }
+                                          key={item.project_id}
+                                          // style={{ marginLeft: "5px" }}
+                                          style={{
+                                            display: "flex",
+                                            margin: "2px",
+                                            marginRight: "5px",
+                                          }}
+                                        >
+                                          <FolderIcon
+                                            fontSize="small"
+                                            style={{ marginTop: "3px" }}
+                                          />
+                                          <div
+                                            // onMouseLeave={() =>
+                                            //   setSelectedChildItem(false)
+                                            // }
+                                            // onClick={() => onhandelProject(item.id)}
+                                            // key={item.project_id}
+                                            style={{ marginLeft: "5px" }}
+                                          >
+                                            {item.project_name}
+                                          </div>
+                                        </div>
+                                      </Link>
+                                     
+                                    ))}
+                                     </div>
+                                  </div>
+                                )}
                             </div>
                           ) : (
                             <div

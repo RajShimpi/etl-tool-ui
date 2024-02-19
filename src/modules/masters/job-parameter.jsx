@@ -8,7 +8,7 @@ import auth from '../user/auth';
 
 
 const JobParameterMaster = ({ job_id, project_id, handleClose }) => {
-    // console.log(node_Id, "name");
+  
     const [parameter, setparameter] = useState([]);
     const [editName, setEditName] = useState('');    
     const [controlData, setControlData] = useState([]);
@@ -17,13 +17,9 @@ const JobParameterMaster = ({ job_id, project_id, handleClose }) => {
     const [data, setData] = useState(null);
     const [nameValue, setNameValue] = useState([]);
     
-    
-
     // useEffect(() => {
     //   setData((prevData) => ({ ...prevData,  }));
     // }, [name]);
-
-   
 
     useEffect(() => {
       const fetchData = async () => {
@@ -32,7 +28,7 @@ const JobParameterMaster = ({ job_id, project_id, handleClose }) => {
             const options = {};
             await Promise.all(data.map(async (parameter) => {
               const resource = parameter?.resource;
-              if (resource && resource != "NA") {
+              if (resource && resource !== "NA") {
                 try {
                   const resourceData = await axios.get(`${resource}`);
                   parameter.options =  resourceData.data;
@@ -40,24 +36,18 @@ const JobParameterMaster = ({ job_id, project_id, handleClose }) => {
                   console.error(`Error fetching resource ${resource}:`, error);
                 }
               }
-              
             }));
-            
             setparameter(data);
           });
-          // console.log(response);
         } catch (error) {
           console.error('Error fetching data:', error);
         }
       };
-      
-  
       fetchData();
     }, [job_id]);
   
     useEffect(() => {
       if(job_id) {
-      
       axios.getWithCallback(`job-parameters/${job_id}`, (data) => {
           if(data?.length) {
             setUpdate(true);
@@ -71,10 +61,7 @@ const JobParameterMaster = ({ job_id, project_id, handleClose }) => {
        });
       }
     }, [job_id]);
-   
-  
     
-    // console.log(parameter, "parameter");
     const getItemData = (itemData) => {
       if(!itemData)
         return;
@@ -236,7 +223,6 @@ const JobParameterMaster = ({ job_id, project_id, handleClose }) => {
         e.target.classList.add("was-validated");
       } else {
         // axios.putWithCallback(`job-steps/${node_Id}/na`, { step_name: data["step_name"]  }, (data) => {
-          
         // })
         var dt = prepareOtherParams();
         var dt1 = prepareData();

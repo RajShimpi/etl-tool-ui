@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import config from "../../components/config/config.json"
 import CommonModel from '../../components/common-modal';
 import { getCommonFields } from './common-data';
 
-const Folder = ({ project_id, id }) => {
-
-    let defaultObj = { file_name: '', project_id: project_id, type: 'Folder', parent_id: id };
+const Folder = ({ project_id, id,type }) => {
+    let defaultObj = { file_name: '', project_id: project_id, type: 'Folder', parent_id: id === 0 ? null : id };
 
     return (
         <>
@@ -15,9 +14,10 @@ const Folder = ({ project_id, id }) => {
                 insertApi="project-files"
                 // updateApi="clients/:id"
                 // getApi="clients"
+                options={type}
                 title="Add Folder"
                 defaultObj={defaultObj}
-            // tableTitle='client'
+                // tableTitle='client'
             />
         </>
     );

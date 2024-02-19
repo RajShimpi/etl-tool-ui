@@ -19,9 +19,11 @@ const JobStep = () => {
     useEffect(() => {
         axios.getWithCallback('step-type/', (data) => setStepType(data.map(y => ({ value: y.id, label: y.name }))))
     }, []);
+
     useEffect(() => {
         axios.getWithCallback('job-steps/', (data) => setOk(data.map(z => ({ value: z.id, label: z.ok_step }))))
     }, []);
+    
     useEffect(() => {
         axios.getWithCallback('job-steps/', (data) => setError(data.map(e => ({ value: e.id, label: e.error_step }))))
     }, []);

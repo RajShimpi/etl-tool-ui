@@ -6,12 +6,14 @@
   width: 100%;
   height: 100%;
 }
+
 .btncolr {
   border-radius: 100%;
   padding: 10px;
   border: solid 2px rgb(238, 223, 223);
   margin-left: 7px;
 }
+
 .dropbtn {
   cursor: pointer;
 }
@@ -19,6 +21,7 @@
 .pcolr {
   padding: 3px;
 }
+
 .contextMenu {
   position: absolute;
   background-color: #ffffff4f;
@@ -42,21 +45,17 @@
   transition: background-color 0.3s ease;
   &:hover {
     background-color: #f0f0f0;
-    /* color: black; */
   }
 }
 
 .popup {
   position: absolute;
-  /* background-color: white;
-  padding:5px; */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   z-index: 1000;
   left: 112px;
   top: 0px;
   width: 310px;
   height: 100%;
-  /* width: 100%; */
 }
 
 .contextMenu.right .menu-item {

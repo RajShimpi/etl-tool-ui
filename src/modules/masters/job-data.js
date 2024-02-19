@@ -12,8 +12,7 @@ export const getJobFields = (itemData) => {
             isSubmit: itemData.isSubmit,
             isRequired: true,
             itemVal: itemData.values ? itemData.values["name"] : '',
-        },
-        {
+        },{
             type: "text",
             id: "inputParameterContext",
             label: "Start Step",
@@ -22,8 +21,7 @@ export const getJobFields = (itemData) => {
             isSubmit: itemData.isSubmit,
             isRequired: true,
             itemVal: itemData.values ? itemData.values["start_step"] : '',
-        },
-        {
+        },{
             type: "text",
             id: "inputParameterDisplay_name",
             label: "Type",
@@ -32,9 +30,7 @@ export const getJobFields = (itemData) => {
             isSubmit: itemData.isSubmit,
             isRequired: true,
             itemVal: itemData.values ? itemData.values["type"] : '',
-        },
-        {
-            // type: "text",/
+        },{
             id: "inputParameterDescription",
             label: "File",
             name: "job_file_id",
@@ -43,9 +39,7 @@ export const getJobFields = (itemData) => {
             isSubmit: itemData.isSubmit,
             isRequired: true,
             itemVal: itemData.values ? itemData.values["job_file_id"] : '',
-        },
-        {
-            // type: "text",
+        },{
             id: "inputParameterType",
             label: "Project",
             name: "project_id",
@@ -54,9 +48,7 @@ export const getJobFields = (itemData) => {
             isSubmit: itemData.isSubmit,
             isRequired: true,
             itemVal: itemData.values ? itemData.values["project_id"] : '',
-        },
-        {
-            // type: "text",
+        },{
             id: "inputParameterResource",
             label: "Client",
             name: "client_id",
