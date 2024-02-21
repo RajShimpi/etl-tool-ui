@@ -679,7 +679,7 @@ const OverviewFlow = (textColor) => {
         show={openJobParams}
         maxWidth="70%"
       >
-        <JobParameterMaster project_id={projectID} job_Id={job_id} />
+        <JobParameterMaster handleClose={handleCloseJobParams} project_id={projectID} job_Id={job_id} />
       </Modal>
       <div className="dndflow">
         <ReactFlowProvider>

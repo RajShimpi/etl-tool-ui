@@ -281,9 +281,9 @@ const JobStepParameterMaster = ({
       // let item = { id:props.item.id, file_name: data.file_name, project_id: props.item.project_id, type: props.type.includes("Folder") ? 'Folder' : 'File', parent_id: props.item?.id };
     }
   };
-
+console.log(parameter);
   return (
-    <div className="row">
+    <div className="row" style={{height:'300px'}}>
       <div className="col-xl-12">
         <div className="card">
           <form
@@ -312,11 +312,11 @@ const JobStepParameterMaster = ({
                 aria-labelledby="headingOne"
                 data-bs-parent={"common-form-" + name}
               >
-                <div className="accordion-body text-muted">
+                <div className="accordion-body text-muted" >
                   <div className="card-body">
                     <FormCommon data={controlData} />
                   </div>
-                  {!!parameter.filter((x) => x.name === "other")?.length && (
+                  {!parameter.filter((x) => x.name === "other")?.length && (
                     <div style={{ padding: "0px 0px 20px 20px" }}>
                       <button
                         type="button"
