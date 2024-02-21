@@ -96,8 +96,7 @@
     "display_name",
     "description",
     "type",
-    "resource",
-    "step.name"
+    "resource"
   ],
   "STEP_TYPE_PARAMETERS": ["step.name", "parameter.name", "required","params"],
   "Job_Schedule": [

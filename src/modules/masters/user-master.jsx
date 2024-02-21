@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import CommonFormWithList from "../components/common-form-with-list";
 import config from "../components/config/config.json";
 import axios from "../services/axios";
-// import { getUserMasterControl } from "./master-data";
+import { getUserMasterControl } from "./user-master-data";
 
 const UserMaster = () => {
 
@@ -80,22 +80,22 @@ const UserMaster = () => {
     }
 
     return (
-<></>
-    // <CommonFormWithList
-    //     formDataAction={getUserMasterControl}
-    //     columns={config.USER_MASTER_COLUMNS}
-    //     insertApi="user/profile-update/:id"
-    //     updateApi="user/profile-update"
-    //     getApi="user"
-    //     title="Update User-Profile"
-    //     defaultObj={defaultObj}
-    //     options={[ manager, warehouse, binLocation, role ]}
-    //     tableTitle='User Master'
-    //     data={[ manager, warehouse, binLocation, role ]}
-    //     processListCallback={processData}
-    //     updateApiCallback={updateData}
-    //     disabledAdd={true}
-    // />
+
+    <CommonFormWithList
+        formDataAction={getUserMasterControl}
+        columns={config.USER_MASTER_COLUMNS}
+        insertApi="user/profile-update/:id"
+        updateApi="user/profile-update"
+        getApi="user"
+        title="Update User-Profile"
+        defaultObj={defaultObj}
+        options={[ manager, warehouse, binLocation, role ]}
+        tableTitle='User Master'
+        data={[ manager, warehouse, binLocation, role ]}
+        processListCallback={processData}
+        updateApiCallback={updateData}
+        disabledAdd={true}
+    />
 
     )
 
