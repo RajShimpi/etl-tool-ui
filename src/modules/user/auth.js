@@ -55,6 +55,8 @@ const getStorageData = (keyName) => {
             return localObj.user?.userProfile?.manager;
         case "client":
             return localObj.user.client;
+        case "client_id":
+            return localObj.user.client_id;
         case "projectid":
             return localObj.user.projectid;
         case "usersToRoles":

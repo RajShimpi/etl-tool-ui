@@ -86,7 +86,7 @@ const UserManagement = () => {
         // processListCallback={processData}
         // updateApiCallback={updateData}
         // disabledAdd={true}
-    />
+   />
 
     )
 

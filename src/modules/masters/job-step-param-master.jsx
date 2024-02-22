@@ -28,9 +28,12 @@ const JobStepParameterMaster = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        await axios.getWithCallback(`step-type/parameter/get/${step_type_id || 0}`, async (data) => {
+        await axios.getWithCallback(
+          `step-type/parameter/get/${step_type_id || 0}`,
+          async (data) => {
             const options = {};
-            await Promise.all(data.stepTypeParameters.map(async (parameter) => {
+            await Promise.all(
+              data.stepTypeParameters.map(async (parameter) => {
                 const resource = parameter.parameter?.resource;
                 if (resource && resource != "NA") {
                   try {
@@ -53,13 +56,10 @@ const JobStepParameterMaster = ({
       }
     };
     fetchData();
-  }, [step_type_id,setparameter]);
+  }, [step_type_id, setparameter]);
 
   useEffect(() => {
     if (node_Id) {
-      axios.getWithCallback(`job-steps/${node_Id || 0}`, (data) =>
-        setEditName(data)
-      );
       axios.getWithCallback(`job-step-parameters/${node_Id}`, (data) => {
         if (data?.length) {
           setUpdate(true);
@@ -72,9 +72,13 @@ const JobStepParameterMaster = ({
             }));
           });
         } else {
+          setData(null);
           setUpdate(false);
         }
       });
+      axios.getWithCallback(`job-steps/${node_Id || 0}`, (data) =>
+        setEditName(data)
+      );
     }
   }, [node_Id]);
 
@@ -103,7 +107,8 @@ const JobStepParameterMaster = ({
               itemVal: itemData.values ? itemData.values["step_name"] : "",
             }))
           : [],
-      },{
+      },
+      {
         col: colSize,
         callback: itemData.callback,
         groups: !!parameter
@@ -118,7 +123,7 @@ const JobStepParameterMaster = ({
                 name: v.parameter.name,
                 control:
                   v.parameter.type === "text" ? "input" : v.parameter.type,
-                options: v.parameter.options,
+                options: v.parameter.options || v.options,
                 disabled: false,
                 itemVal: itemData.values
                   ? itemData.values[v.parameter.name]
@@ -164,9 +169,9 @@ const JobStepParameterMaster = ({
   };
 
   useEffect(() => {
-    let param = parameter?.find((x) => x.name == "other");
+    let param = parameter?.find((x) => x.parameter.name == "other");
     if (!!param && jobStepParamData?.length) {
-      let dt = jobStepParamData.filter((x) => x.parameter_id === param.id);
+      let dt = jobStepParamData.filter((x) => x.parameter_id === param.parameter_id);
       setNameValue(
         dt.map((x, index) => {
           return {
@@ -184,7 +189,7 @@ const JobStepParameterMaster = ({
     return columns
       .filter((x) => x != "step_name")
       .map((col) => {
-        var param = parameter.find((x) => x.name === col);
+        var param = parameter.find((x) => x.parameter.name === col);
         if (!param) {
           return null;
         }
@@ -199,7 +204,7 @@ const JobStepParameterMaster = ({
             job_id: job_id,
             step_id: node_Id,
             step_type_id: step_type_id,
-            parameter_id: param.id,
+            parameter_id: param.parameter_id,
             parameter_name: col,
             value: data[col],
             value_id: data[`${col}_id`],
@@ -210,10 +215,12 @@ const JobStepParameterMaster = ({
   };
 
   const prepareOtherParams = () => {
-    var param = parameter.find((x) => x.name === "other");
+    var param = parameter.find((x) => x.parameter.name === "other");
 
     return nameValue.map((x, index) => {
-      var item = jobStepParamData.find((y) => y.parameter_name === x[`name_${index + 1}`]);
+      var item = jobStepParamData.find(
+        (y) => y.parameter_name === x[`name_${index + 1}`]
+      );
       if (item) {
         item.parameter_name = x[`name_${index + 1}`];
         item.value = x[`value_${index + 1}`];
@@ -223,7 +230,7 @@ const JobStepParameterMaster = ({
           job_id: job_id,
           step_id: node_Id,
           step_type_id: step_type_id,
-          parameter_id: param.id,
+          parameter_id: param.parameter.id,
           parameter_name: x[`name_${index + 1}`],
           value: x[`value_${index + 1}`],
         };
@@ -275,9 +282,9 @@ const JobStepParameterMaster = ({
       // let item = { id:props.item.id, file_name: data.file_name, project_id: props.item.project_id, type: props.type.includes("Folder") ? 'Folder' : 'File', parent_id: props.item?.id };
     }
   };
-
+console.log(parameter);
   return (
-    <div className="row">
+    <div className="row" style={{height:'300px'}}>
       <div className="col-xl-12">
         <div className="card">
           <form
@@ -288,19 +295,35 @@ const JobStepParameterMaster = ({
             <div className="accordion" id={"common-form-" + name}>
               <div className="accordion-item" style={{ margin: "0px" }}>
                 <h2 className="accordion-header" id="headingOne">
-                  <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" >
+                  <button
+                    className="accordion-button"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapseOne"
+                    aria-expanded="true"
+                    aria-controls="collapseOne"
+                  >
                     {name}
                   </button>
                 </h2>
               </div>
-              <div id="collapseOne" className="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent={"common-form-" + name}>
-                <div className="accordion-body text-muted">
+              <div
+                id="collapseOne"
+                className="accordion-collapse collapse show"
+                aria-labelledby="headingOne"
+                data-bs-parent={"common-form-" + name}
+              >
+                <div className="accordion-body text-muted" >
                   <div className="card-body">
                     <FormCommon data={controlData} />
                   </div>
-                  {!!parameter.filter((x) => x.name === "other")?.length && (
+                  {!parameter.filter((x) => x.name === "other")?.length && (
                     <div style={{ padding: "0px 0px 20px 20px" }}>
-                      <button type="button" className="btn btn-primary" onClick={(e) => onClick(e)} >
+                      <button
+                        type="button"
+                        className="btn btn-primary"
+                        onClick={(e) => onClick(e)}
+                      >
                         <i className="fa fa-plus" />
                         Additional Parameter
                       </button>
@@ -309,7 +332,12 @@ const JobStepParameterMaster = ({
                   <div>
                     {!!nameValue?.length && (
                       <table className="table table-striped table-bordered dt-responsive">
-                        <thead style={{ backgroundColor: "rgb(60, 141, 188)", color: "white", }} >
+                        <thead
+                          style={{
+                            backgroundColor: "rgb(60, 141, 188)",
+                            color: "white",
+                          }}
+                        >
                           <tr>
                             <th>Name</th>
                             <th>Value</th>
@@ -320,14 +348,32 @@ const JobStepParameterMaster = ({
                           {nameValue.map((x, index) => (
                             <tr>
                               <td>
-                                <input type="text" name={`name_${x.id}`} value={x[`name_${x.id}`]} onChange={(e) => {onChange(e, x); }}/>
+                                <input
+                                  type="text"
+                                  name={`name_${x.id}`}
+                                  value={x[`name_${x.id}`]}
+                                  onChange={(e) => {
+                                    onChange(e, x);
+                                  }}
+                                />
                               </td>
                               <td>
-                                <input type="text" name={`value_${x.id}`} value={x[`value_${x.id}`]} onChange={(e) => {onChange(e, x); }} />
+                                <input
+                                  type="text"
+                                  name={`value_${x.id}`}
+                                  value={x[`value_${x.id}`]}
+                                  onChange={(e) => {
+                                    onChange(e, x);
+                                  }}
+                                />
                               </td>
 
                               <td>
-                                <button type="button" className="btn" onClick={(e) => onRemove(e, x.id)}>
+                                <button
+                                  type="button"
+                                  className="btn"
+                                  onClick={(e) => onRemove(e, x.id)}
+                                >
                                   <i className="fa fa-trash" />
                                 </button>
                               </td>
@@ -338,14 +384,24 @@ const JobStepParameterMaster = ({
                     )}
                   </div>
                   <div className=" col-md-12 d-flex justify-content-end">
-                    <button type="submit" 
-                            className={update
-                                             ? "btn mx-2 btn-update w-xs waves-effect waves-light"
-                                             : "btn mx-1 btn-add w-xs waves-effect waves-light"
-                      }>
+                    <button
+                      type="submit"
+                      className={
+                        update
+                          ? "btn mx-2 btn-update w-xs waves-effect waves-light"
+                          : "btn mx-1 btn-add w-xs waves-effect waves-light"
+                      }
+                    >
                       {update ? "Update" : "Add"}
                     </button>
-                    <button type="button" onClick={(e) => {setUpdate(false); handleClose();}} className="btn btn-warning w-xs waves-effect waves-light">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        setUpdate(false);
+                        handleClose();
+                      }}
+                      className="btn btn-warning w-xs waves-effect waves-light"
+                    >
                       Close
                     </button>
                   </div>
