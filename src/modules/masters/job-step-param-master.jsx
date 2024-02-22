@@ -60,9 +60,6 @@ const JobStepParameterMaster = ({
 
   useEffect(() => {
     if (node_Id) {
-      axios.getWithCallback(`job-steps/${node_Id || 0}`, (data) =>
-        setEditName(data)
-      );
       axios.getWithCallback(`job-step-parameters/${node_Id}`, (data) => {
         if (data?.length) {
           setUpdate(true);
@@ -75,9 +72,13 @@ const JobStepParameterMaster = ({
             }));
           });
         } else {
+          setData(null);
           setUpdate(false);
         }
       });
+      axios.getWithCallback(`job-steps/${node_Id || 0}`, (data) =>
+        setEditName(data)
+      );
     }
   }, [node_Id]);
 
@@ -168,9 +169,9 @@ const JobStepParameterMaster = ({
   };
 
   useEffect(() => {
-    let param = parameter?.find((x) => x.name == "other");
+    let param = parameter?.find((x) => x.parameter.name == "other");
     if (!!param && jobStepParamData?.length) {
-      let dt = jobStepParamData.filter((x) => x.parameter_id === param.id);
+      let dt = jobStepParamData.filter((x) => x.parameter_id === param.parameter_id);
       setNameValue(
         dt.map((x, index) => {
           return {
@@ -188,7 +189,7 @@ const JobStepParameterMaster = ({
     return columns
       .filter((x) => x != "step_name")
       .map((col) => {
-        var param = parameter.find((x) => x.name === col);
+        var param = parameter.find((x) => x.parameter.name === col);
         if (!param) {
           return null;
         }
@@ -203,7 +204,7 @@ const JobStepParameterMaster = ({
             job_id: job_id,
             step_id: node_Id,
             step_type_id: step_type_id,
-            parameter_id: param.id,
+            parameter_id: param.parameter_id,
             parameter_name: col,
             value: data[col],
             value_id: data[`${col}_id`],
@@ -214,7 +215,7 @@ const JobStepParameterMaster = ({
   };
 
   const prepareOtherParams = () => {
-    var param = parameter.find((x) => x.name === "other");
+    var param = parameter.find((x) => x.parameter.name === "other");
 
     return nameValue.map((x, index) => {
       var item = jobStepParamData.find(
@@ -229,7 +230,7 @@ const JobStepParameterMaster = ({
           job_id: job_id,
           step_id: node_Id,
           step_type_id: step_type_id,
-          parameter_id: param.id,
+          parameter_id: param.parameter.id,
           parameter_name: x[`name_${index + 1}`],
           value: x[`value_${index + 1}`],
         };

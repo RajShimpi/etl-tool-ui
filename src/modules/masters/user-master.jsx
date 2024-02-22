@@ -1,23 +1,27 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import CommonFormWithList from "../components/common-form-with-list";
 import config from "../components/config/config.json";
 import axios from "../services/axios";
 import { getUserMasterControl } from "./user-master-data";
+import auth from "../user/auth";
+import configContext from "../dashboard/config-context";
 
-const UserMaster = () => {
+const UserManagement = () => {
 
     let defaultObj = {
-        id: null, profileId: null, profileImage: null,
-        emp_code: '', firstname: '',middlename: '', lastname: '',
-        email: '', manager: null, warehouse: null, binLocation: null, role: null,
-        managerId: null, warehouseId: null, binLocationId: null, roleId: null,
-        isActive: true,
+        id: null,
+        username: '', firstname: '',middlename: '', lastname: '',
+        email: '', role: null,
+        roleId: null, client_id: auth.getStorageData("client_id")
+        , isActive: true,
     };
 
     const [manager, setManagers] = useState([]);
     const [warehouse, setWarehouses] = useState([]);
     const [binLocation, setBinLocations] = useState([]);
     const [role, setRoles] = useState([]);
+    const [clients, setClients] = useState([]);
+    const contextData = useContext(configContext);
 
     useEffect(() => {
 
@@ -30,75 +34,62 @@ const UserMaster = () => {
             }
         ))));
         axios.getWithCallback("user-roles", (data) => setRoles(data.map(x => ({ value: x.id, label: x.name }))))
-
+        axios.getWithCallback("clients", (data) => setClients(data.map(x => ({ value: x.id, label: x.name }))))
+        
 
     },[])
+    const isSuperAdmin = auth.getStorageData("role") == contextData?.SUPER_ADMIN;
+    // const processData=(data)=>{
+    //     const newData = data.map(x => {
+    //         return {
+    //             ...x, userRoles: x.UsersToRoles.map(x => x.role_id)
+    //         }
+    //     });
 
-    const processData=(data)=>{
-        const newData = data.map(x => {
-            return {
-                id: x.id,
-                profileId: x.userProfile?.id,
-                emp_code: x.employeeCode,
-                firstname: x.userProfile?.firstName,
-                middlename: x.userProfile?.middleName,
-                lastname: x.userProfile?.lastName,
-                email: x.email,
-                manager: x.userProfile?.manager,
-                warehouse: x.userProfile?.warehouse,
-                warehouseId: x.userProfile?.warehouseId,
-                binLocation: x.userProfile?.binLocation,
-                binLocationId: x.userProfile?.binLocationId,
-                profileImage: x.userProfile?.image,
-                role: x.usersToRoles[0]?.role?.displayname,
-                roleId: x.usersToRoles[0]?.role_id,
-                isActive: x.isActive,
-            }
-        });
+    //     return newData;
+    //   }
 
-        return newData;
-    }
+    // const updateData = (item) => {
+    //     return {
+    //         id: item.id,
+    //         profileId: item.profileId,
+    //         manager: item.manager,
+    //         email: item.email,
+    //         firstName: item.firstname,
+    //         middleName: item.middlename,
+    //         lastName: item.lastname,
+    //         warehouse: item.warehouse,
+    //         binLocation: item.binLocation,
+    //         warehouseId: item.warehouseId,
+    //         binLocationId: item.binLocationId,
+    //         profileImage: item.profileImage,
+    //         roleId: item.roleId,
+    //         isActive: item.isActive
+    //     }
 
-    const updateData = (item) => {
-        return {
-            id: item.id,
-            profileId: item.profileId,
-            manager: item.manager,
-            email: item.email,
-            firstName: item.firstname,
-            middleName: item.middlename,
-            lastName: item.lastname,
-            warehouse: item.warehouse,
-            binLocation: item.binLocation,
-            warehouseId: item.warehouseId,
-            binLocationId: item.binLocationId,
-            profileImage: item.profileImage,
-            roleId: item.roleId,
-            isActive: item.isActive
-        }
-
-    }
+    // }
 
     return (
 
     <CommonFormWithList
         formDataAction={getUserMasterControl}
         columns={config.USER_MASTER_COLUMNS}
-        insertApi="user/profile-update/:id"
-        updateApi="user/profile-update"
+        insertApi="user"
+        updateApi="user"
         getApi="user"
-        title="Update User-Profile"
+        title="Add / Update User"
         defaultObj={defaultObj}
-        options={[ manager, warehouse, binLocation, role ]}
+        options={[role,clients]}
         tableTitle='User Master'
-        data={[ manager, warehouse, binLocation, role ]}
-        processListCallback={processData}
-        updateApiCallback={updateData}
-        disabledAdd={true}
-    />
+        data={[role]}
+        isSuperAdmin={isSuperAdmin}
+        // processListCallback={processData}
+        // updateApiCallback={updateData}
+        // disabledAdd={true}
+   />
 
     )
 
 }
 
-export default UserMaster;
+export default UserManagement;
