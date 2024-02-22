@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../services/axios';
-import { useDashboardMetabaseData, useDashboardMetabaseDataId } from '../../components/JobDataContext';
+import { useDashboardId } from '../../components/JobDataContext';
 
 const MetabaseComponent = () => {
   const [iframeUrl, setIframeUrl] = useState('');
   const [data, setData] = useState([]);
-  const {setMetabaseData} =useDashboardMetabaseData([])
-  const {metabaseDataId} =useDashboardMetabaseDataId([])
+  const {dashboadId} =useDashboardId([])
   useEffect(() => {
-    axios.getWithCallback(`metabase/data/${metabaseDataId}`, (data) => setIframeUrl(data)) 
-    axios.getWithCallback('metabase/json', (data) => setData(data))
-  }, [metabaseDataId]);
-  setMetabaseData(data)
+    axios.getWithCallback(`metabase/data/${dashboadId}`, (data) => setIframeUrl(data)) 
+  }, [dashboadId]);
  
   return (
     <>

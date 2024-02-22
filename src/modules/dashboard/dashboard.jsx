@@ -13,6 +13,7 @@ import SearchFilter from "../components/search-filter";
 import NotificationsDropdown from "../components/notifications-dropdown";
 import {
   useClientId,
+  useDashboardId,
   useProjectid,
 } from "../../components/JobDataContext";
 import PersonIcon from "@mui/icons-material/Person";
@@ -47,7 +48,8 @@ const Dashboard = () => {
   const [selectedChildItem, setSelectedChildItem] = useState(false);
   const { setProjectID } = useProjectid();
   const [isMenuOpen, setMenuOpen] = useState(false);
-  
+  const {setDashboardId}=useDashboardId()
+  const [dashboardData,setDashboardData]=useState([])
 
   const toggleMenu = () => {
     setMenuOpen(!isMenuOpen);
@@ -189,12 +191,20 @@ const Dashboard = () => {
       );
     }
   }, []);
+  useEffect(()=>{
+    axios.getWithCallback('metabase/json', (data) => setDashboardData(data))
+  },[])
+  // console.log(dashboardData);
 
   const onhandelProject = (projectid) => {
     // auth.setAuthData(projectid);
     setProjectID(projectid);
   };
-  
+  const onhandelDashboardId = (id) => {
+    console.log(id);
+    setDashboardId(id)
+  };
+
   const roles = auth.getStorageData("usersToRoles");
   
   return (
@@ -321,7 +331,9 @@ const Dashboard = () => {
                                 >
                                   {!item.menuName
                                     .toLowerCase()
-                                    .includes("project") ? (
+                                    .includes("project")&&!item.menuName
+                                    .toLowerCase()
+                                    .includes("dashboard") ? (
                                     <Link
                                       key={childItem.childMenuItemId + "Link"}
                                       className="dropdown-item"
@@ -347,66 +359,99 @@ const Dashboard = () => {
                                 </div>
                               ))}
 
-                              {item.menuName
-                                .toLowerCase()
-                                .includes("project") &&
-                                selectedChildItem && (
-                                  <div
-                                    style={{
-                                      position: "absolute",
-                                      top: 0,
-                                      left: "100%",
-                                      minWidth: "200px",
-                                      background: "#fff",
-                                      cursor: "pointer",
-                                      boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
-                                      padding: "10px",
-                                      zIndex: 1,
-                                    }}
-                                  >
-                                    <div  onMouseLeave={() =>
-                                        setSelectedChildItem(false)
-                                      }>
-                                    {project.map((item) => (
-                                      
-                                      <Link
-                                     
-                                        key={"maincomponent" + "Link"}
-                                        className="dropdown-item"
-                                        to={{ pathname: "maincomponent" }}
-                                        onClick={() =>
-                                          onhandelProject(item.id)
-                                        }
-                                      >
-                                        <div
-                                          // onMouseLeave={() =>
-                                          //   setSelectedChildItem(false)
-                                          // }
-                                          // onClick={() =>
-                                          //   onhandelProject(item.id)
-                                          // }
-                                          key={item.project_id}
-                                          // style={{ marginLeft: "5px" }}
-                                          style={{
-                                            display: "flex",
-                                            margin: "2px",
-                                            marginRight: "5px",
-                                          }}
+                               {item.menuName
+                                  .toLowerCase()
+                                  .includes("project") &&
+                                  selectedChildItem && (
+                                    <div
+                                      style={{
+                                        position: "absolute",
+                                        top: 0,
+                                        left: "100%",
+                                        minWidth: "200px",
+                                        background: "#fff",
+                                        cursor: "pointer",
+                                        boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+                                        padding: "10px",
+                                        zIndex: 1,
+                                      }}
+                                    >
+                                      <div  onMouseLeave={() =>
+                                          setSelectedChildItem(false)
+                                        }>
+                                      {project.map((item) => (
+                                        <Link
+                                          key={"maincomponent" + "Link"}
+                                          className="dropdown-item"
+                                          to={{ pathname: "maincomponent" }}
+                                          onClick={() =>
+                                            onhandelProject(item.id)
+                                          }
                                         >
-                                          <FolderIcon
-                                            fontSize="small"
-                                            style={{ marginTop: "3px" }}
-                                          />
                                           <div
-                                            style={{ marginLeft: "5px" }}
+                                            key={item.project_id}
+                                            style={{
+                                              display: "flex",
+                                              margin: "2px",
+                                              marginRight: "5px",
+                                            }}
                                           >
-                                            {item.project_name}
+                                            <FolderIcon
+                                              fontSize="small"
+                                              style={{ marginTop: "3px" }}
+                                            />
+                                            <div
+                                              style={{ marginLeft: "5px" }}
+                                            >
+                                              {item.project_name}
+                                            </div>
                                           </div>
-                                        </div>
-                                      </Link>
-                                     
-                                    ))}
-                                     </div>
+                                        </Link>
+                                      ))}
+                                      </div>
+                                  </div>
+                                )}{item.menuName
+                                  .toLowerCase()
+                                  .includes("dashboard") &&
+                                  selectedChildItem && (
+                                    <div
+                                      style={{
+                                        position: "absolute",
+                                        top: 0,
+                                        left: "100%",
+                                        minWidth: "200px",
+                                        background: "#fff",
+                                        cursor: "pointer",
+                                        boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+                                        padding: "10px",
+                                        zIndex: 1,
+                                      }}
+                                    >
+                                      <div  onMouseLeave={() =>
+                                          setSelectedChildItem(false)
+                                        }>
+                                      {dashboardData.map((item) => (
+                                        <Link
+                                          key={"metabase" + "Link"}
+                                          className="dropdown-item"
+                                          to={{ pathname: "metabase" }}
+                                          onClick={() =>onhandelDashboardId(item.id)} >
+                                          <div
+                                            key={item.id}
+                                            style={{
+                                              display: "flex",
+                                              margin: "2px",
+                                              marginRight: "5px",
+                                            }}
+                                          >
+                                            <img src="/assets/images/dashboard1.png"/>
+                                            <div style={{ marginLeft: "5px" }} >
+                                              {item.name}
+                                            </div>
+                                          </div>
+                                        </Link>
+                                      ))}
+                                      </div>
                                   </div>
                                 )}
                             </div>

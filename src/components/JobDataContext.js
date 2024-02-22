@@ -5,6 +5,8 @@ const ClientIdContext = createContext();
 const ProjectIdContext = createContext();
 const ProjectContext = createContext();
 const ProjectIDContext = createContext();
+const DashboardMetabaseDataContext = createContext();
+const DashboardIdContext = createContext();
 
 export const JobDataProvider = ({ children }) => {
   const [jobDataId, setJobDataId] = useState(null);
@@ -111,6 +113,51 @@ export const useProjectid = () => {
   const context = useContext(ProjectIDContext);
   if (!context) {
     throw new Error("useProjectid must be used within a JobDataProvider");
+  }
+  return context;
+};
+
+export const DashboardMetabaseDataProvider = ({ children }) => {
+  const [metabaseData, setMetabaseData] = useState(null);
+
+  const setMetabaseDataValue = (data) => {
+    setMetabaseData(data);
+  };
+
+  return (
+    <DashboardMetabaseDataContext.Provider value={{ metabaseData, setMetabaseData: setMetabaseDataValue }}>
+      {children}
+    </DashboardMetabaseDataContext.Provider>
+  );
+};
+
+export const useDashboardMetabaseData = () => {
+  const context = useContext(DashboardMetabaseDataContext);
+  if (!context) {
+    throw new Error("Dashboard Metabase Data must be used within a Dashboard Metabase Data");
+  }
+  return context;
+};
+
+export const DashboardIdProvider = ({ children }) => {
+  const [dashboadId, setDashboardId] = useState(null);
+
+  const setDashboardIdValue = (id) => {
+    setDashboardId(id);
+    console.log(id,id);
+  };
+
+  return (
+    <DashboardIdContext.Provider value={{ dashboadId, setDashboardId: setDashboardIdValue }}>
+      {children}
+    </DashboardIdContext.Provider>
+  );
+};
+
+export const useDashboardId = () => {
+  const context = useContext(DashboardIdContext);
+  if (!context) {
+    throw new Error("Dashboard Metabase Data must be used within a Dashboard Metabase Data");
   }
   return context;
 };
