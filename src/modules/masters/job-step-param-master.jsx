@@ -22,7 +22,6 @@ const JobStepParameterMaster = ({
   const [step, setStep] = useState();
   const [steptype, setSteptype] = useState();
   const [nodeName, setNodesName] = useState();
-  const [stepName, setStepName] = useState();
   // const [isOtherParamVisible, setOtherParamVisible] = useState(false);
 
   const colSize = parameter.length <= 2 ? 6 : 4;
@@ -31,23 +30,21 @@ const JobStepParameterMaster = ({
     setStep(step_type_id);
     setData((prevData) => ({ ...prevData, step_name: name }));
   }, [name]);
-
-  useEffect(() => {
-    setNodesName(
-      nodes.map((item) => ({
-        id: item.id,
-        step_name: item.data.heading,
-        job_id: item.job_id,
-      }))
-    );
-  }, [nodes, nodeName]);
+  
+  useEffect(()=>{
+    setNodesName(nodes.map((item)=>({
+      id:item.id,
+      step_name:item.data.heading,  
+      job_id:item.job_id,  
+    })))
+  },[])
 
   useEffect(() => {
     if (step_type_id !== step) {
       setData([]);
       setparameter([]);
     }
-  }, [step_type_id, setparameter]);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -183,7 +180,7 @@ const JobStepParameterMaster = ({
       options: [],
       message: "",
     });
-  }, [editName, parameter]);
+  }, [editName, parameters]);
 
   const setValues = (e, name) => {
     if (!e) return;
@@ -302,16 +299,15 @@ const JobStepParameterMaster = ({
       e.target.classList.add("was-validated");
       //props.validationCallback(true);
     } else {
+      // Ensure data is not null before accessing properties
       if (data && data.step_name) {
         const step = nodeName.filter((item) => parseInt(item.id) !== node_id);
-        const isStepNameUnique = step.every(
-          (node) => node.step_name !== data.step_name
-        );
-
+        const isStepNameUnique = step.every((node) => node.step_name !== data.step_name);
+    
         if (!isStepNameUnique) {
           return alert("Step name must be unique.");
         }
-
+    
         axios.putWithCallback(
           `job-steps/${node_id}/name-save`,
           { step_name: data.step_name },
@@ -319,7 +315,7 @@ const JobStepParameterMaster = ({
         );
         var dt = prepareOtherParams();
         var dt1 = prepareData();
-
+    
         axios.postWithCallback(
           "job-step-parameters",
           _.concat(dt1, dt),
@@ -329,10 +325,12 @@ const JobStepParameterMaster = ({
           }
         );
       } else {
+        // Handle case where data or data.step_name is null
         console.error("Data or data.step_name is null");
       }
     }
   };
+  
 
   return (
     <div className="row" style={{ height: "300px" }}>
