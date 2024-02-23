@@ -196,7 +196,7 @@ const OverviewFlow = (textColor) => {
   const [step_type_id, setStep_type_Id] = useState();
   const [job_id, setJob_Id] = useState();
   const [jobfileid, setJobFileId] = useState();
-  const [nodeid, setNode_Id] = useState();
+  const [node_id, setNode_Id] = useState();
   const [editName, setName] = useState();
   const [activeNodes, setActiveNodes] = useState([]);
   const [nodesActive, setNodesActive] = useState([]);
@@ -568,7 +568,7 @@ const OverviewFlow = (textColor) => {
     setShowNodeMaster(true);
   };
 
-  const nodeId = (node) => {
+  const node_Id = (node) => {
     setName(node.data.heading);
     setStep_type_Id(node.step_type_id);
     setJob_Id(node.job_id);
@@ -603,7 +603,7 @@ const OverviewFlow = (textColor) => {
 
   const handleNodeClick = (event, node) => {
     onNodeDoubleClick();
-    nodeId(node);
+    node_Id(node);
   };
 
   const onNodeContextMenu = useCallback(
@@ -679,7 +679,11 @@ const OverviewFlow = (textColor) => {
         show={openJobParams}
         maxWidth="70%"
       >
-        <JobParameterMaster handleClose={handleCloseJobParams} project_id={projectID} job_id={job_id} />
+        <JobParameterMaster
+          handleClose={handleCloseJobParams}
+          project_id={projectID}
+          job_id={job_id}
+        />
       </Modal>
       <div className="dndflow">
         <ReactFlowProvider>
@@ -734,9 +738,10 @@ const OverviewFlow = (textColor) => {
               <JobStepParameterMaster
                 step_type_id={step_type_id}
                 job_id={job_id}
-                node_Id={nodeid}
+                node_id={node_id}
                 handleClose={handleCloseNodeMaster}
                 name={editName}
+                nodes={nodeActives}
               />
             </Modal>
           </div>

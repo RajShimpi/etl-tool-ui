@@ -38,7 +38,7 @@ const Modal = (props) => {
       
       
     return (
-        <div className={props.show ? "modal d-block hide-body-scroll" : "modal d-none"} style={{ overflow: "auto", zIndex:'10000' }} tabIndex="-1" role="dialog">
+        <div className={props.show ? "modal d-block hide-body-scroll" : "modal d-none"} style={{ overflow: "auto", zIndex:'10000' ,top:'15%'}} tabIndex="-1" role="dialog">
             <div className={`modal-dialog modal-lg ${props.maxWidth &&props.maxHeight &&  'modal-top'} `} style={{ maxWidth: props.maxWidth,maxHeight:props.maxHeight }} role="document">
                 <div className="  " style={modalContent}>
                 <div className={`${props.maxWidth && 'modal-header-custom-padding'} modal-header`}>

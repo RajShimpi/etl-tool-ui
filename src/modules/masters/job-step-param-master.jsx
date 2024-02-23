@@ -4,63 +4,89 @@ import FormCommon from "../components/form-common";
 import _ from "lodash";
 
 const JobStepParameterMaster = ({
-  node_Id,
+  node_id,
   job_id,
   step_type_id,
   name,
   handleClose,
+  nodes,
 }) => {
   const [parameter, setparameter] = useState([]);
+  const [parameters, setParameters] = useState([]);
   const [editName, setEditName] = useState("");
   const [controlData, setControlData] = useState([]);
   const [jobStepParamData, setJobStepParamData] = useState([]);
   const [update, setUpdate] = useState(false);
   const [data, setData] = useState(null);
   const [nameValue, setNameValue] = useState([]);
+  const [step, setStep] = useState();
+  const [steptype, setSteptype] = useState();
+  const [nodeName, setNodesName] = useState();
+  const [stepName, setStepName] = useState();
   // const [isOtherParamVisible, setOtherParamVisible] = useState(false);
 
   const colSize = parameter.length <= 2 ? 6 : 4;
 
   useEffect(() => {
+    setStep(step_type_id);
     setData((prevData) => ({ ...prevData, step_name: name }));
   }, [name]);
 
   useEffect(() => {
+    setNodesName(
+      nodes.map((item) => ({
+        id: item.id,
+        step_name: item.data.heading,
+        job_id: item.job_id,
+      }))
+    );
+  }, [nodes, nodeName]);
+
+  useEffect(() => {
+    if (step_type_id !== step) {
+      setData([]);
+      setparameter([]);
+    }
+  }, [step_type_id, setparameter]);
+
+  useEffect(() => {
     const fetchData = async () => {
       try {
-        await axios.getWithCallback(
-          `step-type/parameter/get/${step_type_id || 0}`,
-          async (data) => {
-            const options = {};
-            await Promise.all(
-              data.stepTypeParameters.map(async (parameter) => {
-                const resource = parameter.parameter?.resource;
-                if (resource && resource != "NA") {
-                  try {
-                    const resourceData = await axios.get(`${resource}`);
-                    parameter.options = resourceData.data;
-                  } catch (error) {
-                    console.error(
-                      `Error fetching resource ${resource}:`,
-                      error
-                    );
+        if (step_type_id) {
+          await axios.getWithCallback(
+            `step-type/parameter/get/${step_type_id}`,
+            async (data) => {
+              const options = {};
+              await Promise.all(
+                data.stepTypeParameters.map(async (parameter) => {
+                  const resource = parameter.parameter?.resource;
+                  if (resource && resource != "NA") {
+                    try {
+                      const resourceData = await axios.get(`${resource}`);
+                      parameter.options = resourceData.data;
+                    } catch (error) {
+                      console.error(
+                        `Error fetching resource ${resource}:`,
+                        error
+                      );
+                    }
                   }
-                }
-              })
-            );
-            setparameter(data.stepTypeParameters);
-          }
-        );
+                })
+              );
+              setparameter(data.stepTypeParameters);
+            }
+          );
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
     fetchData();
-  }, [step_type_id, setparameter]);
+  }, [step_type_id]);
 
   useEffect(() => {
-    if (node_Id) {
-      axios.getWithCallback(`job-step-parameters/${node_Id}`, (data) => {
+    if (node_id) {
+      axios.getWithCallback(`job-step-parameters/${node_id}`, (data) => {
         if (data?.length) {
           setUpdate(true);
           setJobStepParamData(data);
@@ -76,11 +102,20 @@ const JobStepParameterMaster = ({
           setUpdate(false);
         }
       });
-      axios.getWithCallback(`job-steps/${node_Id || 0}`, (data) =>
-        setEditName(data)
-      );
+      if (node_id) {
+        axios.getWithCallback(`job-steps/${node_id}`, (data) =>
+          setEditName(data)
+        );
+      }
+      if (step_type_id) {
+        axios.getWithCallback(`step-type/${step_type_id}`, (data) =>
+          setSteptype(data.name)
+        );
+      }
+
+      axios.getWithCallback(`parameter/`, (data) => setParameters(data));
     }
-  }, [node_Id]);
+  }, [node_id]);
 
   let defaultObj = {
     step_name: "",
@@ -99,12 +134,13 @@ const JobStepParameterMaster = ({
         callback: itemData.callback,
         groups: [editName]
           ? [editName].map((v) => ({
-              id: "inputparameterFileid",
+              id: "stepnameid",
               label: "Step Name",
               name: "step_name",
               control: "input",
+              isRequired: true,
               isSubmit: itemData.isSubmit,
-              itemVal: itemData.values ? itemData.values["step_name"] : "",
+              itemVal: itemData.name ? itemData.values["step_name"] : name,
             }))
           : [],
       },
@@ -171,7 +207,9 @@ const JobStepParameterMaster = ({
   useEffect(() => {
     let param = parameter?.find((x) => x.parameter.name == "other");
     if (!!param && jobStepParamData?.length) {
-      let dt = jobStepParamData.filter((x) => x.parameter_id === param.parameter_id);
+      let dt = jobStepParamData.filter(
+        (x) => x.parameter_id === param.parameter_id
+      );
       setNameValue(
         dt.map((x, index) => {
           return {
@@ -201,10 +239,10 @@ const JobStepParameterMaster = ({
           return item;
         } else {
           return {
-            job_id: job_id,
-            step_id: node_Id,
-            step_type_id: step_type_id,
-            parameter_id: param.parameter_id,
+            job_id: parseInt(job_id),
+            step_id: node_id,
+            step_type_id: parseInt(step_type_id),
+            parameter_id: parseInt(param.parameter_id),
             parameter_name: col,
             value: data[col],
             value_id: data[`${col}_id`],
@@ -215,7 +253,7 @@ const JobStepParameterMaster = ({
   };
 
   const prepareOtherParams = () => {
-    var param = parameter.find((x) => x.parameter.name === "other");
+    var param = parameters.find((x) => x.name === "other");
 
     return nameValue.map((x, index) => {
       var item = jobStepParamData.find(
@@ -227,10 +265,10 @@ const JobStepParameterMaster = ({
         return item;
       } else {
         return {
-          job_id: job_id,
-          step_id: node_Id,
-          step_type_id: step_type_id,
-          parameter_id: param.parameter.id,
+          job_id: parseInt(job_id),
+          step_id: node_id,
+          step_type_id: parseInt(step_type_id),
+          parameter_id: parseInt(param.id),
           parameter_name: x[`name_${index + 1}`],
           value: x[`value_${index + 1}`],
         };
@@ -264,27 +302,40 @@ const JobStepParameterMaster = ({
       e.target.classList.add("was-validated");
       //props.validationCallback(true);
     } else {
-      axios.putWithCallback(
-        `job-steps/${node_Id}/name-save`,
-        { step_name: data["step_name"] },
-        (data) => {}
-      );
-      var dt = prepareOtherParams();
-      var dt1 = prepareData();
-      axios.postWithCallback(
-        "job-step-parameters",
-        _.concat(dt1, dt),
-        (data) => {
-          setUpdate(false);
-          handleClose();
+      if (data && data.step_name) {
+        const step = nodeName.filter((item) => parseInt(item.id) !== node_id);
+        const isStepNameUnique = step.every(
+          (node) => node.step_name !== data.step_name
+        );
+
+        if (!isStepNameUnique) {
+          return alert("Step name must be unique.");
         }
-      );
-      // let item = { id:props.item.id, file_name: data.file_name, project_id: props.item.project_id, type: props.type.includes("Folder") ? 'Folder' : 'File', parent_id: props.item?.id };
+
+        axios.putWithCallback(
+          `job-steps/${node_id}/name-save`,
+          { step_name: data.step_name },
+          (data) => {}
+        );
+        var dt = prepareOtherParams();
+        var dt1 = prepareData();
+
+        axios.postWithCallback(
+          "job-step-parameters",
+          _.concat(dt1, dt),
+          (data) => {
+            setUpdate(false);
+            handleClose();
+          }
+        );
+      } else {
+        console.error("Data or data.step_name is null");
+      }
     }
   };
-console.log(parameter);
+
   return (
-    <div className="row" style={{height:'300px'}}>
+    <div className="row" style={{ height: "300px" }}>
       <div className="col-xl-12">
         <div className="card">
           <form
@@ -303,7 +354,16 @@ console.log(parameter);
                     aria-expanded="true"
                     aria-controls="collapseOne"
                   >
-                    {name}
+                    <div
+                      style={{
+                        display: "flex",
+                        width: "100%",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <div>{name}</div>
+                      <div>{steptype}</div>
+                    </div>
                   </button>
                 </h2>
               </div>
@@ -313,11 +373,11 @@ console.log(parameter);
                 aria-labelledby="headingOne"
                 data-bs-parent={"common-form-" + name}
               >
-                <div className="accordion-body text-muted" >
+                <div className="accordion-body text-muted">
                   <div className="card-body">
                     <FormCommon data={controlData} />
                   </div>
-                  {!parameter.filter((x) => x.name === "other")?.length && (
+                  {!!parameters.filter((x) => x.name === "other")?.length && (
                     <div style={{ padding: "0px 0px 20px 20px" }}>
                       <button
                         type="button"
@@ -398,6 +458,8 @@ console.log(parameter);
                       type="button"
                       onClick={(e) => {
                         setUpdate(false);
+                        setData(null);
+                        setparameter(null);
                         handleClose();
                       }}
                       className="btn btn-warning w-xs waves-effect waves-light"
