@@ -94,7 +94,7 @@ const Dashboard = () => {
     );
 
     return () => {};
-  }, [clientId, setClientId]);
+  }, [clientId]);
 
   // useEffect(() => {
   //   if (clientId) {
