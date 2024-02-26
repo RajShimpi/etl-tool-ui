@@ -328,11 +328,12 @@ const OverviewFlow = (textColor) => {
         step_type_id,
         name,
         type,
+        job_id:jobfileid.id,
         node_active: true,
         position,
         data: { heading: name, img: img, start_step: null },
       };
-
+console.log(newNode);
       setNodes((es) => es.concat(newNode));
       setData((prevData) => [...prevData, newNode]);
       setSelectedNode((newNode.a = name));
@@ -554,7 +555,7 @@ const OverviewFlow = (textColor) => {
   const onEdgeUpdate = useCallback((oldEdge, newConnection) => {
     edgeUpdateSuccessful.current = true;
     setEdges((els) => updateEdge(oldEdge, newConnection, els));
-  }, []);
+  }, [edges]);
 
   const onEdgeUpdateEnd = useCallback((_, edge) => {
     if (!edgeUpdateSuccessful.current) {
@@ -654,7 +655,9 @@ const OverviewFlow = (textColor) => {
   }, [menu, setNodes, setEdges, activeNodes]);
 
   const nodeActives = nodes.filter((item) => item.node_active === true);
-
+const onEdgeClick=(data)=>{
+  console.log(data);
+}
   return (
     <>
       <button
@@ -708,6 +711,7 @@ const OverviewFlow = (textColor) => {
               onNodeDragStop={onNodeDragStop}
               onNodeContextMenu={onNodeContextMenu}
               onPaneClick={onPaneClick}
+              onEdgeClick={(edge) => onEdgeClick(edge)}
             >
               <Background color="#aaa" gap={16} />
               {menu && (
