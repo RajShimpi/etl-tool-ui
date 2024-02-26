@@ -200,10 +200,10 @@ const JobStepParameterMaster = ({
   };
 
   useEffect(() => {
-    let param = parameter?.find((x) => x.parameter.name == "other");
+    let param = otherparameters?.find((x) => x.name == "other");
     if (!!param && jobStepParamData?.length) {
       let dt = jobStepParamData.filter(
-        (x) => x.parameter_id === param.parameter_id
+        (x) => x.parameter_id === param.id
       );
       setNameValue(
         dt.map((x, index) => {
