@@ -47,10 +47,9 @@ const JobStepParameterMaster = ({
   }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
+   
         if (step_type_id) {
-          await axios.getWithCallback(
+           axios.getWithCallback(
             `step-type/parameter/get/${step_type_id}`,
             async (data) => {
               const options = {};
@@ -74,12 +73,8 @@ const JobStepParameterMaster = ({
             }
           );
         }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData();
-  }, [step_type_id]);
+     
+  }, [step_type_id,parameters]);
 
   useEffect(() => {
     if (node_id) {
@@ -113,7 +108,7 @@ const JobStepParameterMaster = ({
       axios.getWithCallback(`parameter/`, (data) => setParameters(data));
     }
   }, [node_id]);
-
+console.log(data)
   let defaultObj = {
     step_name: "",
     type: "",
@@ -137,7 +132,6 @@ const JobStepParameterMaster = ({
               control: "input",
               isRequired: true,
               isSubmit: itemData.isSubmit,
-              itemVal: itemData.name ? itemData.values["step_name"] : name,
             }))
           : [],
       },
@@ -168,6 +162,7 @@ const JobStepParameterMaster = ({
       },
     ];
     setControlData(dt);
+    console.log(dt);
     return dt;
   };
 
@@ -180,7 +175,7 @@ const JobStepParameterMaster = ({
       options: [],
       message: "",
     });
-  }, [editName, parameters]);
+  }, [editName, parameters,parameter]);
 
   const setValues = (e, name) => {
     if (!e) return;
@@ -456,8 +451,8 @@ const JobStepParameterMaster = ({
                       type="button"
                       onClick={(e) => {
                         setUpdate(false);
-                        setData(null);
-                        setparameter(null);
+                        // setData(null);
+                        // setparameter(null);
                         handleClose();
                       }}
                       className="btn btn-warning w-xs waves-effect waves-light"
