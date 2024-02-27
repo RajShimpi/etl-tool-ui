@@ -24,7 +24,6 @@ const JobStepParameterMaster = ({
   const [steptype, setSteptype] = useState();
   const [nodeName, setNodesName] = useState();
   // const [isOtherParamVisible, setOtherParamVisible] = useState(false);
-
   const colSize = parameter.length <= 2 ? 6 : 4;
 
   useEffect(() => {
@@ -43,18 +42,19 @@ const JobStepParameterMaster = ({
   }, []);
 
   useEffect(() => {
-      setControlData([]);
-    setData([]);
-    setparameter([]);
-    setJobStepParamData([]);
+    if(nodeid != node_id){
+    setData([])
+    setControlData([]);
     setotherParameters([]);
-  }, []);
+    setparameter([])
+    setNameValue([])
+    setJobStepParamData([])}
+  }, [node_id,nodeid]);
   
 
   useEffect(() => {
-    setControlData([]);
+   
     if (step_type_id) {
-      setparameter([])
       axios.getWithCallback(
         `step-type/parameter/get/${step_type_id}`,
         async (data) => {
@@ -76,15 +76,14 @@ const JobStepParameterMaster = ({
         }
       );
     }
-  }, [step_type_id]);
+  }, [step_type_id,job_id]);
 
   useEffect(() => {
     if (node_id) {
-      setData([])
       axios.getWithCallback(`job-step-parameters/${node_id}`, (data) => {
         if (data?.length) {
           setUpdate(true);
-          setJobStepParamData(data);
+          setJobStepParamData(data !== null ? data : null);
           data.forEach((x) => {
             setData((prevData) => ({
               ...prevData,
@@ -249,7 +248,6 @@ const JobStepParameterMaster = ({
 
   const prepareOtherParams = () => {
     var param = otherparameters.find((x) => x.name === "other");
-
     return nameValue.map((x, index) => {
       var item = jobStepParamData.find(
         (y) => y.parameter_name === x[`name_${index + 1}`]
@@ -273,6 +271,7 @@ const JobStepParameterMaster = ({
 
   const onClick = (e) => {
     e.preventDefault();
+    
     setNameValue((prevData) => [
       ...prevData,
       { id: prevData?.length ? prevData.length + 1 : 1 },
@@ -285,6 +284,7 @@ const JobStepParameterMaster = ({
   };
 
   const onChange = (e, obj) => {
+    // setNameValue([])
     var item = nameValue.find((x) => x.id === obj.id);
     item[e.target.name] = e.target.value;
     setNameValue((prevData) => [...prevData]);
@@ -315,7 +315,6 @@ const JobStepParameterMaster = ({
         );
         var dt = prepareOtherParams();
         var dt1 = prepareData();
-
         axios.postWithCallback(
           "job-step-parameters",
           _.concat(dt1, dt),
