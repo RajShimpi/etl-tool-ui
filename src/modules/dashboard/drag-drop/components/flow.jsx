@@ -677,6 +677,7 @@ const OverviewFlow = (textColor) => {
     }
   }, [menu, setNodes, setEdges, activeNodes]);
 
+  const edgeupdate = edges.filter((item)=>item.target !='null')
   return (
     <>
       <button
@@ -712,7 +713,7 @@ const OverviewFlow = (textColor) => {
           <div className="reactflow-wrapper" ref={reactFlowWrapper}>
             <ReactFlow
               nodes={nodedata}
-              edges={edges}
+              edges={edgeupdate}
               startStep={startStep}
               nodeTypes={nodeTypes}
               onNodesChange={onNodesChange}
