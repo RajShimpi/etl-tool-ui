@@ -166,17 +166,6 @@ const ContextMenu = ({
   );
 };
 
-let id = 0;
-
-axios.getWithCallback("job-steps", (data) => {
-  id = data.length;
-});
-
-const getId = () => {
-  id++;
-  return `${id}`;
-};
-
 const OverviewFlow = (textColor) => {
   const [showNodeMaster, setShowNodeMaster] = useState(false);
   const reactFlowWrapper = useRef(null);
@@ -206,6 +195,7 @@ const OverviewFlow = (textColor) => {
   const { setJobDataId } = useJobData(null);
   const { projectID } = useProjectid([]);
   const [startStep, setStartStep] = useState(null);
+  const [nodedata, setNodedata] = useState([]);
 
   const setAsStartStepHandler = useCallback(() => {
     const startstep = {
@@ -229,6 +219,69 @@ const OverviewFlow = (textColor) => {
     setMenu(null);
   }, [projectID, jobDataId, setStartStep, setMenu]);
 
+  const onDragOver = (event) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
+
+    // const [showNodeMaster, setShowNodeMaster] = useState(false);
+
+    // ... (other state variables and functions)
+  };
+
+  const onDrop = (event) => {
+    if (jobfileid) {
+      event.preventDefault();
+      const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
+      const type = event.dataTransfer.getData("application/reactflow");
+      const img = event.dataTransfer.getData("img");
+      const name = event.dataTransfer.getData("name");
+      const step_type_id = event.dataTransfer.getData("id");
+
+      const position = reactFlowInstance.project({
+        x: event.clientX - reactFlowBounds.left,
+        y: event.clientY - reactFlowBounds.top,
+      });
+
+      const newNode = {
+        step_type_id,
+        step_name: name,
+        type,
+        job_id: parseInt(jobfileid.id),
+        node_active: true,
+        position:{
+          x:position.x,
+          y:position.y,
+        },
+        params:{
+          position_X:position.x,
+          position_Y:position.y,
+        },
+        data: { heading: name, img: img, start_step: null },
+      };
+      axios.postWithCallback("job-steps/", newNode, (data) => {
+        setNodes((prevNodes) => [
+          ...prevNodes,
+          {
+            ...data,
+            id:`${data.id}`,
+            ...newNode,
+            position: {
+              x: position.x,
+              y: position.y
+            } }
+        ]);
+        setData((prevData) => [...prevData, data]);
+        setSelectedNode(data.a || name);
+        setAllNodes((prevNodes) => [...prevNodes, data]);
+      });
+    }
+ 
+  };
+  useEffect(()=>{
+    const nodeActives = nodes.filter((item) => item.node_active === true);
+    setNodedata(nodeActives)
+  },[nodes])
+  
   useEffect(() => {
     if (jobDataId) {
       axios.getWithCallback(`job-steps/${jobDataId.id}/job`, (data) => {
@@ -293,53 +346,20 @@ const OverviewFlow = (textColor) => {
   }, [
     setNodes,
     setAllNodes,
+    nodes,
+    data,
+    allNodes,
     jobDataId,
     startStep,
     setStartStep,
+    setData,
+    selectedNode,
+    setSelectedNode,
     setAsStartStepNullHandler,
     setAsStartStepHandler,
+    onDragOver,
+    onDrop,
   ]);
-
-  const onDragOver = (event) => {
-    event.preventDefault();
-    event.dataTransfer.dropEffect = "move";
-
-    // const [showNodeMaster, setShowNodeMaster] = useState(false);
-
-    // ... (other state variables and functions)
-  };
-
-  const onDrop = (event) => {
-    if (jobfileid) {
-      event.preventDefault();
-      const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
-      const type = event.dataTransfer.getData("application/reactflow");
-      const img = event.dataTransfer.getData("img");
-      const name = event.dataTransfer.getData("name");
-      const step_type_id = event.dataTransfer.getData("id");
-
-      const position = reactFlowInstance.project({
-        x: event.clientX - reactFlowBounds.left,
-        y: event.clientY - reactFlowBounds.top,
-      });
-
-      const newNode = {
-        id: getId(),
-        step_type_id,
-        name,
-        type,
-        job_id:jobfileid.id,
-        node_active: true,
-        position,
-        data: { heading: name, img: img, start_step: null },
-      };
-console.log(newNode);
-      setNodes((es) => es.concat(newNode));
-      setData((prevData) => [...prevData, newNode]);
-      setSelectedNode((newNode.a = name));
-      setAllNodes((prevNodes) => [...prevNodes, newNode]);
-    }
-  };
 
   const saveNodeToDatabase = () => {
     const dataFromNodes = allNodes.map((item) => ({
@@ -552,10 +572,13 @@ console.log(newNode);
     edgeUpdateSuccessful.current = false;
   }, []);
 
-  const onEdgeUpdate = useCallback((oldEdge, newConnection) => {
-    edgeUpdateSuccessful.current = true;
-    setEdges((els) => updateEdge(oldEdge, newConnection, els));
-  }, [edges]);
+  const onEdgeUpdate = useCallback(
+    (oldEdge, newConnection) => {
+      edgeUpdateSuccessful.current = true;
+      setEdges((els) => updateEdge(oldEdge, newConnection, els));
+    },
+    [edges]
+  );
 
   const onEdgeUpdateEnd = useCallback((_, edge) => {
     if (!edgeUpdateSuccessful.current) {
@@ -654,10 +677,6 @@ console.log(newNode);
     }
   }, [menu, setNodes, setEdges, activeNodes]);
 
-  const nodeActives = nodes.filter((item) => item.node_active === true);
-const onEdgeClick=(data)=>{
-  console.log(data);
-}
   return (
     <>
       <button
@@ -692,7 +711,7 @@ const onEdgeClick=(data)=>{
         <ReactFlowProvider>
           <div className="reactflow-wrapper" ref={reactFlowWrapper}>
             <ReactFlow
-              nodes={nodeActives}
+              nodes={nodedata}
               edges={edges}
               startStep={startStep}
               nodeTypes={nodeTypes}
@@ -711,7 +730,6 @@ const onEdgeClick=(data)=>{
               onNodeDragStop={onNodeDragStop}
               onNodeContextMenu={onNodeContextMenu}
               onPaneClick={onPaneClick}
-              onEdgeClick={(edge) => onEdgeClick(edge)}
             >
               <Background color="#aaa" gap={16} />
               {menu && (
@@ -745,7 +763,7 @@ const onEdgeClick=(data)=>{
                 node_id={node_id}
                 handleClose={handleCloseNodeMaster}
                 name={editName}
-                nodes={nodeActives}
+                nodes={nodedata}
               />
             </Modal>
           </div>
