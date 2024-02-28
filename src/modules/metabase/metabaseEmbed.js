@@ -4,8 +4,8 @@ import { useDashboardId } from '../../components/JobDataContext';
 
 const MetabaseComponent = () => {
   const [iframeUrl, setIframeUrl] = useState('');
-  const [data, setData] = useState([]);
   const {dashboadId} =useDashboardId([])
+
   useEffect(() => {
     axios.getWithCallback(`metabase/data/${dashboadId}`, (data) => setIframeUrl(data)) 
   }, [dashboadId]);
@@ -17,7 +17,7 @@ const MetabaseComponent = () => {
         <iframe
           src={iframeUrl.iframeUrl}
           width="100%"
-          height="900"
+          height="1300px"
           frameBorder="0"
           allowtransparency="true"
           allowFullScreen

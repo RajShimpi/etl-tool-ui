@@ -38,7 +38,7 @@ const MainComponent = () => {
     // setIsDropdownOpen(false);
   };
 
-  const calculatePhotoWidth = () => {
+  const componetsWidth = () => {
     if (isProjectStructureOpen && isComponetToolOpen) {
       return "70%";
     } else if (isProjectStructureOpen || isComponetToolOpen) {
@@ -50,6 +50,12 @@ const MainComponent = () => {
 
   return (
     <>
+    <div className="d-flex" style={{justifyContent:'space-between'}}>
+      <div className="d-flex">
+        <button className="btn btn-primary">Save</button>
+        <button className="btn btn-secondary">Job Params</button>
+        <button className="btn btn-primary">publish</button>
+      </div>
       <div className="dropdown">
         <div className="dropbtn" onClick={handleDropdownToggle}>
           Select Theme <KeyboardArrowDownIcon />
@@ -62,12 +68,13 @@ const MainComponent = () => {
           </div>
         )}
       </div>
+      </div>
       <div className="main-container"style={{backgroundColor: themes[currentThemeIndex].backgroundColor, color: themes[currentThemeIndex].textColor}}>
         <div className="d-flex justify-content-between main">
           <div className={` ${isProjectStructureOpen ? "open" : ""}`}>
             <ProjectStructure toggleSidebar={handleProjectStructureToggle} textColor={themes[currentThemeIndex].textColor}/>
           </div>
-          <div style={{ width: calculatePhotoWidth() }}>
+          <div style={{ width: componetsWidth() }}>
             <OverviewFlow textColor={themes[currentThemeIndex].textColor}/>
           </div>
           <div className={` ${isComponetToolOpen ? "open" : ""}`}>

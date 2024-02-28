@@ -144,7 +144,6 @@ export const DashboardIdProvider = ({ children }) => {
 
   const setDashboardIdValue = (id) => {
     setDashboardId(id);
-    console.log(id,id);
   };
 
   return (
