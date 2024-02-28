@@ -61,11 +61,20 @@ const JobStepParameterMaster = ({
           const options = {};
           await Promise.all(
             data.stepTypeParameters.map(async (parameter) => {
-              const resource = parameter.parameter?.resource;
+              let resource = parameter.parameter?.resource;
+              var fieldMapping = parameter.parameter?.params;
               if (resource && resource != "NA") {
                 try {
-                  const resourceData = await axios.get(`${resource}`);
-                  parameter.options = resourceData.data;
+                  const replacements = {}
+		  replacements['${job_id}'] = job_id
+	          resource = resource.replace(/\$\{\w+\}/g, function(all) {
+                     return replacements[all] || all;
+                  });
+	          let resourceData = await axios.get(`${resource}`);
+                  parameter.options = resourceData.data.map(x => ({
+                            value: fieldMapping && fieldMapping.value_field? x[fieldMapping.value_field] : x.id,
+                            label: fieldMapping && fieldMapping.label_field? x[fieldMapping.label_field] : x.Name
+                        }));
                 } catch (error) {
                   console.error(`Error fetching resource ${resource}:`, error);
                 }
