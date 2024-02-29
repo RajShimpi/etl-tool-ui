@@ -10,6 +10,7 @@ const JobStepParameterMaster = ({
   name,
   handleClose,
   nodes,
+  setNodeNames,
 }) => {
   const [parameter, setparameter] = useState([]);
   const [otherparameters, setotherParameters] = useState([]);
@@ -311,7 +312,8 @@ const JobStepParameterMaster = ({
         axios.putWithCallback(
           `job-steps/${node_id}/name-save`,
           { step_name: data.step_name },
-          (data) => {}
+          (data) => {
+            setNodeNames(data)}
         );
         var dt = prepareOtherParams();
         var dt1 = prepareData();
@@ -326,6 +328,7 @@ const JobStepParameterMaster = ({
       
     }
   };
+
   return (
     <div className="row" style={{ height: "300px" }}>
       <div className="col-xl-12">

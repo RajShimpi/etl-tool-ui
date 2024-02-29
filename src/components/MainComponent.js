@@ -1,16 +1,28 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import ComponetTool from "./ComponentTool/ComponetTool";
 import ProjectStructure from "./ProjectStrucure/ProjectStructure";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowUp';
 import "./MainComponent.css";
 import OverviewFlow from "../modules/dashboard/drag-drop/components/flow";
+// import OverviewFlow from "../modules/dashboard/drag-drop/components/flow";
 
 const MainComponent = () => {
   const [isProjectStructureOpen, setIsProjectStructureOpen] = useState(false);
   const [isComponetToolOpen, setIsComponetToolOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [currentThemeIndex, setCurrentThemeIndex] = useState(0);
-
+  const savaDataRef = useRef(null);
+  const savaDataFunction = () => {
+    if (savaDataRef.current && typeof savaDataRef.current.savaDataFunction === 'function') {
+      savaDataRef.current.savaDataFunction();
+    }
+  };
+  const  setOpenJobParam = () => {
+    if (savaDataRef.current && typeof savaDataRef.current. setOpenJobParam === 'function') {
+      savaDataRef.current. setOpenJobParam();
+    }
+  };
+  
   const themes = [
     {backgroundColor: "#ececec", textColor: "#000000"},
     {backgroundColor: "#000000", textColor: "#ffffff"},
@@ -52,9 +64,9 @@ const MainComponent = () => {
     <>
     <div className="d-flex" style={{justifyContent:'space-between'}}>
       <div className="d-flex">
-        <button className="btn btn-primary">Save</button>
-        <button className="btn btn-secondary">Job Params</button>
-        <button className="btn btn-primary">publish</button>
+        <button className="btn btn-primary" onClick={savaDataFunction}>Save</button>
+        <button className="btn btn-secondary" onClick={ setOpenJobParam}>Job Params</button>
+        <button className="btn btn-primary">Publish</button>
       </div>
       <div className="dropdown">
         <div className="dropbtn" onClick={handleDropdownToggle}>
@@ -75,7 +87,7 @@ const MainComponent = () => {
             <ProjectStructure toggleSidebar={handleProjectStructureToggle} textColor={themes[currentThemeIndex].textColor}/>
           </div>
           <div style={{ width: componetsWidth() }}>
-            <OverviewFlow textColor={themes[currentThemeIndex].textColor}/>
+            <OverviewFlow textColor={themes[currentThemeIndex].textColor} ref={savaDataRef} />
           </div>
           <div className={` ${isComponetToolOpen ? "open" : ""}`}>
             <ComponetTool toggleSidebar={handleComponetToolToggle} textColor={themes[currentThemeIndex].textColor}/>

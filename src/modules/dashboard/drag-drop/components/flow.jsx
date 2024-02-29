@@ -167,7 +167,7 @@ const ContextMenu = ({
   );
 };
 
-const OverviewFlow = ({textColor }) => {
+const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   const [showNodeMaster, setShowNodeMaster] = useState(false);
   const reactFlowWrapper = useRef(null);
   const edgeUpdateSuccessful = useRef(true);
@@ -196,10 +196,24 @@ const OverviewFlow = ({textColor }) => {
   const { setJobDataId } = useJobData(null);
   const { projectID } = useProjectid([]);
   const [startStep, setStartStep] = useState(null);
-  const [nodedata, setNodedata] = useState([]);
+  const [nodeName, setNodeName] = useState([]);
 
+  const savaDataFunction = () => {
+    if (isAllNodeisConnected(nodes, edges)) {
+      alert("Congrats its correct");
+      saveNodeToDatabase();
+    } else {
+      alert("Please connect source nodes (Cannot Save Flow)");
+    }
+  };
+  const setOpenJobParam = () => {
+    setOpenJobParams(true);
+  };
+  React.useImperativeHandle(refs, () => ({
+    savaDataFunction,
+    setOpenJobParam,
+  }));
 
-  
   const setAsStartStepHandler = useCallback(() => {
     const startstep = {
       start_step: parseInt(menu.id),
@@ -276,14 +290,28 @@ const OverviewFlow = ({textColor }) => {
         ]);
         setData((prevData) => [...prevData, data]);
         setSelectedNode(data.a || name);
-        setAllNodes((prevNodes) => [...prevNodes, data]);
+        setAllNodes((prevNodes) => [
+          ...prevNodes,
+          {
+            ...data,
+            id: `${data.id}`,
+            ...newNode,
+            position: {
+              x: position.x,
+              y: position.y,
+            },
+          },
+        ]);
       });
     }
   };
-  useEffect(() => {
-    const nodeActives = nodes.filter((item) => item.node_active === true);
-    setNodedata(nodeActives);
-  }, [nodes]);
+
+  const node_Id = (node) => {
+    setName(node.data.heading);
+    setStep_type_Id(node.step_type_id);
+    setJob_Id(node.job_id);
+    setNode_Id(parseInt(node.id));
+  };
 
   useEffect(() => {
     if (jobDataId) {
@@ -364,7 +392,20 @@ const OverviewFlow = ({textColor }) => {
     onDrop,
   ]);
 
+  useEffect(() => {
+    setNodes((nds) =>
+      nds.map((node) => {
+        if (node.id == nodeName.id) {
+          node.data.heading =
+            nodeName.step_name == null ? node.data.heading : nodeName.step_name;
+        }
+        return node;
+      })
+    );
+  }, [nodeName, setNodes]);
+
   const saveNodeToDatabase = () => {
+ 
     const dataFromNodes = allNodes.map((item) => ({
       id: parseInt(item.id),
       job_id: jobfileid.id,
@@ -372,11 +413,9 @@ const OverviewFlow = ({textColor }) => {
       step_name: item.data?.heading || item.name,
       type: item.type,
       params: {
-        position_X:
-          item.id === position.id ? position.position_X : item.position.x,
-        position_Y:
-          item.id === position.id ? position.position_Y : item.position.y,
-      },
+        position_X: item.id === position.id ? position.position_X : item.position.x,
+        position_Y: item.id === position.id ? position.position_Y : item.position.y,   
+         },
     }));
 
     const dataFromEdgesOk = edges
@@ -388,7 +427,10 @@ const OverviewFlow = ({textColor }) => {
       )
       .map((item) => ({
         id: parseInt(item.source),
-        ok_step:item.id===nodesActive.id ?nodesActive.ok_step: parseInt(item.target),
+        ok_step:
+          item.id === nodesActive.id
+            ? nodesActive.ok_step
+            : parseInt(item.target),
       }));
 
     const dataFromEdgesError = edges
@@ -400,7 +442,10 @@ const OverviewFlow = ({textColor }) => {
       )
       .map((item) => ({
         id: parseInt(item.source),
-        error_step:  item.id===nodesActive.id ?nodesActive.error_step:parseInt(item.target),
+        error_step:
+          item.id === nodesActive.id
+            ? nodesActive.error_step
+            : parseInt(item.target),
       }));
 
     const updatedEdgesOk = edges.filter(
@@ -525,8 +570,6 @@ const OverviewFlow = ({textColor }) => {
     [setEdges]
   );
 
-  const [nodeName, setNodeName] = useState("Node 1");
-
   useEffect(() => {
     const node = nodes.filter((node) => {
       if (node.selected) return true;
@@ -541,10 +584,6 @@ const OverviewFlow = ({textColor }) => {
       setIsSelected(false);
     }
   }, [nodes]);
-
-  useEffect(() => {
-    setNodeName(selectedNode?.data?.heading || selectedNode);
-  }, [selectedNode]);
 
   useEffect(() => {
     textRef?.current?.focus();
@@ -595,13 +634,6 @@ const OverviewFlow = ({textColor }) => {
 
   const onNodeDoubleClick = () => {
     setShowNodeMaster(true);
-  };
-
-  const node_Id = (node) => {
-    setName(node.data.heading);
-    setStep_type_Id(node.step_type_id);
-    setJob_Id(node.job_id);
-    setNode_Id(parseInt(node.id));
   };
 
   const handleCloseNodeMaster = () => {
@@ -684,26 +716,25 @@ const OverviewFlow = ({textColor }) => {
   }, [menu, setNodes, setEdges, activeNodes]);
 
   const edgeupdate = edges.filter((item) => item.target != "null");
-const onEdgeClick =(item)=>{
-  console.log(item);
-}
+  const nodeActives = nodes.filter((item) => item.node_active === true);
+
   return (
     <>
-      <button
+      {/* <button
         className="btn btn-primary"
         style={{ marginRight: "1px" }}
         onClick={saveHandler}
       >
         Save
-      </button>
-      <button
+      </button> */}
+      {/* <button
         className="btn btn-secondary"
         onClick={() => {
           setOpenJobParams(true);
         }}
       >
         Job Params
-      </button>
+      </button> */}
       <Modal
         modalTitle={"Save/Update Parameter"}
         ref={modalRef}
@@ -721,7 +752,7 @@ const onEdgeClick =(item)=>{
         <ReactFlowProvider>
           <div className="reactflow-wrapper" ref={reactFlowWrapper}>
             <ReactFlow
-              nodes={nodedata}
+              nodes={nodeActives}
               edges={edgeupdate}
               startStep={startStep}
               nodeTypes={nodeTypes}
@@ -740,7 +771,6 @@ const onEdgeClick =(item)=>{
               onNodeDragStop={onNodeDragStop}
               onNodeContextMenu={onNodeContextMenu}
               onPaneClick={onPaneClick}
-              onEdgeClick={onEdgeClick}
             >
               <Background color="#aaa" gap={16} />
               {menu && (
@@ -774,15 +804,15 @@ const onEdgeClick =(item)=>{
                 node_id={node_id}
                 handleClose={handleCloseNodeMaster}
                 name={editName}
-                nodes={nodedata}
+                nodes={nodeActives}
+                setNodeNames={setNodeName}
               />
             </Modal>
           </div>
         </ReactFlowProvider>
       </div>
-      
     </>
   );
-};
+});
 
 export default OverviewFlow;
