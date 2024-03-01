@@ -197,10 +197,10 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   const { projectID } = useProjectid([]);
   const [startStep, setStartStep] = useState(null);
   const [nodeName, setNodeName] = useState([]);
+  const [nodeData, setNodeData] = useState([]);
 
   const savaDataFunction = () => {
     if (isAllNodeisConnected(nodes, edges)) {
-      alert("Congrats its correct");
       saveNodeToDatabase();
     } else {
       alert("Please connect source nodes (Cannot Save Flow)");
@@ -366,7 +366,6 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
           ...dataEdgesok.find((edgeOk) => edgeOk.id === node.id),
           ...dataEdgeserror.find((edgeError) => edgeError.id === node.id),
         }));
-
         setAllNodes(combinedData);
         function getlabelColor(label) {
           return label === "ok" ? "green" : label === "error" ? "red" : "black";
@@ -391,18 +390,17 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
     onDragOver,
     onDrop,
   ]);
-
-  useEffect(() => {
-    setNodes((nds) =>
-      nds.map((node) => {
-        if (node.id == nodeName.id) {
-          node.data.heading =
-            nodeName.step_name == null ? node.data.heading : nodeName.step_name;
-        }
-        return node;
-      })
-    );
-  }, [nodeName, setNodes]);
+  // useEffect(() => {
+  //   setNodes((nds) =>
+  //     nds.map((node) => {
+  //       if (node.id == nodeName.id) {
+  //         node.data.heading =
+  //           nodeName.step_name == null ? node.data.heading : nodeName.step_name;
+  //       }
+  //       return node;
+  //     })
+  //   );
+  // }, [nodeName, setNodes]);
 
   const saveNodeToDatabase = () => {
  
@@ -636,11 +634,22 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
     setShowNodeMaster(true);
   };
 
-  const handleCloseNodeMaster = () => {
+  const handleCloseNodeMaster = (obj) => {
     setShowNodeMaster(false);
     setMenu(null);
+    if(obj){
+    setNodes((nds) =>
+      nds.map((node) => {
+        if (node.id == obj.id) {
+          node.data.heading =
+            obj.step_name == null ? node.data.heading : obj.step_name;
+        }
+        return node;
+      })
+    );}
+    
   };
-
+ 
   const handleCloseJobParams = () => {
     setOpenJobParams(false);
   };
@@ -716,7 +725,10 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   }, [menu, setNodes, setEdges, activeNodes]);
 
   const edgeupdate = edges.filter((item) => item.target != "null");
+    
   const nodeActives = nodes.filter((item) => item.node_active === true);
+
+  // const nodeActives = nodes.filter((item) => item.node_active === true);
 
   return (
     <>
