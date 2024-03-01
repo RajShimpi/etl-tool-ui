@@ -15,7 +15,7 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
   const [isContextMenuOpen, setContextMenuOpen] = useState({});
   const [isShow, setShow] = useState({});
   const [type, setType] = useState("AddFolder");
-  const { setJobDataId } = useJobData();
+  const { setJobDataId,setJobFolder } = useJobData();
   const containerRef = useRef(null);
   const [hoveredItem, setHoveredItem] = useState(null);
   const [clickedItem, setClickedItem] = useState(false);
@@ -89,9 +89,12 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
   };
 
   const onhandelFileId = (item) => {
+    if(item.type=="File"){
     axios.getWithCallback(`job/${item.id}/file`, (data) => {
       setJobDataId(data);
-    });
+    });}else{
+      setJobFolder(item.type);
+    }
   };
 
   return (
@@ -170,6 +173,7 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
                     }
                     <div
                       style={{ height: "25px" }}
+                      onClick={() => onhandelFileId(subItem)}
                       // className={`file_name ${
                       //   hoveredItem === subItem.file_name ? "hovered" : ""
                       // } ${clickedItem === subItem.file_name ? "clicked" : ""}`}

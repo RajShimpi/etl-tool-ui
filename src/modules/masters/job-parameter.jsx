@@ -6,7 +6,7 @@ import FormCommon from "../components/form-common";
 import _ from "lodash";
 import auth from "../user/auth";
 
-const JobParameterMaster = ({ job_id, project_id, handleClose }) => {
+const JobParameterMaster = ({ job, project_id, handleClose }) => {
   const [parameter, setparameter] = useState([]);
   const [editName, setEditName] = useState("");
   const [controlData, setControlData] = useState([]);
@@ -14,10 +14,16 @@ const JobParameterMaster = ({ job_id, project_id, handleClose }) => {
   const [update, setUpdate] = useState(false);
   const [data, setData] = useState(null);
   const [nameValue, setNameValue] = useState([]);
+  const [job_id, setJob_id] = useState([]);
 
   // useEffect(() => {
   //   setData((prevData) => ({ ...prevData,  }));
   // }, [name]);
+  
+  useEffect(() => {
+    if(job){
+    setJob_id(job.id)}
+  }, [job]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,7 +53,7 @@ const JobParameterMaster = ({ job_id, project_id, handleClose }) => {
   }, [job_id]);
 
   useEffect(() => {
-    if (job_id) {
+    if (job) {
       axios.getWithCallback(`job-parameters/${job_id}`, (data) => {
         if (data?.length) {
           setUpdate(true);

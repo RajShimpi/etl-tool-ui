@@ -30,7 +30,6 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import JobStepParameterMaster from "../../../masters/job-step-param-master";
 import JobParameterMaster from "../../../masters/job-parameter";
-import MainComponent from "../../../../components/MainComponent";
 
 const nodeTypes = {
   node: (node) => {
@@ -192,20 +191,20 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   const [nodesActive, setNodesActive] = useState([]);
   const [openJobParams, setOpenJobParams] = useState(false);
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
-  const { jobDataId } = useJobData(null);
+  const { jobDataId, jobFolder, setJobFolder } = useJobData([]);
   const { setJobDataId } = useJobData(null);
   const { projectID } = useProjectid([]);
   const [startStep, setStartStep] = useState(null);
   const [nodeName, setNodeName] = useState([]);
-  const [nodeData, setNodeData] = useState([]);
 
   const savaDataFunction = () => {
+    if(jobFolder !== "Folder"){
     if (isAllNodeisConnected(nodes, edges)) {
       saveNodeToDatabase();
     } else {
       alert("Please connect source nodes (Cannot Save Flow)");
     }
-  };
+  };}
   const setOpenJobParam = () => {
     setOpenJobParams(true);
   };
@@ -232,6 +231,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
     setEdges([]);
     setNodes([]);
     setJobDataId(null);
+    setJobFileId(null);
     setStartStep(null);
     setMenu(null);
   }, [projectID, jobDataId, setStartStep, setMenu]);
@@ -358,7 +358,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
           style: { stroke: getlabelColor("error") },
         }));
 
-        setNodes(dataNodes);
+        setNodes(dataNodes)
         setEdges([...dataEdgesok, ...dataEdgeserror]);
 
         const combinedData = dataNodes.map((node) => ({
@@ -373,22 +373,18 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       });
     }
     // eslint-disable-next-line
-  }, [
+  }, [  
     setNodes,
-    setAllNodes,
     nodes,
     data,
     allNodes,
-    jobDataId,
+    jobDataId, 
     startStep,
     setStartStep,
-    setData,
     selectedNode,
     setSelectedNode,
     setAsStartStepNullHandler,
-    setAsStartStepHandler,
-    onDragOver,
-    onDrop,
+    setAsStartStepHandler
   ]);
   // useEffect(() => {
   //   setNodes((nds) =>
@@ -403,7 +399,6 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   // }, [nodeName, setNodes]);
 
   const saveNodeToDatabase = () => {
- 
     const dataFromNodes = allNodes.map((item) => ({
       id: parseInt(item.id),
       job_id: jobfileid.id,
@@ -411,9 +406,11 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       step_name: item.data?.heading || item.name,
       type: item.type,
       params: {
-        position_X: item.id === position.id ? position.position_X : item.position.x,
-        position_Y: item.id === position.id ? position.position_Y : item.position.y,   
-         },
+        position_X:
+          item.id === position.id ? position.position_X : item.position.x,
+        position_Y:
+          item.id === position.id ? position.position_Y : item.position.y,
+      },
     }));
 
     const dataFromEdgesOk = edges
@@ -587,19 +584,19 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
     textRef?.current?.focus();
   }, [selectedNode]);
 
-  useEffect(() => {
-    setNodes((nds) =>
-      nds.map((node) => {
-        if (node.id === selectedNode?.id) {
-          node.data = {
-            ...node.data,
-            content: nodeName || " ",
-          };
-        }
-        return node;
-      })
-    );
-  }, [nodeName, setNodes]);
+  // useEffect(() => {
+  //   setNodes((nds) =>
+  //     nds.map((node) => {
+  //       if (node.id === selectedNode?.id) {
+  //         node.data = {
+  //           ...node.data,
+  //           content: nodeName || " ",
+  //         };
+  //       }
+  //       return node;
+  //     })
+  //   );
+  // }, [nodeName, setNodes]);
 
   const saveHandler = () => {
     if (isAllNodeisConnected(nodes, edges)) {
@@ -637,19 +634,20 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   const handleCloseNodeMaster = (obj) => {
     setShowNodeMaster(false);
     setMenu(null);
-    if(obj){
-    setNodes((nds) =>
-      nds.map((node) => {
-        if (node.id == obj.id) {
-          node.data.heading =
-            obj.step_name == null ? node.data.heading : obj.step_name;
-        }
-        return node;
-      })
-    );}
-    
+    if (obj) {
+      setNodes((nds) =>
+        nds.map((node) => {
+          if (node.id == obj.id) {
+            node.data.heading =
+              obj.step_name == null ? node.data.heading : obj.step_name;
+          }
+          console.log("node",node);
+          return node;
+        })
+      );
+    }
   };
- 
+
   const handleCloseJobParams = () => {
     setOpenJobParams(false);
   };
@@ -724,12 +722,24 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
     }
   }, [menu, setNodes, setEdges, activeNodes]);
 
-  const edgeupdate = edges.filter((item) => item.target != "null");
-    
-  const nodeActives = nodes.filter((item) => item.node_active === true);
+  const edgeupdate =
+    edges !== null ? edges.filter((item) => item.target != "null") : null;
+  const nodeActives =
+    nodes !== null ? nodes.filter((item) => item.node_active === true) : null;
 
-  // const nodeActives = nodes.filter((item) => item.node_active === true);
+  useEffect(() => {
+    if (jobDataId !== null) {
+      setJobFolder(null);
+    }
+  }, [jobDataId]);
 
+  useEffect(() => {
+    if (jobFolder === "Folder") {
+      setJobDataId(null);
+      setNodes([]);
+      setEdges([]);
+    }
+  }, [jobFolder]);
   return (
     <>
       {/* <button
@@ -757,7 +767,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
         <JobParameterMaster
           handleClose={handleCloseJobParams}
           project_id={projectID}
-          job_id={job_id}
+          job={jobfileid}
         />
       </Modal>
       <div className="dndflow">

@@ -10,13 +10,17 @@ const DashboardIdContext = createContext();
 
 export const JobDataProvider = ({ children }) => {
   const [jobDataId, setJobDataId] = useState(null);
+  const [jobFolder, setJobFolder] = useState(null);
 
   const setJobDataIdValue = (id) => {
     setJobDataId(id);
   };
+  const setJobFolderValue = (data) => {
+    setJobFolder(data);
+  };
 
   return (
-    <JobDataContext.Provider value={{ jobDataId, setJobDataId: setJobDataIdValue }}>
+    <JobDataContext.Provider value={{ jobDataId,jobFolder, setJobDataId: setJobDataIdValue ,setJobFolder:setJobFolderValue}}>
       {children}
     </JobDataContext.Provider>
   );
