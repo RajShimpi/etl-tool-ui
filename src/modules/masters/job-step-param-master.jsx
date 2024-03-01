@@ -24,7 +24,6 @@ const JobStepParameterMaster = ({
   const [nodeid, setNodeid] = useState();
   const [steptype, setSteptype] = useState();
   const [nodeName, setNodesName] = useState();
-  const [nodeData, setNodeData] = useState([]);
   // const [isOtherParamVisible, setOtherParamVisible] = useState(false);
   const colSize = parameter.length < 2 ? 12 : parameter.length < 4 ? 4: 4;
 
@@ -314,7 +313,7 @@ const JobStepParameterMaster = ({
           `job-steps/${node_id}/name-save`,
           { step_name: data.step_name },
           (data) => {
-            handleClose(data);}
+            setNodeNames(data)}
         );
         var dt = prepareOtherParams();
         var dt1 = prepareData();
@@ -323,7 +322,7 @@ const JobStepParameterMaster = ({
           _.concat(dt1, dt),
           (data) => {
             setUpdate(false);
-            // handleClose();
+            handleClose();
           }
         );
       
@@ -454,7 +453,7 @@ const JobStepParameterMaster = ({
                       type="button"
                       onClick={(e) => {
                         setUpdate(false);
-                        handleClose(nodeData);
+                        handleClose();
                      
                       }}
                       className="btn btn-warning w-xs waves-effect waves-light"
