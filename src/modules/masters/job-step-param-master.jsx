@@ -10,6 +10,7 @@ const JobStepParameterMaster = ({
   name,
   handleClose,
   nodes,
+  setNodeNames,
 }) => {
   const [parameter, setparameter] = useState([]);
   const [otherparameters, setotherParameters] = useState([]);
@@ -24,7 +25,7 @@ const JobStepParameterMaster = ({
   const [steptype, setSteptype] = useState();
   const [nodeName, setNodesName] = useState();
   // const [isOtherParamVisible, setOtherParamVisible] = useState(false);
-  const colSize = parameter.length <= 2 ? 6 : 4;
+  const colSize = parameter.length < 2 ? 12 : parameter.length < 4 ? 4: 4;
 
   useEffect(() => {
     setStep(step_type_id);
@@ -61,20 +62,11 @@ const JobStepParameterMaster = ({
           const options = {};
           await Promise.all(
             data.stepTypeParameters.map(async (parameter) => {
-              let resource = parameter.parameter?.resource;
-              var fieldMapping = parameter.parameter?.params;
+              const resource = parameter.parameter?.resource;
               if (resource && resource != "NA") {
                 try {
-                  const replacements = {}
-		  replacements['${job_id}'] = job_id
-	          resource = resource.replace(/\$\{\w+\}/g, function(all) {
-                     return replacements[all] || all;
-                  });
-	          let resourceData = await axios.get(`${resource}`);
-                  parameter.options = resourceData.data.map(x => ({
-                            value: fieldMapping && fieldMapping.value_field? x[fieldMapping.value_field] : x.id,
-                            label: fieldMapping && fieldMapping.label_field? x[fieldMapping.label_field] : x.Name
-                        }));
+                  const resourceData = await axios.get(`${resource}`);
+                  parameter.options = resourceData.data;
                 } catch (error) {
                   console.error(`Error fetching resource ${resource}:`, error);
                 }
@@ -163,7 +155,7 @@ const JobStepParameterMaster = ({
                   control: v.parameter.type === "text" ? "input" : v.parameter.type,
                   options: v.parameter.options || v.options,
                   disabled: false,
-                  itemVal: itemData.values ? itemData.values[v.parameter.name] : "",
+                  itemVal: itemData.values ? itemData.values[v.parameter.name] :'',
                   multiple: v.parameter.type === "select-react" ? true : false, 
                   isGeneric: true,
                 };
@@ -174,7 +166,7 @@ const JobStepParameterMaster = ({
     ];
     setControlData(dt);
     return dt;
-  };
+  }; 
 
   useEffect(() => {
     getItemData({
@@ -320,7 +312,10 @@ const JobStepParameterMaster = ({
         axios.putWithCallback(
           `job-steps/${node_id}/name-save`,
           { step_name: data.step_name },
-          (data) => {}
+          (data) => {
+            setNodeNames(data)
+            handleClose(data);
+          }
         );
         var dt = prepareOtherParams();
         var dt1 = prepareData();

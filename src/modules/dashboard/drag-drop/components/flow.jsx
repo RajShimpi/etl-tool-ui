@@ -166,7 +166,7 @@ const ContextMenu = ({
   );
 };
 
-const OverviewFlow = (textColor) => {
+const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   const [showNodeMaster, setShowNodeMaster] = useState(false);
   const reactFlowWrapper = useRef(null);
   const edgeUpdateSuccessful = useRef(true);
@@ -191,11 +191,27 @@ const OverviewFlow = (textColor) => {
   const [nodesActive, setNodesActive] = useState([]);
   const [openJobParams, setOpenJobParams] = useState(false);
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
-  const { jobDataId } = useJobData(null);
+  const { jobDataId, jobFolder, setJobFolder } = useJobData([]);
   const { setJobDataId } = useJobData(null);
   const { projectID } = useProjectid([]);
   const [startStep, setStartStep] = useState(null);
-  const [nodedata, setNodedata] = useState([]);
+  const [nodeName, setNodeName] = useState([]);
+
+  const savaDataFunction = () => {
+    if(jobFolder !== "Folder"){
+    if (isAllNodeisConnected(nodes, edges)) {
+      saveNodeToDatabase();
+    } else {
+      alert("Please connect source nodes (Cannot Save Flow)");
+    }
+  };}
+  const setOpenJobParam = () => {
+    setOpenJobParams(true);
+  };
+  React.useImperativeHandle(refs, () => ({
+    savaDataFunction,
+    setOpenJobParam,
+  }));
 
   const setAsStartStepHandler = useCallback(() => {
     const startstep = {
@@ -215,6 +231,7 @@ const OverviewFlow = (textColor) => {
     setEdges([]);
     setNodes([]);
     setJobDataId(null);
+    setJobFileId(null);
     setStartStep(null);
     setMenu(null);
   }, [projectID, jobDataId, setStartStep, setMenu]);
@@ -248,13 +265,13 @@ const OverviewFlow = (textColor) => {
         type,
         job_id: parseInt(jobfileid.id),
         node_active: true,
-        position:{
-          x:position.x,
-          y:position.y,
+        position: {
+          x: position.x,
+          y: position.y,
         },
-        params:{
-          position_X:position.x,
-          position_Y:position.y,
+        params: {
+          position_X: position.x,
+          position_Y: position.y,
         },
         data: { heading: name, img: img, start_step: null },
       };
@@ -263,25 +280,39 @@ const OverviewFlow = (textColor) => {
           ...prevNodes,
           {
             ...data,
-            id:`${data.id}`,
+            id: `${data.id}`,
             ...newNode,
             position: {
               x: position.x,
-              y: position.y
-            } }
+              y: position.y,
+            },
+          },
         ]);
         setData((prevData) => [...prevData, data]);
         setSelectedNode(data.a || name);
-        setAllNodes((prevNodes) => [...prevNodes, data]);
+        setAllNodes((prevNodes) => [
+          ...prevNodes,
+          {
+            ...data,
+            id: `${data.id}`,
+            ...newNode,
+            position: {
+              x: position.x,
+              y: position.y,
+            },
+          },
+        ]);
       });
     }
- 
   };
-  useEffect(()=>{
-    const nodeActives = nodes.filter((item) => item.node_active === true);
-    setNodedata(nodeActives)
-  },[nodes])
-  
+
+  const node_Id = (node) => {
+    setName(node.data.heading);
+    setStep_type_Id(node.step_type_id);
+    setJob_Id(node.job_id);
+    setNode_Id(parseInt(node.id));
+  };
+
   useEffect(() => {
     if (jobDataId) {
       axios.getWithCallback(`job-steps/${jobDataId.id}/job`, (data) => {
@@ -327,7 +358,7 @@ const OverviewFlow = (textColor) => {
           style: { stroke: getlabelColor("error") },
         }));
 
-        setNodes(dataNodes);
+        setNodes(dataNodes)
         setEdges([...dataEdgesok, ...dataEdgeserror]);
 
         const combinedData = dataNodes.map((node) => ({
@@ -335,7 +366,6 @@ const OverviewFlow = (textColor) => {
           ...dataEdgesok.find((edgeOk) => edgeOk.id === node.id),
           ...dataEdgeserror.find((edgeError) => edgeError.id === node.id),
         }));
-
         setAllNodes(combinedData);
         function getlabelColor(label) {
           return label === "ok" ? "green" : label === "error" ? "red" : "black";
@@ -343,23 +373,30 @@ const OverviewFlow = (textColor) => {
       });
     }
     // eslint-disable-next-line
-  }, [
+  }, [  
     setNodes,
-    setAllNodes,
     nodes,
     data,
     allNodes,
-    jobDataId,
+    jobDataId, 
     startStep,
     setStartStep,
-    setData,
     selectedNode,
     setSelectedNode,
     setAsStartStepNullHandler,
-    setAsStartStepHandler,
-    onDragOver,
-    onDrop,
+    setAsStartStepHandler
   ]);
+  // useEffect(() => {
+  //   setNodes((nds) =>
+  //     nds.map((node) => {
+  //       if (node.id == nodeName.id) {
+  //         node.data.heading =
+  //           nodeName.step_name == null ? node.data.heading : nodeName.step_name;
+  //       }
+  //       return node;
+  //     })
+  //   );
+  // }, [nodeName, setNodes]);
 
   const saveNodeToDatabase = () => {
     const dataFromNodes = allNodes.map((item) => ({
@@ -385,7 +422,10 @@ const OverviewFlow = (textColor) => {
       )
       .map((item) => ({
         id: parseInt(item.source),
-        ok_step: parseInt(item.target) || null,
+        ok_step:
+          item.id === nodesActive.id
+            ? nodesActive.ok_step
+            : parseInt(item.target),
       }));
 
     const dataFromEdgesError = edges
@@ -397,7 +437,10 @@ const OverviewFlow = (textColor) => {
       )
       .map((item) => ({
         id: parseInt(item.source),
-        error_step: parseInt(item.target) || null,
+        error_step:
+          item.id === nodesActive.id
+            ? nodesActive.error_step
+            : parseInt(item.target),
       }));
 
     const updatedEdgesOk = edges.filter(
@@ -444,6 +487,8 @@ const OverviewFlow = (textColor) => {
     const dataFromNodesActive = nodesActive.map((item) => ({
       id: parseInt(item.id),
       node_active: item.node_active,
+      ok_step: item.ok_step,
+      error_step: item.error_step,
     }));
 
     const combinedData = dataFromNodes.map((node) => ({
@@ -520,8 +565,6 @@ const OverviewFlow = (textColor) => {
     [setEdges]
   );
 
-  const [nodeName, setNodeName] = useState("Node 1");
-
   useEffect(() => {
     const node = nodes.filter((node) => {
       if (node.selected) return true;
@@ -538,26 +581,22 @@ const OverviewFlow = (textColor) => {
   }, [nodes]);
 
   useEffect(() => {
-    setNodeName(selectedNode?.data?.heading || selectedNode);
-  }, [selectedNode]);
-
-  useEffect(() => {
     textRef?.current?.focus();
   }, [selectedNode]);
 
-  useEffect(() => {
-    setNodes((nds) =>
-      nds.map((node) => {
-        if (node.id === selectedNode?.id) {
-          node.data = {
-            ...node.data,
-            content: nodeName || " ",
-          };
-        }
-        return node;
-      })
-    );
-  }, [nodeName, setNodes]);
+  // useEffect(() => {
+  //   setNodes((nds) =>
+  //     nds.map((node) => {
+  //       if (node.id === selectedNode?.id) {
+  //         node.data = {
+  //           ...node.data,
+  //           content: nodeName || " ",
+  //         };
+  //       }
+  //       return node;
+  //     })
+  //   );
+  // }, [nodeName, setNodes]);
 
   const saveHandler = () => {
     if (isAllNodeisConnected(nodes, edges)) {
@@ -592,16 +631,21 @@ const OverviewFlow = (textColor) => {
     setShowNodeMaster(true);
   };
 
-  const node_Id = (node) => {
-    setName(node.data.heading);
-    setStep_type_Id(node.step_type_id);
-    setJob_Id(node.job_id);
-    setNode_Id(parseInt(node.id));
-  };
-
-  const handleCloseNodeMaster = () => {
+  const handleCloseNodeMaster = (obj) => {
     setShowNodeMaster(false);
     setMenu(null);
+    if (obj) {
+      setNodes((nds) =>
+        nds.map((node) => {
+          if (node.id == obj.id) {
+            node.data.heading =
+              obj.step_name == null ? node.data.heading : obj.step_name;
+          }
+          console.log("node",node);
+          return node;
+        })
+      );
+    }
   };
 
   const handleCloseJobParams = () => {
@@ -650,8 +694,9 @@ const OverviewFlow = (textColor) => {
         right: left < 0 ? -left : 0,
         bottom: top < 0 ? -top : 0,
         start_step: node.data.start_step,
+        ok_step: null,
+        error_step: null,
       });
-
       setActiveNodes(node);
       setSelectedNode(node);
     },
@@ -668,7 +713,7 @@ const OverviewFlow = (textColor) => {
     if (menu && menu.id) {
       setNodesActive((prevDeletedNodes) => [
         ...prevDeletedNodes,
-        { id: menu.id, node_active: false },
+        { id: menu.id, node_active: false, ok_step: null, error_step: null },
       ]);
 
       setNodes((nodes) => nodes.filter((node) => node.id !== menu.id));
@@ -677,24 +722,41 @@ const OverviewFlow = (textColor) => {
     }
   }, [menu, setNodes, setEdges, activeNodes]);
 
-  const edgeupdate = edges.filter((item)=>item.target !='null')
+  const edgeupdate =
+    edges !== null ? edges.filter((item) => item.target != "null") : null;
+  const nodeActives =
+    nodes !== null ? nodes.filter((item) => item.node_active === true) : null;
+
+  useEffect(() => {
+    if (jobDataId !== null) {
+      setJobFolder(null);
+    }
+  }, [jobDataId]);
+
+  useEffect(() => {
+    if (jobFolder === "Folder") {
+      setJobDataId(null);
+      setNodes([]);
+      setEdges([]);
+    }
+  }, [jobFolder]);
   return (
     <>
-      <button
+      {/* <button
         className="btn btn-primary"
         style={{ marginRight: "1px" }}
         onClick={saveHandler}
       >
         Save
-      </button>
-      <button
+      </button> */}
+      {/* <button
         className="btn btn-secondary"
         onClick={() => {
           setOpenJobParams(true);
         }}
       >
         Job Params
-      </button>
+      </button> */}
       <Modal
         modalTitle={"Save/Update Parameter"}
         ref={modalRef}
@@ -705,14 +767,14 @@ const OverviewFlow = (textColor) => {
         <JobParameterMaster
           handleClose={handleCloseJobParams}
           project_id={projectID}
-          job_id={job_id}
+          job={jobfileid}
         />
       </Modal>
       <div className="dndflow">
         <ReactFlowProvider>
           <div className="reactflow-wrapper" ref={reactFlowWrapper}>
             <ReactFlow
-              nodes={nodedata}
+              nodes={nodeActives}
               edges={edgeupdate}
               startStep={startStep}
               nodeTypes={nodeTypes}
@@ -764,7 +826,8 @@ const OverviewFlow = (textColor) => {
                 node_id={node_id}
                 handleClose={handleCloseNodeMaster}
                 name={editName}
-                nodes={nodedata}
+                nodes={nodeActives}
+                setNodeNames={setNodeName}
               />
             </Modal>
           </div>
@@ -772,6 +835,6 @@ const OverviewFlow = (textColor) => {
       </div>
     </>
   );
-};
+});
 
 export default OverviewFlow;
