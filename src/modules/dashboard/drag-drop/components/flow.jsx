@@ -198,14 +198,13 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   const [nodeName, setNodeName] = useState([]);
 
   const savaDataFunction = () => {
-    if (jobFolder !== "Folder") {
-      if (isAllNodeisConnected(nodes, edges)) {
-        saveNodeToDatabase();
-      } else {
-        alert("Please connect source nodes (Cannot Save Flow)");
-      }
+    if(jobFolder !== "Folder"){
+    if (isAllNodeisConnected(nodes, edges)) {
+      saveNodeToDatabase();
+    } else {
+      alert("Please connect source nodes (Cannot Save Flow)");
     }
-  };
+  };}
   const setOpenJobParam = () => {
     setOpenJobParams(true);
   };
@@ -359,7 +358,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
           style: { stroke: getlabelColor("error") },
         }));
 
-        setNodes(dataNodes);
+        setNodes(dataNodes)
         setEdges([...dataEdgesok, ...dataEdgeserror]);
 
         const combinedData = dataNodes.map((node) => ({
@@ -374,30 +373,19 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       });
     }
     // eslint-disable-next-line
-  }, [
+  }, [  
     setNodes,
     nodes,
     data,
     allNodes,
-    jobDataId,
+    jobDataId, 
     startStep,
     setStartStep,
     selectedNode,
     setSelectedNode,
     setAsStartStepNullHandler,
-    setAsStartStepHandler,
+    setAsStartStepHandler
   ]);
-  // useEffect(() => {
-  //   setNodes((nds) =>
-  //     nds.map((node) => {
-  //       if (node.id == nodeName.id) {
-  //         node.data.heading =
-  //           nodeName.step_name == null ? node.data.heading : nodeName.step_name;
-  //       }
-  //       return node;
-  //     })
-  //   );
-  // }, [nodeName, setNodes]);
 
   const saveNodeToDatabase = () => {
     const dataFromNodes = allNodes.map((item) => ({
@@ -585,20 +573,6 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
     textRef?.current?.focus();
   }, [selectedNode]);
 
-  // useEffect(() => {
-  //   setNodes((nds) =>
-  //     nds.map((node) => {
-  //       if (node.id === selectedNode?.id) {
-  //         node.data = {
-  //           ...node.data,
-  //           content: nodeName || " ",
-  //         };
-  //       }
-  //       return node;
-  //     })
-  //   );
-  // }, [nodeName, setNodes]);
-
   const saveHandler = () => {
     if (isAllNodeisConnected(nodes, edges)) {
       alert("Congrats its correct");
@@ -638,10 +612,12 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
     if (obj) {
       setNodes((nds) =>
         nds.map((node) => {
+          if (node.id == obj.id) {          
           node.data = {
             ...node.data,
             heading: obj.step_name,
-          };
+             }
+          }
           return node;
         })
       );
@@ -742,21 +718,6 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   }, [jobFolder]);
   return (
     <>
-      {/* <button
-        className="btn btn-primary"
-        style={{ marginRight: "1px" }}
-        onClick={saveHandler}
-      >
-        Save
-      </button> */}
-      {/* <button
-        className="btn btn-secondary"
-        onClick={() => {
-          setOpenJobParams(true);
-        }}
-      >
-        Job Params
-      </button> */}
       <Modal
         modalTitle={"Save/Update Parameter"}
         ref={modalRef}
