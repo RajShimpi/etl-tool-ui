@@ -24,9 +24,15 @@ const MainComponent = () => {
 
   useEffect(() => {
     if (jobData) {
-      setDisabled(jobData.length === 0);
-    } 
-  }, [jobData, fileType, disabled, setDisabled]);
+      setDisabled(false);
+    }
+  }, [jobData]);
+  
+  useEffect(() => {
+    if (fileType) {
+      setDisabled(true);
+    }
+  }, [fileType]);
 
   const savaDataFunction = () => {
     if (savaDataRef.current && typeof savaDataRef.current.savaDataFunction === 'function') {
@@ -79,8 +85,7 @@ const MainComponent = () => {
 
   return (
     <>
-      <div className="d-flex" style={{ justifyContent: 'space-between' }}>
-        { }
+      <div className="d-flex" >
         <div className="d-flex">
           <button className="btn btn-primary" onClick={savaDataFunction} disabled={disabled}>Save</button>
           <button className="btn btn-secondary" onClick={setOpenJobParam} disabled={disabled}>Job Params</button>
