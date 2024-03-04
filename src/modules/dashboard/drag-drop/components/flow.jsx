@@ -198,13 +198,14 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   const [nodeName, setNodeName] = useState([]);
 
   const savaDataFunction = () => {
-    if(jobFolder !== "Folder"){
-    if (isAllNodeisConnected(nodes, edges)) {
-      saveNodeToDatabase();
-    } else {
-      alert("Please connect source nodes (Cannot Save Flow)");
+    if (jobFolder !== "Folder") {
+      if (isAllNodeisConnected(nodes, edges)) {
+        saveNodeToDatabase();
+      } else {
+        alert("Please connect source nodes (Cannot Save Flow)");
+      }
     }
-  };}
+  };
   const setOpenJobParam = () => {
     setOpenJobParams(true);
   };
@@ -358,7 +359,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
           style: { stroke: getlabelColor("error") },
         }));
 
-        setNodes(dataNodes)
+        setNodes(dataNodes);
         setEdges([...dataEdgesok, ...dataEdgeserror]);
 
         const combinedData = dataNodes.map((node) => ({
@@ -373,18 +374,18 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       });
     }
     // eslint-disable-next-line
-  }, [  
+  }, [
     setNodes,
     nodes,
     data,
     allNodes,
-    jobDataId, 
+    jobDataId,
     startStep,
     setStartStep,
     selectedNode,
     setSelectedNode,
     setAsStartStepNullHandler,
-    setAsStartStepHandler
+    setAsStartStepHandler,
   ]);
   // useEffect(() => {
   //   setNodes((nds) =>
@@ -637,11 +638,10 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
     if (obj) {
       setNodes((nds) =>
         nds.map((node) => {
-          if (node.id == obj.id) {
-            node.data.heading =
-              obj.step_name == null ? node.data.heading : obj.step_name;
-          }
-          console.log("node",node);
+          node.data = {
+            ...node.data,
+            heading: obj.step_name,
+          };
           return node;
         })
       );
