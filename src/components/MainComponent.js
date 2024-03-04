@@ -25,7 +25,7 @@ const MainComponent = () => {
   useEffect(() => {
     if (jobData) {
       setDisabled(jobData.length === 0);
-    }
+    } 
   }, [jobData, fileType, disabled, setDisabled]);
 
   const savaDataFunction = () => {
