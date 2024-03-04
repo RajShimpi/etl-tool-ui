@@ -27,7 +27,7 @@ const MainComponent = () => {
       setDisabled(false);
     }
   }, [jobData]);
-  
+
   useEffect(() => {
     if (fileType) {
       setDisabled(true);
@@ -81,7 +81,7 @@ const MainComponent = () => {
     } else {
       return "100%";
     }
-  };
+  };      
 
   return (
     <>
