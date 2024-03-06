@@ -25,7 +25,7 @@ const JobStepParameterMaster = ({
   const [steptype, setSteptype] = useState();
   const [nodeName, setNodesName] = useState();
   // const [isOtherParamVisible, setOtherParamVisible] = useState(false);
-  const colSize = parameter.length < 2 ? 12 : parameter.length < 4 ? 4: 4;
+  const colSize = parameter.length < 2 ? 12 : parameter.length < 3 ? 6: parameter.length < 4 ? 4:parameter.length < 5 ? 6: 4 ;
 
   useEffect(() => {
     setStep(step_type_id);
@@ -110,7 +110,7 @@ const JobStepParameterMaster = ({
 
       axios.getWithCallback(`parameter/`, (data) => setotherParameters(data));
     }
-  }, [node_id,step_type_id,]);
+  }, [node_id,step_type_id,nodeid]);
 
   let defaultObj = {
     step_name: "",
@@ -313,7 +313,8 @@ const JobStepParameterMaster = ({
           `job-steps/${node_id}/name-save`,
           { step_name: data.step_name },
           (data) => {
-            setNodeNames(data)
+            setNodeNames(data);
+            setUpdate(false);
             handleClose(data);
           }
         );
@@ -329,7 +330,7 @@ const JobStepParameterMaster = ({
         );
       
     }
-  };
+  }; 
 
   return (
     <div className="row" style={{ height: "300px" }}>

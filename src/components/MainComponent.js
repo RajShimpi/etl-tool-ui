@@ -5,6 +5,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowUp';
 import "./MainComponent.css";
 import OverviewFlow from "../modules/dashboard/drag-drop/components/flow";
 import { useJobData } from "./JobDataContext";
+import axios from "../modules/services/axios";
 
 const MainComponent = () => {
   const [isProjectStructureOpen, setIsProjectStructureOpen] = useState(false);
@@ -17,32 +18,48 @@ const MainComponent = () => {
   const [jobData, setJobData] = useState([])
   const [fileType, setFileType] = useState([])
 
+
   useEffect(() => {
-    setJobData(jobDataId)
-    setFileType(jobFolder)
-  })
+    if (jobDataId) {
+      setJobData(jobDataId);
+    }
+    if (jobFolder) {
+      setFileType(jobFolder)
+    }
+  }, [jobDataId]);
 
   useEffect(() => {
     if (jobData) {
       setDisabled(false);
+    } else {
+      setDisabled(true);
     }
   }, [jobData]);
 
   useEffect(() => {
     if (fileType) {
       setDisabled(true);
+    } else {
+      setDisabled(false);
     }
   }, [fileType]);
 
-  const savaDataFunction = () => {
+  const publish = () => {
+    const jobid =({
+      jobId:jobData.id
+    })
+    axios.postWithCallback(`job/publish-job/${jobData.id}`,jobid)
+  }
+
+  const saveDataFunction = () => {
     if (savaDataRef.current && typeof savaDataRef.current.savaDataFunction === 'function') {
       savaDataRef.current.savaDataFunction();
     }
   };
 
-  const setOpenJobParam = () => {
-    if (savaDataRef.current && typeof savaDataRef.current.setOpenJobParam === 'function') {
-      savaDataRef.current.setOpenJobParam();
+  const OpenJobParam = () => {
+    if (savaDataRef.current && typeof savaDataRef.current.OpenJobParam === 'function') {
+      savaDataRef.current.OpenJobParam();
     }
   };
 
@@ -81,15 +98,15 @@ const MainComponent = () => {
     } else {
       return "100%";
     }
-  };      
+  };
 
   return (
     <>
       <div className="d-flex" >
-        <div className="d-flex">
-          <button className="btn btn-primary" onClick={savaDataFunction} disabled={disabled}>Save</button>
-          <button className="btn btn-secondary" onClick={setOpenJobParam} disabled={disabled}>Job Params</button>
-          <button className="btn btn-primary" disabled={disabled}>Publish</button>
+        <div className="d-flex" style={{ height: "50%" }}>
+          <button className="btn btn-primary" onClick={saveDataFunction} disabled={disabled}>Save</button>
+          <button className="btn btn-secondary" onClick={OpenJobParam} disabled={disabled}>Job Params</button>
+          <button className="btn btn-primary" onClick={publish} disabled={disabled}>Publish</button>
         </div>
         <div className="dropdown">
           <div className="dropbtn" onClick={handleDropdownToggle}>
