@@ -13,43 +13,30 @@ const MainComponent = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [currentThemeIndex, setCurrentThemeIndex] = useState(0);
   const savaDataRef = useRef(null);
-  const { jobDataId, jobFolder } = useJobData();
-  const [disabled, setDisabled] = useState(false)
+  const { jobDataId } = useJobData();
+  const [disabled, setDisabled] = useState(true)
   const [jobData, setJobData] = useState([])
-  const [fileType, setFileType] = useState([])
-
 
   useEffect(() => {
     if (jobDataId) {
       setJobData(jobDataId);
-    }
-    if (jobFolder) {
-      setFileType(jobFolder)
+    } else {
+      setJobData(null);
     }
   }, [jobDataId]);
+ 
 
   useEffect(() => {
-    if (jobData) {
-      setDisabled(false);
-    } else {
-      setDisabled(true);
-    }
-  }, [jobData]);
-
-  useEffect(() => {
-    if (fileType) {
-      setDisabled(true);
-    } else {
-      setDisabled(false);
-    }
-  }, [fileType]);
-
+    setDisabled(jobData ? false : true);
+  }, [jobDataId]);
+  
   const publish = () => {
-    const jobid =({
-      jobId:jobData.id
-    })
-    axios.postWithCallback(`job/publish-job/${jobData.id}`,jobid)
-  }
+    if (jobData && jobData.id) {
+      const jobId = jobData.id;
+      axios.postWithCallback(`job/publish-job/${jobId}`, { jobId });
+    }
+  };
+  
 
   const saveDataFunction = () => {
     if (savaDataRef.current && typeof savaDataRef.current.savaDataFunction === 'function') {

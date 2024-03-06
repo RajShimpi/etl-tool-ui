@@ -384,7 +384,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
         }));
         setNodes(dataNodes);
         const dataEdgesok = data.map((item) => ({
-          id: "" + item.id,
+          id: "ok_" + item.id,
           source: "" + item.id,
           target: "" + item.ok_step,
           label: "ok",
@@ -395,7 +395,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
         }));
 
         const dataEdgeserror = data.map((item) => ({
-          id: "" + item.id,
+          id: "error_" + item.id,
           source: "" + item.id,
           target: "" + item.error_step,
           label: "error",
@@ -748,11 +748,11 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
     }
   }, [menu, setNodes, setEdges]);
 
-//   const edgeupdate =
-//     edges !== null ? edges.filter((item) => item.target !== "null") : null;
+  const edgeupdate =
+    edges !== null ? edges.filter((item) => item.target !== "null") : null;
   const nodeActives =
     nodes !== null ? nodes.filter((item) => item.node_active === true) : null;
-
+  
   useEffect(() => {
     if (jobDataId !== null) {
       setJobFolder(null);
