@@ -75,7 +75,6 @@ const Node = ({ data, id, start_step, startStep, item, isSelected, textRef, node
                 <div style={style.contentWrapper}>
                   {data.heading?.length > 10 ? data.heading.slice(0, 9) + '...' : data.heading}
                 </div>
-
               </abbr>
             </>
           )}
