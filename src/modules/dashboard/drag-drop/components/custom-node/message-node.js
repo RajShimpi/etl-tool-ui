@@ -1,8 +1,6 @@
 import React, { useState, memo, useRef, useEffect, useCallback } from "react";
 import { Handle, Position } from "reactflow";
 import { style } from "./message-node-styles";
-import Modal from "../../../../components/modal-popup";
-import AddFile from '../../../../masters/popup/add-file'
 
 const Node = ({ data, id, start_step, startStep, item, isSelected, textRef, nodeName, setNodeName, ...props }) => {
   const [selected, setSelected] = useState(false);

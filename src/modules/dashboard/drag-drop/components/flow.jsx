@@ -386,17 +386,6 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
     setAsStartStepNullHandler,
     setAsStartStepHandler
   ]);
-  // useEffect(() => {
-  //   setNodes((nds) =>
-  //     nds.map((node) => {
-  //       if (node.id == nodeName.id) {
-  //         node.data.heading =
-  //           nodeName.step_name == null ? node.data.heading : nodeName.step_name;
-  //       }
-  //       return node;
-  //     })
-  //   );
-  // }, [nodeName, setNodes]);
 
   const saveNodeToDatabase = () => {
     const dataFromNodes = allNodes.map((item) => ({
@@ -584,20 +573,6 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
     textRef?.current?.focus();
   }, [selectedNode]);
 
-  // useEffect(() => {
-  //   setNodes((nds) =>
-  //     nds.map((node) => {
-  //       if (node.id === selectedNode?.id) {
-  //         node.data = {
-  //           ...node.data,
-  //           content: nodeName || " ",
-  //         };
-  //       }
-  //       return node;
-  //     })
-  //   );
-  // }, [nodeName, setNodes]);
-
   const saveHandler = () => {
     if (isAllNodeisConnected(nodes, edges)) {
       alert("Congrats its correct");
@@ -637,11 +612,12 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
     if (obj) {
       setNodes((nds) =>
         nds.map((node) => {
-          if (node.id == obj.id) {
-            node.data.heading =
-              obj.step_name == null ? node.data.heading : obj.step_name;
+          if (node.id == obj.id) {          
+          node.data = {
+            ...node.data,
+            heading: obj.step_name,
+             }
           }
-          console.log("node",node);
           return node;
         })
       );
@@ -742,21 +718,6 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   }, [jobFolder]);
   return (
     <>
-      {/* <button
-        className="btn btn-primary"
-        style={{ marginRight: "1px" }}
-        onClick={saveHandler}
-      >
-        Save
-      </button> */}
-      {/* <button
-        className="btn btn-secondary"
-        onClick={() => {
-          setOpenJobParams(true);
-        }}
-      >
-        Job Params
-      </button> */}
       <Modal
         modalTitle={"Save/Update Parameter"}
         ref={modalRef}
