@@ -80,6 +80,11 @@
     "usersToRoles.role.name",
     "isActive"
   ],
+  "SYSTEM_CONFIG": [
+    "parameter",
+    "description",
+    "value"
+  ],  
   "CLIENT": ["name", "abbreviation", "client_id"],
   "PROJECT": ["project_name", "client.name", "base_location"],
   "PROJECT_FILE": [
