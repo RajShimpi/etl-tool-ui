@@ -329,8 +329,7 @@ const JobStepParameterMaster = ({
         );
       
     }
-  };
-  console.log(nameValue);
+  }; 
 
   return (
     <div className="row" style={{ height: "300px" }}>

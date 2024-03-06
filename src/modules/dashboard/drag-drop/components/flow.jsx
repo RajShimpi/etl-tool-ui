@@ -224,8 +224,10 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   const prevJobDataIdRef = useRef(jobDataId);
 
   useEffect(() => {
+    
     const prevJobDataId = prevJobDataIdRef.current;
     prevJobDataIdRef.current = jobDataId;
+
     if (shouldCallSave && jobfileid != null && jobDataId !== prevJobDataId) {
       confirmAlert("Do you want to save data into the database?",
         () => {
