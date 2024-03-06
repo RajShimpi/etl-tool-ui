@@ -72,8 +72,8 @@ const Node = ({ data, id, start_step, startStep, item, isSelected, textRef, node
                 onClick={handleImageClick}
               />
               <abbr title={data.heading} style={{ cursor: 'pointer', textDecoration: 'none', borderRadius: '50px' }}>
-                <div>
-                  {data.heading?.length > 10 ? data.heading.slice(0, 9) + '...' : data.heading}
+                <div style={style.contentWrapper}>
+                  {data.heading && data.heading?.length > 10 ? data.heading.slice(0, 9) + '...' : data.heading}
                 </div>
               </abbr>
             </>
