@@ -748,8 +748,8 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
     }
   }, [menu, setNodes, setEdges]);
 
-  const edgeupdate =
-    edges !== null ? edges.filter((item) => item.target !== "null") : null;
+//   const edgeupdate =
+//     edges !== null ? edges.filter((item) => item.target !== "null") : null;
   const nodeActives =
     nodes !== null ? nodes.filter((item) => item.node_active === true) : null;
 
@@ -787,7 +787,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
           <div className="reactflow-wrapper" ref={reactFlowWrapper}>
             <ReactFlow
               nodes={nodeActives}
-              edges={edgeupdate}
+              edges={edges}
               startStep={startStep}
               nodeTypes={nodeTypes}
               onNodesChange={onNodesChange}
