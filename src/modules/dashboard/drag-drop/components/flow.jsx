@@ -213,34 +213,34 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
 
   useEffect(() => {
     if (newEdges) {
-      if ( edges.length !== newEdges.length) {
-        setShouldCallSave(true)
+      if (edges.length !== newEdges.length) {
+        setShouldCallSave(true);
       } else {
-        setShouldCallSave(false)
+        setShouldCallSave(false);
       }
     }
-  }, [edges,jobDataId]);
-  
-    useEffect(() => {
-      if (shouldCallSave && jobfileid != null) {
-        if (jobDataId !== jobfileid ) {
-          confirmAlert(
-            "Do you want to save data into the database?",
-            () => {
-              if (isAllNodeisConnected(nodes, edges)) {
-                saveNodeToDatabase();
-              } else {
-                alert("Please connect source nodes (Cannot Save Flow)");
-              }
-            },
-            () => {
-              alertInfo("Data not saved in the database");
-            }
-          );
+  }, [edges, jobDataId]);
+
+  const prevJobDataIdRef = useRef(jobDataId);
+
+  useEffect(() => {
+    const prevJobDataId = prevJobDataIdRef.current;
+    prevJobDataIdRef.current = jobDataId;
+    if (shouldCallSave && jobfileid != null && jobDataId !== prevJobDataId) {
+      confirmAlert("Do you want to save data into the database?",
+        () => {
+          if (isAllNodeisConnected(nodes, edges)) {
+            saveNodeToDatabase();
+          } else {
+            alert("Please connect source nodes (Cannot Save Flow)");
+          }
+        },
+        () => {
+          alertInfo("Data not saved in the database");
         }
-      }
-    }, [jobDataId, shouldCallSave, jobfileid, nodes, edges]);
-    
+      );
+    }
+  }, [jobDataId, shouldCallSave, jobfileid, nodes, edges]);
 
   const OpenJobParam = () => {
     setOpenJobParams(true);
@@ -266,15 +266,15 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   }, [menu, setMenu, jobfileid, startStep, setStartStep, nodes]);
 
   useEffect(() => {
-    if(jobDataId!== jobfileid){
-    setEdges([]);
-    setNodes([]);
-    setJobDataId(null);
-    setJobFileId(null);
-    setStartStep(null);
-    setMenu(null);
-    setNewEdges([])
-    setShouldCallSave(false)
+    if (jobDataId !== jobfileid) {
+      setEdges([]);
+      setNodes([]);
+      setJobDataId(null);
+      setJobFileId(null);
+      setStartStep(null);
+      setMenu(null);
+      setNewEdges([]);
+      setShouldCallSave(false);
     }
   }, [projectID, jobDataId, setStartStep, setMenu]);
 
@@ -345,8 +345,8 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
           },
         ]);
       });
-    }else{
-      alertInfo('You need to selsect the file or create the new file')
+    } else {
+      alertInfo("You need to selsect the file or create the new file");
     }
   };
 
@@ -430,7 +430,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
     unselectStartStep,
     setAsStartStepHandler,
   ]);
- 
+
   const saveNodeToDatabase = () => {
     const dataFromNodes = allNodes.map((item) => ({
       id: parseInt(item.id),
@@ -657,6 +657,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   const handleCloseNodeMaster = (obj) => {
     setShowNodeMaster(false);
     setMenu(null);
+    console.log(obj);
     if (obj) {
       setNodes((nds) =>
         nds.map((node) => {
