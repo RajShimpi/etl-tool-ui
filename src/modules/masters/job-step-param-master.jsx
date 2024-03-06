@@ -313,7 +313,8 @@ const JobStepParameterMaster = ({
           `job-steps/${node_id}/name-save`,
           { step_name: data.step_name },
           (data) => {
-            setNodeNames(data)
+            setNodeNames(data);
+            setUpdate(false);
             handleClose(data);
           }
         );
