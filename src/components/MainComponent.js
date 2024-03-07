@@ -15,28 +15,28 @@ const MainComponent = () => {
   const savaDataRef = useRef(null);
   const { jobDataId } = useJobData();
   const [disabled, setDisabled] = useState(true)
-  const [jobData, setJobData] = useState([])
+  const [jobData, setJobData] = useState()
+  const [jobid, setJobid] = useState([])
 
   useEffect(() => {
     if (jobDataId) {
       setJobData(jobDataId);
+      setJobid(jobDataId.id)
     } else {
-      setJobData(null);
+      setJobData(null)
     }
   }, [jobDataId]);
- 
 
   useEffect(() => {
-    setDisabled(jobData ? false : true);
+    setDisabled(jobData !== undefined && jobData !== null ? false : true);
   }, [jobDataId]);
-  
+
   const publish = () => {
-    if (jobData && jobData.id) {
-      const jobId = jobData.id;
-      axios.postWithCallback(`job/publish-job/${jobId}`, { jobId });
-    }
-  };
-  
+    const job_id = ({
+      jobId: jobid
+    })
+    axios.postWithCallback(`job/publish-job/${jobid}`, job_id)
+  }
 
   const saveDataFunction = () => {
     if (savaDataRef.current && typeof savaDataRef.current.savaDataFunction === 'function') {
