@@ -93,7 +93,7 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
     axios.getWithCallback(`job/${item.id}/file`, (data) => {
       setJobDataId(data);
     });}else{
-      setJobFolder(item.type);
+      setJobDataId();
     }
   };
 
