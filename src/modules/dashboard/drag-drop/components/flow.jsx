@@ -199,6 +199,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   const [nodeName, setNodeName] = useState([]);
   const [shouldCallSave, setShouldCallSave] = useState(false);
   const [newEdges, setNewEdges] = useState([]);
+  const [jobFileName, setJobFileName] = useState([]);
 
   const savaDataFunction = () => {
     if (jobFolder !== "Folder") {
@@ -224,12 +225,12 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   const prevJobDataIdRef = useRef(jobDataId);
 
   useEffect(() => {
-    
     const prevJobDataId = prevJobDataIdRef.current;
     prevJobDataIdRef.current = jobDataId;
 
     if (shouldCallSave && jobfileid != null && jobDataId !== prevJobDataId) {
-      confirmAlert("Do you want to save data into the database?",
+      confirmAlert(
+        "Do you want to save data into the database?",
         () => {
           if (isAllNodeisConnected(nodes, edges)) {
             saveNodeToDatabase();
@@ -254,16 +255,57 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   }));
 
   const setAsStartStepHandler = useCallback(() => {
-    const startstep = {
-      start_step: parseInt(menu.id),
-    };
-    axios.putWithCallback(`job/${jobfileid.id}/startstep`, startstep);
-  }, [menu, setMenu, jobfileid, startStep, setStartStep, nodes]);
+    const startStep = parseInt(menu.id);
+
+    setNodes((nodes) =>
+      nodes.map((node) => {
+        if (node.data.start_step !== null) {
+          return {
+            ...node,
+            data: {
+              ...node.data,
+              start_step: null,
+            },
+          };
+        }
+        return node;
+      })
+    );
+
+    setNodes((nodes) =>
+      nodes.map((node) => {
+        if (node.id === menu.id) {
+          return {
+            ...node,
+            data: {
+              ...node.data,
+              start_step: startStep,
+            },
+          };
+        }
+        return node;
+      })
+    );
+    axios.putWithCallback(`job/${jobfileid.id}/startstep`, {
+      start_step: startStep,
+    });
+  }, [menu, jobfileid, setNodes]);
 
   const unselectStartStep = useCallback(() => {
     const startstep = {
       start_step: null,
     };
+    setNodes((nds) =>
+      nds.map((node) => {
+        if (node.id == menu.id) {
+          node.data = {
+            ...node.data,
+            start_step: startstep.start_step,
+          };
+        }
+        return node;
+      })
+    );
     axios.putWithCallback(`job/${jobfileid.id}/startstep`, startstep);
   }, [menu, setMenu, jobfileid, startStep, setStartStep, nodes]);
 
@@ -277,6 +319,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       setMenu(null);
       setNewEdges([]);
       setShouldCallSave(false);
+      setJobFileName([]);
     }
   }, [projectID, jobDataId, setStartStep, setMenu]);
 
@@ -348,7 +391,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
         ]);
       });
     } else {
-      alertInfo("You need to selsect the file or create the new file");
+      alertInfo("You Need To Select The File Or Create The New File");
     }
   };
 
@@ -364,6 +407,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       // setShouldCallSave(true);
       axios.getWithCallback(`job-steps/${jobDataId.id}/job`, (data) => {
         setJobFileId(jobDataId);
+        setJobFileName(jobDataId.name);
         const dataNodes = data.map((item) => ({
           id: "" + item.id,
           step_type_id: "" + item.step_type_id,
@@ -595,7 +639,6 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
         },
       };
 
-      // setNewEdges(newEdge)
       setEdges((eds) => addEdge(newEdge, eds));
     },
     [setEdges]
@@ -658,15 +701,16 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
 
   const handleCloseNodeMaster = (obj) => {
     setShowNodeMaster(false);
+    console.log(obj);
     setMenu(null);
     if (obj) {
       setNodes((nds) =>
         nds.map((node) => {
-          if (node.id == obj.id) {          
-          node.data = {
-            ...node.data,
-            heading: obj.step_name,
-             }
+          if (node.id == obj.id) {
+            node.data = {
+              ...node.data,
+              heading: obj.step_name,
+            };   
           }
           return node;
         })
@@ -752,7 +796,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
     edges !== null ? edges.filter((item) => item.target !== "null") : null;
   const nodeActives =
     nodes !== null ? nodes.filter((item) => item.node_active === true) : null;
-  
+
   useEffect(() => {
     if (jobDataId !== null) {
       setJobFolder(null);
@@ -764,11 +808,13 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       setJobDataId(null);
       setNodes([]);
       setEdges([]);
+      setJobFileName([]);
     }
-  }, [jobFolder, setNodes, setEdges, setJobDataId]);
-
+  }, [jobFolder, setNodes, setEdges, jobFileName, setJobDataId]);
+  
   return (
     <>
+      {jobFileName && <div className="filename">{jobFileName}</div>}
       <Modal
         modalTitle={"Save/Update Parameter"}
         ref={modalRef}
@@ -780,7 +826,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
           handleClose={handleCloseJobParams}
           project_id={projectID}
           job={jobfileid}
-        />
+        />  
       </Modal>
       <div className="dndflow">
         <ReactFlowProvider>
@@ -839,7 +885,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
                 handleClose={handleCloseNodeMaster}
                 name={editName}
                 nodes={nodeActives}
-                setNodeNames={setNodeName}
+                // setNodeNames={setNodeName}
               />
             </Modal>
           </div>

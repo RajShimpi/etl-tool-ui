@@ -37,7 +37,6 @@ const MainComponent = () => {
     };
     axios.postWithCallback(`job/publish-job/`, job_id);
   };
-  
 
   const saveDataFunction = () => {
     if (savaDataRef.current && typeof savaDataRef.current.savaDataFunction === 'function') {
