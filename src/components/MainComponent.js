@@ -32,11 +32,12 @@ const MainComponent = () => {
   }, [jobDataId]);
 
   const publish = () => {
-    const job_id = ({
-      jobId: jobid
-    })
-    axios.postWithCallback(`job/publish-job/${jobid}`, job_id)
-  }
+    const job_id = {
+      jobId: jobid,
+    };
+    axios.postWithCallback(`job/publish-job/`, job_id);
+  };
+  
 
   const saveDataFunction = () => {
     if (savaDataRef.current && typeof savaDataRef.current.savaDataFunction === 'function') {
