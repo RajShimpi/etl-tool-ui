@@ -229,8 +229,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
     prevJobDataIdRef.current = jobDataId;
 
     if (shouldCallSave && jobfileid != null && jobDataId !== prevJobDataId) {
-      confirmAlert(
-        "Do you want to save data into the database?",
+      confirmAlert("Do You Want To Save Flow?",
         () => {
           if (isAllNodeisConnected(nodes, edges)) {
             saveNodeToDatabase();
@@ -239,7 +238,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
           }
         },
         () => {
-          alertInfo("Data not saved in the database");
+          alertInfo("Flow not saved");
         }
       );
     }
@@ -476,7 +475,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
     unselectStartStep,
     setAsStartStepHandler,
   ]);
-
+console.log(edges);
   const saveNodeToDatabase = () => {
     const dataFromNodes = allNodes.map((item) => ({
       id: parseInt(item.id),
@@ -493,20 +492,18 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
     }));
 
     const dataFromEdgesOk = edges
-      .filter(
-        (item) =>
-          item.sourceHandle === "ok" &&
-          item.ok_step !== null &&
-          !isNaN(item.target)
-      )
-      .map((item) => ({
-        id: parseInt(item.source),
-        ok_step:
-          item.id === nodesActive.id
-            ? nodesActive.ok_step
-            : parseInt(item.target),
-      }));
+    .filter(
+      (item) =>
+        item.sourceHandle === "ok" &&   
+        item.ok_step !== null &&          
+        !isNaN(item.target)             
+    )
+    .map((item) => ({
+      id: parseInt(item.source),
+      ok_step: nodesActive.some(node => parseInt(item.target) === parseInt(node.id)) ? null : parseInt(item.target)
+    }));
 
+  
     const dataFromEdgesError = edges
       .filter(
         (item) =>
@@ -516,10 +513,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       )
       .map((item) => ({
         id: parseInt(item.source),
-        error_step:
-          item.id === nodesActive.id
-            ? nodesActive.error_step
-            : parseInt(item.target),
+        error_step: nodesActive.some(node => parseInt(item.target) === parseInt(node.id)) ? null : parseInt(item.target)
       }));
 
     const updatedEdgesOk = edges.filter(
@@ -792,8 +786,6 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
     }
   }, [menu, setNodes, setEdges]);
 
-  const edgeupdate =
-    edges !== null ? edges.filter((item) => item.target !== "null") : null;
   const nodeActives =
     nodes !== null ? nodes.filter((item) => item.node_active === true) : null;
 
@@ -814,7 +806,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   
   return (
     <>
-      {jobFileName && <div className="filename">{jobFileName}</div>}
+      {jobFileName && <div className="filename text-center"><div className="data">{jobFileName}</div></div>}
       <Modal
         modalTitle={"Save/Update Parameter"}
         ref={modalRef}

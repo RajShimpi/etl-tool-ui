@@ -87,16 +87,17 @@
   width: 120px !important;
   justify-content: flex-start;
 }
-
 .filename {
+  /* margin-top: -50px; */
+  margin-left: 38%;
   background-color: #5c636a85;
   border-radius: 5px;
   box-sizing: border-box;
   cursor: pointer;
   display: inline-block;
   font-size: 18px;
+  /* height: 100px; */
   font-weight: 400;
-  margin: 0;
   position: absolute;
   text-align: center;
   text-decoration: none;
