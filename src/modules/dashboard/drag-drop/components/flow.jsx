@@ -31,7 +31,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import JobStepParameterMaster from "../../../masters/job-step-param-master";
 import JobParameterMaster from "../../../masters/job-parameter";
 import { alertInfo, confirmAlert } from "../../../components/config/alert";
-
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 const nodeTypes = {
   node: (node) => {
     return (
@@ -200,6 +200,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   const [shouldCallSave, setShouldCallSave] = useState(false);
   const [newEdges, setNewEdges] = useState([]);
   const [jobFileName, setJobFileName] = useState([]);
+  const [filePath, setFilePath] = useState([]);
 
   const savaDataFunction = () => {
     if (jobFolder !== "Folder") {
@@ -229,7 +230,8 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
     prevJobDataIdRef.current = jobDataId;
 
     if (shouldCallSave && jobfileid != null && jobDataId !== prevJobDataId) {
-      confirmAlert("Do You Want To Save Flow?",
+      confirmAlert(
+        "Do You Want To Save Flow?",
         () => {
           if (isAllNodeisConnected(nodes, edges)) {
             saveNodeToDatabase();
@@ -319,6 +321,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       setNewEdges([]);
       setShouldCallSave(false);
       setJobFileName([]);
+      setFilePath([]);
     }
   }, [projectID, jobDataId, setStartStep, setMenu]);
 
@@ -403,7 +406,20 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
 
   useEffect(() => {
     if (jobDataId) {
-      // setShouldCallSave(true);
+      axios.getWithCallback(`project-files/${jobDataId.Projects_Files.id}/path`, (data) => {
+        const pathSegments = data.split('/');
+        pathSegments.splice(0, 2);
+        const lastSegmentIndex = pathSegments.length - 1;
+        const lastSegment = pathSegments[lastSegmentIndex].replace('.json', '');
+        pathSegments[lastSegmentIndex] = lastSegment;
+        const filepath = pathSegments.map((segment, index) => (
+          <React.Fragment key={index}>
+            {segment}
+            {index < lastSegmentIndex && <ArrowForwardIosIcon style={{ fontSize: "15px" }} />}
+          </React.Fragment>
+        ));
+        setFilePath(filepath);
+      });
       axios.getWithCallback(`job-steps/${jobDataId.id}/job`, (data) => {
         setJobFileId(jobDataId);
         setJobFileName(jobDataId.name);
@@ -475,7 +491,13 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
     unselectStartStep,
     setAsStartStepHandler,
   ]);
-console.log(edges);
+  // useEffect(() => {
+  //   if (filePath) {
+  //     axios.getWithCallback(`project-files/${filePath}/path`, (data) =>
+  //       setFilePaths(data)
+  //     );
+  //   }
+  // }, []);
   const saveNodeToDatabase = () => {
     const dataFromNodes = allNodes.map((item) => ({
       id: parseInt(item.id),
@@ -492,18 +514,21 @@ console.log(edges);
     }));
 
     const dataFromEdgesOk = edges
-    .filter(
-      (item) =>
-        item.sourceHandle === "ok" &&   
-        item.ok_step !== null &&          
-        !isNaN(item.target)             
-    )
-    .map((item) => ({
-      id: parseInt(item.source),
-      ok_step: nodesActive.some(node => parseInt(item.target) === parseInt(node.id)) ? null : parseInt(item.target)
-    }));
+      .filter(
+        (item) =>
+          item.sourceHandle === "ok" &&
+          item.ok_step !== null &&
+          !isNaN(item.target)
+      )
+      .map((item) => ({
+        id: parseInt(item.source),
+        ok_step: nodesActive.some(
+          (node) => parseInt(item.target) === parseInt(node.id)
+        )
+          ? null
+          : parseInt(item.target),
+      }));
 
-  
     const dataFromEdgesError = edges
       .filter(
         (item) =>
@@ -513,7 +538,11 @@ console.log(edges);
       )
       .map((item) => ({
         id: parseInt(item.source),
-        error_step: nodesActive.some(node => parseInt(item.target) === parseInt(node.id)) ? null : parseInt(item.target)
+        error_step: nodesActive.some(
+          (node) => parseInt(item.target) === parseInt(node.id)
+        )
+          ? null
+          : parseInt(item.target),
       }));
 
     const updatedEdgesOk = edges.filter(
@@ -695,7 +724,6 @@ console.log(edges);
 
   const handleCloseNodeMaster = (obj) => {
     setShowNodeMaster(false);
-    console.log(obj);
     setMenu(null);
     if (obj) {
       setNodes((nds) =>
@@ -704,7 +732,7 @@ console.log(edges);
             node.data = {
               ...node.data,
               heading: obj.step_name,
-            };   
+            };
           }
           return node;
         })
@@ -801,12 +829,18 @@ console.log(edges);
       setNodes([]);
       setEdges([]);
       setJobFileName([]);
+      setFilePath([]);
     }
   }, [jobFolder, setNodes, setEdges, jobFileName, setJobDataId]);
-  
+
   return (
     <>
-      {jobFileName && <div className="filename text-center"><div className="data">{jobFileName}</div></div>}
+      {jobFileName && (
+        <>
+          <div className="filePath">{filePath}</div>
+          <div className="filename text-center">{jobFileName}</div>
+        </>
+      )}
       <Modal
         modalTitle={"Save/Update Parameter"}
         ref={modalRef}
@@ -818,7 +852,7 @@ console.log(edges);
           handleClose={handleCloseJobParams}
           project_id={projectID}
           job={jobfileid}
-        />  
+        />
       </Modal>
       <div className="dndflow">
         <ReactFlowProvider>
