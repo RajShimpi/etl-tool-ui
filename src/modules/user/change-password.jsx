@@ -60,7 +60,7 @@ const ChangePassword = () => {
         }, (err) => {
         });
     };
-console.log( auth.getStorageData("username"))
+// console.log( auth.getStorageData("username"))
     return (<div style={bgStyle} className="admin-login-bg">
         <div className="account-pages form-center-align">
             <div className="container">

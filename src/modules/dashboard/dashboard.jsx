@@ -13,6 +13,7 @@ import SearchFilter from "../components/search-filter";
 import NotificationsDropdown from "../components/notifications-dropdown";
 import {
   useClientId,
+  useDashboardId,
   useProjectid,
 } from "../../components/JobDataContext";
 import PersonIcon from "@mui/icons-material/Person";
@@ -45,18 +46,19 @@ const Dashboard = () => {
   const { setClientId } = useClientId();
   const [project, setProject] = useState([]);
   const [selectedChildItem, setSelectedChildItem] = useState(false);
+  const [selectedChildMenu, setSelectedChildMenu] = useState(false);
   const { setProjectID } = useProjectid();
   const [isMenuOpen, setMenuOpen] = useState(false);
-  
+  const { setDashboardId } = useDashboardId();
+  const [dashboardData, setDashboardData] = useState([]);
 
   const toggleMenu = () => {
     setMenuOpen(!isMenuOpen);
   };
 
   useEffect(() => {
-
     const client = auth.getStorageData("client");
-   
+
     if (clientId === null && client.client_id) {
       setClientId(client.client_id);
     }
@@ -69,8 +71,8 @@ const Dashboard = () => {
 
     axios.getWithCallback("system-config/all", (data) => {
       setConfigValues({ config: data });
-  });
-    // console.log("clientName:",clientName);
+    });
+
     axios.getWithCallback(
       "user/getUserById/" + auth.getStorageData("id"),
       (data) => {
@@ -94,7 +96,7 @@ const Dashboard = () => {
     );
 
     return () => {};
-  }, [clientId, setClientId]);
+  }, [clientId]);
 
   // useEffect(() => {
   //   if (clientId) {
@@ -136,16 +138,15 @@ const Dashboard = () => {
         break;
     }
   };
-  
+
   const getMenusRoutes = () => {
     if (!menuData?.length) return [];
-    //console.log(menuData);
     let dt = menuData.map((x) => x.menuRoute).filter((x) => x);
     let dt1 = menuData
       .reduce((x, y) => _.concat(x, y.childMenu), [])
       .filter((x) => x)
       .map((x) => x.href.toLowerCase());
-    //console.log(_.concat(dt, dt1));
+
     let routes = _.concat(dt, dt1);
     //   let routeDt = routeData;
     //   routeDt.forEach(element => {
@@ -179,7 +180,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     const Clientid = auth.getStorageData("client");
-    
+
     if (Clientid.id) {
       axios.getWithCallback(
         `projects/client/${Clientid.id}`,
@@ -189,14 +190,24 @@ const Dashboard = () => {
       );
     }
   }, []);
+  useEffect(() => {
+    axios.getWithCallback("metabase/json", (data) => setDashboardData(data));
+  }, []);
+  // console.log(dashboardData);
 
   const onhandelProject = (projectid) => {
     // auth.setAuthData(projectid);
     setProjectID(projectid);
   };
-  
+  const onhandelDashboardId = (id) => {
+    setDashboardId(id);
+  };
+
   const roles = auth.getStorageData("usersToRoles");
   
+  const handalchildMenu = (childItem) => {
+    setSelectedChildMenu(childItem.itemName);
+  };
   return (
     // <div id="layout-wrapper" > data-layout-mode="layout-mode-light"
     <div id="layout-wrapper">
@@ -292,6 +303,8 @@ const Dashboard = () => {
                             aria-haspopup="true"
                             aria-expanded="false"
                             style={{ fontWeight: "bold" }}
+                            onMouseLeave={() => setSelectedChildItem(false)}
+                            onClick={() => setSelectedChildMenu(false)}
                           >
                             <i
                               key={item.menuId + "i"}
@@ -315,13 +328,15 @@ const Dashboard = () => {
                                 <div
                                   key={childItem.childMenuItemId + "Link"}
                                   className="dropdown-item"
-                                  onMouseEnter={() =>
-                                    setSelectedChildItem(childItem)
-                                  }
+                                  onClick={() => handalchildMenu(childItem)}
                                 >
-                                  {!item.menuName
+                                  {!item.hasChild &&
+                                  !item.childMenu
                                     .toLowerCase()
-                                    .includes("project") ? (
+                                    .includes("list") &&
+                                  !item.childMenu
+                                    .toLowerCase()
+                                    .includes("metabase") ? (
                                     <Link
                                       key={childItem.childMenuItemId + "Link"}
                                       className="dropdown-item"
@@ -331,7 +346,12 @@ const Dashboard = () => {
                                     </Link>
                                   ) : (
                                     <>
-                                      <div style={{ cursor: "pointer" }}>
+                                      <div
+                                        style={{ cursor: "pointer" }}
+                                        // onClick={() =>
+                                        //   handalchildMenu(childItem)
+                                        // }
+                                      >
                                         {childItem.itemName}
 
                                         <ArrowForwardIosIcon
@@ -350,7 +370,7 @@ const Dashboard = () => {
                               {item.menuName
                                 .toLowerCase()
                                 .includes("project") &&
-                                selectedChildItem && (
+                                selectedChildMenu === "List" && (
                                   <div
                                     style={{
                                       position: "absolute",
@@ -364,49 +384,88 @@ const Dashboard = () => {
                                       zIndex: 1,
                                     }}
                                   >
-                                    <div  onMouseLeave={() =>
-                                        setSelectedChildItem(false)
-                                      }>
-                                    {project.map((item) => (
-                                      
-                                      <Link
-                                     
-                                        key={"maincomponent" + "Link"}
-                                        className="dropdown-item"
-                                        to={{ pathname: "maincomponent" }}
-                                        onClick={() =>
-                                          onhandelProject(item.id)
-                                        }
-                                      >
-                                        <div
-                                          // onMouseLeave={() =>
-                                          //   setSelectedChildItem(false)
-                                          // }
-                                          // onClick={() =>
-                                          //   onhandelProject(item.id)
-                                          // }
-                                          key={item.project_id}
-                                          // style={{ marginLeft: "5px" }}
-                                          style={{
-                                            display: "flex",
-                                            margin: "2px",
-                                            marginRight: "5px",
-                                          }}
+                                    <div
+                                      onMouseLeave={() =>
+                                        setSelectedChildMenu(false)
+                                      }
+                                    >
+                                      {project.map((item) => (
+                                        <Link
+                                          key={"maincomponent" + "Link"}
+                                          className="dropdown-item"
+                                          to={{ pathname: "maincomponent" }}
+                                          onClick={() =>
+                                            onhandelProject(item.id)
+                                          }
                                         >
-                                          <FolderIcon
-                                            fontSize="small"
-                                            style={{ marginTop: "3px" }}
-                                          />
                                           <div
-                                            style={{ marginLeft: "5px" }}
+                                            key={item.project_id}
+                                            style={{
+                                              display: "flex",
+                                              margin: "2px",
+                                              marginRight: "5px",
+                                            }}
                                           >
-                                            {item.project_name}
+                                            <FolderIcon
+                                              fontSize="small"
+                                              style={{ marginTop: "3px" }}
+                                            />
+                                            <div style={{ marginLeft: "5px" }}>
+                                              {item.project_name}
+                                            </div>
                                           </div>
-                                        </div>
-                                      </Link>
-                                     
-                                    ))}
-                                     </div>
+                                        </Link>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+                              {item.menuName
+                                .toLowerCase()
+                                .includes("project") &&
+                                selectedChildMenu === "Metabase" && (
+                                  <div
+                                    style={{
+                                      position: "absolute",
+                                      top: "45px",
+                                      left: "100%",
+                                      minWidth: "200px",
+                                      background: "#fff",
+                                      cursor: "pointer",
+                                      boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+                                      padding: "10px",
+                                      zIndex: 1,
+                                    }}
+                                  >
+                                    <div
+                                      onMouseLeave={() =>
+                                        setSelectedChildMenu(false)
+                                      }
+                                    >
+                                      {dashboardData.map((item) => (
+                                        <Link
+                                          key={"metabase" + "Link"}
+                                          className="dropdown-item"
+                                          to={{ pathname: "metabase" }}
+                                          onClick={() =>
+                                            onhandelDashboardId(item.id)
+                                          }
+                                        >
+                                          <div
+                                            key={item.id}
+                                            style={{
+                                              display: "flex",
+                                              margin: "2px",
+                                              marginRight: "5px",
+                                            }}
+                                          >
+                                            <img src="/assets/images/dashboard1.png" />
+                                            <div style={{ marginLeft: "5px" }}>
+                                              {item.name}
+                                            </div>
+                                          </div>
+                                        </Link>
+                                      ))}
+                                    </div>
                                   </div>
                                 )}
                             </div>
@@ -524,10 +583,12 @@ const Dashboard = () => {
                 />
                 <span className="d-none d-xl-inline-block ms-1 fw-medium font-size-15">
                   <div>
-                    <div>{auth.getStorageData("firstName")}</div>
+                    {/* <div>{auth.getStorageData("firstName")}</div> */}
                   </div>{" "}
                   {roles.role}
-                  <div className="arrow-down"></div>
+                  <abbr title="Menu" style={{ cursor: "pointer" }}>
+                    <div className="arrow-down"></div>
+                  </abbr>
                 </span>
               </button>
               <div className="dropdown-menu dropdown-menu-end">

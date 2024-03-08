@@ -3,14 +3,17 @@ import "./component.css";
 import React, { useEffect, useState } from 'react';
 
 const CustomSelect = (props) => {
+
   const [value, setValue] = useState('');
   const [valueAfterRender, setValueAfterRender] = useState('');
   const setItem = (e) => {
+   
     const filterData = props.options?.find(ele => (ele?.value == e.target.value))
     let index = e.nativeEvent.target.selectedIndex;
     let label = e.nativeEvent.target[index].text;
     setValue({ label: e.target.name, value: e.target.value, params: filterData?.params ? filterData.params : null });
     callBackFunc({ text: label, label: e.target.name, value: e.target.value, params: filterData?.params ? filterData.params : null })
+
   }
 
   const callBackFunc = (curValue) => {
@@ -23,7 +26,7 @@ const CustomSelect = (props) => {
   }
 
   useEffect(() => {
-    let obj = props.options?.find(x => x.value === valueAfterRender);
+    let obj = props.options?.find(x => x.label === valueAfterRender);
     if (!obj) {
       setValue('');
       callBackFunc('')
@@ -36,7 +39,7 @@ const CustomSelect = (props) => {
   }, [props.options]);
 
   useEffect(() => {
-    let obj = props.options?.find(x => x.value == props.itemVal);
+    let obj = props.options?.find(x => x.label == props.itemVal);
     setValueAfterRender(props.itemVal);
     if (!obj) {
       setValue('');
@@ -44,7 +47,7 @@ const CustomSelect = (props) => {
     } else {
       setValue({ ...obj });
     }
-  }, [props.itemVal])
+  }, [props.options])
 
   //   const style = {
   //     borderColor: "#f46a6a",
@@ -70,6 +73,7 @@ const CustomSelect = (props) => {
   //     }
   //   })
   // }
+ 
   return (
     <>
       {/* <div key={props.primaryKey + 'div'} style={{ width: '-webkit-fill-available' }}> */}
