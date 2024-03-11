@@ -838,7 +838,6 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       {jobFileName && (
         <>
           <div className="filePath">{filePath}</div>
-          <div className="filename text-center">{jobFileName}</div>
         </>
       )}
       <Modal
