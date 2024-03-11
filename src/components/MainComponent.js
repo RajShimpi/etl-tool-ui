@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import ComponetTool from "./ComponentTool/ComponetTool";
 import ProjectStructure from "./ProjectStrucure/ProjectStructure";
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowUp';
 import "./MainComponent.css";
 import OverviewFlow from "../modules/dashboard/drag-drop/components/flow";
 import { useJobData } from "./JobDataContext";
 import axios from "../modules/services/axios";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 const MainComponent = () => {
   const [isProjectStructureOpen, setIsProjectStructureOpen] = useState(false);
@@ -17,6 +17,7 @@ const MainComponent = () => {
   const [disabled, setDisabled] = useState(true)
   const [jobData, setJobData] = useState()
   const [jobid, setJobid] = useState([])
+  const [filePath, setFilePath] = useState([])
 
   useEffect(() => {
     if (jobDataId) {
@@ -24,8 +25,26 @@ const MainComponent = () => {
       setJobid(jobDataId.id)
     } else {
       setJobData(null)
+      setFilePath([])
     }
   }, [jobDataId]);
+
+  useEffect(() => {
+    if (jobDataId) {
+      axios.getWithCallback(
+        `project-files/${jobDataId.Projects_Files.id}/path`,
+        (data) => {
+          const pathSegments = data.split("/");
+          pathSegments.splice(0, 2);
+          const lastSegment = pathSegments.pop().replace(".json", "");
+          const shortenedPath = pathSegments.length > 5
+            ? [...pathSegments.slice(0, 5), `... ${lastSegment}`]
+            : [...pathSegments, lastSegment];
+          setFilePath(shortenedPath);
+        }
+      );
+    }
+  }, [filePath, jobDataId])
 
   useEffect(() => {
     setDisabled(jobData !== undefined && jobData !== null ? false : true);
@@ -89,26 +108,59 @@ const MainComponent = () => {
 
   return (
     <>
-      <div className="d-flex" >
-        <div className="d-flex" style={{ height: "50%" }}>
-          <button className="btn mx-1 w-xs btn-primary" onClick={saveDataFunction} disabled={disabled}>Save</button>
-          <button className="btn mx-1 w-xs btn-secondary" onClick={OpenJobParam} disabled={disabled}>Job Params</button>
-          <button className="btn mx-1 w-xs  btn-success" onClick={publish} disabled={disabled}>Publish</button>
-        </div>
-        <div className="dropdown">
-          <div className="dropbtn" onClick={handleDropdownToggle}>
-            Select Theme <KeyboardArrowDownIcon />
-          </div>
-          {isDropdownOpen && (
-            <div className="dropdown-content pcolr">
-              {themes.map((theme, index) => (
-                <button className="btncolr" key={index} onClick={() => handleThemeChange(index)} style={{ backgroundColor: theme.backgroundColor, color: theme.textColor}} />
-              ))}
+    <div style={{ backgroundColor: themes[currentThemeIndex].backgroundColor, color: themes[currentThemeIndex].textColor }}>
+      <nav class="navbar navbar-expand-lg ">
+        <div class="container-fluid">
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                {filePath.length > 0 && (
+                  <div className="mx-1 w-xs" title="filePath">
+                    {filePath.map((segment, index) => (
+                      <React.Fragment key={index}>
+                        {segment}
+                        {index < filePath.length - 1 && (
+                          <ArrowForwardIosIcon style={{ fontSize: "15px" }} />
+                        )}
+                      </React.Fragment>
+                    ))}
+                  </div>
+                )}
+              </li>
+            </ul>
+            <div style={{ position: 'fixed', marginLeft: '38%' }}>
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                  <button className="btn mx-1 w-xs btn-primary" onClick={saveDataFunction} disabled={disabled}>Save</button>
+                </li>
+                <li class="nav-item">
+                  <button className="btn mx-1 w-xs btn-secondary" onClick={OpenJobParam} disabled={disabled}>Job Params</button>
+                </li>
+                <li class="nav-item">
+                  <button className="btn mx-1 w-xs btn-success" onClick={publish} disabled={disabled}>Publish</button>
+                </li>
+              </ul>
             </div>
-          )}
+          </div>
+          <div>
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0" >
+              <li class="nav-item dropdown"  >
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Select Theme
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  {themes.map((theme, index) => (
+                    <div className="d-flex">
+                      <button className="btncolr d-flex" key={index} onClick={() => handleThemeChange(index)} style={{ backgroundColor: theme.backgroundColor, color: theme.textColor }} >
+                      </button><div></div></div>
+                  ))}
+                </ul>
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
-      <div className="main-container" style={{ backgroundColor: themes[currentThemeIndex].backgroundColor, color: themes[currentThemeIndex].textColor }}>
+      </nav>
+      <div className="main-container">
         <div className="d-flex justify-content-between main">
           <div className={` ${isProjectStructureOpen ? "open" : ""}`}>
             <ProjectStructure toggleSidebar={handleProjectStructureToggle} textColor={themes[currentThemeIndex].textColor} />
@@ -121,6 +173,7 @@ const MainComponent = () => {
           </div>
         </div>
       </div>
+    </div>
     </>
   );
 };
