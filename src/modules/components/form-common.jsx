@@ -6,7 +6,7 @@ import SelectReact from "./select-react";
 import SearchModal from "./search-modal";
 
 const FormCommon = (props) => {
-// console.log(props.data);
+console.log(props);
   return (
     <div > 
       {props.data &&
@@ -55,7 +55,7 @@ const FormCommon = (props) => {
                       isSubmit={item.isSubmit}
                       isRequired={item.isRequired}
                       disabled={item.update || pitem.disabled || item.disabled}
-                      itemVal={item.itemVal}
+                      itemVal={item.itemVal||1}
                     />
                   )}
 

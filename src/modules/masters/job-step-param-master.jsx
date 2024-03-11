@@ -397,7 +397,7 @@ const JobStepParameterMaster = ({
                       </button>
                     </div>
                   )}
-                  <div style={{maxHeight:"138px" ,overflowY:"scroll" , scrollbarWidth: "thin", scrollbarColor: "transparent transparent" }}>
+                  <div style={{maxHeight:"190px" ,overflowY:"scroll" , scrollbarWidth: "thin", scrollbarColor: "transparent transparent" }}>
                     {!!nameValue?.length && (
                       <table className="table table-striped table-bordered dt-responsive">
                         <thead

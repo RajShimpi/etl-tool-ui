@@ -4627,8 +4627,8 @@ left: 450px;
     display: none;
     -ms-overflow-style: none;
     scrollbar-width: none;
-    min-height: 173px;
-    max-height: 173px;
+    /* min-height: 173px;
+    max-height: 1730px; */
 }
 .cards-body {
     -webkit-box-flex: 1;

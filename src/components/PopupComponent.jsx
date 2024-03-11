@@ -14,12 +14,22 @@ const PopupComponent = ({ onClose, actionType, project_id, id }) => {
   switch (actionType) {
     case "AddFolder":
       contentComponent = (
-        <Folder project_id={project_id} id={id} type="Folder" onClose={onClose} />
+        <Folder
+          project_id={project_id}
+          id={id}
+          type="Folder"
+          onClose={onClose}
+        />
       );
       break;
     case "AddFile":
       contentComponent = (
-        <AddFile project_id={project_id} id={id} type="File" onClose={onClose} />
+        <AddFile
+          project_id={project_id}
+          id={id}
+          type="File"
+          onClose={onClose}
+        />
       );
       break;
     case "Edit":
@@ -120,16 +130,32 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
     <div className="row ">
       <div className="col-xl-12 ">
         <div className="card">
-          <form onSubmit={(e) => onsubmit(e)} className="needs-validation" noValidate >
+          <form
+            onSubmit={(e) => onsubmit(e)}
+            className="needs-validation"
+            noValidate
+          >
             <div className="accordion" id={"common-form-" + props.title}>
               <div className="accordion-item" style={{ margin: "0px" }}>
                 <h2 className="accordion-header" id="headingOne">
-                  <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" >
+                  <button
+                    className="accordion-button"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapseOne"
+                    aria-expanded="true"
+                    aria-controls="collapseOne"
+                  >
                     {props.title}
                   </button>
                 </h2>
               </div>
-              <div id="collapseOne" className="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent={"common-form-" + props.title}>
+              <div
+                id="collapseOne"
+                className="accordion-collapse collapse show"
+                aria-labelledby="headingOne"
+                data-bs-parent={"common-form-" + props.title}
+              >
                 <div className="accordion-body text-muted">
                   <div className="card-body">
                     {props.type == "Delete" ? (
@@ -144,7 +170,9 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
                           update: props.update,
                           callback: setValues,
                           values: data,
-                          type: props.type.includes("Folder") ? "Folder" : "File",
+                          type: props.type.includes("Folder")
+                            ? "Folder"
+                            : "File",
                           options: !!props.options ? props.options : [],
                           data: !!props.data ? props.data : [],
                           message: props.message,
@@ -153,15 +181,21 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
                     )}
                   </div>
                   <div className=" col-md-12 d-flex justify-content-end">
-                    <button type="submit"
+                    <button
+                      type="submit"
                       className={
                         props.update
                           ? "btn mx-2 btn-update w-xs waves-effect waves-light"
                           : "btn mx-1 btn-add w-xs waves-effect waves-light"
-                      }>
+                      }
+                    >
                       {props.type}
                     </button>
-                    <button type="button" onClick={(e) => props.onClose(e)} className="btn btn-warning w-xs waves-effect waves-light">
+                    <button
+                      type="button"
+                      onClick={(e) => props.onClose(e)}
+                      className="btn btn-warning w-xs waves-effect waves-light"
+                    >
                       Close
                     </button>
                   </div>
