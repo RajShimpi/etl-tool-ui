@@ -411,7 +411,7 @@ const DataTable = (props) => {
                             <i className="fa fa-print" style={{ fontSize: "20px" }}></i>
                         </button>
                     </div> */}
-                                    <div className="card-body" >
+                                    <div className="card-body " >
                                         {!!tableData.length ? <React.Fragment>
                                             <div className="row">
                                                 <div className={`col-lg-12 table-responsive table-large-size`}>

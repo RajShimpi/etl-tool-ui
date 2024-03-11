@@ -4610,20 +4610,23 @@ left: 450px;
 .card>.list-group+.card-footer {
     border-top: 0
 }
-.card-body {
-    -webkit-box-flex: 1;
-    -ms-flex: 1 1 auto;
-    flex: 1 1 auto;
-    /* padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x); */
-    color: var(--bs-card-color);
-    /* min-height: 267px; */
+
+.from-body{
     max-height: 243px;
     overflow-y: scroll;
     -ms-overflow-style: none;  
     scrollbar-width: none;  /* Firefox */
 }
 
-.card-body ::-webkit-scrollbar{
+.card-body {
+    -webkit-box-flex: 1;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    /* padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x); */
+    color: var(--bs-card-color);
+}
+
+.from-body ::-webkit-scrollbar{
     display: none;
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -4640,9 +4643,7 @@ left: 450px;
     overflow-y: scroll;
     -ms-overflow-style: none;
     scrollbar-width: none; */
-    -ms-overflow-style: none;  /* Internet Explorer 10+ */
-    scrollbar-width: none;  /*Firefox*/
-    color: var(--bs-card-color);   
+    
 
 }
 
@@ -13118,7 +13119,6 @@ button {
 }
 .table-dark>:not(:last-child)>:last-child>* {
     border-bottom-color: #43494e;
-  
 }
 .table-nowrap td,
 .table-nowrap th {
