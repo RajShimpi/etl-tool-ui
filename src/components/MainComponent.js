@@ -108,8 +108,8 @@ const MainComponent = () => {
 
   return (
     <>
-    <div style={{ backgroundColor: themes[currentThemeIndex].backgroundColor, color: themes[currentThemeIndex].textColor, }}>
-      <nav class="navbar navbar-expand-lg ">
+    <div >
+      <nav class="navbar navbar-expand-lg " style={{backgroundColor:'#00659e', color:"white"}}>
         <div class="container-fluid">
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -128,7 +128,7 @@ const MainComponent = () => {
                 )}
               </li>
             </ul>
-            <div style={{ position: 'fixed', marginLeft: '38%' }}>
+            <div style={{  marginRight: '35%' }}>
               <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                   <button className="btn mx-1 w-xs btn-primary" onClick={saveDataFunction} disabled={disabled}>Save</button>
@@ -145,7 +145,7 @@ const MainComponent = () => {
           <div>
             <ul class="navbar-nav me-auto mb-2 mb-lg-0" >
               <li class="nav-item dropdown"  >
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <a style={{ background:"white", borderRadius:"8px", border: "1px solid black"}} class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Select Theme
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -160,7 +160,7 @@ const MainComponent = () => {
           </div>
         </div>
       </nav>
-      <div className="main-container">
+      <div className="main-container" style={{ backgroundColor: themes[currentThemeIndex].backgroundColor, color: themes[currentThemeIndex].textColor, }}>
         <div className="d-flex justify-content-between main">
           <div className={` ${isProjectStructureOpen ? "open" : ""}`}>
             <ProjectStructure toggleSidebar={handleProjectStructureToggle} textColor={themes[currentThemeIndex].textColor} />
