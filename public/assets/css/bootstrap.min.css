@@ -4612,10 +4612,14 @@ left: 450px;
 }
 
 .from-body{
-    max-height: 243px;
+    max-height: 250px;
+    min-height: 200px;
+    /* overflow-y: overlay; */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
     overflow-y: scroll;
-    -ms-overflow-style: none;  
-    scrollbar-width: none;  /* Firefox */
+    /* overflow-x: clip; */
+    padding: 5px;
 }
 
 .card-body {

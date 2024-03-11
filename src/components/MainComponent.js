@@ -122,7 +122,7 @@ const MainComponent = () => {
                         <React.Fragment key={index}>
                           {segment}
                           {index < filePath.length - 1 && (
-                            <ArrowForwardIosIcon style={{ fontSize: "15px" }} />
+                            <ArrowForwardIosIcon style={{ fontSize: "15px" ,marginBottom:'3px'}} />
                           )}
                         </React.Fragment>
                       ))}
