@@ -6,7 +6,7 @@ import OverviewFlow from "../modules/dashboard/drag-drop/components/flow";
 import { useJobData } from "./JobDataContext";
 import axios from "../modules/services/axios";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-
+import SaveIcon from '@mui/icons-material/Save';
 const MainComponent = () => {
   const [isProjectStructureOpen, setIsProjectStructureOpen] = useState(false);
   const [isComponetToolOpen, setIsComponetToolOpen] = useState(false);
@@ -108,7 +108,7 @@ const MainComponent = () => {
 
   return (
     <>
-    <div style={{ backgroundColor: themes[currentThemeIndex].backgroundColor, color: themes[currentThemeIndex].textColor }}>
+    <div style={{ backgroundColor: themes[currentThemeIndex].backgroundColor, color: themes[currentThemeIndex].textColor, }}>
       <nav class="navbar navbar-expand-lg ">
         <div class="container-fluid">
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
