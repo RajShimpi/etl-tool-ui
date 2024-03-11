@@ -157,7 +157,7 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
                 data-bs-parent={"common-form-" + props.title}
               >
                 <div className="accordion-body text-muted">
-                  <div className="card-body">
+                  <div className="card-body ">
                     {props.type == "Delete" ? (
                       <p style={{ whiteSpace: "pre-wrap" }}>
                         Are you sure you want delete this folder undelaying

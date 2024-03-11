@@ -8,7 +8,7 @@ import SearchModal from "./search-modal";
 const FormCommon = (props) => {
 console.log(props);
   return (
-    <div > 
+    <div  className="from-body"> 
       {props.data &&
         props.data.map((pitem, pindex) => (
           <div key={`form-row${pindex}`} className="row">
