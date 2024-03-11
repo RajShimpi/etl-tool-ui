@@ -128,7 +128,7 @@ const MainComponent = () => {
                 )}
               </li>
             </ul>
-            <div style={{ position: 'fixed', marginLeft: '38%' }}>
+            <div style={{ marginRight: '35%' }}>
               <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                   <button className="btn mx-1 w-xs btn-primary" onClick={saveDataFunction} disabled={disabled}>Save</button>
