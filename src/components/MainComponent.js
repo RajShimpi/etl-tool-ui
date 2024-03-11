@@ -37,7 +37,6 @@ const MainComponent = () => {
     };
     axios.postWithCallback(`job/publish-job/`, job_id);
   };
-  
 
   const saveDataFunction = () => {
     if (savaDataRef.current && typeof savaDataRef.current.savaDataFunction === 'function') {
@@ -92,9 +91,9 @@ const MainComponent = () => {
     <>
       <div className="d-flex" >
         <div className="d-flex" style={{ height: "50%" }}>
-          <button className="btn btn-primary" onClick={saveDataFunction} disabled={disabled}>Save</button>
-          <button className="btn btn-secondary" onClick={OpenJobParam} disabled={disabled}>Job Params</button>
-          <button className="btn btn-primary" onClick={publish} disabled={disabled}>Publish</button>
+          <button className="btn mx-1 w-xs btn-primary" onClick={saveDataFunction} disabled={disabled}>Save</button>
+          <button className="btn mx-1 w-xs btn-secondary" onClick={OpenJobParam} disabled={disabled}>Job Params</button>
+          <button className="btn mx-1 w-xs  btn-success" onClick={publish} disabled={disabled}>Publish</button>
         </div>
         <div className="dropdown">
           <div className="dropbtn" onClick={handleDropdownToggle}>
@@ -103,7 +102,7 @@ const MainComponent = () => {
           {isDropdownOpen && (
             <div className="dropdown-content pcolr">
               {themes.map((theme, index) => (
-                <button className="btncolr" key={index} onClick={() => handleThemeChange(index)} style={{ backgroundColor: theme.backgroundColor, color: theme.textColor }} />
+                <button className="btncolr" key={index} onClick={() => handleThemeChange(index)} style={{ backgroundColor: theme.backgroundColor, color: theme.textColor}} />
               ))}
             </div>
           )}
