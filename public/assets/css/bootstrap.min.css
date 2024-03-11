@@ -4616,17 +4616,34 @@ left: 450px;
     flex: 1 1 auto;
     /* padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x); */
     color: var(--bs-card-color);
-  
+    /* min-height: 267px; */
+    max-height: 243px;
     overflow-y: scroll;
+    -ms-overflow-style: none;  
+    scrollbar-width: none;  /* Firefox */
+}
+
+.card-body ::-webkit-scrollbar{
+    display: none;
     -ms-overflow-style: none;
     scrollbar-width: none;
+    min-height: 173px;
+    max-height: 173px;
 }
 .cards-body {
     -webkit-box-flex: 1;
     -ms-flex: 1 1 auto;
     flex: 1 1 auto;
     /* padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x); */
+    color: var(--bs-card-color);
+    /* height:340px;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none; */
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /*Firefox*/
     color: var(--bs-card-color);   
+
 }
 
 .card-title {
@@ -4896,7 +4913,16 @@ left: 450px;
 .accordion-body {
     padding: var(--bs-accordion-body-padding-y) var(--bs-accordion-body-padding-x);
     margin-top: -25px;
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
 }
+
+.accordion-body::-webkit-scrollbar { 
+    display: none;   /* Safari and Chrome*/
+}
+
+
+
 .accordion-flush .accordion-collapse {
     border-width: 0
 }
@@ -5843,7 +5869,7 @@ left: 450px;
     background-clip: padding-box;
     border: var(--bs-modal-border-width) solid var(--bs-modal-border-color);
     border-radius: var(--bs-modal-border-radius);
-    outline: 0
+    outline: 0;
 }
 .modal-backdrop {
     --bs-backdrop-zindex: 1050;
@@ -13087,10 +13113,12 @@ button {
     border-top-width: 1px
 }
 .table>:not(:last-child)>:last-child>* {
-    border-bottom-color: var(--bs-border-color)
+    border-bottom-color: var(--bs-border-color);
+    background-color: #00649b;
 }
 .table-dark>:not(:last-child)>:last-child>* {
-    border-bottom-color: #43494e
+    border-bottom-color: #43494e;
+  
 }
 .table-nowrap td,
 .table-nowrap th {

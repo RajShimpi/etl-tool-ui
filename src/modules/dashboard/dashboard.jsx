@@ -58,7 +58,6 @@ const Dashboard = () => {
 
   useEffect(() => {
     const client = auth.getStorageData("client");
-
     if (clientId === null && client.client_id) {
       setClientId(client.client_id);
     }
@@ -191,7 +190,7 @@ const Dashboard = () => {
     }
   }, []);
   useEffect(() => {
-    axios.getWithCallback("metabase/json", (data) => setDashboardData(data));
+    // axios.getWithCallback("metabase/json", (data) => setDashboardData(data));
   }, []);
   // console.log(dashboardData);
 

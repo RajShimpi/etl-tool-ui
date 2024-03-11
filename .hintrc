@@ -8,7 +8,12 @@
       {
         "ignore": [
           "appearance",
-          "position: sticky"
+          "position: sticky",
+          "background-clip",
+          "print-color-adjust",
+          "-webkit-text-size-adjust",
+          "text-align: -webkit-match-parent",
+          "scrollbar-width"
         ]
       }
     ]

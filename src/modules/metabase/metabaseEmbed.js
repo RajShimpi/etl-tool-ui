@@ -7,7 +7,7 @@ const MetabaseComponent = () => {
   const {dashboadId} =useDashboardId([])
 
   useEffect(() => {
-    axios.getWithCallback(`metabase/data/${dashboadId}`, (data) => setIframeUrl(data)) 
+    // axios.getWithCallback(`metabase/data/${dashboadId}`, (data) => setIframeUrl(data)) 
   }, [dashboadId]);
  
   return (
