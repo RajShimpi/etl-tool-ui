@@ -9,9 +9,10 @@ import { AddUpdateDeleteFileAndFolder } from '../PopupComponent';
 import FolderIcon from '@mui/icons-material/Folder';
 import { TiPin } from "react-icons/ti";
 import { RiUnpinFill } from "react-icons/ri";
-import { useProjectid } from '../JobDataContext';
+import { useJobData, useProjectid } from '../JobDataContext';
 
 function ProjectStructure({ textColor, onFileClickCallback }) {
+
   const [isOpen, setIsOpen] = useState(false);
   const [projects, setProjects] = useState([]);
   const [contextMenuPosition, setContextMenuPosition] = useState(null);
@@ -21,6 +22,7 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
   const [fix, setFix] = useState(true);
   const { projectID } = useProjectid([])
   const containerRef = useRef(null);
+  const { setJobDataId } = useJobData();
 
   const handleDocumentClick = (event) => {
     event.stopPropagation();
@@ -38,7 +40,6 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
       }
     };
     window.addEventListener('keydown', close);
-
     document.addEventListener('click', handleDocumentClick);
     return () => {
       document.removeEventListener('click', handleDocumentClick);
@@ -48,21 +49,22 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
 
   const getProjects = () => {
     setProjects([]);
-    if(projectID){
-       axios.getWithCallback(`projects/${projectID}`, (dt) => {
-       // data.map((dt, inx) => {
-       let url = 'project-files/get-folder-hierarchy?projectId=' + dt.id;
-           axios.getWithCallback(url, (subdata) => {
-           var treeData = treefy(subdata);
-               dt.treeData = treeData;
-               dt.isRightClick = false;
-               dt.item = { file_name: dt.project_name, parent: null, parent_id: null, id: 0, project_id: dt.id }
-               // setData((prevData) => [...prevData, { prjId : dt.id, heirarchy: treeData}]);
-               setProjects((prevData) => [...prevData, dt])
-            });
-          // });
-          // setProjects(data);
-        });}
+    if (projectID) {
+      axios.getWithCallback(`projects/${projectID}`, (dt) => {
+        // data.map((dt, inx) => {
+        let url = 'project-files/get-folder-hierarchy?projectId=' + dt.id;
+        axios.getWithCallback(url, (subdata) => {
+          var treeData = treefy(subdata);
+          dt.treeData = treeData;
+          dt.isRightClick = false;
+          dt.item = { file_name: dt.project_name, parent: null, parent_id: null, id: 0, project_id: dt.id }
+          // setData((prevData) => [...prevData, { prjId : dt.id, heirarchy: treeData}]);
+          setProjects((prevData) => [...prevData, dt])
+        });
+        // });
+        // setProjects(data);
+      });
+    }
   };
 
   const toggleSidebar = () => {
@@ -93,7 +95,6 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
     return list.reduce((root, li) => {
       const arr = li.parent_id ? list[map[li.parent_id]].children : root;
       arr.push(li);
-
       return root;
     }, []);
   }
@@ -104,7 +105,6 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
     setType(type);
   }
 
-  // console.log("projects:,", projects);
   // const toggleFile = (projectIndex, file) => {
   //   const updatedProject = [...project];
   //   updatedProject[projectIndex].openFiles[file] = !updatedProject[projectIndex].openFiles[file];
@@ -161,7 +161,6 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
   const handleFileClick = (file_id) => {
 
     onFileClickCallback(file_id)
-    // console.log(file_id);
   };
   const [isPinned, setIsPinned] = useState(true);
 
@@ -181,19 +180,22 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
       setIsOpen(false);
     }
   };
-
+  
+  const onhandelFileId = () => {
+    setJobDataId();
+  };
   return (
     <div>
       <div className={`sidebar ${isOpen ? 'open' : ''}`} onMouseEnter={handleSidebarHover} onMouseLeave={handleSidebarLeave}>
         <div className='logo_details' style={{ textColor }}>
           {isOpen && (isPinned ? (
-              <abbr title='Pin' style={{cursor: 'pointer'}}>
-                   <RiUnpinFill size={22} className="pushPinIcon" onClick={() => { setIsPinned(!isPinned); setFix(!fix); }} />
-              </abbr>
+            <abbr title='Pin' style={{ cursor: 'pointer' }}>
+              <RiUnpinFill size={22} className="pushPinIcon" onClick={() => { setIsPinned(!isPinned); setFix(!fix); }} />
+            </abbr>
           ) : (
-              <abbr title='UnPin' style={{cursor: 'pointer'}}>
-                   <TiPin size={22} className="pushPinIcon" onClick={() => { setIsPinned(!isPinned); setFix(!fix); }} />
-              </abbr>
+            <abbr title='UnPin' style={{ cursor: 'pointer' }}>
+              <TiPin size={22} className="pushPinIcon" onClick={() => { setIsPinned(!isPinned); setFix(!fix); }} />
+            </abbr>
           ))}
           <div className='logo_name ms-2'>Project Structure</div>
           <DensityMediumIcon className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`} id='btn' onClick={() => { toggleSidebar(); setIsPinned(!isPinned); setFix(!fix); }} />
@@ -202,8 +204,9 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
           {projects.map((project, index) => (
             <div key={index} ref={containerRef} onClick={(e) => toggleNested(e, project.project_name)} onContextMenu={(e) => handleContextMenu(e, project.item)}>
               <li>
-                <div className='proicon'>
+                <div className='proicon' onClick={onhandelFileId}>
                   <FolderIcon fontSize='medium' />
+                  {/* <img src='/assets/images/open-folder.png' style={{height:"20px"}} /> */}
                   <div className='link_name' style={{ marginLeft: '5px' }}>
                     {project.project_name}
                   </div>
@@ -227,7 +230,7 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
                   </Modal>
                 }
                 <div style={{ display: !showNested[project.project_name] && "none" }}>
-                  <RecursiveFolder items={project.treeData} onRightCallback={onRightCallback} refreshData={getProjects} onFileClickCallback={handleFileClick}  isOpen={isOpen} setIsOpen={setIsOpen}/>
+                  <RecursiveFolder items={project.treeData} onRightCallback={onRightCallback} refreshData={getProjects} onFileClickCallback={handleFileClick} isOpen={isOpen} setIsOpen={setIsOpen} />
                   {/* <FolderDropdown
                       project={project}
                       projectId={project.id}

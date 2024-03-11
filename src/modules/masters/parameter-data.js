@@ -11,7 +11,7 @@ export const getParameterFields = (itemData) => {
             control: "input",
             isRequired: true,
             itemVal: itemData.values ? itemData.values["name"] : '',
-        },{
+        }, {
             type: "text",
             id: "inputParameterContext",
             label: "Context",
@@ -19,7 +19,7 @@ export const getParameterFields = (itemData) => {
             control: "input",
             isRequired: true,
             itemVal: itemData.values ? itemData.values["context"] : '',
-        },{
+        }, {
             type: "text",
             id: "inputParameterDisplay_name",
             label: "Display Name",
@@ -27,7 +27,7 @@ export const getParameterFields = (itemData) => {
             control: "input",
             isRequired: true,
             itemVal: itemData.values ? itemData.values["display_name"] : '',
-        },{
+        }, {
             type: "text",
             id: "inputParameterDescription",
             label: "Description",
@@ -36,7 +36,7 @@ export const getParameterFields = (itemData) => {
             isSubmit: itemData.isSubmit,
             isRequired: true,
             itemVal: itemData.values ? itemData.values["description"] : '',
-        },{
+        }, {
             type: "text",
             id: "inputParameterType",
             label: "Type",
@@ -45,7 +45,7 @@ export const getParameterFields = (itemData) => {
             isSubmit: itemData.isSubmit,
             isRequired: true,
             itemVal: itemData.values ? itemData.values["type"] : '',
-        },{
+        }, {
             type: "text",
             id: "inputParameterResource",
             label: "Resource",
@@ -54,16 +54,7 @@ export const getParameterFields = (itemData) => {
             isSubmit: itemData.isSubmit,
             isRequired: false,
             itemVal: itemData.values ? itemData.values["resource"] : '',
-        },{
-            id: "inputStepId",
-            label: "Step Name",
-            name: "step_id",
-            options: itemData.options[0],
-            control: "select",
-            isSubmit: itemData.isSubmit,
-            isRequired: false,
-            itemVal: itemData.values ? itemData.values["step_id"] : '',
-        },
+        }
         ]
     }];
 }

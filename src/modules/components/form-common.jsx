@@ -6,9 +6,9 @@ import SelectReact from "./select-react";
 import SearchModal from "./search-modal";
 
 const FormCommon = (props) => {
-
+// console.log(props.data);
   return (
-    <div  > 
+    <div > 
       {props.data &&
         props.data.map((pitem, pindex) => (
           <div key={`form-row${pindex}`} className="row">

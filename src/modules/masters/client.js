@@ -5,7 +5,7 @@ import { getClientFields } from './client-data';
 
 const Client = () => {
 
-    let defaultObj = { name: '', abbreviation: '', active: true, client_id:""}
+    let defaultObj = { name: '', abbreviation: '', active: true, client_id: "" }
 
     return (
         <>
@@ -14,6 +14,7 @@ const Client = () => {
                 columns={config.CLIENT}
                 insertApi="clients"
                 updateApi="clients/:id"
+                deleteApi="clients/:id"
                 getApi="clients"
                 title="Client"
                 defaultObj={defaultObj}

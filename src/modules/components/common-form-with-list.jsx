@@ -64,6 +64,7 @@ const CommonFormWithList = (props) => {
       case "finalParameterId":
       case "menuParentId":
       case "conclusionTypeId":
+      case "client_id":
         setData((prevState) => ({ ...prevState, [name]: parseInt(e.value) }));
         break;
       case "role":
@@ -378,6 +379,7 @@ const CommonFormWithList = (props) => {
                         options: !!props.options ? props.options : [],
                         data: !!props.data ? props.data : [],
                         message: props.message,
+                        isSuperAdmin: props.isSuperAdmin
                       })}
                     />
                   </div>
