@@ -25,7 +25,7 @@ const JobSchedule = () => {
         axios.getWithCallback(`job/client/${client_id}`, (data) => setJob(data.map(e => ({ value: e.id, label: e.name }))))
     }, []);
 
-    const defaultObj = { client_id:parseInt(client_id), project:'', job:'', name:'', description:'', scheduleCron:'', active:'' };
+    const defaultObj = { client_id:parseInt(client_id), project:'', job:'', name:'', description:'', scheduleCron:'', active:true };
     
     return (
         <>
