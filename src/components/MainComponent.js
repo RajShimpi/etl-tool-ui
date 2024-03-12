@@ -146,16 +146,15 @@ const MainComponent = () => {
             </div>
             <div>
               <ul class="navbar-nav me-auto mb-2 mb-lg-0" >
-                <li class="nav-item dropdown"  >
-                 <a  class="nav-link " href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style={{ color: 'black', backgroundColor:"transparent", borderRadius:"4px"}}>
+                <li class="nav-item  "  >
+                 <a  class="nav-link " href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style={{backgroundColor:"transparent", borderRadius:"4px"}}>
                   <img src="assets/images/work_up_protocol/colorpick.png" width={30}  alt=" of the image" />       
-                  </a>
-                 
-                  <ul class="dropdown-menu" style={{marginLeft:"-94px"  }} aria-labelledby="navbarDropdown">
+                  </a>                 
+                  <ul class="dropdown-menu" style={{marginLeft:"-94px",  }} aria-labelledby="navbarDropdown">
                     {themes.map((theme, index) => (
-                      <div className="">
+                     
                         <button className="btncolr " key={index} onClick={() => handleThemeChange(index)} style={{ backgroundColor: theme.backgroundColor, color: theme.textColor }} >
-                        </button><div></div></div>
+                        </button>
                     ))}
                   </ul>
                 </li>
