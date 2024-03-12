@@ -122,7 +122,7 @@ const MainComponent = () => {
                         <React.Fragment key={index}>
                           {segment}
                           {index < filePath.length - 1 && (
-                            <ArrowForwardIosIcon style={{ fontSize: "15px" }} />
+                            <ArrowForwardIosIcon style={{ fontSize: "15px" ,marginBottom:'3px'}} />
                           )}
                         </React.Fragment>
                       ))}
@@ -151,10 +151,10 @@ const MainComponent = () => {
                   <img src="assets/images/work_up_protocol/colorpick.png" width={30}  alt=" of the image" />       
                   </a>
                  
-                  <ul class="dropdown-menu" style={{marginLeft:"-94px", }} aria-labelledby="navbarDropdown">
+                  <ul class="dropdown-menu" style={{marginLeft:"-94px"  }} aria-labelledby="navbarDropdown">
                     {themes.map((theme, index) => (
-                      <div className="d-flex">
-                        <button className="btncolr d-flex" key={index} onClick={() => handleThemeChange(index)} style={{ backgroundColor: theme.backgroundColor, color: theme.textColor }} >
+                      <div className="">
+                        <button className="btncolr " key={index} onClick={() => handleThemeChange(index)} style={{ backgroundColor: theme.backgroundColor, color: theme.textColor }} >
                         </button><div></div></div>
                     ))}
                   </ul>

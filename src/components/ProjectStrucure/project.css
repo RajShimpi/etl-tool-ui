@@ -22,7 +22,8 @@
   }
 
   .sidebar.open {
-  width: 250px;
+  width: 100%;
+  min-width: 250px;
   }
 
   .sidebar .logo_details {

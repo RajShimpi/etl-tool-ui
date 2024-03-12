@@ -33,7 +33,7 @@ const Modal = (props) => {
         outline: 0,
         height:'100%',
         color:'#00659e',
-        marginTop: '92px',
+        marginTop: '90px',
         // left: '114px',
       };
       

@@ -700,7 +700,6 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
 
   const onNodeDoubleClick = () => {
     setShowNodeMaster(true);
-    console.log("daa");
   };
 
   const handleCloseNodeMaster = (obj) => {
@@ -723,7 +722,6 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
 
   const handleCloseJobParams = () => {
     setOpenJobParams(false);
-   
   };
 
   const handleClickOutside = (event) => {
@@ -745,7 +743,6 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
 
   const handleNodeClick = (event, node) => {
     onNodeDoubleClick();
-    console.log(node);
     node_Id(node);
   };
 
@@ -886,7 +883,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
                 handleClose={handleCloseNodeMaster}
                 name={editName}
                 nodes={nodeActives}
-              // setNodeNames={setNodeName}
+                // setNodeNames={setNodeName}
               />
             </Modal>
           </div>

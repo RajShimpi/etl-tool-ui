@@ -6,7 +6,7 @@ import SelectReact from "./select-react";
 import SearchModal from "./search-modal";
 
 const FormCommon = (props) => {
-console.log(props);
+
   return (
     <div  className="from-body"> 
       {props.data &&
