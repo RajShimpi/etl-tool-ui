@@ -328,6 +328,8 @@ const JobStepParameterMaster = ({
       );
       var dt = prepareOtherParams();
       var dt1 = prepareData();
+      console.log("dt:",dt,"dt1",dt1);
+      if ((dt === null || dt === undefined) && (dt1 === null || dt1 === undefined)){    
       axios.postWithCallback(
         "job-step-parameters",
         _.concat(dt1, dt),
@@ -336,7 +338,7 @@ const JobStepParameterMaster = ({
           handleClose();
         }
       );
-
+    }
     }
   };
 
@@ -395,7 +397,7 @@ const JobStepParameterMaster = ({
                       </button>
                     </div>
                   )}
-                  <div style={{maxHeight:"190px" ,overflowY:"scroll" , scrollbarWidth: "thin", scrollbarColor: "transparent transparent" }}>
+                  <div style={{maxHeight:"190px" ,overflowY:"scroll" , scrollbarWidth: "thin" }}>
                     {!!nameValue?.length && (
                       <table className="table table-striped table-bordered dt-responsive">
                         <thead
