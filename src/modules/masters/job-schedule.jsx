@@ -26,7 +26,7 @@ const JobSchedule = () => {
     }, []);
 
     const defaultObj = { client_id:parseInt(client_id), project:'', job:'', name:'', description:'', scheduleCron:'', active:'' };
-
+    
     return (
         <>
             <CommonFormWithList
