@@ -4611,11 +4611,13 @@ left: 450px;
     border-top: 0
 }
 
-.from-body{
+.from-body {
     max-height: 243px;
-    overflow-y: scroll;
-    -ms-overflow-style: none;  
-    scrollbar-width: none;  /* Firefox */
+    min-height: 243px;
+    overflow: scroll;
+    padding: 7px;
+    overflow-x: hidden;
+    scrollbar-width: thin;
 }
 
 .card-body {
@@ -4626,24 +4628,14 @@ left: 450px;
     color: var(--bs-card-color);
 }
 
-.from-body ::-webkit-scrollbar{
-    display: none;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-    /* min-height: 173px;
-    max-height: 1730px; */
-}
+
 .cards-body {
     -webkit-box-flex: 1;
     -ms-flex: 1 1 auto;
     flex: 1 1 auto;
     /* padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x); */
     color: var(--bs-card-color);
-    /* height:340px;
-    overflow-y: scroll;
-    -ms-overflow-style: none;
-    scrollbar-width: none; */
-    
+   
 
 }
 
@@ -4915,11 +4907,11 @@ left: 450px;
     padding: var(--bs-accordion-body-padding-y) var(--bs-accordion-body-padding-x);
     margin-top: -25px;
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
-    scrollbar-width: none;  /* Firefox */
+     /* Firefox */
 }
 
 .accordion-body::-webkit-scrollbar { 
-    display: none;   /* Safari and Chrome*/
+   /* Safari and Chrome*/
 }
 
 
@@ -5326,9 +5318,9 @@ left: 450px;
     color: var(--bs-list-group-action-active-color);
     background-color: var(--bs-list-group-action-active-bg)
 }
-.card-body ::-webkit-scrollbar{
+/* .card-body ::-webkit-scrollbar{
     display: none;
-}
+} */
 .list-group-item {
     position: relative;
     display: block;
