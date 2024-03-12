@@ -153,9 +153,8 @@ const MainComponent = () => {
                  
                   <ul class="dropdown-menu" style={{marginLeft:"-94px"  }} aria-labelledby="navbarDropdown">
                     {themes.map((theme, index) => (
-                      <div className="">
-                        <button className="btncolr " key={index} onClick={() => handleThemeChange(index)} style={{ backgroundColor: theme.backgroundColor, color: theme.textColor }} >
-                        </button><div></div></div>
+                        <button className="btncolr" key={index} onClick={() => handleThemeChange(index)} style={{ backgroundColor: theme.backgroundColor, color: theme.textColor }} >
+                        </button>
                     ))}
                   </ul>
                 </li>

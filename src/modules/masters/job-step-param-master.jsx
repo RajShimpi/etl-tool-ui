@@ -300,47 +300,40 @@ const JobStepParameterMaster = ({
     item[e.target.name] = e.target.value;
     setNameValue((prevData) => [...prevData]);
   };
+  
 
   const onsubmit = (e) => {
     e.preventDefault();
+    
     if (!e.target.checkValidity()) {
-      e.stopPropagation();
-      e.target.classList.add("was-validated");
-      //props.validationCallback(true);
+        e.stopPropagation();
+        e.target.classList.add("was-validated");
+        //props.validationCallback(true);
     } else {
-      const step = nodeName.filter((item) => parseInt(item.id) !== node_id);
-      const isStepNameUnique = step.every(
-        (node) => node.step_name !== data.step_name
-      );
-
-      if (!isStepNameUnique) {
-        return alert("Step name must be unique.");
-      }
-
-      axios.putWithCallback(
-        `job-steps/${node_id}/name-save`,
-        { step_name: data.step_name },
-        (data) => {
-          setNodeNames(data);
-          handleClose(data.step_name);
-          setUpdate(false);
-        },
-      );
-      var dt = prepareOtherParams();
-      var dt1 = prepareData();
-      console.log("dt:",dt,"dt1",dt1);
-      if ((dt === null || dt === undefined) && (dt1 === null || dt1 === undefined)){    
-      axios.postWithCallback(
-        "job-step-parameters",
-        _.concat(dt1, dt),
-        (data) => {
-          setUpdate(false);
-          handleClose();
+        const step = nodeName.filter((item) => parseInt(item.id) !== node_id);
+        const isStepNameUnique = step.every((node) => node.step_name !== data.step_name);
+  
+        if (!isStepNameUnique) {
+            return alert("Step name must be unique.");
         }
-      );
+  
+        axios.putWithCallback(`job-steps/${node_id}/name-save`, { step_name: data.step_name }, (data) => {
+            handleClose(data); 
+            setNodeNames(data);
+            setUpdate(false); 
+        });
+  
+        var dt = prepareOtherParams();
+        var dt1 = prepareData();
+        if ((dt !== null && dt.length > 0) || (dt1 !== null && dt1.length > 0)) { // Check if either dt or dt1 is not empty
+            axios.postWithCallback("job-step-parameters", _.concat(dt1, dt), (data) => {
+                handleClose();
+            });
+        }
     }
-    }
-  };
+};
+
+     
 
   return (
     <div className="row" style={{ height: "300px" }}>
