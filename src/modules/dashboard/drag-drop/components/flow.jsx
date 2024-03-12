@@ -705,14 +705,15 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   const handleCloseNodeMaster = (obj) => {
     setShowNodeMaster(false);
     setMenu(null);
+    console.log(obj);
     if (obj) {
       setNodes((nds) =>
         nds.map((node) => {
-          if (node.id == obj.id) {
-            node.data = {
-              ...node.data,
-              heading: obj.step_name,
-            };
+          if (node.id == obj.id) {          
+          node.data = {
+            ...node.data,
+            heading: obj.step_name,
+             }
           }
           return node;
         })

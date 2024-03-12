@@ -153,7 +153,7 @@ const MainComponent = () => {
                   <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                     {themes.map((theme, index) => (
                       <div className="d-flex">
-                        <button className="btncolr d-flex" key={index} onClick={() => handleThemeChange(index)} style={{ backgroundColor: theme.backgroundColor, color: theme.textColor }} >
+                        <button className="btncolr " key={index} onClick={() => handleThemeChange(index)} style={{ backgroundColor: theme.backgroundColor, color: theme.textColor }} >
                         </button><div></div></div>
                     ))}
                   </ul>

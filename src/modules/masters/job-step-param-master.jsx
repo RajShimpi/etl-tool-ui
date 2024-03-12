@@ -308,8 +308,6 @@ const JobStepParameterMaster = ({
       e.target.classList.add("was-validated");
       //props.validationCallback(true);
     } else {
-      // Ensure data is not null before accessing properties
-
       const step = nodeName.filter((item) => parseInt(item.id) !== node_id);
       const isStepNameUnique = step.every(
         (node) => node.step_name !== data.step_name
@@ -324,9 +322,9 @@ const JobStepParameterMaster = ({
         { step_name: data.step_name },
         (data) => {
           setNodeNames(data);
+          handleClose(data.step_name);
           setUpdate(false);
-          handleClose(data);
-        }
+        },
       );
       var dt = prepareOtherParams();
       var dt1 = prepareData();
