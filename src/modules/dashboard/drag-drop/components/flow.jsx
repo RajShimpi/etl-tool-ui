@@ -31,7 +31,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import JobStepParameterMaster from "../../../masters/job-step-param-master";
 import JobParameterMaster from "../../../masters/job-parameter";
 import { alertInfo, confirmAlert } from "../../../components/config/alert";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+
 const nodeTypes = {
   node: (node) => {
     return (
@@ -196,11 +196,8 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   const { setJobDataId } = useJobData(null);
   const { projectID } = useProjectid([]);
   const [startStep, setStartStep] = useState(null);
-  const [nodeName, setNodeName] = useState([]);
   const [shouldCallSave, setShouldCallSave] = useState(false);
   const [newEdges, setNewEdges] = useState([]);
-  const [jobFileName, setJobFileName] = useState([]);
-  const [filePath, setFilePath] = useState([]);
 
   const savaDataFunction = () => {
     if (jobFolder !== "Folder") {
@@ -287,6 +284,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
         return node;
       })
     );
+
     axios.putWithCallback(`job/${jobfileid.id}/startstep`, {
       start_step: startStep,
     });
@@ -296,6 +294,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
     const startstep = {
       start_step: null,
     };
+
     setNodes((nds) =>
       nds.map((node) => {
         if (node.id == menu.id) {
@@ -307,6 +306,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
         return node;
       })
     );
+
     axios.putWithCallback(`job/${jobfileid.id}/startstep`, startstep);
   }, [menu, setMenu, jobfileid, startStep, setStartStep, nodes]);
 
@@ -320,8 +320,6 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       setMenu(null);
       setNewEdges([]);
       setShouldCallSave(false);
-      setJobFileName([]);
-      setFilePath([]);
     }
   }, [projectID, jobDataId, setStartStep, setMenu]);
 
@@ -364,6 +362,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
         },
         data: { heading: name, img: img, start_step: null },
       };
+
       axios.postWithCallback("job-steps/", newNode, (data) => {
         setNodes((prevNodes) => [
           ...prevNodes,
@@ -377,8 +376,10 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
             },
           },
         ]);
+
         setData((prevData) => [...prevData, data]);
         setSelectedNode(data.a || name);
+
         setAllNodes((prevNodes) => [
           ...prevNodes,
           {
@@ -406,23 +407,8 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
 
   useEffect(() => {
     if (jobDataId) {
-      axios.getWithCallback(`project-files/${jobDataId.Projects_Files.id}/path`, (data) => {
-        const pathSegments = data.split('/');
-        pathSegments.splice(0, 2);
-        const lastSegmentIndex = pathSegments.length - 1;
-        const lastSegment = pathSegments[lastSegmentIndex].replace('.json', '');
-        pathSegments[lastSegmentIndex] = lastSegment;
-        const filepath = pathSegments.map((segment, index) => (
-          <React.Fragment key={index}>
-            {segment}
-            {index < lastSegmentIndex && <ArrowForwardIosIcon style={{ fontSize: "15px" }} />}
-          </React.Fragment>
-        ));
-        setFilePath(filepath);
-      });
       axios.getWithCallback(`job-steps/${jobDataId.id}/job`, (data) => {
         setJobFileId(jobDataId);
-        setJobFileName(jobDataId.name);
         const dataNodes = data.map((item) => ({
           id: "" + item.id,
           step_type_id: "" + item.step_type_id,
@@ -491,13 +477,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
     unselectStartStep,
     setAsStartStepHandler,
   ]);
-  // useEffect(() => {
-  //   if (filePath) {
-  //     axios.getWithCallback(`project-files/${filePath}/path`, (data) =>
-  //       setFilePaths(data)
-  //     );
-  //   }
-  // }, []);
+
   const saveNodeToDatabase = () => {
     const dataFromNodes = allNodes.map((item) => ({
       id: parseInt(item.id),
@@ -725,14 +705,15 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   const handleCloseNodeMaster = (obj) => {
     setShowNodeMaster(false);
     setMenu(null);
+    console.log(obj);
     if (obj) {
       setNodes((nds) =>
         nds.map((node) => {
-          if (node.id == obj.id) {
-            node.data = {
-              ...node.data,
-              heading: obj.step_name,
-            };
+          if (node.id == obj.id) {          
+          node.data = {
+            ...node.data,
+            heading: obj.step_name,
+             }
           }
           return node;
         })
@@ -828,18 +809,11 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       setJobDataId(null);
       setNodes([]);
       setEdges([]);
-      setJobFileName([]);
-      setFilePath([]);
     }
-  }, [jobFolder, setNodes, setEdges, jobFileName, setJobDataId]);
+  }, [jobFolder, setNodes, setEdges, setJobDataId]);
 
   return (
     <>
-      {jobFileName && (
-        <>
-          <div className="filePath">{filePath}</div>
-        </>
-      )}
       <Modal
         modalTitle={"Save/Update Parameter"}
         ref={modalRef}

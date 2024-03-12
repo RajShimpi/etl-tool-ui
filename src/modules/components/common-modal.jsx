@@ -366,7 +366,7 @@ const CommonModel = (props) => {
                 data-bs-parent={"common-form-" + props.title}
               >
                 <div className="accordion-body text-muted">
-                  <div className="card-body">
+                  <div className="card-body ">
                     <FormCommon
                       data={formDataAction({
                         isSubmit,

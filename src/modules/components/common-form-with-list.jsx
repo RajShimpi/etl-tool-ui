@@ -338,6 +338,7 @@ const CommonFormWithList = (props) => {
       }
     }
   };
+
   return (
     <div className="row">
       <div className="col-xl-12">
@@ -369,7 +370,7 @@ const CommonFormWithList = (props) => {
                 data-bs-parent={"common-form-" + props.title}
               >
                 <div className="accordion-body text-muted">
-                  <div className="card-body">
+                  <div className="card-body ">
                     <FormCommon
                       data={formDataAction({
                         isSubmit,

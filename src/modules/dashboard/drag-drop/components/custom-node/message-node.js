@@ -7,6 +7,7 @@ const Node = ({ data, id, start_step, startStep, item, isSelected, textRef, node
   const [showNodeMaster, setShowNodeMaster] = useState(false);
   const nodeRef = useRef();
   const [refresh, setRefresh] = useState(false);
+  
   const handleToggle = () => {
     setSelected(!selected);
   };
