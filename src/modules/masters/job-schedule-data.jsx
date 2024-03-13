@@ -6,23 +6,23 @@ export const getJobScheduleFields = (itemData) => {
       disabled: itemData.disabled,
       groups: [
         {
-          id: "inputproject_id",
+          id: "inputproject",
           label: "Project",
           name: "project",
           control: "select",
           options: itemData.options[0],
           isRequired: true,
-          itemVal: itemData.values ? itemData.values["project_id"] : "",
+          itemVal: itemData.values ? itemData.values["project"] : "",
         },
         {
           type: "text",
-          id: "inputjob_id",
+          id: "inputjob",
           label: "Job",
           name: "job",
           control: "select",
           options: itemData.options[1],
           isRequired: true,
-          itemVal: itemData.values ? itemData.values["job_id"] : "",
+          itemVal: itemData.values ? itemData.values["job"] : "",
         },
         {
           id: "inputname",
@@ -61,4 +61,3 @@ export const getJobScheduleFields = (itemData) => {
     },
   ];
 };
-  

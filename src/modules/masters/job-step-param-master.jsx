@@ -320,13 +320,14 @@ const JobStepParameterMaster = ({
         axios.putWithCallback(`job-steps/${node_id}/name-save`, { step_name: data.step_name }, (data) => {
             handleClose(data); 
             setNodeNames(data);
-            setUpdate(false); 
+            // setUpdate(true); 
         });
   
         var dt = prepareOtherParams();
         var dt1 = prepareData();
         if ((dt !== null && dt.length > 0) || (dt1 !== null && dt1.length > 0)) { // Check if either dt or dt1 is not empty
             axios.postWithCallback("job-step-parameters", _.concat(dt1, dt), (data) => {
+              setUpdate(true);
                 handleClose();
             });
         }

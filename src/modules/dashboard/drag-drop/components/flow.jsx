@@ -823,7 +823,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
         <JobParameterMaster
           handleClose={handleCloseJobParams}
           project_id={projectID}
-          job={jobfileid}
+          job={jobfileid?jobfileid.id:''}
         />
       </Modal>
       <div className="dndflow">
