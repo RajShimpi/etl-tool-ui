@@ -68,7 +68,7 @@ const JobStepParameterMaster = ({
               if (resource && resource != "NA") {
                 try {
                   const replacements = {}
-                  replacements['${job_id}'] = job_id
+                  replacements[`${job_id}`] = job_id
                   resource = resource.replace(/\$\{\w+\}/g, function (all) {
                     return replacements[all] || all;
                   });
@@ -336,7 +336,6 @@ const JobStepParameterMaster = ({
           handleClose();
         }
       );
-
     }
   };
 
