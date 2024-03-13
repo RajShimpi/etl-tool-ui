@@ -19,10 +19,7 @@ const JobParameterMaster = ({ job, project_id, handleClose }) => {
   // useEffect(() => {
   //   setData((prevData) => ({ ...prevData,  }));
   // }, [name]);
-
-  console.log("job:",job);
-  console.log("jobid:",jobid);
-  console.log("project_id:",project_id);
+  
   useEffect(() => {
     if (jobid != job) {
       setData([])
