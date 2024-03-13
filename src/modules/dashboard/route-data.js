@@ -124,7 +124,7 @@ export const routeData = (routes) => [
     childComp: MainComponent,
     data: {},
     permissions: true,
-    isUserCanView: routes.includes(routeConstant.maincomponent),
+    isUserCanView: true,
   },
   {
     routeTo: routeConstant.client, // Client Form route

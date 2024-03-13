@@ -52,7 +52,7 @@ const ContextMenu = ({ item, popType, project_id, parent_id,id, onClose, callbac
         <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", }}>
           <InsertDriveFileIcon style={{ fontSize: "medium", marginRight: "5px", marginTop: "3px" }} />
           Add File
-        </div>
+        </div>  
       </div>
       {!hideDeleteUpdate && <>
       <div className="menu-item" onClick={(e) => openPopup(e,"Edit", { top: e.clientY, left: e.clientX + 10 }, project_id, parent_id)}>

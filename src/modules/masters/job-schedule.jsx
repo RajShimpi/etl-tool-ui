@@ -11,22 +11,22 @@ const JobSchedule = () => {
     const [project, setProject] = useState([]);
     const [job, setJob] = useState([]);
 
-    const client= auth.getStorageData("client");
+    const client_id= auth.getStorageData("client_id");
     
     useEffect(() => {
         axios.getWithCallback('job-schedule/', (data) => setJobschedule(data.map(x => { return { value: x.id, label: x.name } })))
     }, []);
 
     useEffect(() => {
-        axios.getWithCallback(`projects/client/${client.id}`, (data) => setProject(data.map(z => ({ value: z.id, label: z.project_name }))))
+        axios.getWithCallback(`projects/client/${client_id}`, (data) => setProject(data.map(z => ({ value: z.id, label: z.project_name }))))
     }, []);
 
     useEffect(() => {
-        axios.getWithCallback(`job/client/${client.id}`, (data) => setJob(data.map(e => ({ value: e.id, label: e.name }))))
+        axios.getWithCallback(`job/client/${client_id}`, (data) => setJob(data.map(e => ({ value: e.id, label: e.name }))))
     }, []);
 
-    const defaultObj = { client:parseInt(client.id), project:'', job:'', name:'', description:'', scheduleCron:'', active:'' };
-
+    const defaultObj = { client_id:parseInt(client_id), project:'', job:'', name:'', description:'', scheduleCron:'', active:true };
+    
     
 
     return (
@@ -36,7 +36,7 @@ const JobSchedule = () => {
                 columns={config.Job_Schedule}
                 insertApi="job-schedule"
                 updateApi="job-schedule/:id"
-                getApi={`job-schedule/client/${client.id}`}
+                getApi={`job-schedule/client/${client_id}`}
                 title="Job Schedule"
                 defaultObj={defaultObj}
                 options={[project, job, jobschedule]}

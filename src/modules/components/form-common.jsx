@@ -6,9 +6,9 @@ import SelectReact from "./select-react";
 import SearchModal from "./search-modal";
 
 const FormCommon = (props) => {
-// console.log(props.data);
+
   return (
-    <div > 
+    <div  className="from-body"> 
       {props.data &&
         props.data.map((pitem, pindex) => (
           <div key={`form-row${pindex}`} className="row">
@@ -55,7 +55,7 @@ const FormCommon = (props) => {
                       isSubmit={item.isSubmit}
                       isRequired={item.isRequired}
                       disabled={item.update || pitem.disabled || item.disabled}
-                      itemVal={item.itemVal}
+                      itemVal={item.itemVal||1}
                     />
                   )}
 

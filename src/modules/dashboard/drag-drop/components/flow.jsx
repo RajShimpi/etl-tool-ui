@@ -196,7 +196,6 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   const { setJobDataId } = useJobData(null);
   const { projectID } = useProjectid([]);
   const [startStep, setStartStep] = useState(null);
-  const [nodeName, setNodeName] = useState([]);
   const [shouldCallSave, setShouldCallSave] = useState(false);
   const [newEdges, setNewEdges] = useState([]);
 
@@ -224,12 +223,12 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   const prevJobDataIdRef = useRef(jobDataId);
 
   useEffect(() => {
-    
     const prevJobDataId = prevJobDataIdRef.current;
     prevJobDataIdRef.current = jobDataId;
 
     if (shouldCallSave && jobfileid != null && jobDataId !== prevJobDataId) {
-      confirmAlert("Do you want to save data into the database?",
+      confirmAlert(
+        "Do You Want To Save Flow?",
         () => {
           if (isAllNodeisConnected(nodes, edges)) {
             saveNodeToDatabase();
@@ -238,7 +237,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
           }
         },
         () => {
-          alertInfo("Data not saved in the database");
+          alertInfo("Flow not saved");
         }
       );
     }
@@ -254,16 +253,60 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   }));
 
   const setAsStartStepHandler = useCallback(() => {
-    const startstep = {
-      start_step: parseInt(menu.id),
-    };
-    axios.putWithCallback(`job/${jobfileid.id}/startstep`, startstep);
-  }, [menu, setMenu, jobfileid, startStep, setStartStep, nodes]);
+    const startStep = parseInt(menu.id);
+
+    setNodes((nodes) =>
+      nodes.map((node) => {
+        if (node.data.start_step !== null) {
+          return {
+            ...node,
+            data: {
+              ...node.data,
+              start_step: null,
+            },
+          };
+        }
+        return node;
+      })
+    );
+
+    setNodes((nodes) =>
+      nodes.map((node) => {
+        if (node.id === menu.id) {
+          return {
+            ...node,
+            data: {
+              ...node.data,
+              start_step: startStep,
+            },
+          };
+        }
+        return node;
+      })
+    );
+
+    axios.putWithCallback(`job/${jobfileid.id}/startstep`, {
+      start_step: startStep,
+    });
+  }, [menu, jobfileid, setNodes]);
 
   const unselectStartStep = useCallback(() => {
     const startstep = {
       start_step: null,
     };
+
+    setNodes((nds) =>
+      nds.map((node) => {
+        if (node.id == menu.id) {
+          node.data = {
+            ...node.data,
+            start_step: startstep.start_step,
+          };
+        }
+        return node;
+      })
+    );
+
     axios.putWithCallback(`job/${jobfileid.id}/startstep`, startstep);
   }, [menu, setMenu, jobfileid, startStep, setStartStep, nodes]);
 
@@ -319,6 +362,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
         },
         data: { heading: name, img: img, start_step: null },
       };
+
       axios.postWithCallback("job-steps/", newNode, (data) => {
         setNodes((prevNodes) => [
           ...prevNodes,
@@ -332,8 +376,10 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
             },
           },
         ]);
+
         setData((prevData) => [...prevData, data]);
         setSelectedNode(data.a || name);
+
         setAllNodes((prevNodes) => [
           ...prevNodes,
           {
@@ -348,7 +394,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
         ]);
       });
     } else {
-      alertInfo("You need to selsect the file or create the new file");
+      alertInfo("You Need To Select The File Or Create The New File");
     }
   };
 
@@ -361,7 +407,6 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
 
   useEffect(() => {
     if (jobDataId) {
-      // setShouldCallSave(true);
       axios.getWithCallback(`job-steps/${jobDataId.id}/job`, (data) => {
         setJobFileId(jobDataId);
         const dataNodes = data.map((item) => ({
@@ -457,10 +502,11 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       )
       .map((item) => ({
         id: parseInt(item.source),
-        ok_step:
-          item.id === nodesActive.id
-            ? nodesActive.ok_step
-            : parseInt(item.target),
+        ok_step: nodesActive.some(
+          (node) => parseInt(item.target) === parseInt(node.id)
+        )
+          ? null
+          : parseInt(item.target),
       }));
 
     const dataFromEdgesError = edges
@@ -472,10 +518,11 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       )
       .map((item) => ({
         id: parseInt(item.source),
-        error_step:
-          item.id === nodesActive.id
-            ? nodesActive.error_step
-            : parseInt(item.target),
+        error_step: nodesActive.some(
+          (node) => parseInt(item.target) === parseInt(node.id)
+        )
+          ? null
+          : parseInt(item.target),
       }));
 
     const updatedEdgesOk = edges.filter(
@@ -595,7 +642,6 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
         },
       };
 
-      // setNewEdges(newEdge)
       setEdges((eds) => addEdge(newEdge, eds));
     },
     [setEdges]
@@ -659,6 +705,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   const handleCloseNodeMaster = (obj) => {
     setShowNodeMaster(false);
     setMenu(null);
+    console.log(obj);
     if (obj) {
       setNodes((nds) =>
         nds.map((node) => {
@@ -748,11 +795,9 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
     }
   }, [menu, setNodes, setEdges]);
 
-  const edgeupdate =
-    edges !== null ? edges.filter((item) => item.target !== "null") : null;
   const nodeActives =
     nodes !== null ? nodes.filter((item) => item.node_active === true) : null;
-  
+
   useEffect(() => {
     if (jobDataId !== null) {
       setJobFolder(null);
@@ -839,7 +884,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
                 handleClose={handleCloseNodeMaster}
                 name={editName}
                 nodes={nodeActives}
-                setNodeNames={setNodeName}
+                // setNodeNames={setNodeName}
               />
             </Modal>
           </div>
