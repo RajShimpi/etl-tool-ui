@@ -27,6 +27,8 @@ const JobSchedule = () => {
 
     const defaultObj = { client:parseInt(client.id), project:'', job:'', name:'', description:'', scheduleCron:'', active:'' };
 
+    
+
     return (
         <>
             <CommonFormWithList
@@ -39,6 +41,9 @@ const JobSchedule = () => {
                 defaultObj={defaultObj}
                 options={[project, job, jobschedule]}
                 tableTitle='Job Schedule'
+                otherParamsData={[]}
+                otherParamColumns={[{ name: 'key', displayName: 'Key', dbPropName: 'parameter_name'}, { name:'value', displayName: 'Value', dbPropName: 'value' }]}
+                
             />
         </>
     );

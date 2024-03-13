@@ -8,6 +8,7 @@ import axios from "../services/axios";
 import configContext from "../dashboard/config-context";
 import { errorAlert } from "./config/alert";
 import utils from "./utils";
+import CommonTable from "./common-table";
 const CommonFormWithList = (props) => {
   const contextData = useContext(configContext);
   const [update, setUpdate] = useState(false);
@@ -19,6 +20,7 @@ const CommonFormWithList = (props) => {
     columns: [],
     filterColumnName: [],
   });
+  const [otherData, setOtherData] = useState([]);
   const filterExcludes = [
     "createdbyName",
     "createdDate",
@@ -235,12 +237,27 @@ const CommonFormWithList = (props) => {
   const editCallBack = (item) => {
     setUpdate(true);
     if (props.getById) {
-      axios.getWithCallback(props.getById.replace(":id", item.id), (data) =>
+      axios.getWithCallback(props.getById.replace(":id", item.id), (data) => {
         setData(data)
+        setOtherData(processTableParams(data));        
+      }
       );
     } else {
       setData(item);
+      setOtherData(processTableParams(item));
     }
+  };
+
+  const processTableParams = (data) => {
+      let obj;
+     return data.otherParams?.map((x, index) => {
+      props.otherParamColumns?.forEach(col => {
+      obj = { ...obj,  [col.name]: x[col.dbPropName] }
+      })
+      return {
+        ...x,
+        ...obj
+      }}  );   
   };
   const deleteImage = (e, item, index) => {
     let arr = [];
@@ -277,6 +294,22 @@ const CommonFormWithList = (props) => {
     }
     return false;
   };
+
+  const otherCallback = (data) => {
+   let sp = data.map(x => {
+      let obj;
+      props.otherParamColumns.forEach(col => {
+        obj = { ...obj,  [col.dbPropName]: x[col.name] }
+      })
+        return {
+          ...x,
+          ...obj
+        }
+    })
+    console.log(sp);
+     setOtherData(sp);
+  }
+
   const onsubmit = (e) => {
     if (update) {
       data.lastChangedBy = auth.getStorageData("id");
@@ -303,7 +336,7 @@ const CommonFormWithList = (props) => {
           : data;
         axios.putWithCallback(
           props.updateApi.replace(":id", postData.id),
-          postData,
+          { ...postData, otherParams: otherData },
           (resp) => {
             setUpdate(true);
             setUpdate(false);
@@ -319,7 +352,7 @@ const CommonFormWithList = (props) => {
       } else {
         axios.postWithCallback(
           props.insertApi,
-          data,
+          { ...data, otherParams: otherData },
           (resp) => {
             if (props.createDefaultObject) {
               props.createDefaultObject();
@@ -383,6 +416,7 @@ const CommonFormWithList = (props) => {
                       })}
                     />
                   </div>
+                  {props.otherParamColumns && <CommonTable data={props.otherParamsData} columns={props.otherParamColumns} callback={otherCallback} /> }
                   {props.fileObjKey && isFilePresent() && (
                     <table className="table table-striped table-bordered dt-responsive">
                       <thead

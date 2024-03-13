@@ -5,7 +5,7 @@ const CommonTable = ({ data, columns, callback }) => {
     const [nameValue, setNameValue] = useState([]);
 
     useEffect(() => {
-        console.log(data);
+        
         let so = data.map((item) => {
             let obj = {};
             columns.forEach(col => {
@@ -13,7 +13,7 @@ const CommonTable = ({ data, columns, callback }) => {
             });
             return {
               ...obj,
-              sequence: item.sequence
+              ...item
             }
            });
            setNameValue(so);
@@ -43,7 +43,7 @@ const CommonTable = ({ data, columns, callback }) => {
          obj = { ...obj,  [col.name]: x[`${col.name}_${x.sequence}`] }
         })
         return {
-          sequence: x.sequence,
+          ...x,
           ...obj
        }        
        }));
@@ -57,7 +57,7 @@ const CommonTable = ({ data, columns, callback }) => {
                         Additional Parameter
                     </button>
                   </div>
-    <table className="table table-striped table-bordered dt-responsive">
+    {!!nameValue?.length && <table className="table table-striped table-bordered dt-responsive">
     <thead
       style={{
         backgroundColor: "rgb(60, 141, 188)",
@@ -87,7 +87,7 @@ const CommonTable = ({ data, columns, callback }) => {
       </tr>
       ))}
     </tbody>
-  </table></>)
+  </table>}</>)
 }
 
 export default CommonTable;
