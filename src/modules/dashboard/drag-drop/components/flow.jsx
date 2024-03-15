@@ -250,7 +250,6 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
 
   const publish = () => {
     const nullEdges = publishEdges.filter((item) => item.target == "null");
-    console.log(nullEdges);
     if (nullEdges?.length === 0) {
       const job_id = {
         jobId: jobfileid.id,
@@ -737,12 +736,14 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
 
   const onEdgeUpdateStart = useCallback(() => {
     edgeUpdateSuccessful.current = false;
+    setShouldCallSave(true);
   }, []);
 
   const onEdgeUpdate = useCallback(
     (oldEdge, newConnection) => {
       edgeUpdateSuccessful.current = true;
       setEdges((els) => updateEdge(oldEdge, newConnection, els));
+      setShouldCallSave(true);
     },
     [edges, setEdges]
   );
@@ -751,6 +752,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
     (_, edge) => {
       if (!edgeUpdateSuccessful.current) {
         setEdges((eds) => eds.filter((e) => e.id !== edge.id));
+        setShouldCallSave(true);
       }
 
       edgeUpdateSuccessful.current = true;
