@@ -10,12 +10,12 @@ const onDragStart = (event, nodeType, img, name, id) => {
 };
 
 const Sidebar = ({ apiData }) => {
- 
+
   return (
     <div className="">
       <ul>
         {apiData.map(item => (
-          <div style={{ marginLeft: '-25px', display: 'flex' }} className="dndnode input m-10" onDragStart={(event) => onDragStart(event, "node", `/assets/images/${item.img}`, item.name, item.id)} draggable key={item.id}>
+          <div style={{ marginLeft: '-25px', display: 'flex' }} className="dndnode input m-10" onDragStart={(event) => onDragStart(event, item.type, `/assets/images/${item.img}`, item.name, item.id)} draggable key={item.id}>
             <div style={{ marginTop: "-2px", padding: "7px" }}>
               <img src={`/assets/images/${item.img}`} style={{ width: '20px', height: '20px' }} alt='node' /></div>
             <li>{item.name}</li>

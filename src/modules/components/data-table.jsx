@@ -323,7 +323,7 @@ const DataTable = (props) => {
             setSelectedRow(index);
         }
     }
-
+// console.log("props:",props);
     return (
         <div className="row">
             <div className="col-xl-12">

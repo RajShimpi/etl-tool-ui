@@ -7,7 +7,7 @@ const Node = ({ data, id, start_step, startStep, item, isSelected, textRef, node
   const [showNodeMaster, setShowNodeMaster] = useState(false);
   const nodeRef = useRef();
   const [refresh, setRefresh] = useState(false);
-  
+
   const handleToggle = () => {
     setSelected(!selected);
   };
@@ -41,7 +41,7 @@ const Node = ({ data, id, start_step, startStep, item, isSelected, textRef, node
 
   let customTitle = { ...style.title };
   customTitle.backgroundColor = "#08c9bd";
-
+  // console.log(data);
   return (
     <div ref={nodeRef}>
       <div style={{ textAlign: "center" }} className="text-updater-node" >
@@ -92,8 +92,25 @@ const Node = ({ data, id, start_step, startStep, item, isSelected, textRef, node
           </div>
         )}
 
-        <Handle type="source" style={{ marginTop: '-30px', marginLeft: '-40px', backgroundColor: "green", border: "green" }} position={Position.Right} id="ok" onDoubleClick={onNodeDoubleClick} />
-        <Handle type="source" style={{ backgroundColor: "red", border: "red" }} position={Position.Right} id="error" onDoubleClick={onNodeDoubleClick} />
+        {!data.type.toLowerCase().includes("end") && (
+          <>
+            <Handle
+              type="source"
+              style={{ marginTop: '-30px', marginLeft: '-40px', backgroundColor: "green", border: "green" }}
+              position={Position.Right}
+              id="ok"
+              onDoubleClick={onNodeDoubleClick}
+            />
+            <Handle
+              type="source"
+              style={{ backgroundColor: "red", border: "red" }}
+              position={Position.Right}
+              id="error"
+              onDoubleClick={onNodeDoubleClick}
+            />
+          </>
+        )}
+
         <Handle type="target" position={Position.Left} id="target" onDoubleClick={onNodeDoubleClick} />
       </div>
     </div>

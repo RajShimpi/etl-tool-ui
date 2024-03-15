@@ -149,7 +149,7 @@ export const routeData = (routes) => [
     childComp: ProjectFile,
     data: {},
     permissions: true,
-    isUserCanView:  routes.includes(routeConstant.projectfile),
+    isUserCanView:  true,
   },
   {
     routeTo: routeConstant.step, // StepType Form route

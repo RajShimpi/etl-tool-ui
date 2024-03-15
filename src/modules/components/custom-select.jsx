@@ -3,27 +3,26 @@ import "./component.css";
 import React, { useEffect, useState } from 'react';
 
 const CustomSelect = (props) => {
-
   const [value, setValue] = useState('');
-  const [valueAfterRender, setValueAfterRender] = useState(props.itemVal);
+  const [valueAfterRender, setValueAfterRender] = useState('');
   const setItem = (e) => {
-   
     const filterData = props.options?.find(ele => (ele?.value == e.target.value))
     let index = e.nativeEvent.target.selectedIndex;
     let label = e.nativeEvent.target[index].text;
     setValue({ label: e.target.name, value: e.target.value, params: filterData?.params ? filterData.params : null });
     callBackFunc({ text: label, label: e.target.name, value: e.target.value, params: filterData?.params ? filterData.params : null })
-
   }
-// console.log(props);
+
   const callBackFunc = (curValue) => {
     if (props.uniqueKey || props.uniqueKey === 0) {
       props.callback(curValue, props.name, props.uniqueKey);
     }
     else
-      props.callback(curValue, props.isGeneric? "select" : props.name, props.index);
+      props.callback(curValue, props.name, props.index);
 
   }
+
+  // console.log(props);
 
   useEffect(() => {
     let obj = props.options?.find(x => x.value === valueAfterRender);
@@ -47,7 +46,7 @@ const CustomSelect = (props) => {
     } else {
       setValue({ ...obj });
     }
-  }, [props.options])
+  }, [props.itemVal])
 
   //   const style = {
   //     borderColor: "#f46a6a",
@@ -73,12 +72,11 @@ const CustomSelect = (props) => {
   //     }
   //   })
   // }
- 
   return (
     <>
       {/* <div key={props.primaryKey + 'div'} style={{ width: '-webkit-fill-available' }}> */}
       <label className={` ${props.isSmall ? 'no-margin d-block' : 'has-float-label select-margin-bottom'}`}>
-        <select id={props.primaryKey} name={props.name} defaultValue={"0"} className={`form-control custom-select ${props.isSmall ? 'no-margin pad-half' : ''}`} value={value?.value} onChange={setItem} disabled={props.disabled} required={props.isRequired}>
+        <select id={props.primaryKey} name={props.name} defaultValue={"0"} className={`form-control custom-select ${props.isSmall ? 'no-margin pad-half' : ''}`} value={value?.value || "0"} onChange={setItem} disabled={props.disabled} required={props.isRequired}>
           <option value={""}>Select {props.label}</option>
           {props.options?.map((optionElement) => (
             <option key={"option-" + optionElement.value} value={optionElement.value}>{optionElement.label}</option>

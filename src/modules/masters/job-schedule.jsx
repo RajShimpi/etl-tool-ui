@@ -11,8 +11,8 @@ const JobSchedule = () => {
     const [project, setProject] = useState([]);
     const [job, setJob] = useState([]);
 
-    const client_id= auth.getStorageData("client_id");
-    
+    const client_id = auth.getStorageData("client_id");
+
     useEffect(() => {
         axios.getWithCallback('job-schedule/', (data) => setJobschedule(data.map(x => { return { value: x.id, label: x.name } })))
     }, []);
@@ -25,8 +25,8 @@ const JobSchedule = () => {
         axios.getWithCallback(`job/client/${client_id}`, (data) => setJob(data.map(e => ({ value: e.id, label: e.name }))))
     }, []);
 
-    const defaultObj = { client_id:parseInt(client_id), project:'', job:'', name:'', description:'', scheduleCron:'', active:true };
-    
+    const defaultObj = { client:parseInt(client_id),project_id:'',job_id:'',name:'',description:'',scheduleCron:'',active:'' };
+
     return (
         <>
             <CommonFormWithList
@@ -37,7 +37,7 @@ const JobSchedule = () => {
                 getApi={`job-schedule/client/${client_id}`}
                 title="Job Schedule"
                 defaultObj={defaultObj}
-                options={[project, job, jobschedule]}
+                options={[project,job,jobschedule]}
                 tableTitle='Job Schedule'
             />
         </>

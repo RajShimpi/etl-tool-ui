@@ -12,7 +12,7 @@ import ReactFlow, {
 import Node from "./custom-node/message-node";
 import { MarkerType } from "reactflow";
 
-// Utils
+// UtilsnullEdges
 import { isAllNodeisConnected } from "../utils";
 
 // Styles
@@ -175,6 +175,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [nodes, setNodes, onNodesChange] = useState([]);
   const [edges, setEdges, onEdgesChange] = useState([]);
+  const [publishEdges, setPublishEdges] = useState([]);
   const [menu, setMenu] = useState(null);
   const ref = useRef(null);
   const [selectedNode, setSelectedNode] = useState(null);
@@ -247,9 +248,23 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
     setOpenJobParams(true);
   };
 
+  const publish = () => {
+    const nullEdges = publishEdges.filter((item) => item.target == "null");
+    console.log(nullEdges);
+    if (nullEdges?.length === 0) {
+      const job_id = {
+        jobId: jobfileid.id,
+      };
+      axios.postWithCallback(`job/publish-job/`, job_id);
+    } else {
+      alertInfo("You need to connect all the Edges");
+    }
+  };
+
   React.useImperativeHandle(refs, () => ({
     savaDataFunction,
     OpenJobParam,
+    publish,
   }));
 
   const setAsStartStepHandler = useCallback(() => {
@@ -336,7 +351,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
     if (jobfileid) {
       event.preventDefault();
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
-      const type = event.dataTransfer.getData("application/reactflow");
+      const Nodetype = event.dataTransfer.getData("application/reactflow");
       const img = event.dataTransfer.getData("img");
       const name = event.dataTransfer.getData("name");
       const step_type_id = event.dataTransfer.getData("id");
@@ -349,7 +364,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       const newNode = {
         step_type_id,
         step_name: name,
-        type,
+        type: "node",
         job_id: parseInt(jobfileid.id),
         node_active: true,
         position: {
@@ -360,7 +375,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
           position_X: position.x,
           position_Y: position.y,
         },
-        data: { heading: name, img: img, start_step: null },
+        data: { heading: name, img: img, start_step: null, type: Nodetype },
       };
 
       axios.postWithCallback("job-steps/", newNode, (data) => {
@@ -369,6 +384,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
           {
             ...data,
             id: `${data.id}`,
+            // type: item.stepType.type,
             ...newNode,
             position: {
               x: position.x,
@@ -385,6 +401,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
           {
             ...data,
             id: `${data.id}`,
+            // type: item.stepType.type,
             ...newNode,
             position: {
               x: position.x,
@@ -409,17 +426,19 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
     if (jobDataId) {
       axios.getWithCallback(`job-steps/${jobDataId.id}/job`, (data) => {
         setJobFileId(jobDataId);
+
         const dataNodes = data.map((item) => ({
           id: "" + item.id,
           step_type_id: "" + item.step_type_id,
           job_id: "" + item.job_id,
-          type: "node",
+          type: item.type,
           data: {
             heading: item.step_name,
             img: `/assets/images/${item.stepType.img}`,
             start_step:
               jobDataId.start_step === item.id ? jobDataId.start_step : null,
             id: item.id,
+            type: item.stepType.type,
           },
           position: {
             x: item.params.position_X,
@@ -427,7 +446,13 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
           },
           node_active: item.node_active,
         }));
-        setNodes(dataNodes);
+
+        const activeNodes = dataNodes.filter(
+          (item) => item.node_active === true
+        );
+
+        setNodes(activeNodes);
+
         const dataEdgesok = data.map((item) => ({
           id: "ok_" + item.id,
           source: "" + item.id,
@@ -437,7 +462,13 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
           sourceHandle: "ok",
           markerEnd: { type: MarkerType.ArrowClosed },
           style: { stroke: getlabelColor("ok") },
+          node_active: item.node_active,
+          nodeType: item.stepType.type,
         }));
+
+        const activeNodesEdgesOk = dataEdgesok.filter(
+          (item) => item.node_active === true && !item.nodeType.toLowerCase().includes("end")
+        );
 
         const dataEdgeserror = data.map((item) => ({
           id: "error_" + item.id,
@@ -448,17 +479,26 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
           sourceHandle: "error",
           markerEnd: { type: MarkerType.ArrowClosed },
           style: { stroke: getlabelColor("error") },
+          node_active: item.node_active,
+          nodeType: item.stepType.type,
         }));
 
-        setEdges([...dataEdgesok, ...dataEdgeserror]);
-        setNewEdges([...dataEdgesok, ...dataEdgeserror]);
+        const activeNodesEdgesError = dataEdgeserror.filter(
+          (item) => item.node_active === true &&!item.nodeType.toLowerCase().includes("end")
+        );
+
+        setEdges([...activeNodesEdgesOk, ...activeNodesEdgesError]);
+        setPublishEdges([...activeNodesEdgesOk, ...activeNodesEdgesError]);
+        setNewEdges([...activeNodesEdgesOk, ...activeNodesEdgesError]);
 
         const combinedData = dataNodes.map((node) => ({
           ...node,
           ...dataEdgesok.find((edgeOk) => edgeOk.id === node.id),
           ...dataEdgeserror.find((edgeError) => edgeError.id === node.id),
         }));
+
         setAllNodes(combinedData);
+
         function getlabelColor(label) {
           return label === "ok" ? "green" : label === "error" ? "red" : "black";
         }
@@ -477,6 +517,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
     unselectStartStep,
     setAsStartStepHandler,
   ]);
+  // console.log(edges);
 
   const saveNodeToDatabase = () => {
     const dataFromNodes = allNodes.map((item) => ({
@@ -642,9 +683,28 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
         },
       };
 
-      setEdges((eds) => addEdge(newEdge, eds));
+      setEdges((prevEdges) => addEdge(newEdge, prevEdges));
+      setPublishEdges((prevEdges) => addEdge(newEdge, prevEdges));
+
+      setPublishEdges((prevEdges) =>
+        prevEdges.map((edge) => {
+          if (edge.label == newEdge.label) {
+            if (edge.source === newEdge.source) {
+              return { ...edge, target: newEdge.target };
+            }
+            return edge;
+          } else if (edge.label == newEdge.label) {
+            if (edge.source === newEdge.source) {
+              return { ...edge, target: newEdge.target };
+            }
+            return edge;
+          } else {
+            return edge;
+          }
+        })
+      );
     },
-    [setEdges]
+    [setEdges, setPublishEdges]
   );
 
   useEffect(() => {
@@ -708,12 +768,12 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
     if (obj) {
       setNodes((nds) =>
         nds.map((node) => {
-          if (node.id == obj.id) {          
+          if (node.id == obj.id) {
             node.data = {
               ...node.data,
               heading: obj.step_name,
-               }  
-            }
+            };
+          }
           return node;
         })
       );
@@ -823,14 +883,14 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
         <JobParameterMaster
           handleClose={handleCloseJobParams}
           project_id={projectID}
-          job={jobfileid?jobfileid.id:''}
+          job={jobfileid ? jobfileid.id : ""}
         />
       </Modal>
       <div className="dndflow">
         <ReactFlowProvider>
           <div className="reactflow-wrapper" ref={reactFlowWrapper}>
             <ReactFlow
-              nodes={nodeActives}
+              nodes={nodes}
               edges={edges}
               startStep={startStep}
               nodeTypes={nodeTypes}

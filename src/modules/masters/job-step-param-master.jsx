@@ -251,6 +251,7 @@ const JobStepParameterMaster = ({
             step_type_id: parseInt(step_type_id),
             parameter_id: parseInt(param.parameter_id),
             parameter_name: col,
+            sequence:data.sequence,
             value: data[col],
             value_id: data[`${col}_id`],
           };
@@ -275,6 +276,7 @@ const JobStepParameterMaster = ({
           step_id: node_id,
           step_type_id: parseInt(step_type_id),
           parameter_id: parseInt(param.id),
+          ...x,
           parameter_name: x[`name_${index + 1}`],
           value: x[`value_${index + 1}`],
         };
@@ -312,13 +314,7 @@ const JobStepParameterMaster = ({
         e.target.classList.add("was-validated");
         //props.validationCallback(true);
     } else {
-        const step = nodeName.filter((item) => parseInt(item.id) !== node_id);
-        const isStepNameUnique = step.every((node) => node.step_name !== data.step_name);
-  
-        if (!isStepNameUnique) {
-            return alert("Step name must be unique.");
-        }
-  
+
         axios.putWithCallback(`job-steps/${node_id}/name-save`, { step_name: data.step_name }, (data) => {
             handleClose(data); 
             setNodeNames(data);
@@ -327,10 +323,10 @@ const JobStepParameterMaster = ({
   
         var dt = prepareOtherParams();
         var dt1 = prepareData();
-        if ((dt !== null && dt.length > 0) || (dt1 !== null && dt1.length > 0)) { // Check if either dt or dt1 is not empty
+        if ((dt !== null && dt.length > 0) || (dt1 !== null && dt1.length > 0)) {
             axios.postWithCallback("job-step-parameters", _.concat(dt1, dt), (data) => {
               setUpdate(true);
-                handleClose();
+                handleClose(null);
             });
         }
     }

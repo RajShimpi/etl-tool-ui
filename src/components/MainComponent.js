@@ -52,13 +52,6 @@ const MainComponent = () => {
     setDisabled(jobData !== undefined && jobData !== null ? false : true);
   }, [jobDataId]);
 
-  const publish = () => {
-    const job_id = {
-      jobId: jobid,
-    };
-    axios.postWithCallback(`job/publish-job/`, job_id);
-  };
-
   const saveDataFunction = () => {
     if (savaDataRef.current && typeof savaDataRef.current.savaDataFunction === 'function') {
       savaDataRef.current.savaDataFunction();
@@ -68,6 +61,11 @@ const MainComponent = () => {
   const OpenJobParam = () => {
     if (savaDataRef.current && typeof savaDataRef.current.OpenJobParam === 'function') {
       savaDataRef.current.OpenJobParam();
+    }
+  };
+  const publish = () => {
+    if (savaDataRef.current && typeof savaDataRef.current.OpenJobParam === 'function') {
+      savaDataRef.current.publish();
     }
   };
 
