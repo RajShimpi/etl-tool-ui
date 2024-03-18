@@ -28,6 +28,7 @@ const CommonFormWithList = (props) => {
     "updatedDate",
     "active",
   ];
+  // console.log( props);
   const filterColumnName = _.filter(
     props.columns,
     (x) => !filterExcludes.includes(x)
@@ -66,7 +67,7 @@ const CommonFormWithList = (props) => {
       case "finalParameterId":
       case "menuParentId":
       case "conclusionTypeId":
-      case "client_id":
+      case "client_id": 
         setData((prevState) => ({ ...prevState, [name]: parseInt(e.value) }));
         break;
       case "role":
@@ -80,14 +81,11 @@ const CommonFormWithList = (props) => {
         setData((prevState) => ({ ...prevState, [name]: parseInt(e.value) }));
         break;
       case "client_id": 
-      case "project_id":
       case "parent_id":
       case "step_id":
-      case "job_id":
-      case "client": 
-      case "project":
-      case "job":
       case "parameter_id":
+      case "project_id":   
+      case "job_id":
         setData((prevState) => ({ ...prevState, [name]: parseInt(e.value) }));
         break;
       case "TemplateItemId":

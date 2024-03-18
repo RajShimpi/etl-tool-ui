@@ -52,13 +52,6 @@ const MainComponent = () => {
     setDisabled(jobData !== undefined && jobData !== null ? false : true);
   }, [jobDataId]);
 
-  const publish = () => {
-    const job_id = {
-      jobId: jobid,
-    };
-    axios.postWithCallback(`job/publish-job/`, job_id);
-  };
-
   const saveDataFunction = () => {
     if (savaDataRef.current && typeof savaDataRef.current.savaDataFunction === 'function') {
       savaDataRef.current.savaDataFunction();
@@ -68,6 +61,11 @@ const MainComponent = () => {
   const OpenJobParam = () => {
     if (savaDataRef.current && typeof savaDataRef.current.OpenJobParam === 'function') {
       savaDataRef.current.OpenJobParam();
+    }
+  };
+  const publish = () => {
+    if (savaDataRef.current && typeof savaDataRef.current.OpenJobParam === 'function') {
+      savaDataRef.current.publish();
     }
   };
 
@@ -133,7 +131,7 @@ const MainComponent = () => {
               <div style={{ marginRight: '35%' }}>
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                   <li class="nav-item">
-                    <button className="btn btn-primary mx-1 w-xs d-flex"  type="button"  onClick={saveDataFunction} disabled={disabled}><div style={{ marginTop: '1px' }}><SaveIcon style={{ fontSize: "20px" }} /></div><div style={{ fontSize: "15px", marginLeft: '5px', marginBottom: '3px' }}> Save</div></button>
+                    <button className="btn  btn-secondary mx-1 w-xs d-flex" style={{backgroundColor:"#3f85c1" , border:"none"}}  type="button"  onClick={saveDataFunction} disabled={disabled}><div style={{ marginTop: '1px' }}><SaveIcon style={{ fontSize: "20px"  }} /></div><div style={{ fontSize: "15px", marginLeft: '5px', marginBottom: '3px' }}> Save</div></button>
                   </li>
                   <li class="nav-item">
                     <button className="btn mx-1 w-xs btn-secondary d-flex" onClick={OpenJobParam} disabled={disabled}><div style={{ marginTop: '1px' }}><DescriptionIcon style={{ fontSize: "20px" }} /></div><div style={{ fontSize: "15px", marginLeft: '5px', marginBottom: '3px' }}> Job Params</div></button>
@@ -147,14 +145,14 @@ const MainComponent = () => {
             <div>
               <ul class="navbar-nav me-auto mb-2 mb-lg-0" >
                 <li class="nav-item dropdown"  >
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style={{ color: '#fff' }}>
-                    Select Theme
+                 <a  class="nav-link " href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style={{ color: 'black', backgroundColor:"transparent", borderRadius:"4px"}}>
+                  <img src="assets/images/work_up_protocol/colorpick.png" width={30}  alt=" of the image" />       
                   </a>
-                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                 
+                  <ul class="dropdown-menu" style={{marginLeft:"-94px"  }} aria-labelledby="navbarDropdown">
                     {themes.map((theme, index) => (
-                      <div className="d-flex">
-                        <button className="btncolr " key={index} onClick={() => handleThemeChange(index)} style={{ backgroundColor: theme.backgroundColor, color: theme.textColor }} >
-                        </button><div></div></div>
+                        <button className="btncolr" key={index} onClick={() => handleThemeChange(index)} style={{ backgroundColor: theme.backgroundColor, color: theme.textColor }} >
+                        </button>
                     ))}
                   </ul>
                 </li>

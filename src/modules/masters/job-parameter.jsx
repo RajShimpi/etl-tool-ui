@@ -14,15 +14,23 @@ const JobParameterMaster = ({ job, project_id, handleClose }) => {
   const [update, setUpdate] = useState(false);
   const [data, setData] = useState(null);
   const [nameValue, setNameValue] = useState([]);
-  const [job_id, setJob_id] = useState([]);
+  const [jobid, setJobid] = useState([]);
 
   // useEffect(() => {
   //   setData((prevData) => ({ ...prevData,  }));
   // }, [name]);
   
   useEffect(() => {
+    if (jobid != job) {
+      setData([])
+      setControlData([]);
+      setparameter([])
+      setNameValue([])
+    }
+  }, [job]);
+  useEffect(() => {
     if(job){
-    setJob_id(job.id)}
+    setJobid(job)}
   }, [job]);
 
   useEffect(() => {
@@ -50,11 +58,11 @@ const JobParameterMaster = ({ job, project_id, handleClose }) => {
       }
     };
     fetchData();
-  }, [job_id]);
+  }, [jobid]);
 
   useEffect(() => {
     if (job) {
-      axios.getWithCallback(`job-parameters/${job_id}`, (data) => {
+      axios.getWithCallback(`job-parameters/${job}`, (data) => {
         if (data?.length) {
           setUpdate(true);
           setJobParamData(data);
@@ -70,7 +78,7 @@ const JobParameterMaster = ({ job, project_id, handleClose }) => {
         }
       });
     }
-  }, [job_id]);
+  }, [jobid]);
 
   const getItemData = (itemData) => {
     if (!itemData) return;
@@ -182,7 +190,7 @@ const JobParameterMaster = ({ job, project_id, handleClose }) => {
           return item;
         } else {
           return {
-            job_id: job_id,
+            jobid: jobid,
             client_id: clientId,
             project_id: project_id,
             parameter_id: param.id,
@@ -206,7 +214,7 @@ const JobParameterMaster = ({ job, project_id, handleClose }) => {
         return item;
       } else {
         return {
-          job_id: job_id,
+          jobid: jobid,
           parameter_id: param.id,
           parameter_name: x[`name_${x.sequence}`],
           value: x[`value_${x.sequence}`],
@@ -249,7 +257,7 @@ const JobParameterMaster = ({ job, project_id, handleClose }) => {
       var dt = prepareOtherParams();
       var dt1 = prepareData();
       axios.postWithCallback("job-parameters", _.concat(dt1, dt), (data) => {
-        // setUpdate(false);
+        setUpdate(true);
         handleClose();
       });
       // let item = { id:props.item.sequence, file_name: data.file_name, project_id: props.item.project_id, type: props.type.includes("Folder") ? 'Folder' : 'File', parent_id: props.item?.sequence };
@@ -265,7 +273,7 @@ const JobParameterMaster = ({ job, project_id, handleClose }) => {
             className="needs-validation"
             noValidate
           >
-            <div className="accordion" id={"common-form-" + job_id}>
+            <div className="accordion" id={"common-form-" + jobid}>
               <div className="accordion-item" style={{ margin: "0px" }}>
                 <h2 className="accordion-header" id="headingOne">
                   <button
@@ -284,7 +292,7 @@ const JobParameterMaster = ({ job, project_id, handleClose }) => {
                 id="collapseOne"
                 className="accordion-collapse collapse show"
                 aria-labelledby="headingOne"
-                data-bs-parent={"common-form-" + job_id}
+                data-bs-parent={"common-form-" + jobid}
               >
                 <div className="accordion-body text-muted">
                   <div className="card-body">
