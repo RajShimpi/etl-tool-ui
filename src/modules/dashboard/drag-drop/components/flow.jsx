@@ -30,7 +30,11 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import JobStepParameterMaster from "../../../masters/job-step-param-master";
 import JobParameterMaster from "../../../masters/job-parameter";
-import { alertInfo, confirmAlert } from "../../../components/config/alert";
+import {
+  alertInfo,
+  confirmAlert,
+  errorAlert,
+} from "../../../components/config/alert";
 
 const nodeTypes = {
   node: (node) => {
@@ -168,6 +172,7 @@ const ContextMenu = ({
 };
 
 const OverviewFlow = React.forwardRef((props, refs, textColor) => {
+
   const [showNodeMaster, setShowNodeMaster] = useState(false);
   const reactFlowWrapper = useRef(null);
   const edgeUpdateSuccessful = useRef(true);
@@ -189,7 +194,6 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   const [jobfileid, setJobFileId] = useState();
   const [node_id, setNode_Id] = useState();
   const [editName, setName] = useState();
-  const [activeNodes, setActiveNodes] = useState([]);
   const [nodesActive, setNodesActive] = useState([]);
   const [openJobParams, setOpenJobParams] = useState(false);
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
@@ -206,7 +210,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
         saveNodeToDatabase();
         setShouldCallSave(false);
       } else {
-        alert("Please connect source nodes (Cannot Save Flow)");
+        errorAlert("Please connect source nodes (Cannot Save Flow)");
       }
     }
   };
@@ -219,6 +223,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
         setShouldCallSave(false);
       }
     }
+    setJobFileId(jobDataId);
   }, [edges, jobDataId]);
 
   const prevJobDataIdRef = useRef(jobDataId);
@@ -234,11 +239,11 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
           if (isAllNodeisConnected(nodes, edges)) {
             saveNodeToDatabase();
           } else {
-            alert("Please connect source nodes (Cannot Save Flow)");
+            errorAlert("Please connect source nodes (Cannot Save Flow)");
           }
         },
         () => {
-          alertInfo("Flow not saved");
+          errorAlert("Flow not saved");
         }
       );
     }
@@ -249,15 +254,41 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   };
 
   const publish = () => {
-    const nullEdges = publishEdges.filter((item) => item.target == "null");
-    if (nullEdges?.length === 0) {
+    const nullEdges = publishEdges.filter((item) => item.target === "null");
+
+    if (nullEdges.length === 0) {
       const job_id = {
         jobId: jobfileid.id,
       };
       axios.postWithCallback(`job/publish-job/`, job_id);
     } else {
-      alertInfo("You need to connect all the Edges");
+      const nullErrors = [];
+      const nullOks = [];
+
+      nullEdges.forEach((edge) => {
+        const nodeName = getNodeName(edge.source);
+        if (edge.label === "error") {
+          nullErrors.push(nodeName);
+        } else if (edge.label === "ok") {
+          nullOks.push(nodeName);
+        }
+      });
+
+      let errorMessage = "You need to connect all the Edges.";
+      if (nullErrors.length > 0) {
+        errorMessage += ` Error edges null: ${nullErrors.join(", ")},`;
+      }
+      if (nullOks.length > 0) {
+        errorMessage += ` Ok edges null: ${nullOks.join(", ")}.`;
+      }
+
+      errorAlert(errorMessage);
     }
+  };
+
+  const getNodeName = (nodeId) => {
+    const node = allNodes.find((node) => node.id === nodeId);
+    return node ? node.data.heading : "";
   };
 
   React.useImperativeHandle(refs, () => ({
@@ -463,10 +494,13 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
           style: { stroke: getlabelColor("ok") },
           node_active: item.node_active,
           nodeType: item.stepType.type,
+          step_name: item.step_name,
         }));
 
         const activeNodesEdgesOk = dataEdgesok.filter(
-          (item) => item.node_active === true && !item.nodeType.toLowerCase().includes("end")
+          (item) =>
+            item.node_active === true &&
+            !item.nodeType.toLowerCase().includes("end")
         );
 
         const dataEdgeserror = data.map((item) => ({
@@ -480,10 +514,13 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
           style: { stroke: getlabelColor("error") },
           node_active: item.node_active,
           nodeType: item.stepType.type,
+          step_name: item.step_name,
         }));
 
         const activeNodesEdgesError = dataEdgeserror.filter(
-          (item) => item.node_active === true &&!item.nodeType.toLowerCase().includes("end")
+          (item) =>
+            item.node_active === true &&
+            !item.nodeType.toLowerCase().includes("end")
         );
 
         setEdges([...activeNodesEdgesOk, ...activeNodesEdgesError]);
@@ -516,7 +553,6 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
     unselectStartStep,
     setAsStartStepHandler,
   ]);
-  // console.log(edges);
 
   const saveNodeToDatabase = () => {
     const dataFromNodes = allNodes.map((item) => ({
@@ -742,22 +778,32 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   const onEdgeUpdate = useCallback(
     (oldEdge, newConnection) => {
       edgeUpdateSuccessful.current = true;
-      setEdges((els) => updateEdge(oldEdge, newConnection, els));
+      const updatedEdges = updateEdge(oldEdge, newConnection, edges);
+      setEdges(updatedEdges);
+      setPublishEdges(updatedEdges);
       setShouldCallSave(true);
     },
-    [edges, setEdges]
+    [edges, setEdges, publishEdges, setPublishEdges]
   );
 
   const onEdgeUpdateEnd = useCallback(
     (_, edge) => {
       if (!edgeUpdateSuccessful.current) {
-        setEdges((eds) => eds.filter((e) => e.id !== edge.id));
+        const updatedEdges = edges.map((e) => {
+          if (e.id === edge.id) {
+            return { ...e, target: "null" };
+          }
+          return e;
+        });
+
+        setEdges(updatedEdges);
+        setPublishEdges(updatedEdges);
         setShouldCallSave(true);
       }
 
       edgeUpdateSuccessful.current = true;
     },
-    [setEdges]
+    [edges, setEdges, publishEdges, setPublishEdges]
   );
 
   const onNodeDoubleClick = () => {
@@ -771,9 +817,26 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       setNodes((nds) =>
         nds.map((node) => {
           if (node.id == obj.id) {
-            node.data = {
-              ...node.data,
-              heading: obj.step_name,
+            return {
+              ...node,
+              data: {
+                ...node.data,
+                heading: obj.step_name,
+              },
+            };
+          }
+          return node;
+        })
+      );
+      setAllNodes((nds) =>
+        nds.map((node) => {
+          if (node.id == obj.id) {
+            return {
+              ...node,
+              data: {
+                ...node.data,
+                heading: obj.step_name,
+              },
             };
           }
           return node;
@@ -831,7 +894,6 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
         ok_step: null,
         error_step: null,
       });
-      setActiveNodes(node);
       setSelectedNode(node);
     },
     [setMenu]
@@ -945,7 +1007,6 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
                 handleClose={handleCloseNodeMaster}
                 name={editName}
                 nodes={nodeActives}
-                // setNodeNames={setNodeName}
               />
             </Modal>
           </div>
