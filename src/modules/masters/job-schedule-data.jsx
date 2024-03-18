@@ -5,7 +5,7 @@ export const getJobScheduleFields = (itemData) => {
       disabled: itemData.disabled,
       groups: [
       {
-          id: "inputproject_id",
+          id: "inputprojectid",
           label: "Project",
           name: "project_id",
           control: "select",
@@ -14,7 +14,7 @@ export const getJobScheduleFields = (itemData) => {
           itemVal: itemData.values ? itemData.values["project_id"] : '',
       },
       {
-          id: "inputjob_id",
+          id: "inputjobsid",
           label: "Job",
           name: "job_id",
           control: "select",

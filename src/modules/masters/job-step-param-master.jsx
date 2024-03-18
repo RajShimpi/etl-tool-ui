@@ -305,35 +305,34 @@ const JobStepParameterMaster = ({
     setNameValue((prevData) => [...prevData]);
   };
   
-
-  const onsubmit = (e) => {
-    e.preventDefault();
-    
-    if (!e.target.checkValidity()) {
-        e.stopPropagation();
-        e.target.classList.add("was-validated");
-        //props.validationCallback(true);
-    } else {
-
-        axios.putWithCallback(`job-steps/${node_id}/name-save`, { step_name: data.step_name }, (data) => {
-            handleClose(data); 
-            setNodeNames(data);
-            // setUpdate(true); 
-        });
+console.log(data);
+const onsubmit = (e) => {
+  e.preventDefault();
   
-        var dt = prepareOtherParams();
-        var dt1 = prepareData();
-        if ((dt !== null && dt.length > 0) || (dt1 !== null && dt1.length > 0)) {
-            axios.postWithCallback("job-step-parameters", _.concat(dt1, dt), (data) => {
-              setUpdate(true);
-                handleClose(null);
-            });
-        }
-    }
-};
+  if (!e.target.checkValidity()) {
+      e.stopPropagation();
+      e.target.classList.add("was-validated");
+      //props.validationCallback(true);
+  } else {
 
-     
-// console.log(controlData);
+      axios.putWithCallback(`job-steps/${node_id}/name-save`, { step_name: data.step_name ,job_id:job_id}, (data) => {
+          handleClose(data);
+          setNodeNames(data);
+          // setUpdate(true); 
+          var dt = prepareOtherParams();
+          var dt1 = prepareData();
+          if ((dt !== null && dt.length > 0) || (dt1 !== null && dt1.length > 0)) {
+              axios.postWithCallback("job-step-parameters", _.concat(dt1, dt), (data) => {
+                  setUpdate(true);
+                  handleClose(null);
+              });
+          } else {
+              handleClose(null);
+          }
+      });
+  }
+}    
+
   return (
     <div className="row" style={{ height: "300px" }}>
       <div className="col-xl-12">

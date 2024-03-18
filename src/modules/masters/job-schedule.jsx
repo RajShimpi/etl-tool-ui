@@ -35,7 +35,7 @@ const JobSchedule = () => {
   }, []);
 
   const defaultObj = {
-    client: parseInt(client_id),
+    client_id: parseInt(client_id),
     project_id: "",
     job_id: "",
     name: "",
