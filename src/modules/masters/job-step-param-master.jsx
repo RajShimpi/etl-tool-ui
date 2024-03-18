@@ -305,7 +305,6 @@ const JobStepParameterMaster = ({
     setNameValue((prevData) => [...prevData]);
   };
   
-console.log(data);
 const onsubmit = (e) => {
   e.preventDefault();
   
