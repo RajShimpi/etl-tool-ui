@@ -223,7 +223,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
         setShouldCallSave(false);
       }
     }
-    setJobFileId(jobDataId);
+    
   }, [edges, jobDataId]);
 
   const prevJobDataIdRef = useRef(jobDataId);
@@ -255,7 +255,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
 
   const publish = () => {
     const nullEdges = publishEdges.filter((item) => item.target === "null");
-
+console.log(publishEdges);
     if (nullEdges.length === 0) {
       const job_id = {
         jobId: jobfileid.id,
@@ -276,10 +276,10 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
 
       let errorMessage = "You need to connect all the Edges.";
       if (nullErrors.length > 0) {
-        errorMessage += ` Error edges null: ${nullErrors.join(", ")},`;
+        errorMessage += ` Error : ${nullErrors.join(", ")},`;
       }
       if (nullOks.length > 0) {
-        errorMessage += ` Ok edges null: ${nullOks.join(", ")}.`;
+        errorMessage += ` Ok : ${nullOks.join(", ")}.`;
       }
 
       errorAlert(errorMessage);

@@ -9,6 +9,7 @@ import configContext from "../dashboard/config-context";
 import { errorAlert } from "./config/alert";
 import utils from "./utils";
 import CommonTable from "./common-table";
+
 const CommonFormWithList = (props) => {
   const contextData = useContext(configContext);
   const [update, setUpdate] = useState(false);
@@ -28,7 +29,7 @@ const CommonFormWithList = (props) => {
     "updatedDate",
     "active",
   ];
-  // console.log( props);
+
   const filterColumnName = _.filter(
     props.columns,
     (x) => !filterExcludes.includes(x)
@@ -36,6 +37,7 @@ const CommonFormWithList = (props) => {
   const [list, setList] = useState([]);
   const [keys, setKeys] = useState([]);
   const [isSubmit, setIsSubmit] = useState(false);
+  const [resetparamsTable, setResetparamsTable] = useState(false);
   const setValues = (e, name) => {
     if (!e) return;
     switch (name) {
@@ -67,7 +69,7 @@ const CommonFormWithList = (props) => {
       case "finalParameterId":
       case "menuParentId":
       case "conclusionTypeId":
-      case "client_id": 
+      case "client_id":
         setData((prevState) => ({ ...prevState, [name]: parseInt(e.value) }));
         break;
       case "role":
@@ -80,11 +82,11 @@ const CommonFormWithList = (props) => {
       case "whsId":
         setData((prevState) => ({ ...prevState, [name]: parseInt(e.value) }));
         break;
-      case "client_id": 
+      case "client_id":
       case "parent_id":
       case "step_id":
       case "parameter_id":
-      case "project_id":   
+      case "project_id":
       case "job_id":
         setData((prevState) => ({ ...prevState, [name]: parseInt(e.value) }));
         break;
@@ -179,16 +181,18 @@ const CommonFormWithList = (props) => {
   useEffect(() => {
     apiCall();
   }, []);
+
   useEffect(() => {
     setData((prevState) => ({
       ...prevState,
       journal_code: props.defaultObj?.journal_code,
     }));
   }, [props.defaultObj]);
+
   const apiCall = () => {
     axios.getWithCallback(
       props.getApi,
-      async (resp) => {
+      (resp) => {
         let listData;
         if (props.processListCallback) {
           listData = props.processListCallback(resp);
@@ -221,6 +225,7 @@ const CommonFormWithList = (props) => {
     }
     return true;
   };
+
   const onReset = (e) => {
     setData({ ...props.defaultObj });
     setUpdate(true);
@@ -231,38 +236,43 @@ const CommonFormWithList = (props) => {
     }
     let form = $(e.target).closest("form");
     form[0].classList.remove("was-validated");
+    setResetparamsTable(true);
+    setOtherData([]);
   };
+
   const editCallBack = (item) => {
     setUpdate(true);
     if (props.getById) {
       axios.getWithCallback(props.getById.replace(":id", item.id), (data) => {
-        setData(data)
-        setOtherData(processTableParams(data));        
-      }
-      );
+        setData(data);
+        setOtherData(processTableParams(data));
+      });
     } else {
       setData(item);
-      setOtherData(processTableParams(item));
+      setOtherData(processTableParams(item.otherParams));
     }
   };
 
   const processTableParams = (data) => {
-      let obj;
-     return data.otherParams?.map((x, index) => {
-      props.otherParamColumns?.forEach(col => {
-      obj = { ...obj,  [col.name]: x[col.dbPropName] }
-      })
+    let obj;
+    return data?.map((x, index) => {
+      props.otherParamColumns?.forEach((col) => {
+        obj = { ...obj, [col.name]: x[col.dbPropName] };
+      });
       return {
         ...x,
-        ...obj
-      }}  );   
+        ...obj,
+      };
+    });
   };
+
   const deleteImage = (e, item, index) => {
     let arr = [];
     data[item].splice(index, 1);
     data[item].forEach((x) => arr.push(x));
     setData((prevData) => ({ ...prevData }));
   };
+
   useEffect(() => {
     setDataTableData({
       data: list,
@@ -274,6 +284,7 @@ const CommonFormWithList = (props) => {
       tableTitle: props.tableTitle ? props.tableTitle : "",
     });
   }, [list, keys]);
+
   const isFilePresent = () => {
     let dt = [];
     props.fileObjKey.forEach((x) => {
@@ -283,6 +294,7 @@ const CommonFormWithList = (props) => {
     });
     return !!dt?.length;
   };
+
   const isJsonString = (str) => {
     if (!str) return false;
     try {
@@ -294,19 +306,22 @@ const CommonFormWithList = (props) => {
   };
 
   const otherCallback = (data) => {
-   let sp = data.map(x => {
+    let sp = data.map((x) => {
       let obj;
-      props.otherParamColumns.forEach(col => {
-        obj = { ...obj,  [col.dbPropName]: x[col.name] }
-      })
-        return {
-          ...x,
-          ...obj
-        }
-    })
-    console.log(sp);
-     setOtherData(sp);
-  }
+      props.otherParamColumns.forEach((col) => {
+        obj = { ...obj, [col.dbPropName]: x[col.name] };
+      });
+      return {
+        ...x,
+        ...obj,
+      };
+    });
+
+    // Check if otherData is different from the calculated value
+    if (!_.isEqual(otherData, sp)) {
+      setOtherData(sp);
+    }
+  };
 
   const onsubmit = (e) => {
     if (update) {
@@ -340,6 +355,8 @@ const CommonFormWithList = (props) => {
             setUpdate(false);
             setData({ ...props.defaultObj });
             setIsSubmit(false);
+            setResetparamsTable(true);
+            setOtherData([]);
             apiCall();
             e.target.classList.remove("was-validated");
             if (!!props.validationCallback) props.validationCallback(null);
@@ -359,6 +376,8 @@ const CommonFormWithList = (props) => {
             setUpdate(true);
             setUpdate(false);
             setIsSubmit(false);
+            setResetparamsTable(true);
+            setOtherData([]);
             apiCall();
             e.target.classList.remove("was-validated");
             if (!!props.validationCallback) props.validationCallback(null);
@@ -411,11 +430,19 @@ const CommonFormWithList = (props) => {
                         options: !!props.options ? props.options : [],
                         data: !!props.data ? props.data : [],
                         message: props.message,
-                        isSuperAdmin: props.isSuperAdmin
+                        isSuperAdmin: props.isSuperAdmin,
                       })}
                     />
                   </div>
-                  {props.otherParamColumns && <CommonTable data={props.otherParamsData} columns={props.otherParamColumns} callback={otherCallback} /> }
+                  {props.otherParamColumns && (
+                    <CommonTable
+                      data={otherData} 
+                      columns={props.otherParamColumns}
+                      callback={otherCallback}
+                      resetparamsTable={resetparamsTable}
+                      otherParamsData={props.otherParamsData}
+                    />
+                  )}
                   {props.fileObjKey && isFilePresent() && (
                     <table className="table table-striped table-bordered dt-responsive">
                       <thead
