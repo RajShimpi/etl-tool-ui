@@ -12,7 +12,7 @@ const JobStepParameterMaster = ({
   nodes,
   setNodeNames,
 }) => {
-  const [parameter, setParameter] = useState([]);
+  const [parameter, setparameter] = useState([]);
   const [otherparameters, setotherParameters] = useState([]);
   const [editName, setEditName] = useState("");
   const [controlData, setControlData] = useState([]);
@@ -47,7 +47,7 @@ const JobStepParameterMaster = ({
       setData([])
       setControlData([]);
       setotherParameters([]);
-      setParameter([])
+      setparameter([])
       setNameValue([])
       setJobStepParamData([])
     }
@@ -74,17 +74,16 @@ const JobStepParameterMaster = ({
                   });
                   let resourceData = await axios.get(`${resource}`);
                   parameter.options = resourceData.data.map(x => ({
-                    value: fieldMapping && fieldMapping.value_field ? x[fieldMapping.value_field] : x.id||x.value,
-                    label: fieldMapping && fieldMapping.label_field ? x[fieldMapping.label_field] : x.Name||x.label
+                    value: fieldMapping && fieldMapping.value_field ? x[fieldMapping.value_field] : x.value,
+                    label: fieldMapping && fieldMapping.label_field ? x[fieldMapping.label_field] : x.label
                   }));
-                  console.log("parameter.options:",parameter.options);
                 } catch (error) {
                   console.error(`Error fetching resource ${resource}:`, error);
                 }
               }
             })
           );
-          setParameter(data.stepTypeParameters);
+          setparameter(data.stepTypeParameters);
         }
       );
     }
@@ -110,7 +109,8 @@ const JobStepParameterMaster = ({
       });
       if (node_id) {
         axios.getWithCallback(`job-steps/${node_id}`, (data) =>
-          setEditName(data)
+          setEditName(data.step_name),
+          setData(data)
         );
       }
       if (step_type_id) {
@@ -175,7 +175,6 @@ const JobStepParameterMaster = ({
       }
 
     ];
-    // console.log(dt);
     setControlData(dt);
     return dt;
   };
@@ -251,7 +250,6 @@ const JobStepParameterMaster = ({
             step_type_id: parseInt(step_type_id),
             parameter_id: parseInt(param.parameter_id),
             parameter_name: col,
-            sequence:data.sequence,
             value: data[col],
             value_id: data[`${col}_id`],
           };
@@ -276,7 +274,6 @@ const JobStepParameterMaster = ({
           step_id: node_id,
           step_type_id: parseInt(step_type_id),
           parameter_id: parseInt(param.id),
-          ...x,
           parameter_name: x[`name_${index + 1}`],
           value: x[`value_${index + 1}`],
         };
@@ -304,33 +301,37 @@ const JobStepParameterMaster = ({
     item[e.target.name] = e.target.value;
     setNameValue((prevData) => [...prevData]);
   };
-  
-const onsubmit = (e) => {
-  e.preventDefault();
-  
-  if (!e.target.checkValidity()) {
+
+
+  const onsubmit = (e) => {
+    e.preventDefault();
+    if (!e.target.checkValidity()) {
       e.stopPropagation();
       e.target.classList.add("was-validated");
       //props.validationCallback(true);
-  } else {
-
-      axios.putWithCallback(`job-steps/${node_id}/name-save`, { step_name: data.step_name ,job_id:job_id}, (data) => {
+    } else {
+      if(data?.step_name){
+      axios.putWithCallback(
+        `job-steps/${node_id}/name-save`,
+        { step_name: data.step_name, job_id: job_id },
+        (data) => {
           handleClose(data);
           setNodeNames(data);
-          // setUpdate(true); 
-          var dt = prepareOtherParams();
-          var dt1 = prepareData();
-          if ((dt !== null && dt.length > 0) || (dt1 !== null && dt1.length > 0)) {
-              axios.postWithCallback("job-step-parameters", _.concat(dt1, dt), (data) => {
-                  setUpdate(true);
-                  handleClose(null);
-              });
-          } else {
-              handleClose(null);
-          }
-      });
-  }
-}    
+          // setUpdate(false);
+        }
+      );
+      }
+      var dt = prepareOtherParams();
+      var dt1 = prepareData();
+      if ((dt !== null && dt.length > 0) || (dt1 !== null && dt1.length > 0)) {
+        axios.postWithCallback("job-step-parameters", _.concat(dt1, dt), (data) => {
+          setUpdate(true);
+          handleClose(null);
+        });
+      }
+    }
+  };
+  
 
   return (
     <div className="row" style={{ height: "300px" }}>
@@ -387,7 +388,7 @@ const onsubmit = (e) => {
                       </button>
                     </div>
                   )}
-                  <div style={{maxHeight:"190px" ,overflowY:"scroll" , scrollbarWidth: "thin" }}>
+                  <div style={{maxHeight:"190px" ,overflowY:"scroll" , scrollbarWidth: "thin", scrollbarColor: "transparent transparent" }}>
                     {!!nameValue?.length && (
                       <table className="table table-striped table-bordered dt-responsive">
                         <thead

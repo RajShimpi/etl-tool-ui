@@ -180,7 +180,6 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [nodes, setNodes, onNodesChange] = useState([]);
   const [edges, setEdges, onEdgesChange] = useState([]);
-  const [publishEdges, setPublishEdges] = useState([]);
   const [menu, setMenu] = useState(null);
   const ref = useRef(null);
   const [selectedNode, setSelectedNode] = useState(null);
@@ -223,7 +222,6 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
         setShouldCallSave(false);
       }
     }
-    
   }, [edges, jobDataId]);
 
   const prevJobDataIdRef = useRef(jobDataId);
@@ -254,8 +252,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   };
 
   const publish = () => {
-    const nullEdges = publishEdges.filter((item) => item.target === "null");
-console.log(publishEdges);
+    const nullEdges = edges.filter((item) => item.target === "null");
     if (nullEdges.length === 0) {
       const job_id = {
         jobId: jobfileid.id,
@@ -281,7 +278,6 @@ console.log(publishEdges);
       if (nullOks.length > 0) {
         errorMessage += ` Ok : ${nullOks.join(", ")}.`;
       }
-
       errorAlert(errorMessage);
     }
   };
@@ -363,7 +359,6 @@ console.log(publishEdges);
       setJobFileId(null);
       setStartStep(null);
       setMenu(null);
-      setNewEdges([]);
       setShouldCallSave(false);
     }
   }, [projectID, jobDataId, setStartStep, setMenu]);
@@ -524,7 +519,6 @@ console.log(publishEdges);
         );
 
         setEdges([...activeNodesEdgesOk, ...activeNodesEdgesError]);
-        setPublishEdges([...activeNodesEdgesOk, ...activeNodesEdgesError]);
         setNewEdges([...activeNodesEdgesOk, ...activeNodesEdgesError]);
 
         const combinedData = dataNodes.map((node) => ({
@@ -719,9 +713,9 @@ console.log(publishEdges);
       };
 
       setEdges((prevEdges) => addEdge(newEdge, prevEdges));
-      setPublishEdges((prevEdges) => addEdge(newEdge, prevEdges));
+      setNewEdges((prevEdges) => addEdge(newEdge, prevEdges));
 
-      setPublishEdges((prevEdges) =>
+      setEdges((prevEdges) =>
         prevEdges.map((edge) => {
           if (edge.label == newEdge.label) {
             if (edge.source === newEdge.source) {
@@ -739,13 +733,12 @@ console.log(publishEdges);
         })
       );
     },
-    [setEdges, setPublishEdges]
+    [setEdges]
   );
 
   useEffect(() => {
     const node = nodes.filter((node) => {
       if (node.selected) return true;
-
       return false;
     });
     if (node[0]) {
@@ -780,10 +773,10 @@ console.log(publishEdges);
       edgeUpdateSuccessful.current = true;
       const updatedEdges = updateEdge(oldEdge, newConnection, edges);
       setEdges(updatedEdges);
-      setPublishEdges(updatedEdges);
+      setNewEdges(updatedEdges);
       setShouldCallSave(true);
     },
-    [edges, setEdges, publishEdges, setPublishEdges]
+    [edges, setEdges,]
   );
 
   const onEdgeUpdateEnd = useCallback(
@@ -795,15 +788,13 @@ console.log(publishEdges);
           }
           return e;
         });
-
+        setNewEdges((eds) => eds.filter((e) => e.id !== edge.id));
         setEdges(updatedEdges);
-        setPublishEdges(updatedEdges);
         setShouldCallSave(true);
       }
-
       edgeUpdateSuccessful.current = true;
     },
-    [edges, setEdges, publishEdges, setPublishEdges]
+    [edges, setEdges ]
   );
 
   const onNodeDoubleClick = () => {
@@ -828,6 +819,7 @@ console.log(publishEdges);
           return node;
         })
       );
+      
       setAllNodes((nds) =>
         nds.map((node) => {
           if (node.id == obj.id) {
@@ -913,7 +905,24 @@ console.log(publishEdges);
       ]);
 
       setNodes((nodes) => nodes.filter((node) => node.id !== menu.id));
-      setEdges((edges) => edges.filter((edge) => edge.source !== menu.id));
+      setNewEdges((edges) => edges.filter((edge) => edge.source !== menu.id));
+      setEdges((prevEdges) =>
+      prevEdges.map((edge) => {
+        if (edge.label === 'ok') {
+        if (edge.target == menu.id) {
+            return { ...edge, target: 'null' };
+          }
+          return edge;
+        } 
+        if (edge.label == 'error') {
+         if (edge.target == menu.id)  {
+            return { ...edge, target: 'null' };
+          }
+          return edge;
+        }
+      })
+    );
+
       setMenu(null);
     }
   }, [menu, setNodes, setEdges]);
