@@ -69,7 +69,7 @@ const Node = ({ data, id, start_step, startStep, item, isSelected, textRef, node
               ) : ''}
               <img
                 src={data.img}
-                style={{ width: "70px", height: "75px" }}
+                style={{ width: "70px", height: "70px" }}
                 onClick={handleImageClick}
               />
               <abbr title={data.heading} style={{ cursor: 'pointer', textDecoration: 'none', borderRadius: '50px' }}>

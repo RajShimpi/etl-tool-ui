@@ -133,6 +133,7 @@ const JobStepParameterMaster = ({
   };
 
   const getItemData = (itemData) => {
+    // console.log(itemData);
     if (!itemData) return;
     setControlData([])
     let dt = [
@@ -166,14 +167,13 @@ const JobStepParameterMaster = ({
                 control: v.parameter.type === "text" ? "input" : v.parameter.type,
                 options: v.parameter.options || v.options,
                 disabled: false,
-                itemVal: itemData.values ? itemData.values[v.parameter.name] : '',
+                itemVal: itemData.values ? itemData.values[v.parameter.name+"_id"]===null? itemData.values[v.parameter.name]:itemData.values[v.parameter.name+"_id"]: '',
                 multiple: v.parameter.type === "select-react" ? true : false,
                 isGeneric: true,
               };
             })
           : null
       }
-
     ];
     setControlData(dt);
     return dt;
@@ -190,9 +190,9 @@ const JobStepParameterMaster = ({
     });
   }, [editName, parameter, data, update]);
 
-  const setValues = (e, name) => {
+  const setValues = (e, type) => {
     if (!e) return;
-    switch (name) {
+    switch (type) {
       case "input":
         setData((prevData) =>
         ({
@@ -323,6 +323,8 @@ const JobStepParameterMaster = ({
       }
       var dt = prepareOtherParams();
       var dt1 = prepareData();
+      console.log("dt1:",dt1);
+      console.log("dt:",dt);
       if ((dt !== null && dt.length > 0) || (dt1 !== null && dt1.length > 0)) {
         axios.postWithCallback("job-step-parameters", _.concat(dt1, dt), (data) => {
           setUpdate(true);
