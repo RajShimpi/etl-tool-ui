@@ -192,8 +192,6 @@ const JobStepParameterMaster = ({
 
   const setValues = (e, type) => {
     if (!e) return;
-    console.log(type);
-    console.log(e);
     switch (type) {
       case "input":
         setData((prevData) =>
