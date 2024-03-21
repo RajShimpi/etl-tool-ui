@@ -440,7 +440,6 @@ const CommonFormWithList = (props) => {
                       columns={props.otherParamColumns}
                       callback={otherCallback}
                       resetparamsTable={resetparamsTable}
-                      otherParamsData={props.otherParamsData}
                     />
                   )}
                   {props.fileObjKey && isFilePresent() && (
