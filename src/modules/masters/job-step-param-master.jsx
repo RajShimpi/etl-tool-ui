@@ -133,7 +133,6 @@ const JobStepParameterMaster = ({
   };
 
   const getItemData = (itemData) => {
-    // console.log(itemData);
     if (!itemData) return;
     setControlData([])
     let dt = [
