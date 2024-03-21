@@ -41,7 +41,7 @@ const JobSchedule = () => {
     name: "",
     description: "",
     scheduleCron: "",
-    active: "",
+    active:true,
   };
 
   return (
