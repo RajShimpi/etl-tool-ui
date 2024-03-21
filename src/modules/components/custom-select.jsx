@@ -76,7 +76,7 @@ const CustomSelect = (props) => {
     <>
       {/* <div key={props.primaryKey + 'div'} style={{ width: '-webkit-fill-available' }}> */}
       <label className={` ${props.isSmall ? 'no-margin d-block' : 'has-float-label select-margin-bottom'}`}>
-        <select id={props.primaryKey} name={props.name} defaultValue={"0"} className={`form-control custom-select ${props.isSmall ? 'no-margin pad-half' : ''}`} value={value?.value} onChange={setItem} disabled={props.disabled} required={props.isRequired}>
+        <select id={props.primaryKey} name={props.name} defaultValue={"0"} className={`form-control custom-select ${props.isSmall ? 'no-margin pad-half' : ''}`} value={value?.value|| "0"} onChange={setItem} disabled={props.disabled} required={props.isRequired}>
           <option value={""}>Select {props.label}</option>
           {props.options?.map((optionElement) => (
             <option key={"option-" + optionElement.value} value={optionElement.value}>{optionElement.label}</option>
