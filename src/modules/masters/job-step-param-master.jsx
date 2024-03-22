@@ -9,7 +9,7 @@ const JobStepParameterMaster = ({
   step_type_id,
   name,
   handleClose,
-  nodes,
+  // nodes,
   setNodeNames,
 }) => {
   const [parameter, setparameter] = useState([]);
@@ -20,32 +20,33 @@ const JobStepParameterMaster = ({
   const [update, setUpdate] = useState(false);
   const [data, setData] = useState(null);
   const [nameValue, setNameValue] = useState([]);
-  const [step, setStep] = useState();
+  // const [step, setStep] = useState();
   const [nodeid, setNodeid] = useState();
   const [steptype, setSteptype] = useState();
-  const [nodeName, setNodesName] = useState();
+  // const [nodeName, setNodesName] = useState();
   // const [isOtherParamVisible, setOtherParamVisible] = useState(false);
   const colSize = parameter.length < 2 ? 12 : parameter.length < 3 ? 6 : parameter.length < 4 ? 4 : parameter.length < 5 ? 6 : 4;
 
   useEffect(() => {
-    setStep(step_type_id);
+    // setStep(step_type_id);
     setNodeid(node_id)
   }, [name]);
 
-  useEffect(() => {
-    setNodesName(
-      nodes.map((item) => ({
-        id: item.id,
-        step_name: item.data.heading,
-        job_id: item.job_id,
-      }))
-    );
-  }, []);
+  // useEffect(() => {
+  //   setNodesName(
+  //     nodes.map((item) => ({
+  //       id: item.id,
+  //       step_name: item.data.heading,
+  //       job_id: item.job_id,
+  //     }))
+  //   );
+  // }, []);
 
   useEffect(() => {
     if (nodeid != node_id) {
       setData([])
       setControlData([]);
+      setEditName([])
       setotherParameters([]);
       setparameter([])
       setNameValue([])
@@ -109,7 +110,7 @@ const JobStepParameterMaster = ({
       });
       if (node_id) {
         axios.getWithCallback(`job-steps/${node_id}`, (data) =>
-          setEditName(data.step_name),
+          setEditName(data?.step_name),
           setData(data)
         );
       }
@@ -301,7 +302,6 @@ const JobStepParameterMaster = ({
     setNameValue((prevData) => [...prevData]);
   };
 
-
   const onsubmit = (e) => {
     e.preventDefault();
     if (!e.target.checkValidity()) {
@@ -309,7 +309,7 @@ const JobStepParameterMaster = ({
       e.target.classList.add("was-validated");
       //props.validationCallback(true);
     } else {
-      if(data?.step_name){
+      if(data?.step_name !== editName){
       axios.putWithCallback(
         `job-steps/${node_id}/name-save`,
         { step_name: data.step_name, job_id: job_id },
@@ -322,8 +322,6 @@ const JobStepParameterMaster = ({
       }
       var dt = prepareOtherParams();
       var dt1 = prepareData();
-      console.log("dt1:",dt1);
-      console.log("dt:",dt);
       if ((dt !== null && dt.length > 0) || (dt1 !== null && dt1.length > 0)) {
         axios.postWithCallback("job-step-parameters", _.concat(dt1, dt), (data) => {
           setUpdate(true);
@@ -333,7 +331,6 @@ const JobStepParameterMaster = ({
     }
   };
   
-
   return (
     <div className="row" style={{ height: "300px" }}>
       <div className="col-xl-12">

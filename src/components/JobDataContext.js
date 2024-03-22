@@ -2,8 +2,6 @@ import { createContext, useContext, useState } from "react";
 
 const JobDataContext = createContext();
 const ClientIdContext = createContext();
-const ProjectIdContext = createContext();
-const ProjectContext = createContext();
 const ProjectIDContext = createContext();
 const DashboardMetabaseDataContext = createContext();
 const DashboardIdContext = createContext();
@@ -55,59 +53,16 @@ export const useClientId = () => {
   }
   return context;
 };
-export const ProjectIdProvider = ({ children }) => {
-  const [projectId, setProjectId] = useState(null);
-
-  const setProjectIdValue = (Project_id) => {
-    setProjectId(Project_id);
-  };
-
-  return (
-    <ProjectIdContext.Provider value={{ projectId, setProjectId: setProjectIdValue }}>
-      {children}
-    </ProjectIdContext.Provider>
-  );
-};
-
-export const useProjectId = () => {
-  const context = useContext(ProjectIdContext);
-  if (!context) {
-    throw new Error("useProjectId must be used within a JobDataProvider");
-  }
-  return context;
-};
-
-export const ProjectProvider = ({ children }) => {
-  const [project_Id, setProject_Id] = useState(null);
-
-  const setProjectValue = (id) => {
-    setProject_Id(id);
-  };
-
-  return (
-    <ProjectContext.Provider value={{ project_Id, setProject_Id: setProjectValue }}>
-      {children}
-    </ProjectContext.Provider>
-  );
-};
-
-export const useProject = () => {
-  const context = useContext(ProjectContext);
-  if (!context) {
-    throw new Error("useProject must be used within a JobDataProvider");
-  }
-  return context;
-};
 
 export const ProjectidProvider = ({ children }) => {
-  const [projectID, setProjectID] = useState(null);
+  const [projectid, setProjectid] = useState(null);
 
   const setProjectIDValue = (id) => {
-    setProjectID(id);
+    setProjectid(id);
   };
 
   return (
-    <ProjectIDContext.Provider value={{ projectID, setProjectID: setProjectIDValue }}>
+    <ProjectIDContext.Provider value={{ projectid, setProjectid: setProjectIDValue }}>
       {children}
     </ProjectIDContext.Provider>
   );

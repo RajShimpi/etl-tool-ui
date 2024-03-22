@@ -19,7 +19,7 @@ const MainComponent = () => {
   const [disabled, setDisabled] = useState(true)
   const [jobData, setJobData] = useState()
   const [filePath, setFilePath] = useState([])
-  const { projectID } = useProjectid([]);
+  const { projectid } = useProjectid([]);
 
   useEffect(() => {
     if (jobDataId) {
@@ -28,7 +28,7 @@ const MainComponent = () => {
       setJobData(null)
       setFilePath([])
     }
-  }, [jobDataId,projectID]);
+  }, [jobDataId,projectid]);
 
   useEffect(() => {
     if (jobDataId) {
@@ -49,7 +49,7 @@ const MainComponent = () => {
 
   useEffect(() => {
     setDisabled(jobData !== undefined && jobData !== null ? false : true);
-  }, [jobDataId,projectID]);
+  }, [jobDataId,projectid]);
 
   const saveDataFunction = () => {
     if (savaDataRef.current && typeof savaDataRef.current.savaDataFunction === 'function') {

@@ -197,7 +197,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
   const { jobDataId, jobFolder, setJobFolder } = useJobData([]);
   const { setJobDataId } = useJobData(null);
-  const { projectID } = useProjectid([]);
+  const { projectid } = useProjectid([]);
   const [startStep, setStartStep] = useState(null);
   const [shouldCallSave, setShouldCallSave] = useState(false);
   const [newEdges, setNewEdges] = useState([]);
@@ -360,7 +360,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       setMenu(null);
       setShouldCallSave(false);
     }
-  }, [projectID, jobDataId, setStartStep, setMenu]);
+  }, [projectid, jobDataId, setStartStep, setMenu]);
 
   const onDragOver = (event) => {
     event.preventDefault();
@@ -974,7 +974,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       >
         <JobParameterMaster
           handleClose={handleCloseJobParams}
-          project_id={projectID}
+          project_id={projectid}
           job={jobfileid ? jobfileid.id : ""}
         />
       </Modal>
