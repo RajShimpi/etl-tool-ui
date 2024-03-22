@@ -9,7 +9,6 @@ const JobStepParameterMaster = ({
   step_type_id,
   name,
   handleClose,
-  // nodes,
   setNodeNames,
 }) => {
   const [parameter, setparameter] = useState([]);
@@ -20,27 +19,13 @@ const JobStepParameterMaster = ({
   const [update, setUpdate] = useState(false);
   const [data, setData] = useState(null);
   const [nameValue, setNameValue] = useState([]);
-  // const [step, setStep] = useState();
   const [nodeid, setNodeid] = useState();
   const [steptype, setSteptype] = useState();
-  // const [nodeName, setNodesName] = useState();
-  // const [isOtherParamVisible, setOtherParamVisible] = useState(false);
   const colSize = parameter.length < 2 ? 12 : parameter.length < 3 ? 6 : parameter.length < 4 ? 4 : parameter.length < 5 ? 6 : 4;
 
   useEffect(() => {
-    // setStep(step_type_id);
     setNodeid(node_id)
   }, [name]);
-
-  // useEffect(() => {
-  //   setNodesName(
-  //     nodes.map((item) => ({
-  //       id: item.id,
-  //       step_name: item.data.heading,
-  //       job_id: item.job_id,
-  //     }))
-  //   );
-  // }, []);
 
   useEffect(() => {
     if (nodeid != node_id) {
@@ -296,7 +281,6 @@ const JobStepParameterMaster = ({
   };
 
   const onChange = (e, obj) => {
-    // setNameValue([])
     var item = nameValue.find((x) => x.id === obj.id);
     item[e.target.name] = e.target.value;
     setNameValue((prevData) => [...prevData]);
@@ -316,7 +300,6 @@ const JobStepParameterMaster = ({
         (data) => {
           handleClose(data);
           setNodeNames(data);
-          // setUpdate(false);
         }
       );
       }
