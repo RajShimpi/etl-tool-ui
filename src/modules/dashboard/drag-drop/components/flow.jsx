@@ -325,29 +325,24 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       })
     );
 
-    axios.putWithCallback(`job/${jobfileid.id}/startstep`, {
-      start_step: startStep,
-    });
+  axios.putWithCallback(`job/${jobfileid.id}/startstep`);
   }, [menu, jobfileid, setNodes]);
 
   const unselectStartStep = useCallback(() => {
-    const startstep = {
-      start_step: null,
-    };
 
     setNodes((nds) =>
       nds.map((node) => {
         if (node.id == menu.id) {
           node.data = {
             ...node.data,
-            start_step: startstep.start_step,
+            start_step:null,
           };
         }
         return node;
       })
     );
 
-    axios.putWithCallback(`job/${jobfileid.id}/startstep`, startstep);
+    axios.putWithCallback(`job/${jobfileid.id}/startstep`);
   }, [menu, setMenu, jobfileid, startStep, setStartStep, nodes]);
 
   useEffect(() => {
