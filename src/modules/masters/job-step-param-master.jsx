@@ -251,7 +251,7 @@ const JobStepParameterMaster = ({
         })
       );
     }
-  }, [jobStepParamData, parameter,setNameValue]);
+  }, [jobStepParamData, parameter]);
 console.log(nameValue);
   const prepareData = () => {
     let columns = Object.getOwnPropertyNames(data);
