@@ -6,15 +6,15 @@ import axios from '../services/axios';
 
 const ProjectFile = () => {
 
-    const [projectid, setProjectid] = useState([]);
-    const [parentid, setParentid] = useState([]);
+    const [projectId, setProjectId] = useState([]);
+    const [parentId, setParentId] = useState([]);
 
     useEffect(() => {
-        axios.getWithCallback('projects/', (data) => setProjectid(data.map(x => ({ value: x.id, label: x.project_name }))))
+        axios.getWithCallback('projects/', (data) => setProjectId(data.map(x => ({ value: x.id, label: x.project_name }))))
     }, []);
 
     useEffect(() => {
-        axios.getWithCallback('project-files/', (data) => setParentid(data.map(y => ({ value: y.id, label: y.file_name }))))
+        axios.getWithCallback('project-files/', (data) => setParentId(data.map(y => ({ value: y.id, label: y.file_name }))))
     }, []);
 
     const defaultObj = { project_id: '', type: '', file_name: '', parent_id: null };
@@ -30,7 +30,7 @@ const ProjectFile = () => {
                 getApi="project-files"
                 title="Project-File"
                 defaultObj={defaultObj}
-                options={[projectid, parentid]}
+                options={[projectId, parentId]}
                 tableTitle='Project-File'
             />
         </>

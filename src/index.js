@@ -10,13 +10,17 @@ root.render(
   // <React.StrictMode>
   <DashboardMetabaseDataProvider>
     <DashboardIdProvider>
+    <ProjectProvider>
         <ProjectidProvider>
+        <ProjectIdProvider>
             <ClientIdProvider>
               <JobDataProvider>
                 <App />
               </JobDataProvider>
             </ClientIdProvider>
+            </ProjectIdProvider>
         </ProjectidProvider>
+        </ProjectProvider>
     </DashboardIdProvider>
   </DashboardMetabaseDataProvider>
 );

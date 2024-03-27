@@ -197,7 +197,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
   const { jobDataId, jobFolder, setJobFolder } = useJobData([]);
   const { setJobDataId } = useJobData(null);
-  const { projectid } = useProjectid([]);
+  const { projectID } = useProjectid([]);
   const [startStep, setStartStep] = useState(null);
   const [shouldCallSave, setShouldCallSave] = useState(false);
   const [newEdges, setNewEdges] = useState([]);
@@ -325,7 +325,9 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       })
     );
 
-  axios.putWithCallback(`job/${jobfileid.id}/startstep`);
+    axios.putWithCallback(`job/${jobfileid.id}/startstep`, {
+      start_step: startStep,
+    });
   }, [menu, jobfileid, setNodes]);
 
   const unselectStartStep = useCallback(() => {
@@ -335,7 +337,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
         if (node.id == menu.id) {
           node.data = {
             ...node.data,
-            start_step:null,
+            start_step: null,
           };
         }
         return node;
@@ -355,7 +357,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       setMenu(null);
       setShouldCallSave(false);
     }
-  }, [projectid, jobDataId, setStartStep, setMenu]);
+  }, [projectID, jobDataId, setStartStep, setMenu]);
 
   const onDragOver = (event) => {
     event.preventDefault();
@@ -969,7 +971,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       >
         <JobParameterMaster
           handleClose={handleCloseJobParams}
-          project_id={projectid}
+          project_id={projectID}
           job={jobfileid ? jobfileid.id : ""}
         />
       </Modal>
