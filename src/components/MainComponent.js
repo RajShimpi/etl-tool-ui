@@ -28,6 +28,7 @@ const MainComponent = () => {
       setJobData(null)
     }
   }, [jobDataId,projectID]);
+  
   useEffect(() => {
     if (projectID) {
       setFilePath([]);

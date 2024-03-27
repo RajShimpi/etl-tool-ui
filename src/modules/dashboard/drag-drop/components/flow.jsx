@@ -325,7 +325,9 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       })
     );
 
-  axios.putWithCallback(`job/${jobfileid.id}/startstep`);
+    axios.putWithCallback(`job/${jobfileid.id}/startstep`, {
+      start_step: startStep,
+    });
   }, [menu, jobfileid, setNodes]);
 
   const unselectStartStep = useCallback(() => {
@@ -335,7 +337,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
         if (node.id == menu.id) {
           node.data = {
             ...node.data,
-            start_step:null,
+            start_step: null,
           };
         }
         return node;

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import FormCommon from "../components/form-common";
 import _ from "lodash";
 import InfoIcon from "@mui/icons-material/Info";
+
 const JobStepParameterMaster = ({
   node_id,
   job_id,
@@ -12,6 +13,7 @@ const JobStepParameterMaster = ({
   nodes,
   setNodeNames,
 }) => {
+
   const [parameter, setparameter] = useState([]);
   const [otherparameters, setotherParameters] = useState([]);
   const [editName, setEditName] = useState("");
@@ -20,10 +22,9 @@ const JobStepParameterMaster = ({
   const [update, setUpdate] = useState(false);
   const [data, setData] = useState(null);
   const [nameValue, setNameValue] = useState([]);
-  const [step, setStep] = useState();
+  // const [step, setStep] = useState();
   const [nodeid, setNodeid] = useState();
   const [steptype, setSteptype] = useState();
-  const [nodeName, setNodesName] = useState();
 
   const colSize =
     parameter.length < 2
@@ -37,19 +38,19 @@ const JobStepParameterMaster = ({
       : 4;
 
   useEffect(() => {
-    setStep(step_type_id);
+    // setStep(step_type_id);
     setNodeid(node_id);
   }, [name]);
   
-  useEffect(() => {
-    setNodesName(
-      nodes.map((item) => ({
-        id: item.id,
-        step_name: item.data.heading,
-        job_id: item.job_id,
-      }))
-    );
-  }, []);
+  // useEffect(() => {
+  //   setNodesName(
+  //     nodes.map((item) => ({
+  //       id: item.id,
+  //       step_name: item.data.heading,
+  //       job_id: item.job_id,
+  //     }))
+  //   );
+  // }, []);
 
   useEffect(() => {
     if (nodeid != node_id) {
@@ -58,7 +59,7 @@ const JobStepParameterMaster = ({
       setEditName([]);
       setotherParameters([]);
       setparameter([]);
-      setNameValue([]);
+      // setNameValue([]);
       setJobStepParamData([]);
     }
   }, [node_id, nodeid]);
@@ -250,8 +251,8 @@ const JobStepParameterMaster = ({
         })
       );
     }
-  }, [jobStepParamData, parameter]);
-
+  }, [jobStepParamData, parameter,setNameValue]);
+console.log(nameValue);
   const prepareData = () => {
     let columns = Object.getOwnPropertyNames(data);
     return columns
