@@ -9,6 +9,7 @@ const JobStepParameterMaster = ({
   step_type_id,
   name,
   handleClose,
+  nodes,
   setNodeNames,
 }) => {
   const [parameter, setparameter] = useState([]);
@@ -19,8 +20,11 @@ const JobStepParameterMaster = ({
   const [update, setUpdate] = useState(false);
   const [data, setData] = useState(null);
   const [nameValue, setNameValue] = useState([]);
+  const [step, setStep] = useState();
   const [nodeid, setNodeid] = useState();
   const [steptype, setSteptype] = useState();
+  const [nodeName, setNodesName] = useState();
+
   const colSize =
     parameter.length < 2
       ? 12
@@ -33,8 +37,19 @@ const JobStepParameterMaster = ({
       : 4;
 
   useEffect(() => {
+    setStep(step_type_id);
     setNodeid(node_id);
   }, [name]);
+  
+  useEffect(() => {
+    setNodesName(
+      nodes.map((item) => ({
+        id: item.id,
+        step_name: item.data.heading,
+        job_id: item.job_id,
+      }))
+    );
+  }, []);
 
   useEffect(() => {
     if (nodeid != node_id) {

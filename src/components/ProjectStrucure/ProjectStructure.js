@@ -20,7 +20,7 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
   const [showNested, setShowNested] = useState({});
   const [isShow, setShow] = useState({});
   const [fix, setFix] = useState(true);
-  const { projectid } = useProjectid([])
+  const { projectID } = useProjectid([])
   const containerRef = useRef(null);
   const { setJobDataId } = useJobData();
 
@@ -45,12 +45,12 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
       document.removeEventListener('click', handleDocumentClick);
       window.removeEventListener('keydown', close);
     };
-  }, [projectid]);
+  }, [projectID]);
 
   const getProjects = () => {
     setProjects([]);
-    if (projectid) {
-      axios.getWithCallback(`projects/${projectid}`, (dt) => {
+    if (projectID) {
+      axios.getWithCallback(`projects/${projectID}`, (dt) => {
         // data.map((dt, inx) => {
         let url = 'project-files/get-folder-hierarchy?projectId=' + dt.id;
         axios.getWithCallback(url, (subdata) => {

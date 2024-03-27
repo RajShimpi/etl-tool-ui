@@ -47,7 +47,7 @@ const Dashboard = () => {
   const [project, setProject] = useState([]);
   const [selectedChildItem, setSelectedChildItem] = useState(false);
   const [selectedChildMenu, setSelectedChildMenu] = useState(false);
-  const { setProjectid } = useProjectid();
+  const { setProjectID } = useProjectid();
   const [isMenuOpen, setMenuOpen] = useState(false);
   const { setDashboardId } = useDashboardId();
   const [dashboardData, setDashboardData] = useState([]);
@@ -194,7 +194,7 @@ const Dashboard = () => {
   }, []);
 
   const onhandelProject = (projectid) => {
-    setProjectid(projectid);
+    setProjectID(projectid);
   };
   const onhandelDashboardId = (id) => {
     setDashboardId(id);

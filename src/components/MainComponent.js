@@ -3,7 +3,7 @@ import ComponetTool from "./ComponentTool/ComponetTool";
 import ProjectStructure from "./ProjectStrucure/ProjectStructure";
 import "./MainComponent.css";
 import OverviewFlow from "../modules/dashboard/drag-drop/components/flow";
-import { useJobData, useProjectid } from "./JobDataContext";
+import { useJobData, useProjectId, useProjectid, useprojectID } from "./JobDataContext";
 import axios from "../modules/services/axios";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import SaveIcon from '@mui/icons-material/Save';
@@ -19,7 +19,7 @@ const MainComponent = () => {
   const [disabled, setDisabled] = useState(true)
   const [jobData, setJobData] = useState()
   const [filePath, setFilePath] = useState([])
-  const { projectid } = useProjectid([]);
+  const { projectID } = useProjectid([]);
 
   useEffect(() => {
     if (jobDataId) {
@@ -27,12 +27,12 @@ const MainComponent = () => {
     } else {
       setJobData(null)
     }
-  }, [jobDataId,projectid]);
+  }, [jobDataId,projectID]);
   useEffect(() => {
-    if (projectid) {
+    if (projectID) {
       setFilePath([]);
     }
-  }, [projectid,jobDataId]);
+  }, [projectID,jobDataId]);
 
   useEffect(() => {
     if (jobDataId) {
@@ -53,7 +53,7 @@ const MainComponent = () => {
 
   useEffect(() => {
     setDisabled(jobData !== undefined && jobData !== null ? false : true);
-  }, [jobDataId,projectid]);
+  }, [jobDataId,projectID]);
 
   const saveDataFunction = () => {
     if (savaDataRef.current && typeof savaDataRef.current.savaDataFunction === 'function') {
