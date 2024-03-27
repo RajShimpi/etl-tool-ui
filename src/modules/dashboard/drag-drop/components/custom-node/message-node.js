@@ -41,7 +41,7 @@ const Node = ({ data, id, start_step, startStep, item, isSelected, textRef, node
 
   let customTitle = { ...style.title };
   customTitle.backgroundColor = "#08c9bd";
-  // console.log(data);
+
   return (
     <div ref={nodeRef}>
       <div style={{ textAlign: "center" }} className="text-updater-node" >
@@ -62,8 +62,8 @@ const Node = ({ data, id, start_step, startStep, item, isSelected, textRef, node
               {startStep === data.id ? (
                 <div>
                   <img
-                    src="/assets/images/flag.png"
-                    style={{ zIndex: '10', position: "absolute", marginLeft: '-30px', marginTop: '1px' }}
+                    src="/assets/images/start.png"
+                    style={{ zIndex: '10', position: "absolute", marginLeft: '-58px', marginTop: '30px' ,height:"30px",width:'30px'}}
                   />
                 </div>
               ) : ''}
@@ -96,22 +96,36 @@ const Node = ({ data, id, start_step, startStep, item, isSelected, textRef, node
           <>
             <Handle
               type="source"
-              style={{ marginTop: '-30px', marginLeft: '-40px', backgroundColor: "green", border: "green" }}
+              style={{ marginTop: '-30px', marginLeft: '-40px', backgroundColor: "green", border: "green" ,height:"8px",width:"8px" }}
               position={Position.Right}
               id="ok"
               onDoubleClick={onNodeDoubleClick}
             />
             <Handle
               type="source"
-              style={{ backgroundColor: "red", border: "red" }}
+              style={{ backgroundColor: "red", border: "red",height:"8px",width:"8px"  }}
               position={Position.Right}
               id="error"
               onDoubleClick={onNodeDoubleClick}
             />
           </>
         )}
+        {data.type.toLowerCase().includes("end") && (
+          <>
+          <div>
+                  <img
+                    src="/assets/images/end.png"
+                    style={{ zIndex: '10', position: "absolute", marginLeft: '38px', marginTop: '-90px' ,height:"30px",width:'30px'}}
+                  />
+                </div>
+          </>
+        )}
+        {!data.start_step&& (
+          <>
+            <Handle type="target" position={Position.Left} id="target"   style={{ marginTop: '-18px', marginLeft: '-10px', height:"10px",width:"10px" }} onDoubleClick={onNodeDoubleClick} />
+          </>
+        )}
 
-        <Handle type="target" position={Position.Left} id="target" onDoubleClick={onNodeDoubleClick} />
       </div>
     </div>
   );
