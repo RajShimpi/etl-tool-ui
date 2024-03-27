@@ -52,7 +52,6 @@ export const getJobScheduleFields = (itemData) => {
           label: "Active",
           name: "active",
           control: "input",
-          isRequired: true,
           itemVal: itemData.values ? itemData.values["active"] : '',
       },
       ]

@@ -172,7 +172,6 @@ const ContextMenu = ({
 };
 
 const OverviewFlow = React.forwardRef((props, refs, textColor) => {
-
   const [showNodeMaster, setShowNodeMaster] = useState(false);
   const reactFlowWrapper = useRef(null);
   const edgeUpdateSuccessful = useRef(true);
@@ -198,7 +197,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
   const { jobDataId, jobFolder, setJobFolder } = useJobData([]);
   const { setJobDataId } = useJobData(null);
-  const { projectID } = useProjectid([]);
+  const { projectid } = useProjectid([]);
   const [startStep, setStartStep] = useState(null);
   const [shouldCallSave, setShouldCallSave] = useState(false);
   const [newEdges, setNewEdges] = useState([]);
@@ -241,7 +240,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
           }
         },
         () => {
-          errorAlert("Flow not saved");
+          alertInfo("Flow not saved");
         }
       );
     }
@@ -326,29 +325,24 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       })
     );
 
-    axios.putWithCallback(`job/${jobfileid.id}/startstep`, {
-      start_step: startStep,
-    });
+  axios.putWithCallback(`job/${jobfileid.id}/startstep`);
   }, [menu, jobfileid, setNodes]);
 
   const unselectStartStep = useCallback(() => {
-    const startstep = {
-      start_step: null,
-    };
 
     setNodes((nds) =>
       nds.map((node) => {
         if (node.id == menu.id) {
           node.data = {
             ...node.data,
-            start_step: startstep.start_step,
+            start_step:null,
           };
         }
         return node;
       })
     );
 
-    axios.putWithCallback(`job/${jobfileid.id}/startstep`, startstep);
+    axios.putWithCallback(`job/${jobfileid.id}/startstep`);
   }, [menu, setMenu, jobfileid, startStep, setStartStep, nodes]);
 
   useEffect(() => {
@@ -361,7 +355,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       setMenu(null);
       setShouldCallSave(false);
     }
-  }, [projectID, jobDataId, setStartStep, setMenu]);
+  }, [projectid, jobDataId, setStartStep, setMenu]);
 
   const onDragOver = (event) => {
     event.preventDefault();
@@ -409,7 +403,6 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
           {
             ...data,
             id: `${data.id}`,
-            // type: item.stepType.type,
             ...newNode,
             position: {
               x: position.x,
@@ -426,7 +419,6 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
           {
             ...data,
             id: `${data.id}`,
-            // type: item.stepType.type,
             ...newNode,
             position: {
               x: position.x,
@@ -434,6 +426,28 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
             },
           },
         ]);
+        if (!data?.step_name.toLowerCase().includes("end")) {
+          const newEdgeok = {
+            id: data.id + "_ok",
+            source: data.id + "",
+            target: "null",
+            sourceHandle: "ok",
+            label: "ok",
+            type: "smoothstep",
+            step_name: data.step_name,
+          };
+          setEdges((prevEdges) => addEdge(newEdgeok, prevEdges));
+          const newEdgeerror = {
+            source: data.id + "_error",
+            source: data.id + "",
+            target: "null",
+            sourceHandle: "error",
+            label: "error",
+            type: "smoothstep",
+            step_name: data.step_name,
+          };
+          setEdges((prevEdges) => addEdge(newEdgeerror, prevEdges));
+        }
       });
     } else {
       alertInfo("You Need To Select The File Or Create The New File");
@@ -741,7 +755,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       if (node.selected) return true;
       return false;
     });
-    if (node[0]) {
+    if (node[0]) { 
       setSelectedNode(node[0]);
       setIsSelected(true);
     } else {
@@ -776,7 +790,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       setNewEdges(updatedEdges);
       setShouldCallSave(true);
     },
-    [edges, setEdges,]
+    [edges, setEdges]
   );
 
   const onEdgeUpdateEnd = useCallback(
@@ -794,7 +808,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       }
       edgeUpdateSuccessful.current = true;
     },
-    [edges, setEdges ]
+    [edges, setEdges]
   );
 
   const onNodeDoubleClick = () => {
@@ -819,7 +833,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
           return node;
         })
       );
-      
+
       setAllNodes((nds) =>
         nds.map((node) => {
           if (node.id == obj.id) {
@@ -907,21 +921,21 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       setNodes((nodes) => nodes.filter((node) => node.id !== menu.id));
       setNewEdges((edges) => edges.filter((edge) => edge.source !== menu.id));
       setEdges((prevEdges) =>
-      prevEdges.map((edge) => {
-        if (edge.label === 'ok') {
-        if (edge.target == menu.id) {
-            return { ...edge, target: 'null' };
+        prevEdges.map((edge) => {
+          if (edge.label === "ok") {
+            if (edge.target == menu.id) {
+              return { ...edge, target: "null" };
+            }
+            return edge;
           }
-          return edge;
-        } 
-        if (edge.label == 'error') {
-         if (edge.target == menu.id)  {
-            return { ...edge, target: 'null' };
+          if (edge.label == "error") {
+            if (edge.target == menu.id) {
+              return { ...edge, target: "null" };
+            }
+            return edge;
           }
-          return edge;
-        }
-      })
-    );
+        })
+      );
 
       setMenu(null);
     }
@@ -955,7 +969,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       >
         <JobParameterMaster
           handleClose={handleCloseJobParams}
-          project_id={projectID}
+          project_id={projectid}
           job={jobfileid ? jobfileid.id : ""}
         />
       </Modal>

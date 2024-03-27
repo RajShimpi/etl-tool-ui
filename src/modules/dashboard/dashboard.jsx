@@ -47,7 +47,7 @@ const Dashboard = () => {
   const [project, setProject] = useState([]);
   const [selectedChildItem, setSelectedChildItem] = useState(false);
   const [selectedChildMenu, setSelectedChildMenu] = useState(false);
-  const { setProjectID } = useProjectid();
+  const { setProjectid } = useProjectid();
   const [isMenuOpen, setMenuOpen] = useState(false);
   const { setDashboardId } = useDashboardId();
   const [dashboardData, setDashboardData] = useState([]);
@@ -192,11 +192,9 @@ const Dashboard = () => {
   useEffect(() => {
     // axios.getWithCallback("metabase/json", (data) => setDashboardData(data));
   }, []);
-  // console.log(dashboardData);
 
   const onhandelProject = (projectid) => {
-    // auth.setAuthData(projectid);
-    setProjectID(projectid);
+    setProjectid(projectid);
   };
   const onhandelDashboardId = (id) => {
     setDashboardId(id);

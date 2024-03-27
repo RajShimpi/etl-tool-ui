@@ -6,34 +6,8 @@ const CommonTable = ({
   columns,
   callback,
   resetparamsTable,
-  otherParamsData,
 }) => {
   const [nameValue, setNameValue] = useState([]);
-  const [otherData, setotherData] = useState([]);
-
-  useEffect(() => {
-    if (data) {
-      setotherData(data);
-    } else  if(otherParamsData){
-      setotherData(otherParamsData);
-    }else{
-      setotherData([]);
-    }
-  }, [otherData]);
-
-  useEffect(() => {
-    let so = otherData.map((item) => {
-      let obj = {};
-      columns.forEach((col) => {
-        obj = { ...obj, [`${col.name}_${item.sequence}`]: item[col.name] };
-      });
-      return {
-        ...obj,
-        ...item,
-      };
-    });
-    setNameValue(so);
-  }, [otherData, columns]);
 
   useEffect(() => {
     let so = data.map((item) => {
@@ -102,6 +76,7 @@ const CommonTable = ({
           Additional Parameter
         </button>
       </div>
+      <div style={{maxHeight:"190px" ,overflowY:"scroll" , scrollbarWidth: "thin", scrollbarColor: "transparent transparent" }}>
       {!!nameValue?.length && (
         <table className="table table-striped table-bordered dt-responsive">
           <thead
@@ -146,6 +121,7 @@ const CommonTable = ({
           </tbody>
         </table>
       )}
+      </div>
     </>
   );
 };
