@@ -59,7 +59,7 @@ const JobStepParameterMaster = ({
       setEditName([]);
       setotherParameters([]);
       setparameter([]);
-      // setNameValue([]);
+      setNameValue([]);
       setJobStepParamData([]);
     }
   }, [node_id, nodeid]);
