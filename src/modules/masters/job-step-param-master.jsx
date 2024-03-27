@@ -365,7 +365,7 @@ const JobStepParameterMaster = ({
                     <div
                       style={{
                         display: "flex",
-                        width: "100%",  
+                        width: "100%",
                         justifyContent: "space-between",
                       }}
                     >
