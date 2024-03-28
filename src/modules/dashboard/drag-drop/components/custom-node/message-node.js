@@ -63,6 +63,7 @@ const Node = ({ data, id, start_step, startStep, item, isSelected, textRef, node
                 <div>
                   <img
                     src="/assets/images/start.png"
+                    title="Start Point"
                     style={{ zIndex: '10', position: "absolute", marginLeft: '-58px', marginTop: '30px' ,height:"30px",width:'30px'}}
                   />
                 </div>
@@ -115,6 +116,7 @@ const Node = ({ data, id, start_step, startStep, item, isSelected, textRef, node
           <div>
                   <img
                     src="/assets/images/end.png"
+                    title="End"
                     style={{ zIndex: '10', position: "absolute", marginLeft: '38px', marginTop: '-90px' ,height:"30px",width:'30px'}}
                   />
                 </div>
