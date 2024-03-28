@@ -40,13 +40,13 @@ const JobStepParameterMaster = ({
   useEffect(() => {
     setStep(step_type_id);
     setNodeid(node_id);
-    setData([]);
-      setControlData([]);
-      setEditName([]);
-      setotherParameters([]);
-      setparameter([]);
-      setNameValue([]);
-      setJobStepParamData([]);
+    // setData([]);
+    //   setControlData([]);
+    //   setEditName([]);
+    //   setotherParameters([]);
+    //   setparameter([]);
+    //   setNameValue([]);
+    //   setJobStepParamData([]);
   }, [step_type_id,node_id]);
   
   // useEffect(() => {
@@ -60,7 +60,7 @@ const JobStepParameterMaster = ({
   // }, []);
 
   useEffect(() => {
-    // if (nodeid != node_id) {
+    if (nodeid != node_id) {
       setData([]);
       setControlData([]);
       setEditName([]);
@@ -68,8 +68,8 @@ const JobStepParameterMaster = ({
       setparameter([]);
       setNameValue([]);
       setJobStepParamData([]);
-    // }
-  }, [node_id, nodeid]);
+    }
+  }, [node_id]);
 
   useEffect(() => {
     if (step) {
