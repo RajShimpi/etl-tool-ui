@@ -8,7 +8,19 @@ const Parameter = () => {
 
     const [parameter, setParameter] = useState([]);
     const [stepType, setStepType] = useState([]);
+    const [validationMsgs, setValidationMessages] = useState({});
 
+    const triggerValidation = (propsName, msg) => {
+        if (propsName) {
+            setValidationMessages((prevState) => ({ ...prevState, [propsName]: msg }));
+        } else {
+            setValidationMessages({});
+        }
+    }
+
+    const processListCallback = (data) => {
+        return data.map(x => { return { ...x, params: JSON.stringify(x.params) } })
+    }
     useEffect(() => {
         axios.getWithCallback('parameter/', (data) => setParameter(data.map(x => { return { value: x.id, label: x.name } })))
     }, []);
@@ -31,6 +43,10 @@ const Parameter = () => {
                 defaultObj={defaultObj}
                 options={[stepType, parameter]}
                 tableTitle='Parameter'
+                message={validationMsgs}
+                validationCallback={triggerValidation}
+                processListCallback={processListCallback}
+                jsonParam='params'
             />
         </>
     );

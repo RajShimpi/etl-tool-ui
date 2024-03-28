@@ -30,7 +30,7 @@ const MainComponent = () => {
   }, [jobDataId,projectID]);
   
   useEffect(() => {
-    if (projectID) {
+    if (jobDataId || projectID) {
       setFilePath([]);
     }
   }, [projectID,jobDataId]);
