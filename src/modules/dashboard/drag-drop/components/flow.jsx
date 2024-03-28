@@ -959,7 +959,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       setEdges([]);
     }
   }, [jobFolder, setNodes, setEdges, setJobDataId]);
-console.log(jobfileid);
+
   return (
     <>
       <Modal

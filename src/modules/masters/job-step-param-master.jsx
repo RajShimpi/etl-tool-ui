@@ -40,7 +40,14 @@ const JobStepParameterMaster = ({
   useEffect(() => {
     setStep(step_type_id);
     setNodeid(node_id);
-  }, [name]);
+    setData([]);
+      setControlData([]);
+      setEditName([]);
+      setotherParameters([]);
+      setparameter([]);
+      setNameValue([]);
+      setJobStepParamData([]);
+  }, [step_type_id,node_id]);
   
   // useEffect(() => {
   //   setNodesName(
@@ -52,17 +59,17 @@ const JobStepParameterMaster = ({
   //   );
   // }, []);
 
-  useEffect(() => {
-    // if (nodeid != node_id) {
-      setData([]);
-      setControlData([]);
-      setEditName([]);
-      setotherParameters([]);
-      setparameter([]);
-      setNameValue([]);
-      setJobStepParamData([]);
-    // }
-  }, [node_id, nodeid]);
+  // useEffect(() => {
+  //   // if (nodeid != node_id) {
+  //     setData([]);
+  //     setControlData([]);
+  //     setEditName([]);
+  //     setotherParameters([]);
+  //     setparameter([]);
+  //     setNameValue([]);
+  //     setJobStepParamData([]);
+  //   // }
+  // }, [node_id, nodeid]);
 
   useEffect(() => {
     if (step) {
@@ -102,7 +109,7 @@ const JobStepParameterMaster = ({
         }
       );
     }
-  }, [step_type_id,step, job_id,node_id]);
+  }, [step_type_id,step, job_id,node_id,setparameter]);
 
   useEffect(() => {
     if (node_id) {
@@ -252,7 +259,7 @@ const JobStepParameterMaster = ({
       );
     }
   }, [jobStepParamData, parameter]);
-console.log(nameValue);
+
   const prepareData = () => {
     let columns = Object.getOwnPropertyNames(data);
     return columns
