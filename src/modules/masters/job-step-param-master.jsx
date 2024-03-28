@@ -60,7 +60,7 @@ const JobStepParameterMaster = ({
   // }, []);
 
   useEffect(() => {
-    // if (nodeid != node_id) {
+    if (nodeid != node_id) {
       setData([]);
       setControlData([]);
       setEditName([]);
@@ -68,7 +68,7 @@ const JobStepParameterMaster = ({
       setparameter([]);
       setNameValue([]);
       setJobStepParamData([]);
-    // }
+    }
   }, [node_id]);
 
   useEffect(() => {
