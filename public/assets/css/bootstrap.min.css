@@ -4613,7 +4613,7 @@ left: 450px;
 
 .from-body {
     max-height: 197px;
-    min-height: 197px;
+    min-height: 255px;
     overflow: scroll;
     padding: 7px;
     overflow-x: hidden;

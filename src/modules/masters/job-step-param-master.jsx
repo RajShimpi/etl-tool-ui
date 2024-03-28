@@ -22,7 +22,7 @@ const JobStepParameterMaster = ({
   const [update, setUpdate] = useState(false);
   const [data, setData] = useState(null);
   const [nameValue, setNameValue] = useState([]);
-  // const [step, setStep] = useState();
+  const [step, setStep] = useState();
   const [nodeid, setNodeid] = useState();
   const [steptype, setSteptype] = useState();
 
@@ -38,7 +38,7 @@ const JobStepParameterMaster = ({
       : 4;
 
   useEffect(() => {
-    // setStep(step_type_id);
+    setStep(step_type_id);
     setNodeid(node_id);
   }, [name]);
   
@@ -53,7 +53,7 @@ const JobStepParameterMaster = ({
   // }, []);
 
   useEffect(() => {
-    if (nodeid != node_id) {
+    // if (nodeid != node_id) {
       setData([]);
       setControlData([]);
       setEditName([]);
@@ -61,13 +61,13 @@ const JobStepParameterMaster = ({
       setparameter([]);
       setNameValue([]);
       setJobStepParamData([]);
-    }
+    // }
   }, [node_id, nodeid]);
 
   useEffect(() => {
-    if (step_type_id) {
+    if (step) {
       axios.getWithCallback(
-        `step-type/parameter/get/${step_type_id}`,
+        `step-type/parameter/get/${step}`,
         async (data) => {
           const options = {};
           await Promise.all(
@@ -102,7 +102,7 @@ const JobStepParameterMaster = ({
         }
       );
     }
-  }, [step_type_id, job_id]);
+  }, [step_type_id,step, job_id,node_id]);
 
   useEffect(() => {
     if (node_id) {
@@ -129,15 +129,15 @@ const JobStepParameterMaster = ({
           setData(data)
         );
       }
-      if (step_type_id) {
-        axios.getWithCallback(`step-type/${step_type_id}`, (data) =>
+      if (step) {
+        axios.getWithCallback(`step-type/${step}`, (data) =>
           setSteptype(data.name)
         );
       }
 
       axios.getWithCallback(`parameter/`, (data) => setotherParameters(data));
     }
-  }, [node_id, step_type_id, nodeid]);
+  }, [node_id, step_type_id,step, nodeid]);
 
   let defaultObj = {
     step_name: "",
@@ -272,7 +272,7 @@ console.log(nameValue);
           return {
             job_id: parseInt(job_id),
             step_id: node_id,
-            step_type_id: parseInt(step_type_id),
+            step_type_id: parseInt(step),
             parameter_id: parseInt(param.parameter_id),
             parameter_name: col,
             value: data[col],
@@ -297,7 +297,7 @@ console.log(nameValue);
         return {
           job_id: parseInt(job_id),
           step_id: node_id,
-          step_type_id: parseInt(step_type_id),
+          step_type_id: parseInt(step),
           parameter_id: parseInt(param.id),
           parameter_name: x[`name_${index + 1}`],
           value: x[`value_${index + 1}`],
