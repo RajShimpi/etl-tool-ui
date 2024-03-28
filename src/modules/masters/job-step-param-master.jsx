@@ -59,17 +59,17 @@ const JobStepParameterMaster = ({
   //   );
   // }, []);
 
-  // useEffect(() => {
-  //   // if (nodeid != node_id) {
-  //     setData([]);
-  //     setControlData([]);
-  //     setEditName([]);
-  //     setotherParameters([]);
-  //     setparameter([]);
-  //     setNameValue([]);
-  //     setJobStepParamData([]);
-  //   // }
-  // }, [node_id, nodeid]);
+  useEffect(() => {
+    // if (nodeid != node_id) {
+      setData([]);
+      setControlData([]);
+      setEditName([]);
+      setotherParameters([]);
+      setparameter([]);
+      setNameValue([]);
+      setJobStepParamData([]);
+    // }
+  }, [node_id, nodeid]);
 
   useEffect(() => {
     if (step) {
