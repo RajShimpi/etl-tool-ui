@@ -168,7 +168,7 @@ const JobStepParameterMaster = ({
         callback: itemData.callback,
         groups: !!parameter
           ? parameter
-              ?.filter((x) => x.name !== "other")
+              ?.filter((x) => x.parameter?.name !== "other")
               .map((v) => {
                 return {
                   type: v.parameter.type.includes("text")
