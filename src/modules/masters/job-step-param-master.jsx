@@ -53,7 +53,7 @@ const JobStepParameterMaster = ({
     const fetchData = async () => {
       if (step_type_id) {
         try {
-          const response = await axios.get(`step-type/parameter/get/${step_type_id}`);
+          const response = await axios.getWithCallback(`step-type/parameter/get/${step_type_id}`);
           const options = {};
           await Promise.all(
             response.data.stepTypeParameters.map(async (parameter) => {
@@ -90,7 +90,7 @@ const JobStepParameterMaster = ({
     const fetchData = async () => {
       if (node_id) {
         try {
-          const response = await axios.get(`job-step-parameters/${node_id}`);
+          const response = await axios.getWithCallback(`job-step-parameters/${node_id}`);
           if (response.data?.length) {
             setUpdate(true);
             setJobStepParamData(response.data !== null ? response.data : null);
