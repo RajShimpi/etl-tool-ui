@@ -51,12 +51,17 @@ const JobStepParameterMaster = ({
 
   useEffect(() => {
     const fetchData = async () => {
-      if (step_type_id) {
-        try {
-          const response = await axios.getWithCallback(`step-type/parameter/get/${step_type_id}`);
+        if (step_type_id) {
+          const response = await new Promise((resolve, reject) => {
+            axios.getWithCallback(`step-type/parameter/get/${step_type_id}`, (data) => {
+              resolve(data);
+            }, (error) => {
+              reject(error);
+            });
+          });
           const options = {};
           await Promise.all(
-            response.data.stepTypeParameters.map(async (parameter) => {
+            response.stepTypeParameters.map(async (parameter) => {
               let resource = parameter.parameter?.resource;
               var fieldMapping = parameter.parameter?.params;
               if (resource && resource !== "NA") {
@@ -66,7 +71,7 @@ const JobStepParameterMaster = ({
                   resource = resource.replace(/\$\{\w+\}/g, function (all) {
                     return replacements[all] || all;
                   });
-                  const resourceData = await axios.getWithCallback(`${resource}`);
+                  const resourceData = await axios.get(`${resource}`);
                   parameter.options = resourceData.data.map((x) => ({
                     value: fieldMapping && fieldMapping.value_field ? x[fieldMapping.value_field] : x.value,
                     label: fieldMapping && fieldMapping.label_field ? x[fieldMapping.label_field] : x.label,
@@ -77,20 +82,17 @@ const JobStepParameterMaster = ({
               }
             })
           );
-          setParameter(response.data.stepTypeParameters);
-        } catch (error) {
-          console.error("Error fetching step type parameters:", error);
+          setParameter(response.stepTypeParameters);
         }
-      }
     };
     fetchData();
-  }, [step_type_id, job_id, node_id]);
+  }, [step_type_id, job_id, node_id]);  
 
   useEffect(() => {
     const fetchData = async () => {
       if (node_id) {
         try {
-          const response = await axios.getWithCallback(`job-step-parameters/${node_id}`);
+          const response = await axios.get(`job-step-parameters/${node_id}`);
           if (response.data?.length) {
             setUpdate(true);
             setJobStepParamData(response.data !== null ? response.data : null);
@@ -168,7 +170,7 @@ const JobStepParameterMaster = ({
         callback: itemData.callback,
         groups: !!parameter
           ? parameter
-              ?.filter((x) => x.parameter?.name !== "other")
+              ?.filter((x) => x.name !== "other")
               .map((v) => {
                 return {
                   type: v.parameter.type.includes("text")
@@ -228,20 +230,24 @@ const JobStepParameterMaster = ({
   };
 
   useEffect(() => {
-    let param = otherParameters?.find((x) => x.name == "other");
-    if (!!param && jobStepParamData?.length) {
-      let dt = jobStepParamData.filter((x) => x.parameter_id === param.id);
-      setNameValue(
-        dt.map((x, index) => {
-          return {
-            sequence: x.sequence,
-            [`name_${x.sequence}`]: x.parameter_name,
-            [`value_${x.sequence}`]: x.value,
-          };
-        })
-      );
-    }
-  }, [jobStepParamData, parameter,setNameValue]);
+    const fetchData = async () => {
+      let param = otherParameters?.find((x) => x.name === "other");
+      if (!!param && jobStepParamData?.length) {
+        let dt = jobStepParamData.filter((x) => x.parameter_id === param.id);
+        setNameValue(
+          dt.map((x, index) => {
+            return {
+              sequence: x.sequence,
+              [`name_${x.sequence}`]: x.parameter_name,
+              [`value_${x.sequence}`]: x.value,
+            };
+          })
+        );
+      }
+    };
+    fetchData();
+  }, [jobStepParamData, otherParameters]);
+  
 
   const prepareData = () => {
     let columns = Object.getOwnPropertyNames(data);
