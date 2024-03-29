@@ -170,7 +170,7 @@ const JobStepParameterMaster = ({
         callback: itemData.callback,
         groups: !!parameter
           ? parameter
-              ?.filter((x) => x.name !== "other")
+          ?.filter((x) => x.parameter?.name !== "other")
               .map((v) => {
                 return {
                   type: v.parameter.type.includes("text")
@@ -247,7 +247,7 @@ const JobStepParameterMaster = ({
     };
     fetchData();
   }, [jobStepParamData, otherParameters]);
-  
+  // console.log(nameValue);
 
   const prepareData = () => {
     let columns = Object.getOwnPropertyNames(data);
@@ -293,11 +293,12 @@ const JobStepParameterMaster = ({
         return {
           job_id: parseInt(job_id),
           step_id: node_id,
+          sequence: x.sequence,
           step_type_id: parseInt(step_type_id),
           parameter_id: parseInt(param.id),
           parameter_name: x[`name_${x.sequence}`],
-          sequence: x.sequence,
           value: x[`value_${x.sequence}`],
+
         };
       }
     });
@@ -306,9 +307,8 @@ const JobStepParameterMaster = ({
   const onClick = (e) => {
     e.preventDefault();
     let val = _.maxBy(nameValue, x => x.sequence);
-    setNameValue((prevData) => ([ ...prevData, { sequence: val?.sequence ? val.sequence + 1 : 1 }]))
-  }
-
+      setNameValue((prevData) => ([ ...prevData, { sequence: val?.sequence ? val.sequence + 1 : 1 }]))
+  };
   const onRemove = (e, id) => {
     e.preventDefault();
     setNameValue(nameValue.filter((x) => x.sequence !== id));
@@ -339,6 +339,8 @@ const JobStepParameterMaster = ({
       }
       var dt = prepareOtherParams();
       var dt1 = prepareData();
+      console.log("dt:",dt);
+      console.log("dt1:",dt1);
       if ((dt !== null && dt.length > 0) || (dt1 !== null && dt1.length > 0)) {
         axios.postWithCallback(
           "job-step-parameters",
@@ -351,7 +353,6 @@ const JobStepParameterMaster = ({
       }
     }
   };
-
 
   return (
     <div className="row" style={{ height: "300px" }}>
