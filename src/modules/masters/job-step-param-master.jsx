@@ -320,7 +320,7 @@ const JobStepParameterMaster = ({
     setNameValue((prevData) => [...prevData]);
   };
 
-  const onsubmit = async (e) => {
+  const onsubmit = (e) => {
     e.preventDefault();
     if (!e.target.checkValidity()) {
       e.stopPropagation();
@@ -328,27 +328,30 @@ const JobStepParameterMaster = ({
       //props.validationCallback(true);
     } else {
       if (data?.step_name) {
-        try {
-          const response = await axios.put(`job-steps/${node_id}/name-save`, { step_name: data.step_name, job_id: job_id });
-          handleClose(response.data);
-          setNodeNames(response.data);
-        } catch (error) {
-          console.error("Error updating step name:", error);
-        }
+        axios.putWithCallback(
+          `job-steps/${node_id}/name-save`,
+          { step_name: data.step_name, job_id: job_id },
+          (data) => {
+            handleClose(data);
+            setNodeNames(data);
+          }
+        );
       }
       var dt = prepareOtherParams();
       var dt1 = prepareData();
       if ((dt !== null && dt.length > 0) || (dt1 !== null && dt1.length > 0)) {
-        try {
-          const response = await axios.post("job-step-parameters", _.concat(dt1, dt));
-          setUpdate(true);
-          handleClose(null);
-        } catch (error) {
-          console.error("Error adding job step parameters:", error);
-        }
+        axios.postWithCallback(
+          "job-step-parameters",
+          _.concat(dt1, dt),
+          (data) => {
+            setUpdate(true);
+            handleClose(null);
+          }
+        );
       }
     }
   };
+
 
   return (
     <div className="row" style={{ height: "300px" }}>
