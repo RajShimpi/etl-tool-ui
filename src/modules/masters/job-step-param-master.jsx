@@ -11,6 +11,7 @@ const JobStepParameterMaster = ({
   name,
   handleClose,
   nodes,
+  open,
   setNodeNames,
 }) => {
   const [parameter, setParameter] = useState([]);
@@ -86,7 +87,7 @@ const JobStepParameterMaster = ({
         }
     };
     fetchData();
-  }, [step_type_id, job_id, node_id]);  
+  }, [step_type_id, job_id, node_id,open]);  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -129,7 +130,7 @@ const JobStepParameterMaster = ({
     }
 
     axios.getWithCallback(`parameter/`, (data) => setOtherParameters(data));
-  }, [node_id, step_type_id, nodeid]);
+  }, [node_id, step_type_id, nodeid,open]);
 
   let defaultObj = {
     step_name: "",
@@ -247,7 +248,6 @@ const JobStepParameterMaster = ({
     };
     fetchData();
   }, [jobStepParamData, otherParameters]);
-  // console.log(nameValue);
 
   const prepareData = () => {
     let columns = Object.getOwnPropertyNames(data);
@@ -339,8 +339,6 @@ const JobStepParameterMaster = ({
       }
       var dt = prepareOtherParams();
       var dt1 = prepareData();
-      console.log("dt:",dt);
-      console.log("dt1:",dt1);
       if ((dt !== null && dt.length > 0) || (dt1 !== null && dt1.length > 0)) {
         axios.postWithCallback(
           "job-step-parameters",
