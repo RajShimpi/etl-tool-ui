@@ -66,7 +66,7 @@ const JobStepParameterMaster = ({
                   resource = resource.replace(/\$\{\w+\}/g, function (all) {
                     return replacements[all] || all;
                   });
-                  const resourceData = await axios.get(`${resource}`);
+                  const resourceData = await axios.getWithCallback(`${resource}`);
                   parameter.options = resourceData.data.map((x) => ({
                     value: fieldMapping && fieldMapping.value_field ? x[fieldMapping.value_field] : x.value,
                     label: fieldMapping && fieldMapping.label_field ? x[fieldMapping.label_field] : x.label,
