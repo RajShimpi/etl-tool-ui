@@ -185,7 +185,7 @@ const JobStepParameterMaster = ({
         callback: itemData.callback,
         groups: !!parameter
           ? parameter
-              ?.filter((x) => x.name !== "other")
+              ?.filter((x) => x.parameter?.name !== "other")
               .map((v) => {
                 return {
                   type: v.parameter.type.includes("text")
@@ -251,9 +251,10 @@ const JobStepParameterMaster = ({
       setNameValue(
         dt.map((x, index) => {
           return {
-            id: index + 1,
-            [`name_${index + 1}`]: x.parameter_name,
-            [`value_${index + 1}`]: x.value,
+            sequence: x.sequence,
+            [`name_${x.sequence}`]: x.parameter_name,
+            [`value_${x.sequence}`]: x.value,
+
           };
         })
       );
@@ -294,7 +295,7 @@ const JobStepParameterMaster = ({
     var param = otherparameters.find((x) => x.name === "other");
     return nameValue.map((x, index) => {
       var item = jobStepParamData.find(
-        (y) => y.parameter_name === x[`name_${index + 1}`]
+        (y) =>  y => y.sequence === x.sequence
       );
       if (item) {
         item.parameter_name = x[`name_${index + 1}`];
@@ -304,10 +305,12 @@ const JobStepParameterMaster = ({
         return {
           job_id: parseInt(job_id),
           step_id: node_id,
+          sequence: x.sequence,
           step_type_id: parseInt(step),
           parameter_id: parseInt(param.id),
-          parameter_name: x[`name_${index + 1}`],
-          value: x[`value_${index + 1}`],
+          parameter_name: x[`name_${x.sequence}`],
+          value: x[`value_${x.sequence}`],
+
         };
       }
     });
@@ -316,19 +319,18 @@ const JobStepParameterMaster = ({
   const onClick = (e) => {
     e.preventDefault();
 
-    setNameValue((prevData) => [
-      ...prevData,
-      { id: prevData?.length ? prevData.length + 1 : 1 },
-    ]);
+    let val = _.maxBy(nameValue, x => x.sequence);
+      setNameValue((prevData) => ([ ...prevData, { sequence: val?.sequence ? val.sequence + 1 : 1 }]))
+
   };
 
   const onRemove = (e, id) => {
     e.preventDefault();
-    setNameValue(nameValue.filter((x) => x.id !== id));
+    setNameValue(nameValue.filter((x) => x.sequence !== id));
   };
 
   const onChange = (e, obj) => {
-    var item = nameValue.find((x) => x.id === obj.id);
+    var item = nameValue.find(x => x.sequence === obj.sequence);
     item[e.target.name] = e.target.value;
     setNameValue((prevData) => [...prevData]);
   };
@@ -449,8 +451,8 @@ const JobStepParameterMaster = ({
                               <td>
                                 <input
                                   type="text"
-                                  name={`name_${x.id}`}
-                                  value={x[`name_${x.id}`]}
+                                  name={`name_${x.sequence}`}
+                                  value={x[`name_${x.sequence}`]}
                                   onChange={(e) => {
                                     onChange(e, x);
                                   }}
@@ -459,8 +461,8 @@ const JobStepParameterMaster = ({
                               <td>
                                 <input
                                   type="text"
-                                  name={`value_${x.id}`}
-                                  value={x[`value_${x.id}`]}
+                                  name={`value_${x.sequence}`}
+                                  value={x[`value_${x.sequence}`]}
                                   onChange={(e) => {
                                     onChange(e, x);
                                   }}
@@ -471,7 +473,7 @@ const JobStepParameterMaster = ({
                                 <button
                                   type="button"
                                   className="btn"
-                                  onClick={(e) => onRemove(e, x.id)}
+                                  onClick={(e) => onRemove(e, x.sequence)}
                                 >
                                   <i className="fa fa-trash" />
                                 </button>
