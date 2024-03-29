@@ -1,7 +1,7 @@
 import axios from "../services/axios";
 import React, { useState, useEffect } from "react";
 import FormCommon from "../components/form-common";
-import _ from "lodash";
+import _, { set } from "lodash";
 import InfoIcon from "@mui/icons-material/Info";
 
 const JobStepParameterMaster = ({
@@ -22,7 +22,6 @@ const JobStepParameterMaster = ({
   const [update, setUpdate] = useState(false);
   const [data, setData] = useState(null);
   const [nameValue, setNameValue] = useState([]);
-  const [step, setStep] = useState();
   const [nodeid, setNodeid] = useState();
   const [steptype, setSteptype] = useState();
 
@@ -38,29 +37,11 @@ const JobStepParameterMaster = ({
       : 4;
 
   useEffect(() => {
-    setStep(step_type_id);
     setNodeid(node_id);
-    // setData([]);
-    //   setControlData([]);
-    //   setEditName([]);
-    //   setotherParameters([]);
-    //   setparameter([]);
-    //   setNameValue([]);
-    //   setJobStepParamData([]);
-  }, [step_type_id,node_id]);
+  }, [name]);
   
-  // useEffect(() => {
-  //   setNodesName(
-  //     nodes.map((item) => ({
-  //       id: item.id,
-  //       step_name: item.data.heading,
-  //       job_id: item.job_id,
-  //     }))
-  //   );
-  // }, []);
-
   useEffect(() => {
-    if (node_id) {
+    // if (nodeid != node_id) {
       setData([]);
       setControlData([]);
       setEditName([]);
@@ -68,13 +49,13 @@ const JobStepParameterMaster = ({
       setparameter([]);
       setNameValue([]);
       setJobStepParamData([]);
-    }
+    // }
   }, [node_id]);
 
   useEffect(() => {
-    if (step) {
+    if (step_type_id) {
       axios.getWithCallback(
-        `step-type/parameter/get/${step}`,
+        `step-type/parameter/get/${step_type_id}`,
         async (data) => {
           const options = {};
           await Promise.all(
@@ -109,7 +90,7 @@ const JobStepParameterMaster = ({
         }
       );
     }
-  }, [step_type_id,step, job_id,node_id,setparameter]);
+  }, [step_type_id, job_id,node_id]);
 
   useEffect(() => {
     if (node_id) {
@@ -136,15 +117,15 @@ const JobStepParameterMaster = ({
           setData(data)
         );
       }
-      if (step) {
-        axios.getWithCallback(`step-type/${step}`, (data) =>
+      if (step_type_id) {
+        axios.getWithCallback(`step-type/${step_type_id}`, (data) =>
           setSteptype(data.name)
         );
       }
 
       axios.getWithCallback(`parameter/`, (data) => setotherParameters(data));
     }
-  }, [node_id, step_type_id,step, nodeid]);
+  }, [node_id, step_type_id, nodeid]);
 
   let defaultObj = {
     step_name: "",
@@ -248,17 +229,18 @@ const JobStepParameterMaster = ({
     let param = otherparameters?.find((x) => x.name == "other");
     if (!!param && jobStepParamData?.length) {
       let dt = jobStepParamData.filter((x) => x.parameter_id === param.id);
+      // console.log("dt:",dt);
       setNameValue(
         dt.map((x, index) => {
           return {
-            id: index + 1,
-            [`name_${index + 1}`]: x.parameter_name,
-            [`value_${index + 1}`]: x.value,
+            sequence: x.sequence,
+            [`name_${x.sequence}`]: x.parameter_name,
+            [`value_${x.sequence}`]: x.value,
           };
         })
       );
     }
-  }, [jobStepParamData, parameter]);
+  }, [jobStepParamData, parameter,setNameValue]);
 
   const prepareData = () => {
     let columns = Object.getOwnPropertyNames(data);
@@ -279,7 +261,7 @@ const JobStepParameterMaster = ({
           return {
             job_id: parseInt(job_id),
             step_id: node_id,
-            step_type_id: parseInt(step),
+            step_type_id: parseInt(step_type_id),
             parameter_id: parseInt(param.parameter_id),
             parameter_name: col,
             value: data[col],
@@ -294,7 +276,7 @@ const JobStepParameterMaster = ({
     var param = otherparameters.find((x) => x.name === "other");
     return nameValue.map((x, index) => {
       var item = jobStepParamData.find(
-        (y) => y.parameter_name === x[`name_${index + 1}`]
+        y => y.sequence === x.sequence
       );
       if (item) {
         item.parameter_name = x[`name_${index + 1}`];
@@ -304,10 +286,11 @@ const JobStepParameterMaster = ({
         return {
           job_id: parseInt(job_id),
           step_id: node_id,
-          step_type_id: parseInt(step),
+          step_type_id: parseInt(step_type_id),
           parameter_id: parseInt(param.id),
-          parameter_name: x[`name_${index + 1}`],
-          value: x[`value_${index + 1}`],
+          parameter_name: x[`name_${x.sequence}`],
+          sequence: x.sequence,
+          value: x[`value_${x.sequence}`],
         };
       }
     });
@@ -315,20 +298,17 @@ const JobStepParameterMaster = ({
 
   const onClick = (e) => {
     e.preventDefault();
-
-    setNameValue((prevData) => [
-      ...prevData,
-      { id: prevData?.length ? prevData.length + 1 : 1 },
-    ]);
-  };
+    let val = _.maxBy(nameValue, x => x.sequence);
+    setNameValue((prevData) => ([ ...prevData, { sequence: val?.sequence ? val.sequence + 1 : 1 }]))
+  }
 
   const onRemove = (e, id) => {
     e.preventDefault();
-    setNameValue(nameValue.filter((x) => x.id !== id));
+    setNameValue(nameValue.filter((x) => x.sequence !== id));
   };
 
   const onChange = (e, obj) => {
-    var item = nameValue.find((x) => x.id === obj.id);
+    var item = nameValue.find(x => x.sequence === obj.sequence);
     item[e.target.name] = e.target.value;
     setNameValue((prevData) => [...prevData]);
   };
@@ -449,8 +429,8 @@ const JobStepParameterMaster = ({
                               <td>
                                 <input
                                   type="text"
-                                  name={`name_${x.id}`}
-                                  value={x[`name_${x.id}`]}
+                                  name={`name_${x.sequence}`}
+                                  value={x[`name_${x.sequence}`]}
                                   onChange={(e) => {
                                     onChange(e, x);
                                   }}
@@ -458,9 +438,9 @@ const JobStepParameterMaster = ({
                               </td>
                               <td>
                                 <input
-                                  type="text"
-                                  name={`value_${x.id}`}
-                                  value={x[`value_${x.id}`]}
+                                  type="text" 
+                                  name={`value_${x.sequence}`}
+                                  value={x[`value_${x.sequence}`]}
                                   onChange={(e) => {
                                     onChange(e, x);
                                   }}
@@ -471,7 +451,7 @@ const JobStepParameterMaster = ({
                                 <button
                                   type="button"
                                   className="btn"
-                                  onClick={(e) => onRemove(e, x.id)}
+                                  onClick={(e) => onRemove(e, x.sequence)}
                                 >
                                   <i className="fa fa-trash" />
                                 </button>
