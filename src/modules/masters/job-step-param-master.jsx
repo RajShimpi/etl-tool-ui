@@ -50,32 +50,114 @@ const JobStepParameterMaster = ({
     setJobStepParamData([]);
   }, [node_id]);
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //       if (step_type_id) {
+  //         const response = await new Promise((resolve, reject) => {
+  //           axios.getWithCallback(`step-type/parameter/get/${step_type_id}`, (data) => {
+  //             resolve(data);
+  //           }, (error) => {
+  //             reject(error);
+  //           });
+  //         });
+  //         const options = {};
+  //         await Promise.all(
+  //           response.stepTypeParameters.map(async (parameter) => {
+  //             let resource = parameter.parameter?.resource;
+  //             var fieldMapping = parameter.parameter?.params;
+  //             if (resource && resource !== "NA") {
+  //               try {
+  //                 const replacements = {};
+  //                 replacements["${job_id}"] = job_id;
+  //                 resource = resource.replace(/\$\{\w+\}/g, function (all) {
+  //                   return replacements[all] || all;
+  //                 });
+  //                 const resourceData = await axios.get(`${resource}`);
+  //                 parameter.options = resourceData.data.map((x) => ({
+  //                   value: fieldMapping && fieldMapping.value_field ? x[fieldMapping.value_field] : x.value,
+  //                   label: fieldMapping && fieldMapping.label_field ? x[fieldMapping.label_field] : x.label,
+  //                 }));
+  //               } catch (error) {
+  //                 console.error(`Error fetching resource ${resource}:`, error);
+  //               }
+  //             }
+  //           })
+  //         );
+  //         setParameter(response.stepTypeParameters);
+  //       }
+  //   };
+  //   fetchData();
+  // }, [step_type_id, job_id, node_id,open]);  
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     if (node_id) {
+  //       try {
+  //         const response = await axios.get(`job-step-parameters/${node_id}`);
+  //         if (response.data?.length) {
+  //           setUpdate(true);
+  //           setJobStepParamData(response.data !== null ? response.data : null);
+  //           response.data.forEach((x) => {
+  //             setData((prevData) => ({
+  //               ...prevData,
+  //               [x.parameter_name]: x.value,
+  //               [`${x.parameter_name}_id`]: x.value_id,
+  //             }));
+  //           });
+  //         } else {
+  //           setData(null);
+  //           setUpdate(false);
+  //         }
+  //       } catch (error) {
+  //         console.error("Error fetching job step parameters:", error);
+  //       }
+  //     }
+  //   };
+  //   fetchData();
+
+  //   if (node_id) {
+  //     axios.getWithCallback(
+  //       `job-steps/${node_id}`,
+  //       (data) => setEditName(data?.step_name),
+  //       setData(data)
+  //     );
+  //   }
+
+  //   if (step_type_id) {
+  //     axios.getWithCallback(`step-type/${step_type_id}`, (data) =>
+  //       setSteptype(data.name)
+  //     );
+  //   }
+
+  //   axios.getWithCallback(`parameter/`, (data) => setOtherParameters(data));
+  // }, [node_id, step_type_id, nodeid,open]);
   useEffect(() => {
-    const fetchData = async () => {
-        if (step_type_id) {
-          const response = await new Promise((resolve, reject) => {
-            axios.getWithCallback(`step-type/parameter/get/${step_type_id}`, (data) => {
-              resolve(data);
-            }, (error) => {
-              reject(error);
-            });
-          });
+    if (step_type_id) {
+      axios.getWithCallback(
+        `step-type/parameter/get/${step_type_id}`,
+        async (data) => {
           const options = {};
           await Promise.all(
-            response.stepTypeParameters.map(async (parameter) => {
+            data.stepTypeParameters.map(async (parameter) => {
               let resource = parameter.parameter?.resource;
               var fieldMapping = parameter.parameter?.params;
-              if (resource && resource !== "NA") {
+              if (resource && resource != "NA") {
                 try {
                   const replacements = {};
                   replacements["${job_id}"] = job_id;
                   resource = resource.replace(/\$\{\w+\}/g, function (all) {
                     return replacements[all] || all;
                   });
-                  const resourceData = await axios.get(`${resource}`);
+                  let resourceData = await axios.get(`${resource}`);
                   parameter.options = resourceData.data.map((x) => ({
-                    value: fieldMapping && fieldMapping.value_field ? x[fieldMapping.value_field] : x.value,
-                    label: fieldMapping && fieldMapping.label_field ? x[fieldMapping.label_field] : x.label,
+                    value:
+                      fieldMapping && fieldMapping.value_field
+                        ? x[fieldMapping.value_field]
+                        : x.value,
+                    label:
+                      fieldMapping && fieldMapping.label_field
+                        ? x[fieldMapping.label_field]
+                        : x.label,
                   }));
                 } catch (error) {
                   console.error(`Error fetching resource ${resource}:`, error);
@@ -83,54 +165,47 @@ const JobStepParameterMaster = ({
               }
             })
           );
-          setParameter(response.stepTypeParameters);
+          setParameter(data.stepTypeParameters);
         }
-    };
-    fetchData();
-  }, [step_type_id, job_id, node_id,open]);  
+      );
+    }
+  }, [step_type_id, job_id,node_id,open]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (node_id) {
-        try {
-          const response = await axios.get(`job-step-parameters/${node_id}`);
-          if (response.data?.length) {
-            setUpdate(true);
-            setJobStepParamData(response.data !== null ? response.data : null);
-            response.data.forEach((x) => {
-              setData((prevData) => ({
-                ...prevData,
-                [x.parameter_name]: x.value,
-                [`${x.parameter_name}_id`]: x.value_id,
-              }));
-            });
-          } else {
-            setData(null);
-            setUpdate(false);
-          }
-        } catch (error) {
-          console.error("Error fetching job step parameters:", error);
-        }
-      }
-    };
-    fetchData();
-
     if (node_id) {
-      axios.getWithCallback(
-        `job-steps/${node_id}`,
-        (data) => setEditName(data?.step_name),
-        setData(data)
-      );
-    }
+      axios.getWithCallback(`job-step-parameters/${node_id}`, (data) => {
+        if (data?.length) {
+          setUpdate(true);
+          setJobStepParamData(data !== null ? data : null);
+          data.forEach((x) => {
+            setData((prevData) => ({
+              ...prevData,
+              [x.parameter_name]: x.value,
+              [`${x.parameter_name}_id`]: x.value_id,
+            }));
+          });
+        } else {
+          setData(null);
+          setUpdate(false);
+        }
+      });
+      if (node_id) {
+        axios.getWithCallback(
+          `job-steps/${node_id}`,
+          (data) => setEditName(data?.step_name),
+          setData(data)
+        );
+      }
+      if (step_type_id) {
+        axios.getWithCallback(`step-type/${step_type_id}`, (data) =>
+          setSteptype(data.name)
+        );
+      }
 
-    if (step_type_id) {
-      axios.getWithCallback(`step-type/${step_type_id}`, (data) =>
-        setSteptype(data.name)
-      );
+      axios.getWithCallback(`parameter/`, (data) => setOtherParameters(data));
     }
-
-    axios.getWithCallback(`parameter/`, (data) => setOtherParameters(data));
   }, [node_id, step_type_id, nodeid,open]);
+
 
   let defaultObj = {
     step_name: "",
@@ -209,7 +284,7 @@ const JobStepParameterMaster = ({
       options: [],
       message: "",
     });
-  }, [editName, parameter, data, update]);
+  }, [editName, parameter, data, update,open]);
 
   const setValues = (e, type) => {
     if (!e) return;
@@ -230,24 +305,41 @@ const JobStepParameterMaster = ({
     }
   };
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     let param = otherParameters?.find((x) => x.name === "other");
+  //     if (!!param && jobStepParamData?.length) {
+  //       let dt = jobStepParamData.filter((x) => x.parameter_id === param.id);
+  //       setNameValue(
+  //         dt.map((x, index) => {
+  //           return {
+  //             sequence: x.sequence,
+  //             [`name_${x.sequence}`]: x.parameter_name,
+  //             [`value_${x.sequence}`]: x.value,
+  //           };
+  //         })
+  //       );
+  //     }
+  //   };
+  //   fetchData();
+  // }, [jobStepParamData, otherParameters,open]);
+
   useEffect(() => {
-    const fetchData = async () => {
-      let param = otherParameters?.find((x) => x.name === "other");
-      if (!!param && jobStepParamData?.length) {
-        let dt = jobStepParamData.filter((x) => x.parameter_id === param.id);
-        setNameValue(
-          dt.map((x, index) => {
-            return {
-              sequence: x.sequence,
-              [`name_${x.sequence}`]: x.parameter_name,
-              [`value_${x.sequence}`]: x.value,
-            };
-          })
-        );
-      }
-    };
-    fetchData();
-  }, [jobStepParamData, otherParameters]);
+    let param = otherParameters?.find((x) => x.name == "other");
+    if (!!param && jobStepParamData?.length) {
+      let dt = jobStepParamData.filter((x) => x.parameter_id === param.id);
+      // console.log("dt:",dt);
+      setNameValue(
+        dt.map((x, index) => {
+          return {
+            sequence: x.sequence,
+            [`name_${x.sequence}`]: x.parameter_name,
+            [`value_${x.sequence}`]: x.value,
+          };
+        })
+      );
+    }
+  }, [jobStepParamData, parameter]);
 
   const prepareData = () => {
     let columns = Object.getOwnPropertyNames(data);

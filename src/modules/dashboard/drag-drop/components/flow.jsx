@@ -252,29 +252,30 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   };
 
   const publish = () => {
-    const nullEdges = edges.filter((item) => item.target === "null");
+    const nullEdges = edges.filter((item) => item.target === "null"&& item.label ==="ok");
     if (nullEdges.length === 0) {
       const job_id = {
         jobId: jobfileid.id,
       };
       axios.postWithCallback(`job/publish-job/`, job_id);
     } else {
-      const nullErrors = [];
+      // const nullErrors = [];
       const nullOks = [];
 
       nullEdges.forEach((edge) => {
         const nodeName = getNodeName(edge.source);
-        if (edge.label === "error") {
-          nullErrors.push(nodeName);
-        } else if (edge.label === "ok") {
+        // if (edge.label === "error") {
+        //   nullErrors.push(nodeName);
+        // } else 
+        if (edge.label === "ok") {
           nullOks.push(nodeName);
         }
       });
 
       let errorMessage = "You need to connect all the Edges.";
-      if (nullErrors.length > 0) {
-        errorMessage += ` Error : ${nullErrors.join(", ")},`;
-      }
+      // if (nullErrors.length > 0) {
+      //   errorMessage += ` Error : ${nullErrors.join(", ")},`;
+      // }
       if (nullOks.length > 0) {
         errorMessage += ` Ok : ${nullOks.join(", ")}.`;
       }
