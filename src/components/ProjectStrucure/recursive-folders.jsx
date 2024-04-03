@@ -8,6 +8,8 @@ import { AddUpdateDeleteFileAndFolder } from "../PopupComponent";
 import axios from "../../modules/services/axios";
 import { useJobData } from "../JobDataContext";
 import "./project.css";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
 const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
   const [showNested, setShowNested] = useState({});
@@ -125,13 +127,15 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
                     ref={containerRef}
                     key={subItem.file_name + "rootDiv" + index}
                     onClick={() => onhandelFileId(subItem)}
+                    style={{marginLeft:"25px"}}
                     
                   >
                     <InsertDriveFileIcon
                       key={subItem.file_name + "fileIcon" + index}
                       fontSize="small"
+                      style={{marginRight:"5px", color:"rgb(99 102 120)"}}
                     />
-                    <span>{subItem.file_name}</span>
+                    <span style={{fontWeight: "600"}}>{subItem.file_name}</span>
                   </div>
                 )}
 
@@ -172,7 +176,7 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
                       </Modal>
                     }
                     <div
-                      style={{ height: "25px" }}
+                      style={{ height: "25px", display:"flex" }}
                       onClick={() => onhandelFileId(subItem)}
                       // className={`file_name ${
                       //   hoveredItem === subItem.file_name ? "hovered" : ""
@@ -180,18 +184,22 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
                       // onMouseEnter={() => handleMouseEnter(subItem.file_name)}
                       
                     >
-                      {showNested[subItem.file_name] ? (
+                      <div className="arrow_Icons">
+                      {showNested[subItem.file_name] ? <KeyboardArrowDownIcon  /> : <KeyboardArrowRightIcon />}</div>
+                      {/* {showNested[subItem.file_name] ? (
                         <FolderOpenIcon
                           key={subItem.file_name + "openIcon" + index}
                           fontSize="small"
                         />
-                      ) : (
+                      ) : ( */}
                         <FolderIcon
                           key={subItem.file_name + "closeIcon" + index}
                           fontSize="small"
+                          style={{marginRight:"5px", color:"rgb(252 201 53)"}}
+
                         />
-                      )}
-                      <span>{subItem.file_name}</span>
+                      {/* )} */}
+                      <span style={{fontWeight: "600"}}>{subItem.file_name}</span>
                     </div>
                     <div
                       style={{

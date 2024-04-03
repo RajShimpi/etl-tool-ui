@@ -70,6 +70,7 @@ export default PopupComponent;
 
 export const AddUpdateDeleteFileAndFolder = (props) => {
   const [data, setData] = useState("");
+  const [properties, setProperties] = useState([]);
 
   useEffect(() => {
     if (props.item?.file_name)
@@ -141,6 +142,20 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
       }
     }
   };
+  
+  const otherCallback = (data) => {
+    // setProperties(data);
+   let sp = {
+     properties: data.map((x) => ({
+       projectId:  props.item.project_id,
+       name: x.key,
+       value: x.value,
+       active: true
+     }))
+   };
+   console.log(sp);
+  //  setProperties(sp)
+ };
 
   return (
     <div className="row " >
@@ -200,7 +215,8 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
                           <>
                             <Project_Properties
                             data={data}
-                              project_id={props.item.project_id}
+                            callback={otherCallback}
+                              // project_id={props.item.project_id}
                               PropertieColumns={[
                                 {
                                   name: "key",
