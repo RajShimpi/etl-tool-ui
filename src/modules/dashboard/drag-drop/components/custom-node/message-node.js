@@ -116,7 +116,7 @@ const Node = ({ data, id, start_step, startStep, item, isSelected, textRef, node
           <div>
                   <img
                     src="/assets/images/end.png"
-                    title="End"
+                    title="End Point"
                     style={{cursor:"pointer", zIndex: '10', position: "absolute", marginLeft: '38px', marginTop: '-90px' ,height:"30px",width:'30px'}}
                   />
                 </div>

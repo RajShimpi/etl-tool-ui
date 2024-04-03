@@ -6,21 +6,22 @@ import FormCommon from "../components/form-common";
 import _ from "lodash";
 import auth from "../user/auth";
 
-const JobParameterMaster = ({ job, project_id, handleClose }) => {
+const JobParameterMaster = ({ job, project_id, handleClose,open }) => {
   const [parameter, setparameter] = useState([]);
+  const [editName, setEditName] = useState("");
   const [controlData, setControlData] = useState([]);
   const [jobParamData, setJobParamData] = useState([]);
   const [update, setUpdate] = useState(false);
   const [data, setData] = useState(null);
   const [nameValue, setNameValue] = useState([]);
-  const [job_id, setjob_id] = useState([]);
+  const [jobid, setJobid] = useState([]);
 
   // useEffect(() => {
   //   setData((prevData) => ({ ...prevData,  }));
   // }, [name]);
   
   useEffect(() => {
-    if (job_id != job) {
+    if (jobid != job) {
       setData([])
       setControlData([]);
       setparameter([])
@@ -29,7 +30,7 @@ const JobParameterMaster = ({ job, project_id, handleClose }) => {
   }, [job]);
   useEffect(() => {
     if(job){
-    setjob_id(job)}
+    setJobid(job)}
   }, [job]);
 
   useEffect(() => {
@@ -57,7 +58,7 @@ const JobParameterMaster = ({ job, project_id, handleClose }) => {
       }
     };
     fetchData();
-  }, [job_id]);
+  }, [jobid,open]);
 
   useEffect(() => {
     if (job) {
@@ -77,7 +78,7 @@ const JobParameterMaster = ({ job, project_id, handleClose }) => {
         }
       });
     }
-  }, [job_id]);
+  }, [jobid,open]);
 
   const getItemData = (itemData) => {
     if (!itemData) return;
@@ -133,7 +134,7 @@ const JobParameterMaster = ({ job, project_id, handleClose }) => {
       options: [],
       message: "",
     });
-  }, [ parameter]);
+  }, [editName, parameter]);
 
   const setValues = (e, name) => {
     if (!e) return;
@@ -189,7 +190,7 @@ const JobParameterMaster = ({ job, project_id, handleClose }) => {
           return item;
         } else {
           return {
-            job_id: job_id,
+            job_id: jobid,
             client_id: clientId,
             project_id: project_id,
             parameter_id: param.id,
@@ -213,7 +214,7 @@ const JobParameterMaster = ({ job, project_id, handleClose }) => {
         return item;
       } else {
         return {
-          job_id: job_id,
+          job_id: jobid,
           parameter_id: param.id,
           parameter_name: x[`name_${x.sequence}`],
           value: x[`value_${x.sequence}`],
@@ -272,7 +273,7 @@ const JobParameterMaster = ({ job, project_id, handleClose }) => {
             className="needs-validation"
             noValidate
           >
-            <div className="accordion" id={"common-form-" + job_id}>
+            <div className="accordion" id={"common-form-" + jobid}>
               <div className="accordion-item" style={{ margin: "0px" }}>
                 <h2 className="accordion-header" id="headingOne">
                   <button
@@ -291,7 +292,7 @@ const JobParameterMaster = ({ job, project_id, handleClose }) => {
                 id="collapseOne"
                 className="accordion-collapse collapse show"
                 aria-labelledby="headingOne"
-                data-bs-parent={"common-form-" + job_id}
+                data-bs-parent={"common-form-" + jobid}
               >
                 <div className="accordion-body text-muted">
                   <div className="card-body">
@@ -299,17 +300,26 @@ const JobParameterMaster = ({ job, project_id, handleClose }) => {
                   </div>
                   {!!parameter.filter((x) => x.name === "other")?.length && (
                     <div style={{ padding: "0px 0px 20px 20px" }}>
-                      <button
+                       <button
                         type="button"
                         className="btn btn-primary"
                         onClick={(e) => onClick(e)}
+                        style={{ display: "flex" }}
                       >
-                        <i className="fa fa-plus" />
-                        Additional Parameter
+                        <div style={{ fontSize: "16px" }}>
+                          <i
+                            className="fa fa-plus"
+                            style={{ fontSize: "16px",  }}
+                          />
+                        </div>
+                        <div style={{ fontSize: "14px", margin: "4px" }}>
+                          Additional Parameter
+                        </div>
                       </button>
                     </div>
                   )}
-                  <div>
+                  <div style={{ maxHeight: "190px", overflowY: "scroll", scrollbarWidth: "thin", }}>
+
                     {!!nameValue?.length && (
                       <table className="table table-striped table-bordered dt-responsive">
                         <thead

@@ -436,7 +436,8 @@ const CommonFormWithList = (props) => {
                   </div>
                   {props.otherParamColumns && (
                     <CommonTable
-                      data={otherData} 
+                      btnName={props.btnName}
+                      data={otherData}
                       columns={props.otherParamColumns}
                       callback={otherCallback}
                       resetparamsTable={resetparamsTable}

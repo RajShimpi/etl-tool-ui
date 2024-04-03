@@ -7,6 +7,7 @@ import axios from "../modules/services/axios";
 import FormCommon from "../modules/components/form-common";
 import { getCommonFields } from "../modules/masters/popup/common-data";
 import auth from "../modules/user/auth";
+import Project_Properties from "../modules/masters/popup/properties";
 
 const PopupComponent = ({ onClose, actionType, project_id, id }) => {
   let contentComponent;
@@ -28,6 +29,16 @@ const PopupComponent = ({ onClose, actionType, project_id, id }) => {
           project_id={project_id}
           id={id}
           type="File"
+          onClose={onClose}
+        />
+      );
+      break;
+    case "Add Propertie":
+      contentComponent = (
+        <Project_Properties
+          project_id={project_id}
+          id={id}
+          type="Propertie"
           onClose={onClose}
         />
       );
@@ -102,6 +113,11 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
             props.onClose(e, true);
           });
           break;
+        case "Add Propertie":
+          axios.postWithCallback("Propertie_api/", item, (resp) => {
+            props.onClose(e, true);
+          });
+          break;
         case "Edit":
           axios.putWithCallback(
             `project-files/${item.id}`,
@@ -127,7 +143,7 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
   };
 
   return (
-    <div className="row ">
+    <div className="row " >
       <div className="col-xl-12 ">
         <div className="card">
           <form
@@ -164,20 +180,43 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
                         files also will be deleted?
                       </p>
                     ) : (
-                      <FormCommon
-                        data={getCommonFields({
-                          isSubmit: false,
-                          update: props.update,
-                          callback: setValues,
-                          values: data,
-                          type: props.type.includes("Folder")
-                            ? "Folder"
-                            : "File",
-                          options: !!props.options ? props.options : [],
-                          data: !!props.data ? props.data : [],
-                          message: props.message,
-                        })}
-                      />
+                      <>
+                        {props.type !== "Add Propertie" ? (
+                          <FormCommon
+                            data={getCommonFields({
+                              isSubmit: false,
+                              update: props.update,
+                              callback: setValues,
+                              values: data,
+                              type: props.type.includes("Folder")
+                                ? "Folder"
+                                : "File",
+                              options: !!props.options ? props.options : [],
+                              data: !!props.data ? props.data : [],
+                              message: props.message,
+                            })}
+                          />
+                        ) : (
+                          <>
+                            <Project_Properties
+                            data={data}
+                              project_id={props.item.project_id}
+                              PropertieColumns={[
+                                {
+                                  name: "key",
+                                  displayName: "Name",
+                                  dbPropName: "propertie_name",
+                                },
+                                {
+                                  name: "value",
+                                  displayName: "Value",
+                                  dbPropName: "propertie_value",
+                                },
+                              ]}
+                            />
+                          </>
+                        )}
+                      </>
                     )}
                   </div>
                   <div className=" col-md-12 d-flex justify-content-end">

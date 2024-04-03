@@ -371,8 +371,8 @@ const Dashboard = () => {
                                   <div
                                     style={{
                                       position: "absolute",
-                                      top: 0,
                                       left: "100%",
+                                      top:0,
                                       minWidth: "200px",
                                       background: "#fff",
                                       cursor: "pointer",
@@ -423,8 +423,8 @@ const Dashboard = () => {
                                   <div
                                     style={{
                                       position: "absolute",
-                                      top: "45px",
                                       left: "100%",
+                                      top:90,
                                       minWidth: "200px",
                                       background: "#fff",
                                       cursor: "pointer",

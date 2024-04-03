@@ -124,6 +124,7 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
     // setContextMenuOpen({ [item.file_name]: !isContextMenuOpen[item.file_name] });
     // nestedCallback(item);
     onRightCallback(item, true, true);
+    setFix(false)
   };
 
   const onRightCallback = (item, isReset, isHeaderClick) => {
@@ -184,6 +185,7 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
   const onhandelFileId = () => {
     setJobDataId();
   };
+  
   return (
     <div>
       <div className={`sidebar ${isOpen ? 'open' : ''}`} onMouseEnter={handleSidebarHover} onMouseLeave={handleSidebarLeave}>
@@ -212,7 +214,7 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
                   </div>
                 </div>
                 {contextMenuPosition && project.isRightClick && (
-                  <div style={{ display: !project.isRightClick && "none" }}>
+                  <div style={{ display: !project.isRightClick && "none" }} >
                     <ContextMenu
                       onClose={(e) => closeContextMenu(e, project.item)}
                       project_id={project.id}
@@ -225,7 +227,7 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
                   </div>
                 )}
                 {
-                  <Modal modalTitle={type} handleClose={() => { setShow({}) }} show={!!isShow[project.project_name]} maxWidth="35%">
+                  <Modal modalTitle={type} handleClose={() => { setShow({}) }} show={!!isShow[project.project_name]} maxWidth={type ==="Add Propertie"?"60%":"35%"}>
                     <AddUpdateDeleteFileAndFolder title={type} item={project.item} type={type} onClose={(e, isRefreshNeeded) => { closeContextMenu(e); setShow({}); if (isRefreshNeeded) getProjects(); }} />
                   </Modal>
                 }

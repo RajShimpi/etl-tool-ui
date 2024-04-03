@@ -6,6 +6,7 @@ const CommonTable = ({
   columns,
   callback,
   resetparamsTable,
+  btnName,
 }) => {
   const [nameValue, setNameValue] = useState([]);
 
@@ -42,7 +43,6 @@ const CommonTable = ({
     item[e.target.name] = e.target.value;
     setNameValue((prevData) => [...prevData]);
   };
-
   useEffect(() => {
     callback(
       nameValue.map((x) => {
@@ -71,56 +71,71 @@ const CommonTable = ({
           type="button"
           className="btn btn-primary"
           onClick={(e) => onClick(e)}
+          style={{ display: "flex" }}
         >
-          <i className="fa fa-plus" />
-          Additional Parameter
+          <div style={{ fontSize: "15px" }}>
+            <i className="fa fa-plus" style={{ fontSize: "15px" }} />
+          </div>
+          <div style={{ fontSize: "16px",margin:'6px' }}>{btnName}</div>
         </button>
       </div>
-      <div style={{maxHeight:"190px" ,overflowY:"scroll" , scrollbarWidth: "thin", scrollbarColor: "transparent transparent" }}>
-      {!!nameValue?.length && (
-        <table className="table table-striped table-bordered dt-responsive">
-          <thead
-            style={{
-              backgroundColor: "rgb(60, 141, 188)",
-              color: "white",
-            }}
-          >
-            <tr>
-              {columns.map((col, ind) => (
-                <th>{col.displayName}</th>
-              ))}
-              <th>Remove</th>
-            </tr>
-          </thead>
-          <tbody>
-            {nameValue.map((x) => (
+      <div
+        style={{
+          maxHeight: "190px",
+          overflowY: "scroll",
+          scrollbarWidth: "thin",
+          // scrollbarColor: "transparent transparent",
+        }}
+      >
+        {!!nameValue?.length && (
+          <table className="table table-striped table-bordered dt-responsive">
+            <thead
+              style={{
+                backgroundColor: "rgb(60, 141, 188)",
+                color: "white",
+              }}
+            >
               <tr>
                 {columns.map((col, ind) => (
-                  <td>
-                    <input
-                      type="text"
-                      name={`${col.name}_${x.sequence}`}
-                      value={x[`${col.name}_${x.sequence}`]}
-                      onChange={(e) => {
-                        onChange(e, x);
-                      }}
-                    />
-                  </td>
+                  <th>{col.displayName}</th>
                 ))}
-                <td>
-                  <button
-                    type="button"
-                    className="btn"
-                    onClick={(e) => onRemove(e, x.sequence)}
-                  >
-                    <i className="fa fa-trash" />
-                  </button>
-                </td>
+                <th>Remove</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+            </thead>
+            <tbody>
+              {nameValue.map((x) => (
+                <tr>
+                  {columns.map((col, ind) => (
+                    <td>
+                      <input
+                        type="text"
+                        name={`${col.name}_${x.sequence}`}
+                        value={x[`${col.name}_${x.sequence}`]}
+                        onChange={(e) => {
+                          onChange(e, x);
+                        }}
+                      />
+                    </td>
+                  ))}
+                  <td>
+                    <button
+                      type="button"
+                      className="btn"
+                      onClick={(e) => onRemove(e, x.sequence)}
+                    >
+                      <div style={{ fontSize: "16px" }}>
+                        <i
+                          className="fa fa-trash"
+                          style={{ fontSize: "16px" }}
+                        />
+                      </div>
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </>
   );

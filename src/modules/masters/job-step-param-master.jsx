@@ -39,7 +39,7 @@ const JobStepParameterMaster = ({
   useEffect(() => {
     setNodeid(node_id);
   }, [name]);
-  
+
   useEffect(() => {
     setData(null);
     setControlData([]);
@@ -87,7 +87,7 @@ const JobStepParameterMaster = ({
   //       }
   //   };
   //   fetchData();
-  // }, [step_type_id, job_id, node_id,open]);  
+  // }, [step_type_id, job_id, node_id,open]);
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -131,6 +131,7 @@ const JobStepParameterMaster = ({
 
   //   axios.getWithCallback(`parameter/`, (data) => setOtherParameters(data));
   // }, [node_id, step_type_id, nodeid,open]);
+
   useEffect(() => {
     if (step_type_id) {
       axios.getWithCallback(
@@ -169,7 +170,7 @@ const JobStepParameterMaster = ({
         }
       );
     }
-  }, [step_type_id, job_id,node_id,open]);
+  }, [step_type_id, job_id, node_id, open]);
 
   useEffect(() => {
     if (node_id) {
@@ -204,8 +205,7 @@ const JobStepParameterMaster = ({
 
       axios.getWithCallback(`parameter/`, (data) => setOtherParameters(data));
     }
-  }, [node_id, step_type_id, nodeid,open]);
-
+  }, [node_id, step_type_id, nodeid, open]);
 
   let defaultObj = {
     step_name: "",
@@ -246,7 +246,7 @@ const JobStepParameterMaster = ({
         callback: itemData.callback,
         groups: !!parameter
           ? parameter
-          ?.filter((x) => x.parameter?.name !== "other")
+              ?.filter((x) => x.parameter?.name !== "other")
               .map((v) => {
                 return {
                   type: v.parameter.type.includes("text")
@@ -284,7 +284,7 @@ const JobStepParameterMaster = ({
       options: [],
       message: "",
     });
-  }, [editName, parameter, data, update,open]);
+  }, [editName, parameter, data, update, open]);
 
   const setValues = (e, type) => {
     if (!e) return;
@@ -328,7 +328,6 @@ const JobStepParameterMaster = ({
     let param = otherParameters?.find((x) => x.name == "other");
     if (!!param && jobStepParamData?.length) {
       let dt = jobStepParamData.filter((x) => x.parameter_id === param.id);
-      // console.log("dt:",dt);
       setNameValue(
         dt.map((x, index) => {
           return {
@@ -374,9 +373,7 @@ const JobStepParameterMaster = ({
   const prepareOtherParams = () => {
     var param = otherParameters.find((x) => x.name === "other");
     return nameValue.map((x, index) => {
-      var item = jobStepParamData.find(
-        y => y.sequence === x.sequence
-      );
+      var item = jobStepParamData.find((y) => y.sequence === x.sequence);
       if (item) {
         item.parameter_name = x[`name_${index + 1}`];
         item.value = x[`value_${index + 1}`];
@@ -390,7 +387,6 @@ const JobStepParameterMaster = ({
           parameter_id: parseInt(param.id),
           parameter_name: x[`name_${x.sequence}`],
           value: x[`value_${x.sequence}`],
-
         };
       }
     });
@@ -398,8 +394,11 @@ const JobStepParameterMaster = ({
 
   const onClick = (e) => {
     e.preventDefault();
-    let val = _.maxBy(nameValue, x => x.sequence);
-      setNameValue((prevData) => ([ ...prevData, { sequence: val?.sequence ? val.sequence + 1 : 1 }]))
+    let val = _.maxBy(nameValue, (x) => x.sequence);
+    setNameValue((prevData) => [
+      ...prevData,
+      { sequence: val?.sequence ? val.sequence + 1 : 1 },
+    ]);
   };
   const onRemove = (e, id) => {
     e.preventDefault();
@@ -407,7 +406,7 @@ const JobStepParameterMaster = ({
   };
 
   const onChange = (e, obj) => {
-    var item = nameValue.find(x => x.sequence === obj.sequence);
+    var item = nameValue.find((x) => x.sequence === obj.sequence);
     item[e.target.name] = e.target.value;
     setNameValue((prevData) => [...prevData]);
   };
@@ -472,7 +471,7 @@ const JobStepParameterMaster = ({
                       }}
                     >
                       <div>{name}</div>
-                      <InfoIcon titleAccess={steptype} />
+                      <div title="Step Name">{steptype}</div>
                     </div>
                   </button>
                 </h2>
@@ -490,13 +489,29 @@ const JobStepParameterMaster = ({
                   {!!otherParameters.filter((x) => x.name === "other")
                     ?.length && (
                     <div style={{ padding: "0px 0px 20px 20px" }}>
-                      <button
+                      {/* <button
                         type="button"
                         className="btn btn-primary"
                         onClick={(e) => onClick(e)}
                       >
                         <i className="fa fa-plus" />
                         Additional Parameter
+                      </button> */}
+                      <button
+                        type="button"
+                        className="btn btn-primary"
+                        onClick={(e) => onClick(e)}
+                        style={{ display: "flex" }}
+                      >
+                        <div style={{ fontSize: "20px" }}>
+                          <i
+                            className="fa fa-plus"
+                            style={{ fontSize: "15px", margin: "1px" }}
+                          />
+                        </div>
+                        <div style={{ fontSize: "15px", margin: "5px" }}>
+                          Additional Parameter
+                        </div>
                       </button>
                     </div>
                   )}
@@ -505,7 +520,7 @@ const JobStepParameterMaster = ({
                       maxHeight: "190px",
                       overflowY: "scroll",
                       scrollbarWidth: "thin",
-                      scrollbarColor: "transparent transparent",
+                      // scrollbarColor: "transparent transparent",
                     }}
                   >
                     {!!nameValue?.length && (
@@ -537,7 +552,7 @@ const JobStepParameterMaster = ({
                               </td>
                               <td>
                                 <input
-                                  type="text" 
+                                  type="text"
                                   name={`value_${x.sequence}`}
                                   value={x[`value_${x.sequence}`]}
                                   onChange={(e) => {

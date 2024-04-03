@@ -249,6 +249,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
 
   const OpenJobParam = () => {
     setOpenJobParams(true);
+    setOpen(true);
   };
 
   const publish = () => {
@@ -859,6 +860,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
 
   const handleCloseJobParams = () => {
     setOpenJobParams(false);
+    setOpen(false);
   };
 
   const handleClickOutside = (event) => {
@@ -975,6 +977,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       >
         <JobParameterMaster
           handleClose={handleCloseJobParams}
+          open={open}
           project_id={projectID}
           job={jobfileid ? jobfileid?.id : ""}
         />
