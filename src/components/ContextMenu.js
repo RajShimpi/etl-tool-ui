@@ -54,6 +54,15 @@ const ContextMenu = ({ item, popType, project_id, parent_id,id, onClose, callbac
           Add File
         </div>  
       </div>
+      {hideDeleteUpdate &&<>
+      <div className="menu-item" onClick={(e) => {openPopup(e,"Add Propertie", { top: e.clientY, left: e.clientX + 10 }, project_id, id)}}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", }}>
+          <InsertDriveFileIcon style={{ fontSize: "medium", marginRight: "5px", marginTop: "3px" }} />
+          Propertie
+        </div>  
+      </div>
+      </>
+      }
       {!hideDeleteUpdate && <>
       <div className="menu-item" onClick={(e) => openPopup(e,"Edit", { top: e.clientY, left: e.clientX + 10 }, project_id, parent_id)}>
         <div style={{display: "flex", alignItems: "center", justifyContent: "flex-start"}}>

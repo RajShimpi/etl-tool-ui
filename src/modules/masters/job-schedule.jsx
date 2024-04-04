@@ -61,6 +61,7 @@ const JobSchedule = () => {
           { name: "key", displayName: "Key", dbPropName: "parameter_name" },
           { name: "value", displayName: "Value", dbPropName: "value" },
         ]}
+        btnName="Additional Parameter"
       />
     </>
   );
