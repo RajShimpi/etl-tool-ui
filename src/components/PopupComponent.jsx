@@ -8,6 +8,7 @@ import FormCommon from "../modules/components/form-common";
 import { getCommonFields } from "../modules/masters/popup/common-data";
 import auth from "../modules/user/auth";
 import Project_Properties from "../modules/masters/popup/properties";
+import _ from "lodash";
 
 const PopupComponent = ({ onClose, actionType, project_id, id }) => {
   let contentComponent;
@@ -115,7 +116,7 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
           });
           break;
         case "Add Propertie":
-          axios.postWithCallback("Propertie_api/", item, (resp) => {
+           axios.postWithCallback("project-property/", properties, (resp) => {
             props.onClose(e, true);
           });
           break;
@@ -128,7 +129,7 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
             }
           );
           break;
-        case "Delete":
+        case "Delete":  
           axios.deleteWithCallback(
             "project-files/" + props.item?.id,
             item,
@@ -142,21 +143,20 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
       }
     }
   };
-  
+
   const otherCallback = (data) => {
-    // setProperties(data);
    let sp = {
      properties: data.map((x) => ({
        projectId:  props.item.project_id,
        name: x.key,
        value: x.value,
-       active: true
+       active: true,
+       id:x.id
+
      }))
    };
-   console.log(sp);
-  //  setProperties(sp)
+    setProperties(sp);
  };
-
   return (
     <div className="row " >
       <div className="col-xl-12 ">
@@ -214,9 +214,10 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
                         ) : (
                           <>
                             <Project_Properties
-                            data={data}
+  
                             callback={otherCallback}
-                              // project_id={props.item.project_id}
+                              project_id={props.item.project_id}
+                              PropertieData={[]}
                               PropertieColumns={[
                                 {
                                   name: "key",
