@@ -22,7 +22,7 @@ const CommonTable = ({
       };
     });
     setNameValue(so);
-  }, [data, columns]);
+  }, [data]);
 
   const onClick = (e) => {
     e.preventDefault();
