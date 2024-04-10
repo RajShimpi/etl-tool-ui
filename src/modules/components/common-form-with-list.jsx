@@ -411,11 +411,12 @@ const CommonFormWithList = (props) => {
       }
     }
   };
+  // console.log(data);
   useEffect(() => {
-    if (data?.job) {
-      setJobName(data.job);
-    }
-  }, [data]);
+
+      setJobName(data);
+  
+  }, []);
   // const btn = [
   //   {
   //     name: "Save",
