@@ -190,7 +190,7 @@ const Dashboard = () => {
     }
   }, []);
   useEffect(() => {
-    axios.getWithCallback("metabase/json", (data) => setDashboardData(data));
+    // axios.getWithCallback("metabase/json", (data) => setDashboardData(data));
   }, []);
 
   const onhandelProject = (projectid) => {

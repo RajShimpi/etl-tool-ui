@@ -4,11 +4,14 @@ import config from "../components/config/config.json";
 import axios from "../services/axios";
 import { getJobScheduleFields } from "./job-schedule-data";
 import auth from "../user/auth";
+import { useJobName } from "../../components/JobDataContext";
+import StarsIcon from "@mui/icons-material/Stars";
 
 const JobSchedule = () => {
   const [jobschedule, setJobschedule] = useState([]);
   const [project, setProject] = useState([]);
   const [job, setJob] = useState([]);
+  const { jobName } = useJobName([]);
 
   const client_id = auth.getStorageData("client_id");
 
@@ -41,7 +44,11 @@ const JobSchedule = () => {
     name: "",
     description: "",
     scheduleCron: "",
-    active:true,
+    active: true,
+  };
+console.log(jobName);
+  const forceRun = () => {
+    axios.postWithCallback(`job-schedule/forceRun/${jobName.name}`);
   };
 
   return (
@@ -62,6 +69,11 @@ const JobSchedule = () => {
           { name: "value", displayName: "Value", dbPropName: "value" },
         ]}
         btnName="Additional Parameter"
+        name="Force Run"
+        color="success"
+        function={forceRun}
+        disabled={true}
+        icon={<StarsIcon style={{ fontSize: "20px" }} />}
       />
     </>
   );

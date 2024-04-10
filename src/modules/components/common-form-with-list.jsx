@@ -9,6 +9,8 @@ import configContext from "../dashboard/config-context";
 import { errorAlert } from "./config/alert";
 import utils from "./utils";
 import CommonTable from "./common-table";
+import CustomButton from "./custom-button";
+import { useJobName } from "../../components/JobDataContext";
 
 const CommonFormWithList = (props) => {
   const contextData = useContext(configContext);
@@ -22,6 +24,8 @@ const CommonFormWithList = (props) => {
     filterColumnName: [],
   });
   const [otherData, setOtherData] = useState([]);
+  const [buttons, setButtons] = useState([]);
+  const [buttonsTrue, setButtonTrue] = useState(true);
   const filterExcludes = [
     "createdbyName",
     "createdDate",
@@ -34,6 +38,7 @@ const CommonFormWithList = (props) => {
     props.columns,
     (x) => !filterExcludes.includes(x)
   );
+  const { setJobName } = useJobName([]);
   const [list, setList] = useState([]);
   const [keys, setKeys] = useState([]);
   const [isSubmit, setIsSubmit] = useState(false);
@@ -178,6 +183,7 @@ const CommonFormWithList = (props) => {
         break;
     }
   };
+
   useEffect(() => {
     apiCall();
   }, []);
@@ -187,7 +193,20 @@ const CommonFormWithList = (props) => {
       ...prevState,
       journal_code: props.defaultObj?.journal_code,
     }));
-  }, [props.defaultObj]);
+  }, [props]);
+
+  useEffect(() => {
+    const forecRun = [
+      {
+        name: props.name,
+        color: props.color,
+        function: props.function,
+        icon:props.icon,
+        disabled: buttonsTrue,
+      },
+    ];
+    setButtons(forecRun);
+  }, [props, buttonsTrue]);
 
   const apiCall = () => {
     axios.getWithCallback(
@@ -229,6 +248,7 @@ const CommonFormWithList = (props) => {
   const onReset = (e) => {
     setData({ ...props.defaultObj });
     setUpdate(true);
+    setButtonTrue(true);
     setUpdate(false);
     setIsSubmit(false);
     if (props.validationCallback) {
@@ -241,6 +261,7 @@ const CommonFormWithList = (props) => {
   };
 
   const editCallBack = (item) => {
+    setButtonTrue(false);
     setUpdate(true);
     if (props.getById) {
       axios.getWithCallback(props.getById.replace(":id", item.id), (data) => {
@@ -357,6 +378,7 @@ const CommonFormWithList = (props) => {
             setIsSubmit(false);
             setResetparamsTable(true);
             setOtherData([]);
+            setButtonTrue(true)
             apiCall();
             e.target.classList.remove("was-validated");
             if (!!props.validationCallback) props.validationCallback(null);
@@ -378,6 +400,7 @@ const CommonFormWithList = (props) => {
             setIsSubmit(false);
             setResetparamsTable(true);
             setOtherData([]);
+            setButtonTrue(true)
             apiCall();
             e.target.classList.remove("was-validated");
             if (!!props.validationCallback) props.validationCallback(null);
@@ -388,7 +411,19 @@ const CommonFormWithList = (props) => {
       }
     }
   };
-
+  useEffect(() => {
+    if (data?.job) {
+      setJobName(data.job);
+    }
+  }, [data]);
+  // const btn = [
+  //   {
+  //     name: "Save",
+  //     // icon: <SaveIcon style={{ fontSize: "20px" }}/>,
+  //     // fun: saveDataFunction,
+  //     color: "info",
+  //     // disabled: disabled
+  //   },]
   return (
     <div className="row">
       <div className="col-xl-12">
@@ -436,8 +471,8 @@ const CommonFormWithList = (props) => {
                   </div>
                   {props.otherParamColumns && (
                     <CommonTable
-                    btnName={props.btnName}
-                      data={otherData} 
+                      btnName={props.btnName}
+                      data={otherData}
                       columns={props.otherParamColumns}
                       callback={otherCallback}
                       resetparamsTable={resetparamsTable}
@@ -502,6 +537,7 @@ const CommonFormWithList = (props) => {
                     </table>
                   )}
                   <div className=" col-md-12 d-flex justify-content-end">
+                    {buttons && <CustomButton button={buttons} />}
                     <button
                       type="submit"
                       onClick={() => setIsSubmit(true)}

@@ -211,7 +211,7 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
                 <div className='proicon d-flex'  onClick={onhandelFileId}>
                   <div className='arrow_Icons'>
                   {showNested[project.project_name] ? <KeyboardArrowDownIcon /> : <KeyboardArrowRightIcon />}</div>
-                  <FolderIcon fontSize='medium' style={{color:'rgb(252 201 53)'}} />
+                  <FolderIcon fontSize='medium' style={{color:'rgb(255 190 0)'}} />
                   <div className='link_name' style={{ marginLeft: '5px', fontWeight:"600" }}>
                     {project.project_name}
                   </div>
