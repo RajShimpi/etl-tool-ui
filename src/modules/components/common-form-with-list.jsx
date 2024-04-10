@@ -262,6 +262,8 @@ const CommonFormWithList = (props) => {
 
   const editCallBack = (item) => {
     setButtonTrue(false);
+    console.log(item);
+    setJobName(item);
     setUpdate(true);
     if (props.getById) {
       axios.getWithCallback(props.getById.replace(":id", item.id), (data) => {
@@ -412,11 +414,11 @@ const CommonFormWithList = (props) => {
     }
   };
   // console.log(data);
-  useEffect(() => {
+  // useEffect(() => {
 
-      setJobName(data);
+  //     setJobName(data);
   
-  }, []);
+  // }, []);
   // const btn = [
   //   {
   //     name: "Save",
