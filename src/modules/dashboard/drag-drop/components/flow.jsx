@@ -105,7 +105,7 @@ const ContextMenu = ({
         className="context-menu"
       >
         <div className="d-flex" style={{ height: "50px" }}>
-          <button className="setAsStartStepHandler">
+          <button className="setAsStartStepHandler"  onClick={handleStartStepClick}>
             {menu.start_step !== null ? (
               <input
                 type="checkbox"
@@ -133,7 +133,6 @@ const ContextMenu = ({
                 }}
                 name="startstep"
                 value="startstep"
-                onClick={handleStartStepClick}
               />
             )}
             <div
