@@ -1,56 +1,35 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CommonTable from "../../components/common-table";
+import axios from "../../services/axios";
 
-function Project_Properties({ props, PropertieColumns, project_id }) {
-  const [resetparamsTable, setResetparamsTable] = useState(false);
+function Project_Properties({PropertieColumns,callback,project_id }) {
+  // const [resetparamsTable, setResetparamsTable] = useState(false);
+  const [data, setData] = useState([]);
 
-  const otherCallback = (data) => {
-    let sp = data.map((x) => {
-      let obj;
-      PropertieColumns.forEach((col) => {
-        obj = { ...obj, [col.dbPropName]: x[col.name] };
+  useEffect(() => {
+    if (project_id) {
+      axios.getWithCallback(`project-property/${project_id}`, (y) => {
+          const dt = y.map((x) => ({
+            id: x.id,
+            key: x.name,
+            name: x.name,
+            sequence: x.sequenceId,
+            value: x.value
+          }));
+          console.log("dt",dt);
+          setData(dt);
       });
-      return {
-        ...x,
-        ...obj,
-      };
-    });
-    // setData(sp)
-  };
-  const dt = [
-    {
-      key: "DB_SQL",
-    //   key_1: "DB_SQL",
-    //   parameter_name: "DB_SQL",
-      sequence: 1,
-      value: "DB_SQL_QURERY",
-    //   value_1: "DB_SQL_QURERY",
-    },
-    {
-      key: "DB_PG",
-    //   key_1: "DB_PG",
-    //   parameter_name: "DB_PG",
-      sequence: 2,
-    //   value: "DB_PG",
-      value: "DB_PG_QUERY",
-    },
-    {
-      key: "DB_NOSQL",
-    //   key_1: "DB_NOSQL",
-    //   parameter_name: "DB_NOSQL",
-      sequence: 3,
-    //   value: "DB_NOSQL",
-      value: "DB_NOSQL_QUREY",
-    },
-  ];
+    }
+  }, [project_id]);
+
   return (
     <div>
       <CommonTable
       btnName="Add Propertie's"
-        data={dt}
+        data={data}
         columns={PropertieColumns}
-        callback={otherCallback}
-        resetparamsTable={resetparamsTable}
+        callback={callback}
+        // resetparamsTable={resetparamsTable}
       />
     </div>
   );
