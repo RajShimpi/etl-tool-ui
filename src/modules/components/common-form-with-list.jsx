@@ -262,7 +262,6 @@ const CommonFormWithList = (props) => {
 
   const editCallBack = (item) => {
     setButtonTrue(false);
-    console.log(item);
     setJobName(item);
     setUpdate(true);
     if (props.getById) {
@@ -413,20 +412,7 @@ const CommonFormWithList = (props) => {
       }
     }
   };
-  // console.log(data);
-  // useEffect(() => {
 
-  //     setJobName(data);
-  
-  // }, []);
-  // const btn = [
-  //   {
-  //     name: "Save",
-  //     // icon: <SaveIcon style={{ fontSize: "20px" }}/>,
-  //     // fun: saveDataFunction,
-  //     color: "info",
-  //     // disabled: disabled
-  //   },]
   return (
     <div className="row">
       <div className="col-xl-12">

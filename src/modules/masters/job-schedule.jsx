@@ -46,7 +46,7 @@ const JobSchedule = () => {
     scheduleCron: "",
     active: true,
   };
-// console.log(jobName);
+
   const forceRun = () => {
     axios.postWithCallback(`job-schedule/forceRun/${jobName.name}`);
   };
