@@ -10,6 +10,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import BackupIcon from '@mui/icons-material/Backup';
 import DescriptionIcon from '@mui/icons-material/Description';
 import CustomButton from "../modules/components/custom-button";
+
 const MainComponent = () => {
   const [isProjectStructureOpen, setIsProjectStructureOpen] = useState(false);
   const [isComponetToolOpen, setIsComponetToolOpen] = useState(false);
