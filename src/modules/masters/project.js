@@ -21,7 +21,6 @@ const Project = () => {
     axios.getWithCallback(`clients/client/${clientid.client_id}`, (data) => {
       const clientData = { id: data.id };
       setClientId(clientData.id);
-      // setProjectId(storedrPojectId);
     });
   }, [clientid]);
 

@@ -12,7 +12,7 @@ import ReactFlow, {
 import Node from "./custom-node/message-node";
 import { MarkerType } from "reactflow";
 
-// Utils
+// UtilsnullEdges
 import { isAllNodeisConnected } from "../utils";
 
 // Styles
@@ -30,7 +30,11 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import JobStepParameterMaster from "../../../masters/job-step-param-master";
 import JobParameterMaster from "../../../masters/job-parameter";
-import { alertInfo, confirmAlert } from "../../../components/config/alert";
+import {
+  alertInfo,
+  confirmAlert,
+  errorAlert,
+} from "../../../components/config/alert";
 
 const nodeTypes = {
   node: (node) => {
@@ -169,6 +173,7 @@ const ContextMenu = ({
 
 const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   const [showNodeMaster, setShowNodeMaster] = useState(false);
+  const [open, setOpen] = useState(false);
   const reactFlowWrapper = useRef(null);
   const edgeUpdateSuccessful = useRef(true);
   const modalRef = useRef(null);
@@ -188,7 +193,6 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   const [jobfileid, setJobFileId] = useState();
   const [node_id, setNode_Id] = useState();
   const [editName, setName] = useState();
-  const [activeNodes, setActiveNodes] = useState([]);
   const [nodesActive, setNodesActive] = useState([]);
   const [openJobParams, setOpenJobParams] = useState(false);
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
@@ -205,7 +209,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
         saveNodeToDatabase();
         setShouldCallSave(false);
       } else {
-        alert("Please connect source nodes (Cannot Save Flow)");
+        errorAlert("Please connect source nodes (Cannot Save Flow)");
       }
     }
   };
@@ -233,7 +237,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
           if (isAllNodeisConnected(nodes, edges)) {
             saveNodeToDatabase();
           } else {
-            alert("Please connect source nodes (Cannot Save Flow)");
+            errorAlert("Please connect source nodes (Cannot Save Flow)");
           }
         },
         () => {
@@ -245,11 +249,50 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
 
   const OpenJobParam = () => {
     setOpenJobParams(true);
+    setOpen(true);
+  };
+
+  const publish = () => {
+    const nullEdges = edges.filter((item) => item.target === "null"&& item.label ==="ok");
+    if (nullEdges.length === 0) {
+      const job_id = {
+        jobId: jobfileid.id,
+      };
+      axios.postWithCallback(`job/publish-job/`, job_id);
+    } else {
+      // const nullErrors = [];
+      const nullOks = [];
+
+      nullEdges.forEach((edge) => {
+        const nodeName = getNodeName(edge.source);
+        // if (edge.label === "error") {
+        //   nullErrors.push(nodeName);
+        // } else 
+        if (edge.label === "ok") {
+          nullOks.push(nodeName);
+        }
+      });
+
+      let errorMessage = "You need to connect all the Edges.";
+      // if (nullErrors.length > 0) {
+      //   errorMessage += ` Error : ${nullErrors.join(", ")},`;
+      // }
+      if (nullOks.length > 0) {
+        errorMessage += ` Ok : ${nullOks.join(", ")}.`;
+      }
+      errorAlert(errorMessage);
+    }
+  };
+
+  const getNodeName = (nodeId) => {
+    const node = allNodes.find((node) => node.id === nodeId);
+    return node ? node.data.heading : "";
   };
 
   React.useImperativeHandle(refs, () => ({
     savaDataFunction,
     OpenJobParam,
+    publish,
   }));
 
   const setAsStartStepHandler = useCallback(() => {
@@ -291,23 +334,20 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   }, [menu, jobfileid, setNodes]);
 
   const unselectStartStep = useCallback(() => {
-    const startstep = {
-      start_step: null,
-    };
 
     setNodes((nds) =>
       nds.map((node) => {
         if (node.id == menu.id) {
           node.data = {
             ...node.data,
-            start_step: startstep.start_step,
+            start_step: null,
           };
         }
         return node;
       })
     );
 
-    axios.putWithCallback(`job/${jobfileid.id}/startstep`, startstep);
+    axios.putWithCallback(`job/${jobfileid.id}/startstep`);
   }, [menu, setMenu, jobfileid, startStep, setStartStep, nodes]);
 
   useEffect(() => {
@@ -318,7 +358,6 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       setJobFileId(null);
       setStartStep(null);
       setMenu(null);
-      setNewEdges([]);
       setShouldCallSave(false);
     }
   }, [projectID, jobDataId, setStartStep, setMenu]);
@@ -336,7 +375,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
     if (jobfileid) {
       event.preventDefault();
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
-      const type = event.dataTransfer.getData("application/reactflow");
+      const Nodetype = event.dataTransfer.getData("application/reactflow");
       const img = event.dataTransfer.getData("img");
       const name = event.dataTransfer.getData("name");
       const step_type_id = event.dataTransfer.getData("id");
@@ -349,7 +388,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       const newNode = {
         step_type_id,
         step_name: name,
-        type,
+        type: "node",
         job_id: parseInt(jobfileid.id),
         node_active: true,
         position: {
@@ -360,7 +399,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
           position_X: position.x,
           position_Y: position.y,
         },
-        data: { heading: name, img: img, start_step: null },
+        data: { heading: name, img: img, start_step: null, type: Nodetype },
       };
 
       axios.postWithCallback("job-steps/", newNode, (data) => {
@@ -392,6 +431,28 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
             },
           },
         ]);
+        if (!data?.step_name.toLowerCase().includes("end")) {
+          const newEdgeok = {
+            id: data.id + "_ok",
+            source: data.id + "",
+            target: "null",
+            sourceHandle: "ok",
+            label: "ok",
+            type: "smoothstep",
+            step_name: data.step_name,
+          };
+          setEdges((prevEdges) => addEdge(newEdgeok, prevEdges));
+          const newEdgeerror = {
+            source: data.id + "_error",
+            source: data.id + "",
+            target: "null",
+            sourceHandle: "error",
+            label: "error",
+            type: "smoothstep",
+            step_name: data.step_name,
+          };
+          setEdges((prevEdges) => addEdge(newEdgeerror, prevEdges));
+        }
       });
     } else {
       alertInfo("You Need To Select The File Or Create The New File");
@@ -409,17 +470,19 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
     if (jobDataId) {
       axios.getWithCallback(`job-steps/${jobDataId.id}/job`, (data) => {
         setJobFileId(jobDataId);
+
         const dataNodes = data.map((item) => ({
           id: "" + item.id,
           step_type_id: "" + item.step_type_id,
           job_id: "" + item.job_id,
-          type: "node",
+          type: item.type,
           data: {
             heading: item.step_name,
             img: `/assets/images/${item.stepType.img}`,
             start_step:
               jobDataId.start_step === item.id ? jobDataId.start_step : null,
             id: item.id,
+            type: item.stepType.type,
           },
           position: {
             x: item.params.position_X,
@@ -427,7 +490,13 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
           },
           node_active: item.node_active,
         }));
-        setNodes(dataNodes);
+
+        const activeNodes = dataNodes.filter(
+          (item) => item.node_active === true
+        );
+
+        setNodes(activeNodes);
+
         const dataEdgesok = data.map((item) => ({
           id: "ok_" + item.id,
           source: "" + item.id,
@@ -437,7 +506,16 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
           sourceHandle: "ok",
           markerEnd: { type: MarkerType.ArrowClosed },
           style: { stroke: getlabelColor("ok") },
+          node_active: item.node_active,
+          nodeType: item.stepType.type,
+          step_name: item.step_name,
         }));
+
+        const activeNodesEdgesOk = dataEdgesok.filter(
+          (item) =>
+            item.node_active === true &&
+            !item.nodeType.toLowerCase().includes("end")
+        );
 
         const dataEdgeserror = data.map((item) => ({
           id: "error_" + item.id,
@@ -448,17 +526,28 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
           sourceHandle: "error",
           markerEnd: { type: MarkerType.ArrowClosed },
           style: { stroke: getlabelColor("error") },
+          node_active: item.node_active,
+          nodeType: item.stepType.type,
+          step_name: item.step_name,
         }));
 
-        setEdges([...dataEdgesok, ...dataEdgeserror]);
-        setNewEdges([...dataEdgesok, ...dataEdgeserror]);
+        const activeNodesEdgesError = dataEdgeserror.filter(
+          (item) =>
+            item.node_active === true &&
+            !item.nodeType.toLowerCase().includes("end")
+        );
+
+        setEdges([...activeNodesEdgesOk, ...activeNodesEdgesError]);
+        setNewEdges([...activeNodesEdgesOk, ...activeNodesEdgesError]);
 
         const combinedData = dataNodes.map((node) => ({
           ...node,
           ...dataEdgesok.find((edgeOk) => edgeOk.id === node.id),
           ...dataEdgeserror.find((edgeError) => edgeError.id === node.id),
         }));
+
         setAllNodes(combinedData);
+
         function getlabelColor(label) {
           return label === "ok" ? "green" : label === "error" ? "red" : "black";
         }
@@ -642,7 +731,26 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
         },
       };
 
-      setEdges((eds) => addEdge(newEdge, eds));
+      setEdges((prevEdges) => addEdge(newEdge, prevEdges));
+      setNewEdges((prevEdges) => addEdge(newEdge, prevEdges));
+
+      setEdges((prevEdges) =>
+        prevEdges.map((edge) => {
+          if (edge.label == newEdge.label) {
+            if (edge.source === newEdge.source) {
+              return { ...edge, target: newEdge.target };
+            }
+            return edge;
+          } else if (edge.label == newEdge.label) {
+            if (edge.source === newEdge.source) {
+              return { ...edge, target: newEdge.target };
+            }
+            return edge;
+          } else {
+            return edge;
+          }
+        })
+      );
     },
     [setEdges]
   );
@@ -650,10 +758,9 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   useEffect(() => {
     const node = nodes.filter((node) => {
       if (node.selected) return true;
-
       return false;
     });
-    if (node[0]) {
+    if (node[0]) { 
       setSelectedNode(node[0]);
       setIsSelected(true);
     } else {
@@ -677,12 +784,16 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
 
   const onEdgeUpdateStart = useCallback(() => {
     edgeUpdateSuccessful.current = false;
+    setShouldCallSave(true);
   }, []);
 
   const onEdgeUpdate = useCallback(
     (oldEdge, newConnection) => {
       edgeUpdateSuccessful.current = true;
-      setEdges((els) => updateEdge(oldEdge, newConnection, els));
+      const updatedEdges = updateEdge(oldEdge, newConnection, edges);
+      setEdges(updatedEdges);
+      setNewEdges(updatedEdges);
+      setShouldCallSave(true);
     },
     [edges, setEdges]
   );
@@ -690,28 +801,55 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   const onEdgeUpdateEnd = useCallback(
     (_, edge) => {
       if (!edgeUpdateSuccessful.current) {
-        setEdges((eds) => eds.filter((e) => e.id !== edge.id));
+        const updatedEdges = edges.map((e) => {
+          if (e.id === edge.id) {
+            return { ...e, target: "null" };
+          }
+          return e;
+        });
+        setNewEdges((eds) => eds.filter((e) => e.id !== edge.id));
+        setEdges(updatedEdges);
+        setShouldCallSave(true);
       }
-
       edgeUpdateSuccessful.current = true;
     },
-    [setEdges]
+    [edges, setEdges]
   );
 
   const onNodeDoubleClick = () => {
     setShowNodeMaster(true);
+    setOpen(true);
   };
 
   const handleCloseNodeMaster = (obj) => {
     setShowNodeMaster(false);
+    setOpen(false);
     setMenu(null);
     if (obj) {
       setNodes((nds) =>
         nds.map((node) => {
           if (node.id == obj.id) {
-            node.data = {
-              ...node.data,
-              heading: obj.step_name,
+            return {
+              ...node,
+              data: {
+                ...node.data,
+                heading: obj.step_name,
+              },
+            };
+          }
+          return node;
+        })
+      );
+
+      setAllNodes((nds) =>
+        nds.map((node) => {
+          if (node.id == obj.id) {
+            return {
+              ...node,
+              data: {
+                ...node.data,
+                heading: obj.step_name,
+              },
             };
           }
           return node;
@@ -722,6 +860,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
 
   const handleCloseJobParams = () => {
     setOpenJobParams(false);
+    setOpen(false);
   };
 
   const handleClickOutside = (event) => {
@@ -769,7 +908,6 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
         ok_step: null,
         error_step: null,
       });
-      setActiveNodes(node);
       setSelectedNode(node);
     },
     [setMenu]
@@ -789,7 +927,24 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       ]);
 
       setNodes((nodes) => nodes.filter((node) => node.id !== menu.id));
-      setEdges((edges) => edges.filter((edge) => edge.source !== menu.id));
+      setNewEdges((edges) => edges.filter((edge) => edge.source !== menu.id));
+      setEdges((prevEdges) =>
+        prevEdges.map((edge) => {
+          if (edge.label === "ok") {
+            if (edge.target == menu.id) {
+              return { ...edge, target: "null" };
+            }
+            return edge;
+          }
+          if (edge.label == "error") {
+            if (edge.target == menu.id) {
+              return { ...edge, target: "null" };
+            }
+            return edge;
+          }
+        })
+      );
+
       setMenu(null);
     }
   }, [menu, setNodes, setEdges]);
@@ -822,15 +977,16 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       >
         <JobParameterMaster
           handleClose={handleCloseJobParams}
+          open={open}
           project_id={projectID}
-          job={jobfileid}
+          job={jobfileid ? jobfileid?.id : ""}
         />
       </Modal>
       <div className="dndflow">
         <ReactFlowProvider>
           <div className="reactflow-wrapper" ref={reactFlowWrapper}>
             <ReactFlow
-              nodes={nodeActives}
+              nodes={nodes}
               edges={edges}
               startStep={startStep}
               nodeTypes={nodeTypes}
@@ -882,8 +1038,8 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
                 node_id={node_id}
                 handleClose={handleCloseNodeMaster}
                 name={editName}
+                open={open}
                 nodes={nodeActives}
-                // setNodeNames={setNodeName}
               />
             </Modal>
           </div>

@@ -54,7 +54,17 @@ export const getParameterFields = (itemData) => {
             isSubmit: itemData.isSubmit,
             isRequired: false,
             itemVal: itemData.values ? itemData.values["resource"] : '',
-        }
+        },{
+            type: "text",
+            id: "inputParams",
+            label: "Params",
+            name: "params",
+            control: "textarea",
+            isRequired: false,
+            itemVal: itemData.values ? itemData.values["params"] : '',
+            span: itemData.message?.params,
+            apiDataType: "json"
+        },
         ]
     }];
 }

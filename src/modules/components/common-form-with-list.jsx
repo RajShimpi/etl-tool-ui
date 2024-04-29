@@ -8,6 +8,10 @@ import axios from "../services/axios";
 import configContext from "../dashboard/config-context";
 import { errorAlert } from "./config/alert";
 import utils from "./utils";
+import CommonTable from "./common-table";
+import CustomButton from "./custom-button";
+import { useJobName } from "../../components/JobDataContext";
+
 const CommonFormWithList = (props) => {
   const contextData = useContext(configContext);
   const [update, setUpdate] = useState(false);
@@ -19,6 +23,9 @@ const CommonFormWithList = (props) => {
     columns: [],
     filterColumnName: [],
   });
+  const [otherData, setOtherData] = useState([]);
+  const [buttons, setButtons] = useState([]);
+  const [buttonsTrue, setButtonTrue] = useState(true);
   const filterExcludes = [
     "createdbyName",
     "createdDate",
@@ -26,13 +33,16 @@ const CommonFormWithList = (props) => {
     "updatedDate",
     "active",
   ];
+
   const filterColumnName = _.filter(
     props.columns,
     (x) => !filterExcludes.includes(x)
   );
+  const { setJobName } = useJobName([]);
   const [list, setList] = useState([]);
   const [keys, setKeys] = useState([]);
   const [isSubmit, setIsSubmit] = useState(false);
+  const [resetparamsTable, setResetparamsTable] = useState(false);
   const setValues = (e, name) => {
     if (!e) return;
     switch (name) {
@@ -77,15 +87,12 @@ const CommonFormWithList = (props) => {
       case "whsId":
         setData((prevState) => ({ ...prevState, [name]: parseInt(e.value) }));
         break;
-      case "client_id": 
-      case "project_id":
+      case "client_id":
       case "parent_id":
       case "step_id":
-      case "job_id":
-      case "client": 
-      case "project":
-      case "job":
       case "parameter_id":
+      case "project_id":
+      case "job_id":
         setData((prevState) => ({ ...prevState, [name]: parseInt(e.value) }));
         break;
       case "TemplateItemId":
@@ -176,19 +183,35 @@ const CommonFormWithList = (props) => {
         break;
     }
   };
+
   useEffect(() => {
     apiCall();
   }, []);
+
   useEffect(() => {
     setData((prevState) => ({
       ...prevState,
       journal_code: props.defaultObj?.journal_code,
     }));
-  }, [props.defaultObj]);
+  }, [props]);
+
+  useEffect(() => {
+    const forecRun = [
+      {
+        name: props.name,
+        color: props.color,
+        function: props.function,
+        icon:props.icon,
+        disabled: buttonsTrue,
+      },
+    ];
+    setButtons(forecRun);
+  }, [props, buttonsTrue]);
+
   const apiCall = () => {
     axios.getWithCallback(
       props.getApi,
-      async (resp) => {
+      (resp) => {
         let listData;
         if (props.processListCallback) {
           listData = props.processListCallback(resp);
@@ -221,9 +244,11 @@ const CommonFormWithList = (props) => {
     }
     return true;
   };
+
   const onReset = (e) => {
     setData({ ...props.defaultObj });
     setUpdate(true);
+    setButtonTrue(true);
     setUpdate(false);
     setIsSubmit(false);
     if (props.validationCallback) {
@@ -231,23 +256,45 @@ const CommonFormWithList = (props) => {
     }
     let form = $(e.target).closest("form");
     form[0].classList.remove("was-validated");
+    setResetparamsTable(true);
+    setOtherData([]);
   };
+
   const editCallBack = (item) => {
+    setButtonTrue(false);
+    setJobName(item);
     setUpdate(true);
     if (props.getById) {
-      axios.getWithCallback(props.getById.replace(":id", item.id), (data) =>
-        setData(data)
-      );
+      axios.getWithCallback(props.getById.replace(":id", item.id), (data) => {
+        setData(data);
+        setOtherData(processTableParams(data));
+      });
     } else {
       setData(item);
+      setOtherData(processTableParams(item.otherParams));
     }
   };
+
+  const processTableParams = (data) => {
+    let obj;
+    return data?.map((x, index) => {
+      props.otherParamColumns?.forEach((col) => {
+        obj = { ...obj, [col.name]: x[col.dbPropName] };
+      });
+      return {
+        ...x,
+        ...obj,
+      };
+    });
+  };
+
   const deleteImage = (e, item, index) => {
     let arr = [];
     data[item].splice(index, 1);
     data[item].forEach((x) => arr.push(x));
     setData((prevData) => ({ ...prevData }));
   };
+
   useEffect(() => {
     setDataTableData({
       data: list,
@@ -259,6 +306,7 @@ const CommonFormWithList = (props) => {
       tableTitle: props.tableTitle ? props.tableTitle : "",
     });
   }, [list, keys]);
+
   const isFilePresent = () => {
     let dt = [];
     props.fileObjKey.forEach((x) => {
@@ -268,6 +316,7 @@ const CommonFormWithList = (props) => {
     });
     return !!dt?.length;
   };
+
   const isJsonString = (str) => {
     if (!str) return false;
     try {
@@ -277,6 +326,25 @@ const CommonFormWithList = (props) => {
     }
     return false;
   };
+
+  const otherCallback = (data) => {
+    let sp = data.map((x) => {
+      let obj;
+      props.otherParamColumns.forEach((col) => {
+        obj = { ...obj, [col.dbPropName]: x[col.name] };
+      });
+      return {
+        ...x,
+        ...obj,
+      };
+    });
+
+    // Check if otherData is different from the calculated value
+    if (!_.isEqual(otherData, sp)) {
+      setOtherData(sp);
+    }
+  };
+
   const onsubmit = (e) => {
     if (update) {
       data.lastChangedBy = auth.getStorageData("id");
@@ -303,12 +371,15 @@ const CommonFormWithList = (props) => {
           : data;
         axios.putWithCallback(
           props.updateApi.replace(":id", postData.id),
-          postData,
+          { ...postData, otherParams: otherData },
           (resp) => {
             setUpdate(true);
             setUpdate(false);
             setData({ ...props.defaultObj });
             setIsSubmit(false);
+            setResetparamsTable(true);
+            setOtherData([]);
+            setButtonTrue(true)
             apiCall();
             e.target.classList.remove("was-validated");
             if (!!props.validationCallback) props.validationCallback(null);
@@ -319,7 +390,7 @@ const CommonFormWithList = (props) => {
       } else {
         axios.postWithCallback(
           props.insertApi,
-          data,
+          { ...data, otherParams: otherData },
           (resp) => {
             if (props.createDefaultObject) {
               props.createDefaultObject();
@@ -328,6 +399,9 @@ const CommonFormWithList = (props) => {
             setUpdate(true);
             setUpdate(false);
             setIsSubmit(false);
+            setResetparamsTable(true);
+            setOtherData([]);
+            setButtonTrue(true)
             apiCall();
             e.target.classList.remove("was-validated");
             if (!!props.validationCallback) props.validationCallback(null);
@@ -380,10 +454,19 @@ const CommonFormWithList = (props) => {
                         options: !!props.options ? props.options : [],
                         data: !!props.data ? props.data : [],
                         message: props.message,
-                        isSuperAdmin: props.isSuperAdmin
+                        isSuperAdmin: props.isSuperAdmin,
                       })}
                     />
                   </div>
+                  {props.otherParamColumns && (
+                    <CommonTable
+                      btnName={props.btnName}
+                      data={otherData}
+                      columns={props.otherParamColumns}
+                      callback={otherCallback}
+                      resetparamsTable={resetparamsTable}
+                    />
+                  )}
                   {props.fileObjKey && isFilePresent() && (
                     <table className="table table-striped table-bordered dt-responsive">
                       <thead
@@ -443,6 +526,7 @@ const CommonFormWithList = (props) => {
                     </table>
                   )}
                   <div className=" col-md-12 d-flex justify-content-end">
+                    {buttons && <CustomButton button={buttons} />}
                     <button
                       type="submit"
                       onClick={() => setIsSubmit(true)}

@@ -44,27 +44,36 @@ const ContextMenu = ({ item, popType, project_id, parent_id,id, onClose, callbac
     <div style={{zIndex:1}} className={`contextMenu ${popType === 'right' ? 'right' :''}`} onContextMenu={handleContextMenuClick}>
       <div className="menu-item" onClick={(e) => openPopup(e,"AddFolder", { top: e.clientY, left: e.clientX + 10 }, project_id, parent_id) }>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start"}}>
-          <FolderIcon style={{ fontSize: "medium", marginRight: "5px", marginTop: "3px" }}/>
-          Add Folder
+          <FolderIcon style={{ fontSize: "20px", marginRight: "5px", marginTop: "5px" }}/>
+          <div style={{ fontSize: "15px", fontWeight: "bold", marginTop: "5px" }}>Add Folder</div>
         </div>
       </div>
       <div className="menu-item" onClick={(e) => {openPopup(e,"AddFile", { top: e.clientY, left: e.clientX + 10 }, project_id, id)}}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", }}>
-          <InsertDriveFileIcon style={{ fontSize: "medium", marginRight: "5px", marginTop: "3px" }} />
-          Add File
+          <InsertDriveFileIcon style={{ fontSize: "20px", marginRight: "5px", marginTop: "5px" }} />
+          <div style={{ fontSize: "15px", fontWeight: "bold", marginTop: "5px" }}>Add File</div>
         </div>  
       </div>
+      {hideDeleteUpdate &&<>
+      <div className="menu-item" onClick={(e) => {openPopup(e,"Add Propertie", { top: e.clientY, left: e.clientX + 10 }, project_id, id)}}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", }}>
+          <InsertDriveFileIcon  style={{ fontSize: "20px", marginRight: "5px", marginTop: "5px" }}/>
+          <div  style={{ fontSize: "15px", fontWeight: "bold", marginTop: "5px" }}>Propertie</div>
+        </div>  
+      </div>
+      </>
+      }
       {!hideDeleteUpdate && <>
       <div className="menu-item" onClick={(e) => openPopup(e,"Edit", { top: e.clientY, left: e.clientX + 10 }, project_id, parent_id)}>
         <div style={{display: "flex", alignItems: "center", justifyContent: "flex-start"}}>
-          <EditIcon style={{ fontSize: "medium", marginRight: "5px", marginTop: "3px" }}/>
-          Edit
+          <EditIcon style={{ fontSize: "20px", marginRight: "5px", marginTop: "5px" }}/>
+          <div style={{ fontSize: "15px", fontWeight: "bold", marginTop: "5px" }}>Edit</div>
         </div>
       </div>
       <div className="menu-item" onClick={(e) =>   openPopup(e,"Delete", { top: e.clientY, left: e.clientX + 10 }, project_id, parent_id) }> 
-        <div style={{display: "flex", alignItems: "center", justifyContent: "flex-start"}} > 
-          <DeleteIcon style={{ fontSize: "medium", marginRight: "5px", marginTop: "3px" }}/>
-          Delete
+        <div style={{display: "flex", alignItems: "center", justifyContent: "flex-start", }} > 
+          <DeleteIcon style={{ fontSize: "20px", marginRight: "5px", marginTop: "5px" }}/>
+          <div style={{ fontSize: "15px", fontWeight: "bold", marginTop: "5px" }}>Delete</div>
         </div>
       </div>
       </>

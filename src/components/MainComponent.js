@@ -3,12 +3,14 @@ import ComponetTool from "./ComponentTool/ComponetTool";
 import ProjectStructure from "./ProjectStrucure/ProjectStructure";
 import "./MainComponent.css";
 import OverviewFlow from "../modules/dashboard/drag-drop/components/flow";
-import { useJobData } from "./JobDataContext";
+import { useJobData, useProjectId, useProjectid, useprojectID } from "./JobDataContext";
 import axios from "../modules/services/axios";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import SaveIcon from '@mui/icons-material/Save';
 import BackupIcon from '@mui/icons-material/Backup';
 import DescriptionIcon from '@mui/icons-material/Description';
+import CustomButton from "../modules/components/custom-button";
+
 const MainComponent = () => {
   const [isProjectStructureOpen, setIsProjectStructureOpen] = useState(false);
   const [isComponetToolOpen, setIsComponetToolOpen] = useState(false);
@@ -18,18 +20,22 @@ const MainComponent = () => {
   const { jobDataId } = useJobData();
   const [disabled, setDisabled] = useState(true)
   const [jobData, setJobData] = useState()
-  const [jobid, setJobid] = useState([])
   const [filePath, setFilePath] = useState([])
-
+  const { projectID } = useProjectid([]);
+const [btns, setBtns]=useState([])
   useEffect(() => {
     if (jobDataId) {
       setJobData(jobDataId);
-      setJobid(jobDataId.id)
     } else {
       setJobData(null)
-      setFilePath([])
     }
-  }, [jobDataId]);
+  }, [jobDataId,projectID]);
+  
+  useEffect(() => {
+    if (jobDataId || projectID) {
+      setFilePath([]);
+    }
+  }, [projectID,jobDataId]);
 
   useEffect(() => {
     if (jobDataId) {
@@ -50,14 +56,7 @@ const MainComponent = () => {
 
   useEffect(() => {
     setDisabled(jobData !== undefined && jobData !== null ? false : true);
-  }, [jobDataId]);
-
-  const publish = () => {
-    const job_id = {
-      jobId: jobid,
-    };
-    axios.postWithCallback(`job/publish-job/`, job_id);
-  };
+  }, [jobDataId,projectID]);
 
   const saveDataFunction = () => {
     if (savaDataRef.current && typeof savaDataRef.current.savaDataFunction === 'function') {
@@ -68,6 +67,11 @@ const MainComponent = () => {
   const OpenJobParam = () => {
     if (savaDataRef.current && typeof savaDataRef.current.OpenJobParam === 'function') {
       savaDataRef.current.OpenJobParam();
+    }
+  };
+  const publish = () => {
+    if (savaDataRef.current && typeof savaDataRef.current.OpenJobParam === 'function') {
+      savaDataRef.current.publish();
     }
   };
 
@@ -107,6 +111,33 @@ const MainComponent = () => {
       return "100%";
     }
   };
+  useEffect(() => {
+    const btn = [
+      {
+        name: "Save",
+        icon: <SaveIcon style={{ fontSize: "20px" }}/>,
+        function: saveDataFunction,
+        color: "info",
+        disabled: disabled
+      },
+      {
+        name: "Job Params",
+        icon: <DescriptionIcon style={{ fontSize: "20px" }} />,
+        function: OpenJobParam,
+        color: "secondary",
+        disabled: disabled
+      },
+      {
+        name: "Publish",
+        icon: <BackupIcon style={{ fontSize: "20px" }} />,
+        function: publish,
+        color: "success",
+        disabled: disabled
+      }
+    ];
+    setBtns(btn);
+  }, [disabled]);
+  
 
   return (
     <>
@@ -130,9 +161,9 @@ const MainComponent = () => {
                   )}
                 </li>
               </ul>
-              <div style={{ marginRight: '35%' }}>
+              <div style={{ marginRight: '40%' }}>
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                  <li class="nav-item">
+                  {/* <li class="nav-item">
                     <button className="btn  btn-secondary mx-1 w-xs d-flex" style={{backgroundColor:"#3f85c1" , border:"none"}}  type="button"  onClick={saveDataFunction} disabled={disabled}><div style={{ marginTop: '1px' }}><SaveIcon style={{ fontSize: "20px"  }} /></div><div style={{ fontSize: "15px", marginLeft: '5px', marginBottom: '3px' }}> Save</div></button>
                   </li>
                   <li class="nav-item">
@@ -140,6 +171,9 @@ const MainComponent = () => {
                   </li>
                   <li class="nav-item">
                     <button className="btn mx-1 w-xs btn-success d-flex" onClick={publish} disabled={disabled}><div style={{ marginTop: '1px' }}><BackupIcon style={{ fontSize: "20px" }} /></div><div style={{ fontSize: "15px", marginLeft: '5px', marginBottom: '3px' }}>Publish</div></button>
+                  </li> */}
+                  <li class="nav-item">
+                  <CustomButton button={btns}/>
                   </li>
                 </ul>
               </div>

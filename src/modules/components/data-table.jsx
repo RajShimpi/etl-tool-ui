@@ -323,7 +323,7 @@ const DataTable = (props) => {
             setSelectedRow(index);
         }
     }
-
+// console.log("props:",props);
     return (
         <div className="row">
             <div className="col-xl-12">
@@ -487,8 +487,7 @@ const DataTable = (props) => {
                                                                                     : col?.columnId.toUpperCase().includes('DATE') && !col?.columnId.toUpperCase().includes('NAME') && !col?.columnId.toUpperCase().includes('UPDATE')
                                                                                         && !col?.columnId.toUpperCase().includes('PODATE')
                                                                                         ? <ReactTimeAgo date={item[col.columnId]} locale="en-US"/>
-                                                                                        : col?.columnId.includes('.') ? getValue(item, col?.columnId) : item[col?.columnId] === null ? 'NA' : typeof item[col?.columnId] == 'object' ? JSON.stringify(item[col?.columnId]) : item[col?.columnId]}
-
+                                                                                        : col?.columnId.includes('.') ? getValue(item, col?.columnId) : item[col?.columnId] === null ? 'NA' : typeof item[col?.columnId] == 'object' ? JSON.stringify(item[col?.columnId]) : (item[col?.columnId].length > 25) ? item[col?.columnId].slice(0, 25) + " ..." : item[col?.columnId]}
                                                                     </td>)
                                                                     )}
                                                                 </tr>

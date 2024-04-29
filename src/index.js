@@ -3,24 +3,26 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { ClientIdProvider, DashboardIdProvider, DashboardMetabaseDataProvider, JobDataProvider, ProjectIdProvider, ProjectProvider, ProjectidProvider } from './components/JobDataContext';
+import { ClientIdProvider, DashboardIdProvider, DashboardMetabaseDataProvider, JobDataProvider, JobNameProvider, ProjectIdProvider, ProjectProvider, ProjectidProvider } from './components/JobDataContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // <React.StrictMode>
   <DashboardMetabaseDataProvider>
     <DashboardIdProvider>
-      <ProjectProvider>
+    <ProjectProvider>
         <ProjectidProvider>
-          <ProjectIdProvider>
+        <ProjectIdProvider>
+        <JobNameProvider>
             <ClientIdProvider>
               <JobDataProvider>
                 <App />
               </JobDataProvider>
             </ClientIdProvider>
-          </ProjectIdProvider>
+            </JobNameProvider>
+            </ProjectIdProvider>
         </ProjectidProvider>
-      </ProjectProvider>
+        </ProjectProvider>
     </DashboardIdProvider>
   </DashboardMetabaseDataProvider>
 );

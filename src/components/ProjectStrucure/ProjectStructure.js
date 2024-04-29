@@ -10,6 +10,8 @@ import FolderIcon from '@mui/icons-material/Folder';
 import { TiPin } from "react-icons/ti";
 import { RiUnpinFill } from "react-icons/ri";
 import { useJobData, useProjectid } from '../JobDataContext';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
 function ProjectStructure({ textColor, onFileClickCallback }) {
 
@@ -124,6 +126,7 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
     // setContextMenuOpen({ [item.file_name]: !isContextMenuOpen[item.file_name] });
     // nestedCallback(item);
     onRightCallback(item, true, true);
+    setFix(false)
   };
 
   const onRightCallback = (item, isReset, isHeaderClick) => {
@@ -180,10 +183,11 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
       setIsOpen(false);
     }
   };
-  
+
   const onhandelFileId = () => {
     setJobDataId();
   };
+
   return (
     <div>
       <div className={`sidebar ${isOpen ? 'open' : ''}`} onMouseEnter={handleSidebarHover} onMouseLeave={handleSidebarLeave}>
@@ -204,15 +208,16 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
           {projects.map((project, index) => (
             <div key={index} ref={containerRef} onClick={(e) => toggleNested(e, project.project_name)} onContextMenu={(e) => handleContextMenu(e, project.item)}>
               <li>
-                <div className='proicon' onClick={onhandelFileId}>
-                  <FolderIcon fontSize='medium' />
-                  {/* <img src='/assets/images/open-folder.png' style={{height:"20px"}} /> */}
-                  <div className='link_name' style={{ marginLeft: '5px' }}>
+                <div className='proicon d-flex'  onClick={onhandelFileId}>
+                  <div className='arrow_Icons'>
+                  {showNested[project.project_name] ? <KeyboardArrowDownIcon /> : <KeyboardArrowRightIcon />}</div>
+                  <FolderIcon fontSize='medium' style={{color:'rgb(255 190 0)'}} />
+                  <div className='link_name' style={{ marginLeft: '5px', fontWeight:"600" }}>
                     {project.project_name}
                   </div>
                 </div>
                 {contextMenuPosition && project.isRightClick && (
-                  <div style={{ display: !project.isRightClick && "none" }}>
+                  <div style={{ display: !project.isRightClick && "none" }} >
                     <ContextMenu
                       onClose={(e) => closeContextMenu(e, project.item)}
                       project_id={project.id}
@@ -225,7 +230,7 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
                   </div>
                 )}
                 {
-                  <Modal modalTitle={type} handleClose={() => { setShow({}) }} show={!!isShow[project.project_name]} maxWidth="35%">
+                  <Modal modalTitle={type} handleClose={() => { setShow({}) }} show={!!isShow[project.project_name]} maxWidth={type === "Add Propertie" ? "60%" : "35%"}>
                     <AddUpdateDeleteFileAndFolder title={type} item={project.item} type={type} onClose={(e, isRefreshNeeded) => { closeContextMenu(e); setShow({}); if (isRefreshNeeded) getProjects(); }} />
                   </Modal>
                 }
