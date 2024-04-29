@@ -66,7 +66,8 @@ export const routeData = (routes) => [
     childComp: Roles,
     data: {},
     permissions: true,
-    isUserCanView: routes.includes(routeConstant.roles),
+    // isUserCanView: routes.includes(routeConstant.roles),
+    isUserCanView: true,
   },
   {
     routeTo: routeConstant.registerUser,
@@ -74,7 +75,8 @@ export const routeData = (routes) => [
     childComp: RegisterUser,
     data: {},
     permissions: true,
-    isUserCanView: routes.includes(routeConstant.registerUser),
+    // isUserCanView: routes.includes(routeConstant.registerUser),
+    isUserCanView: true,
   },
   {
     routeTo: routeConstant.changePassword,
@@ -100,7 +102,8 @@ export const routeData = (routes) => [
     childComp: DashboardBuilder,
     data: {},
     permissions: true,
-    isUserCanView: routes.includes(routeConstant.dashboardBuilder),
+    // isUserCanView: routes.includes(routeConstant.dashboardBuilder),
+    isUserCanView: true,
   },
   {
     routeTo: routeConstant.userMaster,
@@ -108,7 +111,8 @@ export const routeData = (routes) => [
     childComp: UserMaster,
     data: {},
     permissions: true,
-    isUserCanView: routes.includes(routeConstant.userMaster),
+    // isUserCanView: routes.includes(routeConstant.userMaster),
+    isUserCanView: true,
   },
   {
     routeTo: routeConstant.resetPassword,
@@ -116,7 +120,8 @@ export const routeData = (routes) => [
     childComp: ResetPassword,
     data: {},
     permissions: true,
-    isUserCanView: routes.includes(routeConstant.resetPassword),
+    // isUserCanView: routes.includes(routeConstant.resetPassword),
+    isUserCanView: true,
   },
   {
     routeTo: routeConstant.maincomponent, // Main Component route
@@ -141,7 +146,8 @@ export const routeData = (routes) => [
     childComp: Project,
     data: {},
     permissions: true,
-    isUserCanView:  routes.includes(routeConstant.project),
+    // isUserCanView:  routes.includes(routeConstant.project),
+    isUserCanView: true,
   },
   {
     routeTo: routeConstant.projectfile, // Project File Form route
@@ -175,7 +181,8 @@ export const routeData = (routes) => [
     childComp: Parameter,
     data: {},
     permissions: true,
-    isUserCanView: routes.includes(routeConstant.parameter),
+    // isUserCanView: routes.includes(routeConstant.parameter),
+    isUserCanView: true,
   },
   {
     routeTo: routeConstant.steptypeparameter, // StepTypeParameter Form route
