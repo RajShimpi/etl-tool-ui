@@ -195,11 +195,11 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
                         <FolderIcon
                           key={subItem.file_name + "closeIcon" + index}
                           fontSize="small"
-                          style={{marginRight:"5px", color:"rgb(255 190 0)"}}
+                          style={{marginRight:"5px", marginTop:"4px",color:"rgb(255 190 0)"}}
 
                         />
                       {/* )} */}
-                      <span style={{fontWeight: "600"}}>{subItem.file_name}</span>
+                      <span style={{fontWeight: "600", marginTop:"3px",}}>{subItem.file_name}</span>
                     </div>
                     <div
                       style={{

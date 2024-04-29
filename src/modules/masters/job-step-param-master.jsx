@@ -418,7 +418,7 @@ const JobStepParameterMaster = ({
       e.target.classList.add("was-validated");
       //props.validationCallback(true);
     } else {
-      if (data?.step_name) {
+      if (data?.step_name !== editName) {
         axios.putWithCallback(
           `job-steps/${node_id}/name-save`,
           { step_name: data.step_name, job_id: job_id },
