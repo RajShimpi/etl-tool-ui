@@ -93,6 +93,7 @@ const CommonFormWithList = (props) => {
       case "parameter_id":
       case "project_id":
       case "job_id":
+      case "dashboard_id":
         setData((prevState) => ({ ...prevState, [name]: parseInt(e.value) }));
         break;
       case "TemplateItemId":
@@ -207,7 +208,7 @@ const CommonFormWithList = (props) => {
     ];
     setButtons(forecRun);
   }, [props, buttonsTrue]);
-
+// console.log(props);
   const apiCall = () => {
     axios.getWithCallback(
       props.getApi,
@@ -294,7 +295,7 @@ const CommonFormWithList = (props) => {
     data[item].forEach((x) => arr.push(x));
     setData((prevData) => ({ ...prevData }));
   };
-
+console.log(keys);
   useEffect(() => {
     setDataTableData({
       data: list,
@@ -306,7 +307,6 @@ const CommonFormWithList = (props) => {
       tableTitle: props.tableTitle ? props.tableTitle : "",
     });
   }, [list, keys]);
-
   const isFilePresent = () => {
     let dt = [];
     props.fileObjKey.forEach((x) => {
@@ -339,7 +339,6 @@ const CommonFormWithList = (props) => {
       };
     });
 
-    // Check if otherData is different from the calculated value
     if (!_.isEqual(otherData, sp)) {
       setOtherData(sp);
     }

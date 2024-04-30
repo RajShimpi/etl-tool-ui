@@ -112,5 +112,6 @@
     "description",
     "scheduleCron",
     "active"
-  ]
+  ],
+  "Metabase": ["client.name", "dashboard_id"]
 }
