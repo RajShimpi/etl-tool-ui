@@ -26,7 +26,7 @@ function ComponentTool({ textColor }) {
   useEffect(() => {
     axios.getWithCallback('step-type/', (data) => {
 
-      data.sort((a, b) => a.params.sequence - b.params.sequence);
+      // data.sort((a, b) => a.params.sequence - b.params.sequence);
   
       setApiData(data);
       const groupedData = groupDataBy(data, 'group');
