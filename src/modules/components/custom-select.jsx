@@ -33,7 +33,7 @@ const CustomSelect = (props) => {
       callBackFunc({ ...obj })
     }
 
-  }, [props.itemVal]);
+  }, [props.options]);
 
   useEffect(() => {
     let obj = props.options?.find(x => x.value == props.itemVal);
