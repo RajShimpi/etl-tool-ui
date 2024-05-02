@@ -24,6 +24,7 @@ import UserManagement from "../masters/user-management";
 import StepTypeParameter from "../masters/step-type-parameter";
 import JobSchedule from "../masters/job-schedule";
 import MetabaseComponent from "../metabase/metabaseEmbed";
+import Client_Dashboard from "../masters/client_dashboard";
 
 export const routeConstant = {
   dashboard: "/dashboard",
@@ -48,7 +49,8 @@ export const routeConstant = {
   systemConfig: "/system-config",
   usermgmt: "/user-management",
   metabase: "/metabase",
-  jobschedule:"/job-schedule"
+  jobschedule:"/job-schedule",
+  client_dashboard:"/client_dashboard",
 };
 
 export const routeData = (routes) => [
@@ -221,6 +223,14 @@ export const routeData = (routes) => [
   routeTo: routeConstant.metabase, // StepTypeParamete Form route
   header: "",
   childComp:MetabaseComponent ,
+  data: {},
+  permissions: true,
+  isUserCanView: true,
+},
+{
+  routeTo: routeConstant.client_dashboard, // dashboard Form route
+  header: "",
+  childComp:Client_Dashboard,
   data: {},
   permissions: true,
   isUserCanView: true,

@@ -105,12 +105,13 @@
     "params"
   ],
   "STEP_TYPE_PARAMETERS": ["step.name", "parameter.name", "required","params"],
-  "Job_Schedule": [ 
+  "Job_Schedule": [
     "project.project_name",
     "job.name",
     "name",
     "description",
     "scheduleCron",
     "active"
-  ]
+  ],
+  "Metabase": ["client.name", "dashboard_id"]
 }
