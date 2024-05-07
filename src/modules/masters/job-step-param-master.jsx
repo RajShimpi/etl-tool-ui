@@ -166,7 +166,8 @@ const JobStepParameterMaster = ({
               }
             })
           );
-          setParameter(data.stepTypeParameters);
+          const activeparameters =data.stepTypeParameters.filter((x)=>x.active == true)
+          setParameter(activeparameters);
         }
       );
     }
@@ -259,6 +260,7 @@ const JobStepParameterMaster = ({
                     v.parameter.type === "text" ? "input" : v.parameter.type,
                   options: v.parameter.options || v.options,
                   disabled: false,
+                  isRequired: true,
                   itemVal: itemData.values
                     ? itemData.values[v.parameter.name + "_id"] === null
                       ? itemData.values[v.parameter.name]

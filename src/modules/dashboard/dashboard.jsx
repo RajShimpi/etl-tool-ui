@@ -180,18 +180,18 @@ const Dashboard = () => {
     return tempArray;
   };
 
-  const Clientid = auth.getStorageData("client");
   const client_id = auth.getStorageData("client_id");
   useEffect(() => {
-    if (Clientid.id) {
+    if (client_id) {
       axios.getWithCallback(
-        `projects/client/${Clientid.id}`,
-        (projectsData) => {
-          setProject(projectsData);
+        `projects/client/${client_id}`,
+        (projects) => {
+          setProject(projects);
         }
       );
     }
   }, []);
+
   useEffect(() => {
     axios.getWithCallback("metabase/json", (data) => setMetabaseDashboardData(data));
     axios.getWithCallback(`/client-dashboard/${client_id}`, (data) =>setClient_Dashboard(data));
@@ -218,6 +218,7 @@ const Dashboard = () => {
   const handalchildMenu = (childItem) => {
     setSelectedChildMenu(childItem.itemName);
   };
+  
   return (
     // <div id="layout-wrapper" > data-layout-mode="layout-mode-light"
     <div id="layout-wrapper">
