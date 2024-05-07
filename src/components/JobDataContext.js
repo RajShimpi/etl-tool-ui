@@ -8,6 +8,7 @@ const ProjectIDContext = createContext();
 const DashboardMetabaseDataContext = createContext();
 const DashboardIdContext = createContext();
 const JobNameContext = createContext();
+const JobProjectIdContext = createContext();
 
 export const JobDataProvider = ({ children }) => {
   const [jobDataId, setJobDataId] = useState(null);
@@ -184,6 +185,28 @@ export const useJobName = () => {
   const context = useContext(JobNameContext);
   if (!context) {
     throw new Error("Job Name");
+  }
+  return context;
+};
+ 
+export const JobProjectIdProvider = ({ children }) => {
+  const [jobProjectId, setJobProjectId] = useState();
+
+  const setJobProjectIdValue = (data) => {
+    setJobProjectId(data);
+  };
+
+return (
+    <JobProjectIdContext.Provider value={{ jobProjectId, setJobProjectId: setJobProjectIdValue }}>
+      {children}
+    </JobProjectIdContext.Provider>
+  );
+};
+
+export const useJobProjectId = () => {
+  const context = useContext(JobProjectIdContext);
+  if (!context) {
+    throw new Error("Job project Id");
   }
   return context;
 };

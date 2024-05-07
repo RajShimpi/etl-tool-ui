@@ -10,7 +10,7 @@ import { errorAlert } from "./config/alert";
 import utils from "./utils";
 import CommonTable from "./common-table";
 import CustomButton from "./custom-button";
-import { useJobName } from "../../components/JobDataContext";
+import { useJobName, useJobProjectId } from "../../components/JobDataContext";
 
 const CommonFormWithList = (props) => {
   const contextData = useContext(configContext);
@@ -43,6 +43,7 @@ const CommonFormWithList = (props) => {
   const [keys, setKeys] = useState([]);
   const [isSubmit, setIsSubmit] = useState(false);
   const [resetparamsTable, setResetparamsTable] = useState(false);
+  const {setJobProjectId} = useJobProjectId()
   const setValues = (e, name) => {
     if (!e) return;
     switch (name) {
@@ -189,6 +190,12 @@ const CommonFormWithList = (props) => {
     apiCall();
   }, []);
 
+  useEffect(()=>{
+    if(data?.project_id){
+      setJobProjectId(data?.project_id)
+    }
+  })
+
   useEffect(() => {
     setData((prevState) => ({
       ...prevState,
@@ -295,7 +302,7 @@ const CommonFormWithList = (props) => {
     data[item].forEach((x) => arr.push(x));
     setData((prevData) => ({ ...prevData }));
   };
-console.log(keys);
+
   useEffect(() => {
     setDataTableData({
       data: list,
