@@ -51,6 +51,7 @@ export const routeConstant = {
   metabase: "/metabase",
   jobschedule:"/job-schedule",
   client_dashboard:"/client_dashboard",
+
 };
 
 export const routeData = (routes) => [
@@ -68,8 +69,7 @@ export const routeData = (routes) => [
     childComp: Roles,
     data: {},
     permissions: true,
-    // isUserCanView: routes.includes(routeConstant.roles),
-    isUserCanView: true,
+    isUserCanView: routes.includes(routeConstant.roles),
   },
   {
     routeTo: routeConstant.registerUser,
@@ -77,8 +77,7 @@ export const routeData = (routes) => [
     childComp: RegisterUser,
     data: {},
     permissions: true,
-    // isUserCanView: routes.includes(routeConstant.registerUser),
-    isUserCanView: true,
+    isUserCanView: routes.includes(routeConstant.registerUser),
   },
   {
     routeTo: routeConstant.changePassword,
@@ -104,8 +103,7 @@ export const routeData = (routes) => [
     childComp: DashboardBuilder,
     data: {},
     permissions: true,
-    // isUserCanView: routes.includes(routeConstant.dashboardBuilder),
-    isUserCanView: true,
+    isUserCanView: routes.includes(routeConstant.dashboardBuilder),
   },
   {
     routeTo: routeConstant.userMaster,
@@ -113,8 +111,7 @@ export const routeData = (routes) => [
     childComp: UserMaster,
     data: {},
     permissions: true,
-    // isUserCanView: routes.includes(routeConstant.userMaster),
-    isUserCanView: true,
+    isUserCanView: routes.includes(routeConstant.userMaster),
   },
   {
     routeTo: routeConstant.resetPassword,
@@ -122,8 +119,7 @@ export const routeData = (routes) => [
     childComp: ResetPassword,
     data: {},
     permissions: true,
-    // isUserCanView: routes.includes(routeConstant.resetPassword),
-    isUserCanView: true,
+    isUserCanView: routes.includes(routeConstant.resetPassword),
   },
   {
     routeTo: routeConstant.maincomponent, // Main Component route
@@ -148,8 +144,7 @@ export const routeData = (routes) => [
     childComp: Project,
     data: {},
     permissions: true,
-    // isUserCanView:  routes.includes(routeConstant.project),
-    isUserCanView: true,
+    isUserCanView:  routes.includes(routeConstant.project),
   },
   {
     routeTo: routeConstant.projectfile, // Project File Form route
@@ -169,7 +164,7 @@ export const routeData = (routes) => [
     // isUserCanView: routes.includes(routeConstant.step),
   },
   {
-    routeTo: routeConstant.typeconfigmaster, // TypeConfigs Form route
+    routeTo: routeConstant.typeconfigmaster, // Type Configs Form route
     header: "",
     childComp: TypeConfigMaster,
     data: {},
@@ -183,11 +178,10 @@ export const routeData = (routes) => [
     childComp: Parameter,
     data: {},
     permissions: true,
-    // isUserCanView: routes.includes(routeConstant.parameter),
-    isUserCanView: true,
+    isUserCanView: routes.includes(routeConstant.parameter),
   },
   {
-    routeTo: routeConstant.steptypeparameter, // StepTypeParameter Form route
+    routeTo: routeConstant.steptypeparameter, // Step Type Parameter Form route
     header: "",
     childComp: StepTypeParameter,
     data: {},
@@ -204,7 +198,7 @@ export const routeData = (routes) => [
     isUserCanView:true,
  },
  {
-  routeTo: routeConstant.systemConfig, // StepTypeParamete Form route
+  routeTo: routeConstant.systemConfig, // System Config Form route
   header: "",
   childComp: SystemConfig,
   data: {},
@@ -212,7 +206,7 @@ export const routeData = (routes) => [
   isUserCanView: true,
 },
 {
-  routeTo: routeConstant.usermgmt, // StepTypeParamete Form route
+  routeTo: routeConstant.usermgmt, // UserMaster Form route
   header: "",
   childComp: UserManagement,
   data: {},
@@ -220,7 +214,7 @@ export const routeData = (routes) => [
   isUserCanView: true,
 },
 {
-  routeTo: routeConstant.metabase, // StepTypeParamete Form route
+  routeTo: routeConstant.metabase, // MetaBase Form route
   header: "",
   childComp:MetabaseComponent ,
   data: {},
@@ -228,7 +222,7 @@ export const routeData = (routes) => [
   isUserCanView: true,
 },
 {
-  routeTo: routeConstant.client_dashboard, // dashboard Form route
+  routeTo: routeConstant.client_dashboard, // Client Dashboard Form route
   header: "",
   childComp:Client_Dashboard,
   data: {},
