@@ -260,7 +260,7 @@ const JobStepParameterMaster = ({
                     v.parameter.type === "text" ? "input" : v.parameter.type,
                   options: v.parameter.options || v.options,
                   disabled: false,
-                  isRequired: true,
+                  isRequired: v?.required,
                   itemVal: itemData.values
                     ? itemData.values[v.parameter.name + "_id"] === null
                       ? itemData.values[v.parameter.name]

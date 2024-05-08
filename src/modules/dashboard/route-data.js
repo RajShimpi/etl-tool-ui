@@ -206,7 +206,7 @@ export const routeData = (routes) => [
   isUserCanView: routes.includes(routeConstant.systemConfig),
 },
 {
-  routeTo: routeConstant.usermgmt, // UserMaster Form route
+  routeTo: routeConstant.usermgmt, // User Management Form route
   header: "",
   childComp: UserManagement,
   data: {},
