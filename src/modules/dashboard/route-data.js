@@ -61,7 +61,7 @@ export const routeData = (routes) => [
     childComp: DashboardContent,
     data: {},
     permissions: true,
-    isUserCanView: true, //routes.includes(routeConstant.dashboard)
+    isUserCanView:true,
   },
   {
     routeTo: routeConstant.roles,
@@ -135,8 +135,8 @@ export const routeData = (routes) => [
     childComp: Client,
     data: {},
     permissions: true,
-    isUserCanView: true,
-    // isUserCanView: routes.includes(routeConstant.client),
+    // isUserCanView: true,
+    isUserCanView: routes.includes(routeConstant.client),
   },
   {
     routeTo: routeConstant.project, // Project Form route
@@ -152,7 +152,7 @@ export const routeData = (routes) => [
     childComp: ProjectFile,
     data: {},
     permissions: true,
-    isUserCanView:  true,
+    isUserCanView:  routes.includes(routeConstant.projectfile),
   },
   {
     routeTo: routeConstant.step, // StepType Form route
@@ -160,8 +160,8 @@ export const routeData = (routes) => [
     childComp: StepType,
     data: {},
     permissions: true,
-    isUserCanView: true,
-    // isUserCanView: routes.includes(routeConstant.step),
+    // isUserCanView: true,
+    isUserCanView: routes.includes(routeConstant.step),
   },
   {
     routeTo: routeConstant.typeconfigmaster, // Type Configs Form route
@@ -169,8 +169,8 @@ export const routeData = (routes) => [
     childComp: TypeConfigMaster,
     data: {},
     permissions: true,
-    // isUserCanView: routes.includes(routeConstant.typeconfigmaster),
-    isUserCanView:true,
+    isUserCanView: routes.includes(routeConstant.typeconfigmaster),
+    // isUserCanView:true,
   },
   {
     routeTo: routeConstant.parameter, // Parameter Form route
@@ -186,8 +186,8 @@ export const routeData = (routes) => [
     childComp: StepTypeParameter,
     data: {},
     permissions: true,
-    isUserCanView: true,
-    // isUserCanView: routes.includes(routeConstant.steptypeparameter),
+    // isUserCanView: true,
+    isUserCanView: routes.includes(routeConstant.steptypeparameter),
   },
   {
     routeTo: routeConstant.jobschedule, // job-schedule Form route
@@ -195,7 +195,7 @@ export const routeData = (routes) => [
     childComp: JobSchedule,
     data: {},
     permissions: true,
-    isUserCanView:true,
+    isUserCanView:routes.includes(routeConstant.jobschedule),
  },
  {
   routeTo: routeConstant.systemConfig, // System Config Form route
@@ -203,7 +203,7 @@ export const routeData = (routes) => [
   childComp: SystemConfig,
   data: {},
   permissions: true,
-  isUserCanView: true,
+  isUserCanView: routes.includes(routeConstant.systemConfig),
 },
 {
   routeTo: routeConstant.usermgmt, // UserMaster Form route
@@ -211,7 +211,7 @@ export const routeData = (routes) => [
   childComp: UserManagement,
   data: {},
   permissions: true,
-  isUserCanView: true,
+  isUserCanView: routes.includes(routeConstant.usermgmt),
 },
 {
   routeTo: routeConstant.metabase, // MetaBase Form route
@@ -219,7 +219,7 @@ export const routeData = (routes) => [
   childComp:MetabaseComponent ,
   data: {},
   permissions: true,
-  isUserCanView: true,
+  isUserCanView: routes.includes(routeConstant.metabase),
 },
 {
   routeTo: routeConstant.client_dashboard, // Client Dashboard Form route
@@ -227,6 +227,6 @@ export const routeData = (routes) => [
   childComp:Client_Dashboard,
   data: {},
   permissions: true,
-  isUserCanView: true,
+  isUserCanView: routes.includes(routeConstant.client_dashboard),
 }
 ];
