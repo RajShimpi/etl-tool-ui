@@ -10,7 +10,7 @@ import { errorAlert } from "./config/alert";
 import utils from "./utils";
 import CommonTable from "./common-table";
 import CustomButton from "./custom-button";
-import { useJobName, useJobProjectId } from "../../components/JobDataContext";
+import { useData } from "../../components/JobDataContext";
 
 const CommonFormWithList = (props) => {
   const contextData = useContext(configContext);
@@ -38,12 +38,12 @@ const CommonFormWithList = (props) => {
     props.columns,
     (x) => !filterExcludes.includes(x)
   );
-  const { setJobName } = useJobName([]);
+  const { setJobName, setJobProjectId } = useData([]);
   const [list, setList] = useState([]);
   const [keys, setKeys] = useState([]);
   const [isSubmit, setIsSubmit] = useState(false);
   const [resetparamsTable, setResetparamsTable] = useState(false);
-  const {setJobProjectId} = useJobProjectId()
+
   const setValues = (e, name) => {
     if (!e) return;
     switch (name) {

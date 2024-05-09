@@ -8,11 +8,9 @@ import auth from "./auth";
 import axios from '../services/axios';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useClientId } from "../../components/JobDataContext";
 
 const Login = () => {
 
-const { setClientId } = useClientId();  
     const bgStyle = {
         // backgroundImage: `url(${process.env.PUBLIC_URL + "/assets/images/login/login-bg.png"})`,
         backgroundColor: '#ffffff',
@@ -35,7 +33,6 @@ const { setClientId } = useClientId();
 
     const onSubmit = (data) => {
 
-        setClientId(data.client_id)
         // $(".blurbackground").css("visibility", "visible");    //userName: userName, 
         axios.post("auth/login", { username: data.userName,client_id: data.client_id,  password: data.password }, false).then(data => {
             auth.setAuthData(data.data);
@@ -69,10 +66,10 @@ const { setClientId } = useClientId();
     const loginSchema = yup.object().shape({
         userName: yup
             .string()
-            .required('User name is required'),
+            .required('User Name is required'),
         client_id: yup
             .string()
-            .required('User id is required'),
+            .required('User Id is required'),
         password: yup
             .string()
             .required('Password is required'),

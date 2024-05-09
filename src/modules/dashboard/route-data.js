@@ -94,8 +94,8 @@ export const routeData = (routes) => [
     childComp: AddMenu,
     data: {},
     permissions: true,
-    isUserCanView: true,
-    // isUserCanView: routes.includes(routeConstant.addMenu),
+    // isUserCanView: true,
+    isUserCanView: routes.includes(routeConstant.addMenu),
   },
   {
     routeTo: routeConstant.dashboardBuilder,
@@ -219,6 +219,7 @@ export const routeData = (routes) => [
   childComp:MetabaseComponent ,
   data: {},
   permissions: true,
+  // isUserCanView: true,
   isUserCanView: routes.includes(routeConstant.metabase),
 },
 {

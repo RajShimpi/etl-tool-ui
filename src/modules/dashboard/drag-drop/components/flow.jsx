@@ -24,8 +24,7 @@ import Modal from "../../../components/modal-popup";
 
 import axios from "../../../services/axios";
 import {
-  useJobData,
-  useProjectid,
+  useData,
 } from "../../../../components/JobDataContext";
 import DeleteIcon from "@mui/icons-material/Delete";
 import JobStepParameterMaster from "../../../masters/job-step-param-master";
@@ -195,9 +194,8 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   const [nodesActive, setNodesActive] = useState([]);
   const [openJobParams, setOpenJobParams] = useState(false);
   const onInit = (reactFlowInstance) => setReactFlowInstance(reactFlowInstance);
-  const { jobDataId, jobFolder, setJobFolder } = useJobData([]);
-  const { setJobDataId } = useJobData(null);
-  const { projectID } = useProjectid([]);
+  const { jobDataId, jobFolder, setJobFolder,setJobDataId } = useData([]);
+  const { projectID } = useData([]);
   const [startStep, setStartStep] = useState(null);
   const [shouldCallSave, setShouldCallSave] = useState(false);
   const [newEdges, setNewEdges] = useState([]);

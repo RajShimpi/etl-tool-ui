@@ -6,7 +6,7 @@ import ContextMenu from "../ContextMenu";
 import Modal from "../../modules/components/modal-popup";
 import { AddUpdateDeleteFileAndFolder } from "../PopupComponent";
 import axios from "../../modules/services/axios";
-import { useJobData } from "../JobDataContext";
+import { useData } from "../JobDataContext";
 import "./project.css";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
@@ -17,7 +17,7 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
   const [isContextMenuOpen, setContextMenuOpen] = useState({});
   const [isShow, setShow] = useState({});
   const [type, setType] = useState("AddFolder");
-  const { setJobDataId,setJobFolder } = useJobData();
+  const { setJobDataId } = useData();
   const containerRef = useRef(null);
   const [hoveredItem, setHoveredItem] = useState(null);
   const [clickedItem, setClickedItem] = useState(false);

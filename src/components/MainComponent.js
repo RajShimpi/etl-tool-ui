@@ -3,7 +3,7 @@ import ComponetTool from "./ComponentTool/ComponetTool";
 import ProjectStructure from "./ProjectStrucure/ProjectStructure";
 import "./MainComponent.css";
 import OverviewFlow from "../modules/dashboard/drag-drop/components/flow";
-import { useJobData, useProjectId, useProjectid, useprojectID } from "./JobDataContext";
+import { useData } from "./JobDataContext";
 import axios from "../modules/services/axios";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import SaveIcon from '@mui/icons-material/Save';
@@ -17,11 +17,11 @@ const MainComponent = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [currentThemeIndex, setCurrentThemeIndex] = useState(0);
   const savaDataRef = useRef(null);
-  const { jobDataId } = useJobData();
+  const { jobDataId } = useData();
   const [disabled, setDisabled] = useState(true)
   const [jobData, setJobData] = useState()
   const [filePath, setFilePath] = useState([])
-  const { projectID } = useProjectid([]);
+
 const [btns, setBtns]=useState([])
   useEffect(() => {
     if (jobDataId) {
@@ -29,13 +29,13 @@ const [btns, setBtns]=useState([])
     } else {
       setJobData(null)
     }
-  }, [jobDataId,projectID]);
+  }, [jobDataId]);
   
   useEffect(() => {
-    if (jobDataId || projectID) {
+    if (jobDataId ) {
       setFilePath([]);
     }
-  }, [projectID,jobDataId]);
+  }, [jobDataId]);
 
   useEffect(() => {
     if (jobDataId) {
@@ -56,7 +56,7 @@ const [btns, setBtns]=useState([])
 
   useEffect(() => {
     setDisabled(jobData !== undefined && jobData !== null ? false : true);
-  }, [jobDataId,projectID]);
+  }, [jobDataId]);
 
   const saveDataFunction = () => {
     if (savaDataRef.current && typeof savaDataRef.current.savaDataFunction === 'function') {
@@ -111,6 +111,7 @@ const [btns, setBtns]=useState([])
       return "100%";
     }
   };
+
   useEffect(() => {
     const btn = [
       {
@@ -138,7 +139,6 @@ const [btns, setBtns]=useState([])
     setBtns(btn);
   }, [disabled]);
   
-
   return (
     <>
       <div >
