@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../services/axios';
-import { useDashboardId } from '../../components/JobDataContext';
-import auth from '../user/auth';
+import {useData } from '../../components/JobDataContext';
 
 const MetabaseComponent = () => {
   const [iframeUrl, setIframeUrl] = useState('');
-  const { dashboadId } = useDashboardId(); // Corrected spelling of dashboardId
-  const clientId = auth.getStorageData("client_id"); // Corrected spelling of clientId
+  const { dashboardId } = useData();
 
   useEffect(() => {
-    if (dashboadId) {
-      axios.getWithCallback(`client-dashboard/data/${dashboadId}`, (data)=>{setIframeUrl(data.iframeUrl)})
+    if (dashboardId) {
+      axios.getWithCallback(`client-dashboard/data/${dashboardId}`, (data)=>{setIframeUrl(data.iframeUrl)})
     }
-  }, [dashboadId]);
+  }, [dashboardId]);
 
   return (
     <div>

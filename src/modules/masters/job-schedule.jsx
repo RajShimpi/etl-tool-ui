@@ -4,16 +4,15 @@ import config from "../components/config/config.json";
 import axios from "../services/axios";
 import { getJobScheduleFields } from "./job-schedule-data";
 import auth from "../user/auth";
-import { useJobName, useJobProjectId } from "../../components/JobDataContext";
+import { useData } from "../../components/JobDataContext";
 import StarsIcon from "@mui/icons-material/Stars";
 
 const JobSchedule = () => {
   const [jobschedule, setJobschedule] = useState([]);
   const [project, setProject] = useState([]);
   const [job, setJob] = useState([]);
-  const { jobName } = useJobName([]);
-  const [project_id, setProjectId] = useState([]);
-  const {jobProjectId}=useJobProjectId()
+  const {jobProjectId,jobName}=useData()
+
   const client_id = auth.getStorageData("client_id");
 
   useEffect(() => {
@@ -66,7 +65,6 @@ const JobSchedule = () => {
         defaultObj={defaultObj}
         options={[project, job, jobschedule]}
         tableTitle="Job Schedule"
-        project_id={project_id}
         otherParamsData={[]}
         otherParamColumns={[
           { name: "key", displayName: "Key", dbPropName: "parameter_name" },
@@ -78,8 +76,6 @@ const JobSchedule = () => {
         function={forceRun}
         disabled={true}
         icon={<StarsIcon style={{ fontSize: "20px" }} />}
-           // Pass setProjectId to update project_id state
-         setProjectId={setProjectId}
       />
     </>
   );

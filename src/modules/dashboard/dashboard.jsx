@@ -12,9 +12,7 @@ import SearchFilter from "../components/search-filter";
 // import SearchResult from "../components/search-result";
 import NotificationsDropdown from "../components/notifications-dropdown";
 import {
-  useClientId,
-  useDashboardId,
-  useProjectid,
+  useData,
 } from "../../components/JobDataContext";
 import PersonIcon from "@mui/icons-material/Person";
 // import { io } from 'socket.io-client';
@@ -42,15 +40,12 @@ const Dashboard = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [finalData, setfinalData] = useState([]);
   const [clientName, setClientName] = useState([]);
-  const { clientId } = useClientId();
-  const { setClientId } = useClientId();
   const [project, setProject] = useState([]);
   const [selectedChildItem, setSelectedChildItem] = useState(false);
   
   const [selectedChildMenu, setSelectedChildMenu] = useState(false)
-  const { setProjectID } = useProjectid();
+  const { setProjectID,setDashboardId } = useData();
   const [isMenuOpen, setMenuOpen] = useState(false);
-  const { setDashboardId } = useDashboardId();
   const [metabasedashboardData, setMetabaseDashboardData] = useState([]);
   const [client_dashboard, setClient_Dashboard] = useState([]);
   const [metabase_DashboardMenu, setMetabase_DashboardMenu] = useState([]);
@@ -61,12 +56,9 @@ const Dashboard = () => {
 
   useEffect(() => {
     const client = auth.getStorageData("client");
-    if (clientId === null && client.client_id) {
-      setClientId(client.client_id);
-    }
 
-    if (clientId) {
-      axios.getWithCallback(`clients/client/${clientId}`, (client) =>
+    if (client?.client_id) {
+      axios.getWithCallback(`clients/client/${client.client_id}`, (client) =>
         setClientName(client)
       );
     }
@@ -98,15 +90,8 @@ const Dashboard = () => {
     );
 
     return () => {};
-  }, [clientId]);
+  }, [  ]);
 
-  // useEffect(() => {
-  //   if (clientId) {
-  //     // localStorage.setItem("clientId", clientId);
-  //   }
-  // }, [clientId]);
-
-  // console.log("clientId:", clientId);
   // useEffect(() => {
 
   // socket.on('connect', () => {
@@ -193,7 +178,7 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    axios.getWithCallback("metabase/json", (data) => setMetabaseDashboardData(data));
+    axios.getWithCallback("/client-dashboard/json", (data) => setMetabaseDashboardData(data));
     axios.getWithCallback(`/client-dashboard/${client_id}`, (data) =>setClient_Dashboard(data));
   }, []);
 

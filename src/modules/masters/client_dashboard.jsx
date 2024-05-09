@@ -10,7 +10,7 @@ const Client_Dashboard = () => {
 
     useEffect(()=>{
         axios.getWithCallback("/clients",(data)=>setClient(data.map(x => { return { value: x.id, label: x.name } })))
-        axios.getWithCallback("/metabase/json",(data)=>setMetabaseData(data.map(x => { return { value: x.id, label: x.name } })))
+        axios.getWithCallback("/client-dashboard/json",(data)=>setMetabaseData(data.map(x => { return { value: x.id, label: x.name } })))
     },[])
 
     let defaultObj = { dashboard_id:"", client_id: "" }

@@ -219,7 +219,8 @@ export const routeData = (routes) => [
   childComp:MetabaseComponent ,
   data: {},
   permissions: true,
-  isUserCanView: routes.includes(routeConstant.metabase),
+  isUserCanView: true,
+  // isUserCanView: routes.includes(routeConstant.metabase),
 },
 {
   routeTo: routeConstant.client_dashboard, // Client Dashboard Form route

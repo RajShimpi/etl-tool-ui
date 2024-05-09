@@ -9,7 +9,7 @@ import { AddUpdateDeleteFileAndFolder } from '../PopupComponent';
 import FolderIcon from '@mui/icons-material/Folder';
 import { TiPin } from "react-icons/ti";
 import { RiUnpinFill } from "react-icons/ri";
-import { useJobData, useProjectid } from '../JobDataContext';
+import { useData } from '../JobDataContext';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
@@ -22,9 +22,9 @@ function ProjectStructure({ textColor, onFileClickCallback }) {
   const [showNested, setShowNested] = useState({});
   const [isShow, setShow] = useState({});
   const [fix, setFix] = useState(true);
-  const { projectID } = useProjectid([])
+  const { projectID } = useData([])
   const containerRef = useRef(null);
-  const { setJobDataId } = useJobData();
+  const { setJobDataId } = useData();
 
   const handleDocumentClick = (event) => {
     event.stopPropagation();
