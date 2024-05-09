@@ -6,14 +6,14 @@ export const getSteptypeFields = (itemData) => {
         groups: [
         {
             type: "text",
-            id: "inputprojectName",
-            label: "Step_Type",
+            id: "inputStepType",
+            label: "Step Type",
             name: "type",
             control: "input",
             isRequired: true,
             itemVal: itemData.values ? itemData.values["type"] : '',
         },{
-            id: "inputDisplayclientId",
+            id: "inputDisplayStepName",
             label: "Step Name",
             name: "name",
             control: "input",
@@ -21,7 +21,7 @@ export const getSteptypeFields = (itemData) => {
             itemVal: itemData.values ? itemData.values["name"] : '',
         },{
             type: "text",
-            id: "inputDisplaybase_location",
+            id: "inputimg",
             label: "img",
             name: "img",
             control: "input",
@@ -29,7 +29,7 @@ export const getSteptypeFields = (itemData) => {
             itemVal: itemData.values ? itemData.values["img"] : '',
         },{
             type: "text",
-            id: "inputDisplaybase_location",
+            id: "inputStepGroup",
             label: "Group",
             name: "group",
             control: "input",

@@ -22,8 +22,6 @@ const CustomSelect = (props) => {
 
   }
 
-  // console.log(props);
-
   useEffect(() => {
     let obj = props.options?.find(x => x.value === valueAfterRender);
     if (!obj) {

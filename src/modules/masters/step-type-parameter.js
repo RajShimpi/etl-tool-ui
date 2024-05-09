@@ -35,7 +35,7 @@ const StepTypeParameter = () => {
         axios.getWithCallback('parameter/', (data) => setParameter(data.map(z => ({ value: z.id, label: z.name }))))
     }, []);
 
-    const defaultObj = { step_id: '', parameter_id: '', active: true, params: '' };
+    const defaultObj = { step_id: '', parameter_id: '',active:true, params: '' };
 
     return (
         <>

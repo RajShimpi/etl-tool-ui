@@ -24,6 +24,7 @@ import UserManagement from "../masters/user-management";
 import StepTypeParameter from "../masters/step-type-parameter";
 import JobSchedule from "../masters/job-schedule";
 import MetabaseComponent from "../metabase/metabaseEmbed";
+import Client_Dashboard from "../masters/client_dashboard";
 
 export const routeConstant = {
   dashboard: "/dashboard",
@@ -48,7 +49,9 @@ export const routeConstant = {
   systemConfig: "/system-config",
   usermgmt: "/user-management",
   metabase: "/metabase",
-  jobschedule:"/job-schedule"
+  jobschedule:"/job-schedule",
+  client_dashboard:"/client_dashboard",
+
 };
 
 export const routeData = (routes) => [
@@ -58,7 +61,7 @@ export const routeData = (routes) => [
     childComp: DashboardContent,
     data: {},
     permissions: true,
-    isUserCanView: true, //routes.includes(routeConstant.dashboard)
+    isUserCanView:true,
   },
   {
     routeTo: routeConstant.roles,
@@ -132,8 +135,8 @@ export const routeData = (routes) => [
     childComp: Client,
     data: {},
     permissions: true,
-    isUserCanView: true,
-    // isUserCanView: routes.includes(routeConstant.client),
+    // isUserCanView: true,
+    isUserCanView: routes.includes(routeConstant.client),
   },
   {
     routeTo: routeConstant.project, // Project Form route
@@ -149,7 +152,7 @@ export const routeData = (routes) => [
     childComp: ProjectFile,
     data: {},
     permissions: true,
-    isUserCanView:  true,
+    isUserCanView:  routes.includes(routeConstant.projectfile),
   },
   {
     routeTo: routeConstant.step, // StepType Form route
@@ -157,17 +160,17 @@ export const routeData = (routes) => [
     childComp: StepType,
     data: {},
     permissions: true,
-    isUserCanView: true,
-    // isUserCanView: routes.includes(routeConstant.step),
+    // isUserCanView: true,
+    isUserCanView: routes.includes(routeConstant.step),
   },
   {
-    routeTo: routeConstant.typeconfigmaster, // TypeConfigs Form route
+    routeTo: routeConstant.typeconfigmaster, // Type Configs Form route
     header: "",
     childComp: TypeConfigMaster,
     data: {},
     permissions: true,
-    // isUserCanView: routes.includes(routeConstant.typeconfigmaster),
-    isUserCanView:true,
+    isUserCanView: routes.includes(routeConstant.typeconfigmaster),
+    // isUserCanView:true,
   },
   {
     routeTo: routeConstant.parameter, // Parameter Form route
@@ -178,13 +181,13 @@ export const routeData = (routes) => [
     isUserCanView: routes.includes(routeConstant.parameter),
   },
   {
-    routeTo: routeConstant.steptypeparameter, // StepTypeParameter Form route
+    routeTo: routeConstant.steptypeparameter, // Step Type Parameter Form route
     header: "",
     childComp: StepTypeParameter,
     data: {},
     permissions: true,
-    isUserCanView: true,
-    // isUserCanView: routes.includes(routeConstant.steptypeparameter),
+    // isUserCanView: true,
+    isUserCanView: routes.includes(routeConstant.steptypeparameter),
   },
   {
     routeTo: routeConstant.jobschedule, // job-schedule Form route
@@ -192,30 +195,38 @@ export const routeData = (routes) => [
     childComp: JobSchedule,
     data: {},
     permissions: true,
-    isUserCanView:true,
+    isUserCanView:routes.includes(routeConstant.jobschedule),
  },
  {
-  routeTo: routeConstant.systemConfig, // StepTypeParamete Form route
+  routeTo: routeConstant.systemConfig, // System Config Form route
   header: "",
   childComp: SystemConfig,
   data: {},
   permissions: true,
-  isUserCanView: true,
+  isUserCanView: routes.includes(routeConstant.systemConfig),
 },
 {
-  routeTo: routeConstant.usermgmt, // StepTypeParamete Form route
+  routeTo: routeConstant.usermgmt, // User Management Form route
   header: "",
   childComp: UserManagement,
   data: {},
   permissions: true,
-  isUserCanView: true,
+  isUserCanView: routes.includes(routeConstant.usermgmt),
 },
 {
-  routeTo: routeConstant.metabase, // StepTypeParamete Form route
+  routeTo: routeConstant.metabase, // MetaBase Form route
   header: "",
   childComp:MetabaseComponent ,
   data: {},
   permissions: true,
-  isUserCanView: true,
+  isUserCanView: routes.includes(routeConstant.metabase),
+},
+{
+  routeTo: routeConstant.client_dashboard, // Client Dashboard Form route
+  header: "",
+  childComp:Client_Dashboard,
+  data: {},
+  permissions: true,
+  isUserCanView: routes.includes(routeConstant.client_dashboard),
 }
 ];

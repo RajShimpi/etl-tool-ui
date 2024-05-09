@@ -76,7 +76,7 @@
     "firstName",
     "middleName",
     "lastName",
-    "client_id",
+    "client.name",
     "usersToRoles.role.name",
     "isActive"
   ],
@@ -104,7 +104,7 @@
     "resource",
     "params"
   ],
-  "STEP_TYPE_PARAMETERS": ["step.name", "parameter.name", "required","params"],
+  "STEP_TYPE_PARAMETERS": ["step.name", "parameter.name", "required","active","params"],
   "Job_Schedule": [ 
     "project.project_name",
     "job.name",
@@ -112,5 +112,6 @@
     "description",
     "scheduleCron",
     "active"
-  ]
+  ],
+  "Metabase": ["client.name", "dashboard.name"]
 }

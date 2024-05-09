@@ -166,7 +166,8 @@ const JobStepParameterMaster = ({
               }
             })
           );
-          setParameter(data.stepTypeParameters);
+          const activeparameters =data.stepTypeParameters.filter((x)=>x.active == true)
+          setParameter(activeparameters);
         }
       );
     }
@@ -259,6 +260,7 @@ const JobStepParameterMaster = ({
                     v.parameter.type === "text" ? "input" : v.parameter.type,
                   options: v.parameter.options || v.options,
                   disabled: false,
+                  isRequired: v?.required,
                   itemVal: itemData.values
                     ? itemData.values[v.parameter.name + "_id"] === null
                       ? itemData.values[v.parameter.name]
@@ -418,7 +420,7 @@ const JobStepParameterMaster = ({
       e.target.classList.add("was-validated");
       //props.validationCallback(true);
     } else {
-      if (data?.step_name) {
+      if (data?.step_name !== editName) {
         axios.putWithCallback(
           `job-steps/${node_id}/name-save`,
           { step_name: data.step_name, job_id: job_id },

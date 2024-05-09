@@ -4612,8 +4612,8 @@ left: 450px;
 }
 
 .from-body {
-    max-height: 197px;
-    /* min-height: 255px; */
+    max-height: 243px;
+    min-height: 243px;
     overflow: scroll;
     padding: 7px;
     overflow-x: hidden;

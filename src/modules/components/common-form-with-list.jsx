@@ -10,7 +10,7 @@ import { errorAlert } from "./config/alert";
 import utils from "./utils";
 import CommonTable from "./common-table";
 import CustomButton from "./custom-button";
-import { useJobName } from "../../components/JobDataContext";
+import { useJobName, useJobProjectId } from "../../components/JobDataContext";
 
 const CommonFormWithList = (props) => {
   const contextData = useContext(configContext);
@@ -43,6 +43,7 @@ const CommonFormWithList = (props) => {
   const [keys, setKeys] = useState([]);
   const [isSubmit, setIsSubmit] = useState(false);
   const [resetparamsTable, setResetparamsTable] = useState(false);
+  const {setJobProjectId} = useJobProjectId()
   const setValues = (e, name) => {
     if (!e) return;
     switch (name) {
@@ -93,6 +94,7 @@ const CommonFormWithList = (props) => {
       case "parameter_id":
       case "project_id":
       case "job_id":
+      case "dashboard_id":
         setData((prevState) => ({ ...prevState, [name]: parseInt(e.value) }));
         break;
       case "TemplateItemId":
@@ -188,6 +190,12 @@ const CommonFormWithList = (props) => {
     apiCall();
   }, []);
 
+  useEffect(()=>{
+    if(data?.project_id){
+      setJobProjectId(data?.project_id)
+    }
+  })
+
   useEffect(() => {
     setData((prevState) => ({
       ...prevState,
@@ -207,7 +215,7 @@ const CommonFormWithList = (props) => {
     ];
     setButtons(forecRun);
   }, [props, buttonsTrue]);
-
+// console.log(props);
   const apiCall = () => {
     axios.getWithCallback(
       props.getApi,
@@ -306,7 +314,6 @@ const CommonFormWithList = (props) => {
       tableTitle: props.tableTitle ? props.tableTitle : "",
     });
   }, [list, keys]);
-
   const isFilePresent = () => {
     let dt = [];
     props.fileObjKey.forEach((x) => {
@@ -339,7 +346,6 @@ const CommonFormWithList = (props) => {
       };
     });
 
-    // Check if otherData is different from the calculated value
     if (!_.isEqual(otherData, sp)) {
       setOtherData(sp);
     }

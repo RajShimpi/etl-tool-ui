@@ -46,11 +46,14 @@ const Dashboard = () => {
   const { setClientId } = useClientId();
   const [project, setProject] = useState([]);
   const [selectedChildItem, setSelectedChildItem] = useState(false);
-  const [selectedChildMenu, setSelectedChildMenu] = useState(false);
+  
+  const [selectedChildMenu, setSelectedChildMenu] = useState(false)
   const { setProjectID } = useProjectid();
   const [isMenuOpen, setMenuOpen] = useState(false);
   const { setDashboardId } = useDashboardId();
-  const [dashboardData, setDashboardData] = useState([]);
+  const [metabasedashboardData, setMetabaseDashboardData] = useState([]);
+  const [client_dashboard, setClient_Dashboard] = useState([]);
+  const [metabase_DashboardMenu, setMetabase_DashboardMenu] = useState([]);
 
   const toggleMenu = () => {
     setMenuOpen(!isMenuOpen);
@@ -177,21 +180,31 @@ const Dashboard = () => {
     return tempArray;
   };
 
+  const client_id = auth.getStorageData("client_id");
   useEffect(() => {
-    const Clientid = auth.getStorageData("client");
-
-    if (Clientid.id) {
+    if (client_id) {
       axios.getWithCallback(
-        `projects/client/${Clientid.id}`,
-        (projectsData) => {
-          setProject(projectsData);
+        `projects/client/${client_id}`,
+        (projects) => {
+          setProject(projects);
         }
       );
     }
   }, []);
+
   useEffect(() => {
-    axios.getWithCallback("metabase/json", (data) => setDashboardData(data));
+    axios.getWithCallback("metabase/json", (data) => setMetabaseDashboardData(data));
+    axios.getWithCallback(`/client-dashboard/${client_id}`, (data) =>setClient_Dashboard(data));
   }, []);
+
+  useEffect(() => {
+    const dash = client_dashboard.map((x) => x.dashboard_id);
+    const filteredDashboardData = metabasedashboardData.filter((item) => {
+      return dash.includes(item.id);
+    });
+
+    setMetabase_DashboardMenu(filteredDashboardData);
+  }, [client_dashboard, metabasedashboardData]);
 
   const onhandelProject = (projectid) => {
     setProjectID(projectid);
@@ -201,10 +214,11 @@ const Dashboard = () => {
   };
 
   const roles = auth.getStorageData("usersToRoles");
-  
+
   const handalchildMenu = (childItem) => {
     setSelectedChildMenu(childItem.itemName);
   };
+  
   return (
     // <div id="layout-wrapper" > data-layout-mode="layout-mode-light"
     <div id="layout-wrapper">
@@ -372,7 +386,7 @@ const Dashboard = () => {
                                     style={{
                                       position: "absolute",
                                       left: "100%",
-                                      top:0,
+                                      top: 0,
                                       minWidth: "200px",
                                       background: "#fff",
                                       cursor: "pointer",
@@ -424,7 +438,7 @@ const Dashboard = () => {
                                     style={{
                                       position: "absolute",
                                       left: "100%",
-                                      top:90,
+                                      top: 90,
                                       minWidth: "200px",
                                       background: "#fff",
                                       cursor: "pointer",
@@ -438,7 +452,7 @@ const Dashboard = () => {
                                         setSelectedChildMenu(false)
                                       }
                                     >
-                                      {dashboardData.map((item) => (
+                                      {metabase_DashboardMenu.map((item) => (
                                         <Link
                                           key={"metabase" + "Link"}
                                           className="dropdown-item"
