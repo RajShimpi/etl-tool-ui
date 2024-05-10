@@ -166,8 +166,7 @@ const JobStepParameterMaster = ({
               }
             })
           );
-          const activeparameters =data.stepTypeParameters.filter((x)=>x.active == true)
-          setParameter(activeparameters);
+          setParameter(data.stepTypeParameters.filter((x)=>x.active == true));
         }
       );
     }
