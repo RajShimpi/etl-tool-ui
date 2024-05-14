@@ -62,18 +62,12 @@ const ContextMenu = ({
   ...props
 }) => {
   const { setNodes, setEdges } = useReactFlow();
-  const [startStepChecked, setStartStepChecked] = useState(
-    menu.startstep === id
-  );
 
   useEffect(() => {
     setNodes([]);
     setEdges([]);
-  }, [setNodes, setEdges, setStartStepChecked]);
+  }, [setNodes, setEdges]);
 
-  // useEffect(() => {
-  //   setStartStepChecked(menu.startstep === id);
-  // }, [menu, id]);
 
   const handleStartStepClick = () => {
     setAsStartStepHandler();
@@ -199,7 +193,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   const { projectID } = useData([]);
   const [startStep, setStartStep] = useState(null);
   const [shouldCallSave, setShouldCallSave] = useState(false);
-  const [newEdges, setNewEdges] = useState([]);
+  const [oldEdges, setoldEdges] = useState([]);
   const [endNode, setEndNode] = useState('');
 
   const savaDataFunction = () => {
@@ -214,8 +208,8 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
   };
 
   useEffect(() => {
-    if (newEdges) {
-      if (edges.length !== newEdges.length) {
+    if (oldEdges) {
+      if (edges.length !== oldEdges.length) {
         setShouldCallSave(true);
       } else {
         setShouldCallSave(false);
@@ -538,7 +532,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
         );
 
         setEdges([...activeNodesEdgesOk, ...activeNodesEdgesError]);
-        setNewEdges([...activeNodesEdgesOk, ...activeNodesEdgesError]);
+        setoldEdges([...activeNodesEdgesOk, ...activeNodesEdgesError]);
 
         const combinedData = dataNodes.map((node) => ({
           ...node,
@@ -732,7 +726,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       };
 
       setEdges((prevEdges) => addEdge(newEdge, prevEdges));
-      setNewEdges((prevEdges) => addEdge(newEdge, prevEdges));
+      // setoldEdges((prevEdges) => addEdge(newEdge, prevEdges));
 
       setEdges((prevEdges) =>
         prevEdges.map((edge) => {
@@ -792,7 +786,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       edgeUpdateSuccessful.current = true;
       const updatedEdges = updateEdge(oldEdge, newConnection, edges);
       setEdges(updatedEdges);
-      setNewEdges(updatedEdges);
+      // setoldEdges(updatedEdges);
       setShouldCallSave(true);
     },
     [edges, setEdges]
@@ -807,7 +801,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
           }
           return e;
         });
-        setNewEdges((eds) => eds.filter((e) => e.id !== edge.id));
+        setoldEdges((eds) => eds.filter((e) => e.id !== edge.id));
         setEdges(updatedEdges);
         setShouldCallSave(true);
       }
@@ -928,7 +922,6 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       ]);
 
       setNodes((nodes) => nodes.filter((node) => node.id !== menu.id));
-      setNewEdges((edges) => edges.filter((edge) => edge.source !== menu.id));
       setEdges((prevEdges) =>
         prevEdges.map((edge) => {
           if (edge.label === "ok") {
