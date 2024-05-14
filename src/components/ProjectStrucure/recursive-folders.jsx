@@ -16,7 +16,7 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
   const [contextMenuPosition, setContextMenuPosition] = useState(null);
   const [isContextMenuOpen, setContextMenuOpen] = useState({});
   const [isShow, setShow] = useState({});
-  const [type, setType] = useState("AddFolder");
+  const [type, setType] = useState("");
   const { setJobDataId } = useData();
   const containerRef = useRef(null);
   const [hoveredItem, setHoveredItem] = useState(null);
@@ -119,6 +119,43 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
                 onContextMenu={(e) => handleContextMenu(e, subItem)}
               >
                 {subItem.type === "File" && (
+                  <>
+                   {contextMenuPosition && subItem.isRightClick && (
+                      <div style={{ display: !subItem.isRightClick && "none"}}>
+                        <ContextMenu
+                          onClose={(e) => closeContextMenu(e, subItem)}
+                          project_id={subItem.project_id}
+                          parent_id={subItem.parent_id}
+                          id={subItem.id}
+                          item={subItem}
+                          position={contextMenuPosition}
+                          callback={callback}
+                        />
+                      </div>
+                    )}
+                    {
+                      <Modal
+                        modalTitle={type}
+                        handleClose={() => {
+                          setShow({});
+                        }}
+                        show={!!isShow[subItem.file_name]}
+                        maxWidth="35%"
+                      >
+                        <AddUpdateDeleteFileAndFolder
+                          title={type}
+                          item={subItem}
+                          type={type}
+                          onClose={(e, isRefreshNeeded) => {
+                            closeContextMenu(e);
+                            setShow({});
+                            if (isRefreshNeeded) refreshData();
+                          }}
+                          jobtype={subItem.jobs[0]}
+                        />
+                      </Modal>
+                    }
+                  
                   <div
                   // className={`file_name ${
                   //   hoveredItem === subItem.file_name ? "hovered" : ""
@@ -137,6 +174,7 @@ const RecursiveFolder = ({ items, onRightCallback, refreshData }) => {
                     />
                     <span style={{fontWeight: "600"}}>{subItem.file_name}</span>
                   </div>
+                  </>
                 )}
 
                 {subItem.type === "Folder" && subItem.children && (
