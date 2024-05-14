@@ -14,7 +14,7 @@ const PopupComponent = ({ onClose, actionType, project_id, id }) => {
   let contentComponent;
 
   switch (actionType) {
-    case "AddFolder":
+    case "Add Folder":
       contentComponent = (
         <Folder
           project_id={project_id}
@@ -24,7 +24,7 @@ const PopupComponent = ({ onClose, actionType, project_id, id }) => {
         />
       );
       break;
-    case "AddFile":
+    case "Add Job":
       contentComponent = (
         <AddFile
           project_id={project_id}
@@ -72,22 +72,42 @@ export default PopupComponent;
 export const AddUpdateDeleteFileAndFolder = (props) => {
   const [data, setData] = useState("");
   const [properties, setProperties] = useState([]);
+  const [jobType, setJobType] = useState([]);
+
+  useEffect(() => {
+    axios.getWithCallback("/type-config/category?category=JOB_TYPE", (data) => {
+      setJobType(data.map((z) => ({ value: z.value, label: z.label })));
+    });
+  }, [props.type]);
 
   useEffect(() => {
     if (props.item?.file_name)
-      setData({ file_name: props.type == "Edit" ? props.item?.file_name : "" });
-  }, [props.type, props.item?.file_name]);
+      setData({
+        file_name: props.type === "Edit" ? props.item?.file_name : "",
+        jobtype_id: jobType.find((job) => job.label === props?.jobtype?.type)
+          ?.value,
+      });
+  }, [props.type, props.item?.file_name, props.item?.jobtype]);
 
   const setValues = (e, name) => {
     if (!e) return;
     switch (name) {
       case "input":
-        setData({ [e.target.name]: e.target.value });
+        setData((prevState) => ({
+          ...prevState,
+          [e.target.name]: e.target.value,
+        }));
+        break;
+      case "select":
+        setData((prevData) => ({
+          ...prevData,
+          [e.label]: e.text,
+          [`${e.label}_id`]: e.value,
+        }));
         break;
     }
   };
 
-  // const clientid = auth.getStorageData("client_id");
   const onsubmit = (e) => {
     e.preventDefault();
     if (!e.target.checkValidity()) {
@@ -100,23 +120,24 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
         file_name: data.file_name,
         project_id: props.item.project_id,
         type: props.type.includes("Folder") ? "Folder" : "File",
+        jobtype: data.jobtype,
         parent_id: props.item.id === 0 ? null : props.item.id,
         clientid: parseInt(auth.getStorageData("client_id")),
       };
 
       switch (props.type) {
-        case "AddFolder":
+        case "Add Folder":
           axios.postWithCallback("project-files/", item, (resp) => {
             props.onClose(e, true);
           });
           break;
-        case "AddFile":
+        case "Add Job":
           axios.postWithCallback("project-files/", item, (resp) => {
             props.onClose(e, true);
           });
           break;
         case "Add Propertie":
-           axios.postWithCallback("project-property/", properties, (resp) => {
+          axios.postWithCallback("project-property/", properties, (resp) => {
             props.onClose(e, true);
           });
           break;
@@ -129,7 +150,7 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
             }
           );
           break;
-        case "Delete":  
+        case "Delete":
           axios.deleteWithCallback(
             "project-files/" + props.item?.id,
             item,
@@ -145,20 +166,20 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
   };
 
   const otherCallback = (data) => {
-   let sp = {
-     properties: data.map((x) => ({
-       projectId:  props.item.project_id,
-       name: x.key,
-       value: x.value,
-       active: true,
-       id:x.id
-
-     }))
-   };
+    let sp = {
+      properties: data.map((x) => ({
+        projectId: props.item.project_id,
+        name: x.key,
+        value: x.value,
+        active: true,
+        id: x.id,
+      })),
+    };
     setProperties(sp);
- };
+  };
+
   return (
-    <div className="row " >
+    <div className="row ">
       <div className="col-xl-12 ">
         <div className="card">
           <form
@@ -205,17 +226,19 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
                               values: data,
                               type: props.type.includes("Folder")
                                 ? "Folder"
+                                : props.type.includes("Edit")
+                                ? "Edit"
                                 : "File",
-                              options: !!props.options ? props.options : [],
+                              options: [jobType],
                               data: !!props.data ? props.data : [],
                               message: props.message,
+                              filetype: props.item.type,
                             })}
                           />
                         ) : (
                           <>
                             <Project_Properties
-  
-                            callback={otherCallback}
+                              callback={otherCallback}
                               project_id={props.item.project_id}
                               PropertieData={[]}
                               PropertieColumns={[
