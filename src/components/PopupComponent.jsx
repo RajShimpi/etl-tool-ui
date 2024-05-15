@@ -1,73 +1,10 @@
 import React, { useEffect, useState } from "react";
-import Folder from "../modules/masters/popup/add-folder";
-import AddFile from "../modules/masters/popup/add-file";
-import Edit from "../modules/masters/popup/edit-file";
-import Delete from "../modules/masters/popup/delete";
 import axios from "../modules/services/axios";
 import FormCommon from "../modules/components/form-common";
 import { getCommonFields } from "../modules/masters/popup/common-data";
 import auth from "../modules/user/auth";
 import Project_Properties from "../modules/masters/popup/properties";
 import _ from "lodash";
-
-const PopupComponent = ({ onClose, actionType, project_id, id }) => {
-  let contentComponent;
-
-  switch (actionType) {
-    case "Add Folder":
-      contentComponent = (
-        <Folder
-          project_id={project_id}
-          id={id}
-          type="Folder"
-          onClose={onClose}
-        />
-      );
-      break;
-    case "Add Job":
-      contentComponent = (
-        <AddFile
-          project_id={project_id}
-          id={id}
-          type="File"
-          onClose={onClose}
-        />
-      );
-      break;
-    case "Add Propertie":
-      contentComponent = (
-        <Project_Properties
-          project_id={project_id}
-          id={id}
-          type="Propertie"
-          onClose={onClose}
-        />
-      );
-      break;
-    case "Edit":
-      contentComponent = (
-        <Edit project_id={project_id} parent_id={id} onClose={onClose} />
-      );
-      break;
-    case "Delete":
-      contentComponent = (
-        <Delete project_id={project_id} parent_id={id} onClose={onClose} />
-      );
-      break;
-    default:
-      contentComponent = null;
-  }
-
-  return (
-    <div className="popup">
-      <div className="popup-content">
-        <div style={{ flex: 1 }}>{contentComponent}</div>
-      </div>
-    </div>
-  );
-};
-
-export default PopupComponent;
 
 export const AddUpdateDeleteFileAndFolder = (props) => {
   const [data, setData] = useState("");
@@ -84,6 +21,7 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
     if (props.item?.file_name)
       setData({
         file_name: props.type === "Edit" ? props.item?.file_name : "",
+        jobType:'',
         jobtype_id: jobType.find((job) => job.label === props?.jobtype?.type)
           ?.value,
       });
@@ -123,6 +61,7 @@ export const AddUpdateDeleteFileAndFolder = (props) => {
         jobtype: data.jobtype,
         parent_id: props.item.id === 0 ? null : props.item.id,
         clientid: parseInt(auth.getStorageData("client_id")),
+        file_active : true 
       };
 
       switch (props.type) {
