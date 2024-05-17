@@ -42,18 +42,20 @@ const ContextMenu = ({ item, popType, project_id, parent_id,id, onClose, callbac
 
   return (
     <div style={{zIndex:1}} className={`contextMenu ${popType === 'right' ? 'right' :''}`} onContextMenu={handleContextMenuClick}>
-      <div className="menu-item" onClick={(e) => openPopup(e,"AddFolder", { top: e.clientY, left: e.clientX + 10 }, project_id, parent_id) }>
+      {item.type !== "File" && <>
+      <div className="menu-item" onClick={(e) => openPopup(e,"Add Folder", { top: e.clientY, left: e.clientX + 10 }, project_id, parent_id) }>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start"}}>
           <FolderIcon style={{ fontSize: "20px", marginRight: "5px", marginTop: "5px" }}/>
           <div style={{ fontSize: "15px", fontWeight: "bold", marginTop: "5px" }}>Add Folder</div>
         </div>
       </div>
-      <div className="menu-item" onClick={(e) => {openPopup(e,"AddFile", { top: e.clientY, left: e.clientX + 10 }, project_id, id)}}>
+      <div className="menu-item" onClick={(e) => {openPopup(e,"Add Job", { top: e.clientY, left: e.clientX + 10 }, project_id, id)}}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", }}>
           <InsertDriveFileIcon style={{ fontSize: "20px", marginRight: "5px", marginTop: "5px" }} />
-          <div style={{ fontSize: "15px", fontWeight: "bold", marginTop: "5px" }}>Add File</div>
+          <div style={{ fontSize: "15px", fontWeight: "bold", marginTop: "5px" }}>Add Job</div>
         </div>  
       </div>
+      </>}
       {hideDeleteUpdate &&<>
       <div className="menu-item" onClick={(e) => {openPopup(e,"Add Propertie", { top: e.clientY, left: e.clientX + 10 }, project_id, id)}}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", }}>
