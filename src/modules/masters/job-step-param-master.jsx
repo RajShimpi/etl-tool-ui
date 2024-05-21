@@ -29,16 +29,16 @@ const JobStepParameterMaster = ({
     parameter.length < 2
       ? 12
       : parameter.length < 3
-      ? 6
-      : parameter.length < 4
-      ? 4
-      : parameter.length < 5
-      ? 6
-      : 4;
+        ? 6
+        : parameter.length < 4
+          ? 4
+          : parameter.length < 5
+            ? 6
+            : 4;
 
   useEffect(() => {
     setNodeid(node_id);
-  }, [name]);
+  }, [name, open]);
 
   useEffect(() => {
     setData(null);
@@ -48,7 +48,7 @@ const JobStepParameterMaster = ({
     setParameter([]);
     setNameValue([]);
     setJobStepParamData([]);
-  }, [node_id]);
+  }, [node_id, open]);
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -166,7 +166,7 @@ const JobStepParameterMaster = ({
               }
             })
           );
-          setParameter(data.stepTypeParameters.filter((x)=>x.active == true));
+          setParameter(data.stepTypeParameters.filter((x) => x.active == true));
         }
       );
     }
@@ -225,20 +225,20 @@ const JobStepParameterMaster = ({
         callback: itemData.callback,
         groups: [editName]
           ? [editName].map((v) => ({
-              id: "stepnameid",
-              label: "Step Name",
-              name: "step_name",
-              control: "input",
-              isRequired: true,
-              isSubmit: itemData.isSubmit,
-              itemVal: update
-                ? itemData.name
-                  ? itemData.values["step_name"]
-                  : name
-                : itemData.name
+            id: "stepnameid",
+            label: "Step Name",
+            name: "step_name",
+            control: "input",
+            isRequired: true,
+            isSubmit: itemData.isSubmit,
+            itemVal: update
+              ? itemData.name
+                ? itemData.values["step_name"]
+                : name
+              : itemData.name
                 ? itemData.values["step_name"]
                 : "",
-            }))
+          }))
           : [],
       },
       {
@@ -246,29 +246,29 @@ const JobStepParameterMaster = ({
         callback: itemData.callback,
         groups: !!parameter
           ? parameter
-              ?.filter((x) => x.parameter?.name !== "other")
-              .map((v) => {
-                return {
-                  type: v.parameter.type.includes("text")
-                    ? "text"
-                    : v.parameter.type,
-                  id: v.parameter.type + v.parameter.id,
-                  label: v.parameter.description,
-                  name: v.parameter.name,
-                  control:
-                    v.parameter.type === "text" ? "input" : v.parameter.type,
-                  options: v.parameter.options || v.options,
-                  disabled: false,
-                  isRequired: v?.required,
-                  itemVal: itemData.values
-                    ? itemData.values[v.parameter.name + "_id"] === null
-                      ? itemData.values[v.parameter.name]
-                      : itemData.values[v.parameter.name + "_id"]
-                    : "",
-                  multiple: v.parameter.type === "select-react" ? true : false,
-                  isGeneric: true,
-                };
-              })
+            ?.filter((x) => x.parameter?.name !== "other")
+            .map((v) => {
+              return {
+                type: v.parameter.type.includes("text")
+                  ? "text"
+                  : v.parameter.type,
+                id: v.parameter.type + v.parameter.id,
+                label: v.parameter.description,
+                name: v.parameter.name,
+                control:
+                  v.parameter.type === "text" ? "input" : v.parameter.type,
+                options: v.parameter.options || v.options,
+                disabled: false,
+                isRequired: v?.required,
+                itemVal: itemData.values
+                  ? itemData.values[v.parameter.name + "_id"] === null
+                    ? itemData.values[v.parameter.name]
+                    : itemData.values[v.parameter.name + "_id"]
+                  : "",
+                multiple: v.parameter.type === "select-react" ? true : false,
+                isGeneric: true,
+              };
+            })
           : null,
       },
     ];
@@ -339,7 +339,7 @@ const JobStepParameterMaster = ({
         })
       );
     }
-  }, [jobStepParamData, parameter]);
+  }, [jobStepParamData, parameter, open]);
 
   const prepareData = () => {
     let columns = Object.getOwnPropertyNames(data);
@@ -419,7 +419,7 @@ const JobStepParameterMaster = ({
       e.target.classList.add("was-validated");
       //props.validationCallback(true);
     } else {
-      if (data?.step_name !== editName) {
+      if (data?.step_name !== undefined) {
         axios.putWithCallback(
           `job-steps/${node_id}/name-save`,
           { step_name: data.step_name, job_id: job_id },
@@ -489,8 +489,8 @@ const JobStepParameterMaster = ({
                   </div>
                   {!!otherParameters.filter((x) => x.name === "other")
                     ?.length && (
-                    <div style={{ padding: "0px 0px 20px 20px" }}>
-                      {/* <button
+                      <div style={{ padding: "0px 0px 20px 20px" }}>
+                        {/* <button
                         type="button"
                         className="btn btn-primary"
                         onClick={(e) => onClick(e)}
@@ -498,24 +498,24 @@ const JobStepParameterMaster = ({
                         <i className="fa fa-plus" />
                         Additional Parameter
                       </button> */}
-                      <button
-                        type="button"
-                        className="btn btn-primary"
-                        onClick={(e) => onClick(e)}
-                        style={{ display: "flex" }}
-                      >
-                        <div style={{ fontSize: "20px" }}>
-                          <i
-                            className="fa fa-plus"
-                            style={{ fontSize: "15px", margin: "1px" }}
-                          />
-                        </div>
-                        <div style={{ fontSize: "15px", margin: "5px" }}>
-                          Additional Parameter
-                        </div>
-                      </button>
-                    </div>
-                  )}
+                        <button
+                          type="button"
+                          className="btn btn-primary"
+                          onClick={(e) => onClick(e)}
+                          style={{ display: "flex" }}
+                        >
+                          <div style={{ fontSize: "20px" }}>
+                            <i
+                              className="fa fa-plus"
+                              style={{ fontSize: "15px", margin: "1px" }}
+                            />
+                          </div>
+                          <div style={{ fontSize: "15px", margin: "5px" }}>
+                            Additional Parameter
+                          </div>
+                        </button>
+                      </div>
+                    )}
                   <div
                     style={{
                       maxHeight: "190px",

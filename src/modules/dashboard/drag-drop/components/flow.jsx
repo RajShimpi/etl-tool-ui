@@ -59,6 +59,7 @@ const ContextMenu = ({
   unselectStartStep,
   textColor,
   setMenu,
+  handleClose,
   ...props
 }) => {
   const { setNodes, setEdges } = useReactFlow();
@@ -71,15 +72,18 @@ const ContextMenu = ({
 
   const handleStartStepClick = () => {
     setAsStartStepHandler();
+    handleClose()
   };
 
   const handleStartStepNullClick = () => {
     unselectStartStep();
+    handleClose()
   };
 
   const deleteNode = useCallback(() => {
     setNodes((nodes) => nodes.filter((node) => node.id !== id));
     setEdges((edges) => edges.filter((edge) => edge.source !== id));
+    handleClose()
   }, [id, setNodes, setEdges, menu]);
 
   return (
@@ -254,6 +258,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
         jobId: jobfileid.id,
       };
       axios.postWithCallback(`job/publish-job/`, job_id);
+      setShouldCallSave(false);
     } else {
       // const nullErrors = [];
       const nullOks = [];
@@ -1015,6 +1020,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
                   menu={menu}
                   setMenu={setMenu}
                   textColor={textColor}
+                  handleClose={handleCloseNodeMaster}
                 />
               )}
             </ReactFlow>

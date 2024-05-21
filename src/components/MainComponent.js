@@ -70,6 +70,7 @@ const [btns, setBtns]=useState([])
     }
   };
   const publish = () => {
+    savaDataRef.current.savaDataFunction();
     if (savaDataRef.current && typeof savaDataRef.current.OpenJobParam === 'function') {
       savaDataRef.current.publish();
     }
