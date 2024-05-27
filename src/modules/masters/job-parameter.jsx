@@ -6,7 +6,8 @@ import FormCommon from "../components/form-common";
 import _ from "lodash";
 import auth from "../user/auth";
 
-const JobParameterMaster = ({ job, project_id, handleClose,open }) => {
+const JobParameterMaster = ({ job, project_id, handleClose, open }) => {
+
   const [parameter, setparameter] = useState([]);
   const [editName, setEditName] = useState("");
   const [controlData, setControlData] = useState([]);
@@ -19,7 +20,7 @@ const JobParameterMaster = ({ job, project_id, handleClose,open }) => {
   // useEffect(() => {
   //   setData((prevData) => ({ ...prevData,  }));
   // }, [name]);
-  
+
   useEffect(() => {
     if (jobid != job) {
       setData([])
@@ -27,11 +28,13 @@ const JobParameterMaster = ({ job, project_id, handleClose,open }) => {
       setparameter([])
       setNameValue([])
     }
-  }, [job]);
+  }, [job, open]);
+
   useEffect(() => {
-    if(job){
-    setJobid(job)}
-  }, [job]);
+    if (job) {
+      setJobid(job)
+    }
+  }, [job, open]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -58,7 +61,7 @@ const JobParameterMaster = ({ job, project_id, handleClose,open }) => {
       }
     };
     fetchData();
-  }, [jobid,open]);
+  }, [jobid, open]);
 
   useEffect(() => {
     if (job) {
@@ -78,7 +81,7 @@ const JobParameterMaster = ({ job, project_id, handleClose,open }) => {
         }
       });
     }
-  }, [jobid,open]);
+  }, [jobid, open]);
 
   const getItemData = (itemData) => {
     if (!itemData) return;
@@ -88,20 +91,19 @@ const JobParameterMaster = ({ job, project_id, handleClose,open }) => {
         callback: itemData.callback,
         groups: !!parameter
           ? parameter
-              ?.filter((x) => x.name !== "other")
-              .map((v) => ({
-                type: v.type.includes("text") ? "text" : v.type,
-                id: v.type + v.id,
-                label: v.description,
-                name: v.name,
-                control: v.type === "text" ? "input" : v.type,
-                options: v.options,
-                disabled: false,
-                itemVal: itemData.values ? itemData.values[v.name] : "",
-                multiple: v.type === "select-react" ? true : "",
-
-                isGeneric: true,
-              }))
+            ?.filter((x) => x.name !== "other")
+            .map((v) => ({
+              type: v.type.includes("text") ? "text" : v.type,
+              id: v.type + v.id,
+              label: v.description,
+              name: v.name,
+              control: v.type === "text" ? "input" : v.type,
+              options: v.options,
+              disabled: false,
+              itemVal: itemData.values ? itemData.values[v.name] : "",
+              multiple: v.type === "select-react" ? true : "",
+              isGeneric: true,
+            }))
           : [],
       },
       // {
@@ -134,7 +136,7 @@ const JobParameterMaster = ({ job, project_id, handleClose,open }) => {
       options: [],
       message: "",
     });
-  }, [editName, parameter]);
+  }, [editName, parameter, open]);
 
   const setValues = (e, name) => {
     if (!e) return;
@@ -171,7 +173,7 @@ const JobParameterMaster = ({ job, project_id, handleClose,open }) => {
       });
       setNameValue(so);
     }
-  }, [jobParamData, parameter]);
+  }, [jobParamData, parameter, open]);
 
   const prepareData = () => {
     let columns = Object.getOwnPropertyNames(data);
@@ -300,7 +302,7 @@ const JobParameterMaster = ({ job, project_id, handleClose,open }) => {
                   </div>
                   {!!parameter.filter((x) => x.name === "other")?.length && (
                     <div style={{ padding: "0px 0px 20px 20px" }}>
-                       <button
+                      <button
                         type="button"
                         className="btn btn-primary"
                         onClick={(e) => onClick(e)}
@@ -309,7 +311,7 @@ const JobParameterMaster = ({ job, project_id, handleClose,open }) => {
                         <div style={{ fontSize: "16px" }}>
                           <i
                             className="fa fa-plus"
-                            style={{ fontSize: "16px",  }}
+                            style={{ fontSize: "16px", }}
                           />
                         </div>
                         <div style={{ fontSize: "14px", margin: "4px" }}>

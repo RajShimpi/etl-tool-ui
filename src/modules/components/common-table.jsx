@@ -7,6 +7,7 @@ const CommonTable = ({
   callback,
   resetparamsTable,
   btnName,
+  marginTop
 }) => {
   const [nameValue, setNameValue] = useState([]);
 
@@ -73,8 +74,8 @@ const CommonTable = ({
           onClick={(e) => onClick(e)}
           style={{ display: "flex" }}
         >
-          <div style={{ fontSize: "15px" }}>
-            <i className="fa fa-plus" style={{ fontSize: "15px" }} />
+          <div>
+            <i className="fa fa-plus" style={{ fontSize: "15px",marginTop:marginTop}} />
           </div>
           <div style={{ fontSize: "16px",margin:'6px' }}>{btnName}</div>
         </button>

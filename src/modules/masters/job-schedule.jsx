@@ -74,6 +74,7 @@ const JobSchedule = () => {
         name="Force Run"
         color="success"
         function={forceRun}
+        marginTop={"9px"}
         disabled={true}
         icon={<StarsIcon style={{ fontSize: "20px" }} />}
       />
