@@ -43,7 +43,7 @@ export const getJobScheduleFields = (itemData) => {
           label: "Schedule Cron",
           name: "scheduleCron",
           control: "input",
-          isRequired: true,
+        //   isRequired: true,
           itemVal: itemData.values ? itemData.values["scheduleCron"] : '',
       },
       {

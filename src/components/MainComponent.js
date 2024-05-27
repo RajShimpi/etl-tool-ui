@@ -61,6 +61,7 @@ const [btns, setBtns]=useState([])
   const saveDataFunction = () => {
     if (savaDataRef.current && typeof savaDataRef.current.savaDataFunction === 'function') {
       savaDataRef.current.savaDataFunction();
+      return true;
     }
   };
 
@@ -70,7 +71,7 @@ const [btns, setBtns]=useState([])
     }
   };
   const publish = () => {
-    savaDataRef.current.savaDataFunction();
+    saveDataFunction();
     if (savaDataRef.current && typeof savaDataRef.current.OpenJobParam === 'function') {
       savaDataRef.current.publish();
     }
