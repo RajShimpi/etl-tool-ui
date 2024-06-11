@@ -3,7 +3,6 @@ import axios from "../../modules/services/axios";
 import CustomSelect from "../../modules/components/custom-select";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import "./monitoring.css";
 
 const Monitoring = () => {
   const [clusterJobs, setClusterJobs] = useState([]);
@@ -56,7 +55,7 @@ const Monitoring = () => {
       <div className="select-container">
         <CustomSelect
           options={clusterJobs}
-          label="Select Job"
+          label="Job"
           callback={handleJobSelect}
         />
       </div>
@@ -64,33 +63,6 @@ const Monitoring = () => {
       <div className="job-details">
         <h2>Job Details</h2>
         <div className="d-flex">
-          {/* <div
-            className="d-flex"
-            style={{
-              margin: "20px",
-              borderRadius: "10px",
-              border: "2px solid black",
-              padding: "10px",
-            }}
-          >
-            <div
-              className="d-flex"
-              style={{
-                alignItems: "center",
-                justifyContent: "center",
-                margin: "10px",
-                width: "100%",
-              }}
-            >
-              Job Name
-            </div>
-            <div
-              className="d-flex"
-              style={{ width: "100%", alignItems: "center", padding: "10px" }}
-            >
-              {selectedJob && selectedJob.labels["job-name"]}
-            </div>
-          </div> */}
           <div
             className="d-flex"
             style={{
@@ -114,23 +86,6 @@ const Monitoring = () => {
                 {selectedJob && selectedJob.labels["job-name"]}
                 </div>
               </div>
-              {/* <div
-                className="d-flex"
-                style={{
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "100%",
-                }}
-              >
-                <div style={{ marginRight: "10px" }}>Time:</div>
-                <div style={{ padding: "10px" }}>
-                  {selectedJob &&
-                    getRunningStateStartTime(selectedJob.statusHistory) &&
-                    formatTime(
-                      getRunningStateStartTime(selectedJob.statusHistory)
-                    )[1]}
-                </div>
-              </div> */}
             </div>
           </div>
           <div
