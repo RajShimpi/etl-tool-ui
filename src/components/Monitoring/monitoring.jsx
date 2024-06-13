@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "../../modules/services/axios";
 import CustomSelect from "../../modules/components/custom-select";
-import { CircularProgressbar } from "react-circular-progressbar";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
 const Monitoring = () => {
@@ -50,149 +50,87 @@ const Monitoring = () => {
     return runningState?.startTime;
   };
 
+  const cardStyle = {
+    flex: "1 1 300px",
+    margin: "10px",
+    padding: "20px",
+    border: "2px solid #ccc",
+    borderRadius: "8px",
+    backgroundColor: "#fff",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+    height: "150px",
+   
+  };
+  const cardRoundStyle = {
+    flex: "1 1 300px",
+    margin: "10px",
+    padding: "20px",
+    border: "2px solid #ccc",
+    borderRadius: "8px",
+    backgroundColor: "#fff",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+    height: "247px",
+   
+  };
+
+  const headerStyle = {
+    fontWeight: "bold",
+    marginBottom: "10px",
+    fontSize: "1.2em",
+    color: "#333",
+  };
+
+  const progressBarStyles = buildStyles({
+    textSize: "16px",
+    pathColor: "#4caf50",
+    textColor: "#4caf50",
+    trailColor: "#d6d6d6",
+    
+  });
+
+  const statusStyles = buildStyles({
+    textSize: "16px",
+    pathColor: selectedJob?.status.state === "DONE" ? "#4caf50" : "#f44336",
+    textColor: selectedJob?.status.state === "DONE" ? "#4caf50" : "#f44336",
+    trailColor: "#d6d6d6",
+  });
+
   return (
-    <div className="monitoring-container">
-      <div className="select-container">
-        <CustomSelect
-          options={clusterJobs}
-          label="Job"
-          callback={handleJobSelect}
-        />
+    <div style={{ padding: "20px", maxWidth: "1200px", margin: "0 auto", backgroundColor: "#f5f5f5", borderRadius: "10px" }}>
+      {/* <h1 style={{ textAlign: "center", marginBottom: "20px", color: "#333" }}>Job Monitoring Dashboard</h1> */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+        <h2 style={{ margin: 0, color: "#555" }}>Job Details</h2>
+        <div style={{ minWidth: "300px" }}>
+          <CustomSelect
+            options={clusterJobs}
+            label="Select Job"
+            callback={handleJobSelect}
+          />
+        </div>
       </div>
 
-      <div className="job-details">
-        <h2>Job Details</h2>
-        <div className="d-flex">
-          <div
-            className="d-flex"
-            style={{
-              margin: "20px",
-              borderRadius: "10px",
-              border: "2px solid black",
-              padding: "10px",
-            }}
-          >
-            <div className="d-flex flex-column" style={{justifyContent: "space-around"}}>
-            <div style={{display:'flex', alignItems:'center',justifyContent:'center'}}>Job Name</div>
-              <div
-                className="d-flex"
-                style={{
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "100%",
-                }}
-              >
-                <div style={{ padding: "10px" }}>
-                {selectedJob && selectedJob.labels["job-name"]}
-                </div>
-              </div>
+      <div style={{ padding: "20px", backgroundColor: "#ffffff", borderRadius: "10px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)" }}>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          {/* First Row */}
+          <div style={{ display: "flex", marginBottom: "10px" }}>
+            <div style={cardStyle}>
+              <div style={headerStyle}>Job Name</div>
+              <div>{selectedJob && selectedJob.labels["job-name"]}</div>
             </div>
-          </div>
-          <div
-            className="d-flex"
-            style={{
-              margin: "20px",
-              borderRadius: "10px",
-              border: "2px solid black",
-              padding: "10px",
-            }}
-          >
-            <div
-              className="d-flex"
-              style={{
-                alignItems: "center",
-                justifyContent: "center",
-                margin: "10px",
-              }}
-            >
-              Progress
-            </div>
-            <div style={{ width: 100 }}>
-              <CircularProgressbar
-                value={
-                  (selectedJob &&
-                    selectedJob.yarnApplications[0]?.progress * 100) ||
-                  0
-                }
-                text={
-                  `${
-                    selectedJob &&
-                    selectedJob.yarnApplications[0]?.progress * 100
-                  }%` || 0
-                }
-              />
-            </div>
-          </div>
-          <div
-            className="d-flex"
-            style={{
-              margin: "20px",
-              borderRadius: "10px",
-              border: "2px solid black",
-              padding: "10px",
-            }}
-          >
-            <div
-              className="d-flex"
-              style={{
-                alignItems: "center",
-                justifyContent: "center",
-                margin: "10px",
-              }}
-            >
-              Status
-            </div>
-            <div style={{ width: 100, height: 100 }}>
-              <CircularProgressbar
-                value={
-                  selectedJob && selectedJob.status.state === "DONE" ? 100 : 0
-                }
-                text={
-                  selectedJob && selectedJob.status.state === "DONE"
-                    ? "Done"
-                    : "Error"
-                }
-              />
-            </div>
-          </div>
-          <div
-            className="d-flex"
-            style={{
-              margin: "20px",
-              borderRadius: "10px",
-              border: "2px solid black",
-              padding: "10px",
-            }}
-          >
-            <div className="d-flex flex-column">
-            <div style={{display:'flex', alignItems:'center',justifyContent:'center'}}>Start Time</div>
-              <div
-                className="d-flex"
-                style={{
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "100%",
-                }}
-              >
-                <div style={{ marginRight: "10px" }}>Date:</div>
-                <div style={{ padding: "10px" }}>
+
+            <div style={cardStyle}>
+              <div style={headerStyle}>Start Time</div>
+              <div>
+                <div>
+                  Date:{" "}
                   {selectedJob &&
                     getRunningStateStartTime(selectedJob.statusHistory) &&
                     formatTime(
                       getRunningStateStartTime(selectedJob.statusHistory)
                     )[0]}
                 </div>
-              </div>
-              <div
-                className="d-flex"
-                style={{
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "100%",
-                }}
-              >
-                <div style={{ marginRight: "10px" }}>Time:</div>
-                <div style={{ padding: "10px" }}>
+                <div>
+                  Time:{" "}
                   {selectedJob &&
                     getRunningStateStartTime(selectedJob.statusHistory) &&
                     formatTime(
@@ -201,47 +139,62 @@ const Monitoring = () => {
                 </div>
               </div>
             </div>
-          </div>
-          <div
-            className="d-flex"
-            style={{
-              margin: "20px",
-              borderRadius: "10px",
-              border: "2px solid black",
-              padding: "10px",
-            }}
-          >
-            <div className="d-flex flex-column">
-                <div style={{display:'flex', alignItems:'center',justifyContent:'center'}}>End Time</div>
-              <div
-                className="d-flex"
-                style={{
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "100%",
-                }}
-              >
-                <div style={{ marginRight: "10px" }}>Date:</div>
-                <div style={{ padding: "10px" }}>
+
+            <div style={cardStyle}>
+              <div style={headerStyle}>End Time</div>
+              <div>
+                <div>
+                  Date:{" "}
                   {selectedJob &&
                     selectedJob.status.startTime &&
                     formatTime(selectedJob.status.startTime)[0]}
                 </div>
-              </div>
-              <div
-                className="d-flex"
-                style={{
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "100%",
-                }}
-              >
-                <div style={{ marginRight: "10px" }}>Time:</div>
-                <div style={{ padding: "10px" }}>
+                <div>
+                  Time:{" "}
                   {selectedJob &&
                     selectedJob.status.startTime &&
                     formatTime(selectedJob.status.startTime)[1]}
                 </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Second Row */}
+          <div style={{ display: "flex" }}>
+            <div style={cardRoundStyle}>
+              <div style={headerStyle}>Progress</div>
+              <div style={{height: 150,width: 150, marginLeft: 168}}>
+                <CircularProgressbar 
+                  value={
+                    (selectedJob &&
+                      selectedJob.yarnApplications[0]?.progress * 100) ||
+                    0
+                  }
+                  text={
+                    `${
+                      selectedJob &&
+                      selectedJob.yarnApplications[0]?.progress * 100
+                    }%` || 0
+                  }
+                  styles={progressBarStyles}
+                />
+              </div>
+            </div>
+
+            <div style={cardRoundStyle}>
+              <div style={headerStyle}>Status</div>
+              <div  style={{height: 150,width: 150, marginLeft: 168}}>
+                <CircularProgressbar 
+                  value={
+                    selectedJob && selectedJob.status.state === "DONE" ? 100 : 0
+                  }
+                  text={
+                    selectedJob && selectedJob.status.state === "DONE"
+                      ? "Done"
+                      : "Error"
+                  }
+                  styles={statusStyles}
+                />
               </div>
             </div>
           </div>
