@@ -21,6 +21,7 @@ export const getCommonFields = (itemData) => {
                 options: itemData.options[0],
                 control: "select",
                 isGeneric: true,
+                isRequired: true,
                 itemVal: itemData.values ? itemData.values['jobtype_id'] : '',
             } : []
         ]

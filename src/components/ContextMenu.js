@@ -59,8 +59,8 @@ const ContextMenu = ({ item, popType, project_id, parent_id,id, onClose, callbac
       {hideDeleteUpdate &&<>
       <div className="menu-item" onClick={(e) => {openPopup(e,"Add Propertie", { top: e.clientY, left: e.clientX + 10 }, project_id, id)}}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", }}>
-          <InsertDriveFileIcon  style={{ fontSize: "20px", marginRight: "5px", marginTop: "5px" }}/>
-          <div  style={{ fontSize: "15px", fontWeight: "bold", marginTop: "5px" }}>Propertie</div>
+          <img src="assets/images/addproperties.png" style={{ fontSize: "20px", marginRight: "5px", marginTop: "5px" }}/>
+          <div  style={{ fontSize: "15px", fontWeight: "bold", marginTop: "5px" }}>Add Propertie</div>
         </div>  
       </div>
       </>

@@ -16,7 +16,7 @@ export const getProjectFields = (itemData) => {
                 id: "inputDisplayclientId",
                 label: "Client Name",
                 name: "client_id",
-                options: itemData.options[1],
+                options: itemData.options[0],
                 control: "select",
                 isSubmit: itemData.isSubmit,
                 isRequired: !itemData?.values?.client_id,
