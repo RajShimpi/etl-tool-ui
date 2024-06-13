@@ -225,7 +225,7 @@ const Monitoring = () => {
                 color: "#555",
               }}
             >
-              Job Details
+              Job Detail
             </h4>
             <div
               style={{
@@ -358,7 +358,7 @@ const Monitoring = () => {
                 color: "#555",
               }}
             >
-              Log's Details
+              Log's Detail
             </h4>
             <textarea
               value={
