@@ -101,7 +101,7 @@ const Monitoring = () => {
         ];
 
         const isShow = true;
-        const tableTitle = "cluster job";
+        const tableTitle = "Jobs";
 
         const formattedData = {
           data: data,
@@ -178,18 +178,15 @@ const Monitoring = () => {
           justifyContent: "space-between",
           alignItems: "center",
           marginBottom: "20px",
+          backgroundColor: "#f5f5f5",
+          padding: "10px 20px",
+          borderRadius: "8px",
+          boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
         }}
       >
-        <h2 style={{ margin: 0, color: "#555" }}>Job's Details</h2>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginTop: "20px",
-          }}
-        >
-          <div style={{ minWidth: "300px", marginRight: "20px" }}>
+        <h2 style={{color: "#555" }}>Jobs Details</h2>
+        <div style={{ display: "flex", gap: "20px" }}>
+          <div style={{ minWidth: "300px" }}>
             <CustomSelect
               options={projects}
               label="Project"
@@ -358,7 +355,7 @@ const Monitoring = () => {
                 color: "#555",
               }}
             >
-              Log's Detail
+              Logs
             </h4>
             <textarea
               value={
