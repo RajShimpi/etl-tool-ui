@@ -81,6 +81,7 @@ const ContextMenu = ({
   };
 
   const deleteNode = useCallback(() => {
+    axios.putWithCallback(`job-steps/${id}`);
     setNodes((nodes) => nodes.filter((node) => node.id !== id));
     setEdges((edges) => edges.filter((edge) => edge.source !== id));
     handleClose()
@@ -293,6 +294,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
     savaDataFunction,
     OpenJobParam,
     publish,
+    shouldCallSave,
   }));
 
   const setAsStartStepHandler = useCallback(() => {

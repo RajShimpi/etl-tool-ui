@@ -10,7 +10,6 @@ const Project = () => {
   const clientid = auth.getStorageData("client");
 
   const [clientId, setClientId] = useState();
-  const [project, setProject] = useState([]);
   const [client, setClient] = useState([])
 
   useEffect(() => {
@@ -23,14 +22,6 @@ const Project = () => {
       setClientId(clientData.id);
     });
   }, [clientid]);
-
-  useEffect(() => {
-    if (clientId) {
-      axios.getWithCallback(`projects/client/${clientId}`, (projectsData) => {
-        setProject(projectsData);
-      });
-    }
-  }, [clientId]);
 
   let defaultObj = { project_name: '', client_id: '', base_location: '', active: true };
 
@@ -45,7 +36,7 @@ const Project = () => {
           getApi={`projects/client/${clientId}`}
           title="Project"
           defaultObj={defaultObj}
-          options={[project, client]}
+          options={[client]}
           tableTitle="Projects"
         />
       )}

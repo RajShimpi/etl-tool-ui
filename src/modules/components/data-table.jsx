@@ -417,14 +417,14 @@ const DataTable = (props) => {
                                                 <div className={`col-lg-12 table-responsive table-large-size`}>
                                                     <table className="table table-striped table-bordered dt-responsive">
                                                         <colgroup>
-                                                            {(!props.hideActions && (props.isEdit || props.isDelete || type === "client" || type === "checkbox")) && <col width="8%"></col>}
+                                                            {(!props.hideActions && (props.isEdit || props.isDelete || props.isShow || type === "client" || type === "checkbox")) && <col width="8%"></col>}
                                                             {props.columns.map((item, index) => <col key={index} width={item.width}
                                                             ></col>)}
 
                                                         </colgroup>
                                                         <thead style={{ backgroundColor: "#3c8dbc", color: "white" }}>
                                                             <tr>
-                                                                {((!!props.columns && !props.hideActions) && (props.isEdit || props.isDelete || type == "client" || type == "checkbox"))
+                                                                {((!!props.columns && !props.hideActions) && (props.isEdit || props.isDelete ||props.isShow  || type == "client" || type == "checkbox"))
                                                                     && <th style={{ verticalAlign: "middle" }}><span>Action</span>
                                                                     </th>}
                                                                 {props.columns.map((item, index) => (
@@ -449,7 +449,7 @@ const DataTable = (props) => {
                                                         <tbody>
                                                             {tableData.map((item, index) => (
                                                                 <tr key={index} className={`${selectedRow === index || selectedRowMulti.includes(index) ? "table-row selected" : "table-row"} ${props.isRowSelect ? 'cursor-pointer data-table-row-hover' : ''}`} onDoubleClick={() => doubleClick(item)} onClick={() => singleClick(index, item)}>
-                                                                    {(!props.hideActions && (props.isEdit || props.isDelete || type === "client" || type === "checkbox")) &&
+                                                                    {(!props.hideActions && (props.isEdit || props.isDelete || props.isShow  || type === "client" || type === "checkbox")) &&
                                                                         <td>
                                                                             {type === "checkbox" && <input type="checkbox" id={"handover" + index} key={"handover" + index} name={"handover" + index}
                                                                                 onChange={(e) => onchangeCheckBox(e, item, type)} style={{ margin: "0px 3px", verticalAlign: 'middle' }} checked={item.isChecked}></input>}
@@ -467,6 +467,9 @@ const DataTable = (props) => {
                                                                                     <i className="fa fa-print"></i>
                                                                                 </button>
                                                                             }
+                                                                             {props.isShow && <button type='button' className="btn btn-link" style={{ padding: "0px 2px" }} onClick={() => props.showCallBack(item)} title="Show">
+                                                                                <img src="/assets/images/login/btn-show.svg" alt="" width={20} height={20}></img>
+                                                                            </button>}
                                                                             {props.isDelete && <button type='button' style={{ padding: "0px 2px" }} onClick={() => deleteCallback(item)} className="btn btn-link" title="Delete">
                                                                                 {/* <i className="fas fa-trash"></i> */}
                                                                                 <img src="/assets/images/login/btn-delete.svg" alt="" width={20} height={20}></img>

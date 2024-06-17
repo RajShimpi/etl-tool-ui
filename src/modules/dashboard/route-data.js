@@ -25,6 +25,7 @@ import StepTypeParameter from "../masters/step-type-parameter";
 import JobSchedule from "../masters/job-schedule";
 import MetabaseComponent from "../metabase/metabaseEmbed";
 import Client_Dashboard from "../masters/client_dashboard";
+import Monitoring from "../../components/Monitoring/monitoring";
 
 export const routeConstant = {
   dashboard: "/dashboard",
@@ -51,6 +52,7 @@ export const routeConstant = {
   metabase: "/metabase",
   jobschedule:"/job-schedule",
   client_dashboard:"/client_dashboard",
+  monitoring:"/monitoring"
 
 };
 
@@ -94,8 +96,8 @@ export const routeData = (routes) => [
     childComp: AddMenu,
     data: {},
     permissions: true,
-    // isUserCanView: true,
-    isUserCanView: routes.includes(routeConstant.addMenu),
+    isUserCanView: true,
+    // isUserCanView: routes.includes(routeConstant.addMenu),
   },
   {
     routeTo: routeConstant.dashboardBuilder,
@@ -229,5 +231,13 @@ export const routeData = (routes) => [
   data: {},
   permissions: true,
   isUserCanView: routes.includes(routeConstant.client_dashboard),
+},
+{
+  routeTo: routeConstant.monitoring, // monitoring Form route
+  header: "",
+  childComp:Monitoring,
+  data: {},
+  permissions: true,
+  isUserCanView: true,
 }
 ];

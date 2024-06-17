@@ -24,6 +24,7 @@ const JobStepParameterMaster = ({
   const [nameValue, setNameValue] = useState([]);
   const [nodeid, setNodeid] = useState();
   const [steptype, setSteptype] = useState();
+  const [stepNameCall, setStepNameCall] = useState(false);
 
   const colSize =
     parameter.length < 2
@@ -205,7 +206,7 @@ const JobStepParameterMaster = ({
 
       axios.getWithCallback(`parameter/`, (data) => setOtherParameters(data));
     }
-  }, [node_id, step_type_id, nodeid, open]);
+  }, [node_id, step_type_id, nodeid, open,editName]);
 
   let defaultObj = {
     step_name: "",
@@ -339,7 +340,7 @@ const JobStepParameterMaster = ({
         })
       );
     }
-  }, [jobStepParamData, parameter, open]);
+  }, [jobStepParamData, parameter,]);
 
   const prepareData = () => {
     let columns = Object.getOwnPropertyNames(data);
@@ -419,13 +420,14 @@ const JobStepParameterMaster = ({
       e.target.classList.add("was-validated");
       //props.validationCallback(true);
     } else {
-      if (data?.step_name !== undefined) {
+      if (editName !== nameValue) {
         axios.putWithCallback(
           `job-steps/${node_id}/name-save`,
           { step_name: data.step_name, job_id: job_id },
           (data) => {
             handleClose(data);
             setNodeNames(data);
+            setNameValue([])
           }
         );
       }
@@ -438,6 +440,7 @@ const JobStepParameterMaster = ({
           (data) => {
             setUpdate(true);
             handleClose(null);
+            setNameValue([])
           }
         );
       }
