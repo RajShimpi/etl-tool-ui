@@ -414,7 +414,7 @@ const DataTable = (props) => {
                                     <div className="card-body " >
                                         {!!tableData.length ? <React.Fragment>
                                             <div className="row">
-                                                <div className={`col-lg-12 table-responsive table-large-size`}>
+                                            <div className={`col-lg-12 table-responsive table-large-size`} style={{ maxHeight: 'calc(100vh - 300px)' }}>
                                                     <table className="table table-striped table-bordered dt-responsive">
                                                         <colgroup>
                                                             {(!props.hideActions && (props.isEdit || props.isDelete || props.isShow || type === "client" || type === "checkbox")) && <col width="8%"></col>}
@@ -431,14 +431,16 @@ const DataTable = (props) => {
                                                                     <th key={index}>
                                                                         <span>{item.columnName}</span>
                                                                         <button type='button' className={item.columnId + 'asc' == sortedColumnId ? "btn btn-link highlight" : "btn btn-link sortColor"}
-                                                                            style={{ padding: "0px 2px" }}
+                                                                            style={{ padding: "3px" ,color:"white" }}
+                                                                            title='Asc'
                                                                             onClick={() => sortdata(item.columnId, 'asc')}
                                                                         >
                                                                             <i className="fa fa-long-arrow-alt-up"></i>
                                                                         </button>
                                                                         <button type='button' className={item.columnId + 'desc' == sortedColumnId ? "btn btn-link highlight" : "btn btn-link sortColor"}
-                                                                            style={{ padding: "0px 2px" }}
+                                                                            style={{ padding: "3px" ,color:"white" }}
                                                                             onClick={() => sortdata(item.columnId, 'desc')}
+                                                                            title='Desc'
                                                                         >
                                                                             <i className="fa fa-long-arrow-alt-down"></i>
                                                                         </button>

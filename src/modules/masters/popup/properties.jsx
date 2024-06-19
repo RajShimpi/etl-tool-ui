@@ -24,7 +24,7 @@ function Project_Properties({ PropertieColumns, callback, project_id }) {
   return (
     <div>
       <CommonTable
-        btnName="Add Propertie's"
+        btnName="Add Properties"
         data={data}
         columns={PropertieColumns}
         callback={callback}

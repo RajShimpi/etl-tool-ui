@@ -26,6 +26,7 @@ import JobSchedule from "../masters/job-schedule";
 import MetabaseComponent from "../metabase/metabaseEmbed";
 import Client_Dashboard from "../masters/client_dashboard";
 import Monitoring from "../../components/Monitoring/monitoring";
+import IOTDashboard from "../../components/iot_dashbaord/iot_dashboard_ui";
 
 export const routeConstant = {
   dashboard: "/dashboard",
@@ -52,8 +53,8 @@ export const routeConstant = {
   metabase: "/metabase",
   jobschedule:"/job-schedule",
   client_dashboard:"/client_dashboard",
-  monitoring:"/monitoring"
-
+  monitoring:"/monitoring",
+  iot_dashboard:"/iot_dashboard"
 };
 
 export const routeData = (routes) => [
@@ -236,6 +237,14 @@ export const routeData = (routes) => [
   routeTo: routeConstant.monitoring, // monitoring Form route
   header: "",
   childComp:Monitoring,
+  data: {},
+  permissions: true,
+  isUserCanView: true,
+},
+{
+  routeTo: routeConstant.iot_dashboard, // iot_dashboard Form route
+  header: "",
+  childComp:IOTDashboard,
   data: {},
   permissions: true,
   isUserCanView: true,
