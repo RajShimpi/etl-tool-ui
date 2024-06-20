@@ -5355,7 +5355,7 @@ table.dataTable.dtr-inline.collapsed>tbody>tr>td.dtr-control:before {
 
 .unlock-icon {
     position: absolute;
-    margin: -36px 0 0 0;
+    margin: -30px 0 0 0;
     right: 7px;
     padding: 0px 9px;
 }

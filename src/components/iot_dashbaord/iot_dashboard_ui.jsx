@@ -34,7 +34,7 @@ const IOTDashboard = () => {
   useEffect(() => {
     const fetchDeviceData = async () => {
       const deviceIdsToFetch = selectedDeviceId ? [selectedDeviceId.text] : deviceIds.map((device) => device.text);
-      const questionIds = [128, 147, 146, 167]; // by Humidity 147, by Pressure 146, by Temperature 128 by wind speed 167
+      const questionIds = [128, 147, 146, 167]; // by Humidity 147, by Pressure 146, by Temperature 128, by wind speed 167
 
       try {
         const responses = await Promise.all(
@@ -93,8 +93,9 @@ const IOTDashboard = () => {
   const getGridTemplateColumns = () => {
     const itemCount = deviceData[selectedDeviceId.text]?.length || 0;
     if (itemCount >= 7) return "repeat(3, 1fr)";
-    if (itemCount === 6) return "repeat(3, 1fr)";
+    if (itemCount === 5|| itemCount ===6 ) return "repeat(3, 1fr)";
     if (itemCount === 4) return "repeat(2, 1fr)";
+    if (itemCount <= 3) return "repeat(3, 1fr)";
     return "repeat(1, 1fr)";
   };
 
