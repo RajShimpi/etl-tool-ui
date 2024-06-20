@@ -1,53 +1,62 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "../../modules/services/axios";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
-import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
+import CustomSelect from "../../modules/components/custom-select";
 
 const IOTDashboard = () => {
   const [deviceData, setDeviceData] = useState({});
-  const [next, setNext]=useState(true)
+  const [selectedDeviceId, setSelectedDeviceId] = useState([]);
+  const [data, setdata] = useState([]);
   const sliderRefs = useRef([]);
 
   useEffect(() => {
-    const deviceIds = [
-      "127.0.0.1",
-      "44:51:94:e5:f9:3e",
-      "44:51:94:e5:f9:3e-1",
-      "44:51:94:e5:f9:3e-2",
-      "44:51:94:e5:f9:3e-3",
-      "44:51:94:e5:f9:3e-4",
-      "44:51:94:e5:f9:3e-5",
-      "44:51:94:e5:f9:3e-6",
-      "44:51:94:e5:f9:3e-7",
-      "44:51:94:e5:f9:3e-8",
-    ];
-    const questionIds = [128, 147, 146, 167]; // by Humidity 147, by Pressure 146, by Temperature 128 by wind speed 167
+    setSelectedDeviceId([]);
+    setDeviceData([]);
+  }, [data]);
 
-    Promise.all(
-      questionIds.map((questionId) =>
-        axios
-          .post(`client-dashboard/question/${questionId}`, { deviceIds })
-          .then((response) => ({
-            questionId,
-            deviceUrls: response.data.deviceUrls,
-          }))
-          .catch((error) => ({
-            questionId,
-            error: error.message,
-          }))
-      )
-    )
-      .then((responses) => {
+  const deviceIds = [
+    { value: 1, label: "127.0.0.1" },
+    { value: 2, label: "44:51:94:e5:f9:3e-1" },
+    { value: 3, label: "44:51:94:e5:f9:3e-2" },
+    { value: 4, label: "44:51:94:e5:f9:3e-3" },
+    { value: 5, label: "44:51:94:e5:f9:3e-4" },
+    { value: 6, label: "44:51:94:e5:f9:3e-5" },
+    { value: 7, label: "44:51:94:e5:f9:3e-6" },
+    { value: 8, label: "44:51:94:e5:f9:3e-7" },
+    { value: 9, label: "44:51:94:e5:f9:3e-8" },
+    { value: 10, label: "44:51:94:e5:f9:3e" },
+  ];
+
+  useEffect(() => {
+    const deviceId = deviceIds.map((x) => ({ value: x.value, label: x.label }));
+    setdata(deviceId);
+  }, []);
+
+  useEffect(() => {
+    const fetchDeviceData = async () => {
+      const deviceIdsToFetch = selectedDeviceId ? [selectedDeviceId.text] : deviceIds.map((device) => device.text);
+      const questionIds = [128, 147, 146, 167]; // by Humidity 147, by Pressure 146, by Temperature 128 by wind speed 167
+
+      try {
+        const responses = await Promise.all(
+          questionIds.map((questionId) =>
+            axios
+              .post(`client-dashboard/question/${questionId}`, { deviceIds: deviceIdsToFetch })
+              .then((response) => ({
+                questionId,
+                deviceUrls: response.data.deviceUrls,
+              }))
+              .catch((error) => ({
+                questionId,
+                error: error.message,
+              }))
+          )
+        );
+
         const newData = {};
         responses.forEach((response) => {
           const { questionId, deviceUrls, error } = response;
           if (error) {
-            console.error(
-              `Error fetching data for question ${questionId}: ${error}`
-            );
+            console.error(`Error fetching data for question ${questionId}: ${error}`);
           } else {
             Object.entries(deviceUrls).forEach(([deviceId, url]) => {
               if (!newData[deviceId]) {
@@ -57,81 +66,51 @@ const IOTDashboard = () => {
             });
           }
         });
+
         setDeviceData(newData);
-        setNext(false)
-      })
-      .catch((error) => {
-        console.error(error)
-      });
-  }, []);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchDeviceData();
+  }, [selectedDeviceId]);
 
   useEffect(() => {
     sliderRefs.current = Array.from({
       length: Object.keys(deviceData).length,
     }).map(() => React.createRef());
-    setNext(false)
-  }, [deviceData, next]);
+  }, [deviceData]);
 
-  const handleSliderNext = (index) => {
-    setNext(false)
-    if (sliderRefs.current[index] && sliderRefs.current[index].current) {
-      sliderRefs.current[index].current.slickNext();
-      
+  const handledeviceSelect = (selectedData) => {
+    if (!selectedData) {
+      console.error("Expected selected data but got:", selectedData);
+      return;
     }
+    setSelectedDeviceId(selectedData);
   };
 
-  const handleSliderPrev = (index) => {
-    setNext(false)
-    if (sliderRefs.current[index] && sliderRefs.current[index].current) {
-      sliderRefs.current[index].current.slickPrev();
-    }
-  };
-
-  const sliderSettings = {
-    dots: true,
-    infinite: false,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
+  const getGridTemplateColumns = () => {
+    const itemCount = deviceData[selectedDeviceId.text]?.length || 0;
+    if (itemCount >= 7) return "repeat(3, 1fr)";
+    if (itemCount === 6) return "repeat(3, 1fr)";
+    if (itemCount === 4) return "repeat(2, 1fr)";
+    return "repeat(1, 1fr)";
   };
 
   return (
     <>
       <div>
-        {Object.entries(deviceData).map(([deviceId, deviceEntries], index) => (
-          <div key={deviceId} style={{marginBottom: "20px"}}>
-            <div style={{marginBottom: "10px",display: "flex",justifyContent: "space-between",zIndex: "10",position: "absolute",marginTop: "180px",width: "95%",}}>
-              <button onClick={() => handleSliderPrev(index)} style={ {backgroundColor: "#ffffff",border: "1px solid #ccc",borderRadius: "50%",width: "40px",height: "40px",display: "flex",alignItems: "center",justifyContent: "center",cursor: "pointer",transition: "background-color 0.3s ease",}}>
-                <KeyboardDoubleArrowLeftIcon />
-              </button>
-              <button onClick={() => handleSliderNext(index)} style={ {backgroundColor: "#ffffff",border: "1px solid #ccc",borderRadius: "50%",width: "40px",height: "40px",display: "flex",alignItems: "center",justifyContent: "center",cursor: "pointer",transition: "background-color 0.3s ease",}}>
-                <KeyboardDoubleArrowRightIcon />
-              </button>
-            </div>
-            <Slider ref={sliderRefs.current[index]} {...sliderSettings}>
-              {deviceEntries.map((entry, entryIndex) => (
+        <div style={{ width: "30%" }}>
+          <CustomSelect options={data} label="Device" callback={handledeviceSelect} />
+        </div>
+        {selectedDeviceId && (
+          <div style={{ display: "grid", gridTemplateColumns: getGridTemplateColumns(), gap: "10px" }}>
+            {deviceData[selectedDeviceId.text] &&
+              deviceData[selectedDeviceId.text].map((entry, entryIndex) => (
                 <div
-                  key={`${deviceId}-${entry.questionId}-${entryIndex}`}
-                  style={{
-                    padding: "0 10px",
-                    position: "relative",
-                  }}
+                  key={`${selectedDeviceId.text}-${entry.questionId}-${entryIndex}`}
+                  style={{ padding: "0 10px", position: "relative" }}
                 >
                   <iframe
                     src={entry.url}
@@ -143,9 +122,8 @@ const IOTDashboard = () => {
                   ></iframe>
                 </div>
               ))}
-            </Slider>
           </div>
-        ))}
+        )}
       </div>
     </>
   );
