@@ -1,46 +1,33 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "../../modules/services/axios";
-import CustomSelect from "../../modules/components/custom-select";
+import SelectReact from "../../modules/components/select-react";
 
 const IOTDashboard = () => {
   const [deviceData, setDeviceData] = useState({});
-  const [selectedDeviceId, setSelectedDeviceId] = useState([]);
-  const [data, setdata] = useState([]);
+  const [selectedDeviceIds, setSelectedDeviceIds] = useState([]);
+  const [deviceId, setDeviceId] = useState([]);
   const sliderRefs = useRef([]);
 
   useEffect(() => {
-    setSelectedDeviceId([]);
-    setDeviceData([]);
-  }, [data]);
-
-  const deviceIds = [
-    { value: 1, label: "127.0.0.1" },
-    { value: 2, label: "44:51:94:e5:f9:3e-1" },
-    { value: 3, label: "44:51:94:e5:f9:3e-2" },
-    { value: 4, label: "44:51:94:e5:f9:3e-3" },
-    { value: 5, label: "44:51:94:e5:f9:3e-4" },
-    { value: 6, label: "44:51:94:e5:f9:3e-5" },
-    { value: 7, label: "44:51:94:e5:f9:3e-6" },
-    { value: 8, label: "44:51:94:e5:f9:3e-7" },
-    { value: 9, label: "44:51:94:e5:f9:3e-8" },
-    { value: 10, label: "44:51:94:e5:f9:3e" },
-  ];
+    setSelectedDeviceIds([]);
+    setDeviceData({});
+  }, [deviceId]);
 
   useEffect(() => {
-    const deviceId = deviceIds.map((x) => ({ value: x.value, label: x.label }));
-    setdata(deviceId);
+    axios.getWithCallback(`/client-dashboard/field/values`, (data => {
+      setDeviceId(data.map((device) => ({ value: device.id, label: device.device_id })))
+    }))
   }, []);
 
   useEffect(() => {
     const fetchDeviceData = async () => {
-      const deviceIdsToFetch = selectedDeviceId ? [selectedDeviceId.text] : deviceIds.map((device) => device.text);
-      const questionIds = [128, 147, 146, 167]; // by Humidity 147, by Pressure 146, by Temperature 128, by wind speed 167
-
       try {
+        const questionIds = [128, 147, 146, 167]; // by Humidity 147, by Pressure 146, by Temperature 128, by Wind speed 167
+
         const responses = await Promise.all(
           questionIds.map((questionId) =>
             axios
-              .post(`client-dashboard/question/${questionId}`, { deviceIds: deviceIdsToFetch })
+              .post(`client-dashboard/question/${questionId}`, { deviceIds: selectedDeviceIds.map(device => device.label) })
               .then((response) => ({
                 questionId,
                 deviceUrls: response.data.deviceUrls,
@@ -74,7 +61,7 @@ const IOTDashboard = () => {
     };
 
     fetchDeviceData();
-  }, [selectedDeviceId]);
+  }, [selectedDeviceIds]);
 
   useEffect(() => {
     sliderRefs.current = Array.from({
@@ -82,47 +69,43 @@ const IOTDashboard = () => {
     }).map(() => React.createRef());
   }, [deviceData]);
 
-  const handledeviceSelect = (selectedData) => {
-    if (!selectedData) {
-      console.error("Expected selected data but got:", selectedData);
-      return;
-    }
-    setSelectedDeviceId(selectedData);
-  };
-
-  const getGridTemplateColumns = () => {
-    const itemCount = deviceData[selectedDeviceId.text]?.length || 0;
-    if (itemCount >= 7) return "repeat(3, 1fr)";
-    if (itemCount === 5|| itemCount ===6 ) return "repeat(3, 1fr)";
-    if (itemCount === 4) return "repeat(2, 1fr)";
-    if (itemCount <= 3) return "repeat(3, 1fr)";
-    return "repeat(1, 1fr)";
+  const handleDeviceSelect = (selectedDevices) => {
+    setSelectedDeviceIds(selectedDevices || []);
   };
 
   return (
     <>
       <div>
-        <div style={{ width: "30%" }}>
-          <CustomSelect options={data} label="Device" callback={handledeviceSelect} />
+        <div style={{ width: "30%", marginBottom: "20px" }}>
+          <SelectReact options={deviceId} label="Device" callback={handleDeviceSelect} multiple={true} />
         </div>
-        {selectedDeviceId && (
-          <div style={{ display: "grid", gridTemplateColumns: getGridTemplateColumns(), gap: "10px" }}>
-            {deviceData[selectedDeviceId.text] &&
-              deviceData[selectedDeviceId.text].map((entry, entryIndex) => (
-                <div
-                  key={`${selectedDeviceId.text}-${entry.questionId}-${entryIndex}`}
-                  style={{ padding: "0 10px", position: "relative" }}
-                >
-                  <iframe
-                    src={entry.url}
-                    width="100%"
-                    height="400px"
-                    frameBorder="0"
-                    allowTransparency="true"
-                    allowFullScreen
-                  ></iframe>
+        {selectedDeviceIds.length > 0 && (
+          <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+            {selectedDeviceIds.map((selectedDevice) => (
+              <div key={selectedDevice.value} style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                <div style={{ backgroundColor: "#f0f0f0", padding: "10px", borderRadius: "5px", textAlign: "center", fontWeight: "bold", fontSize: "16px" }}>
+                  Device: {selectedDevice.label}
                 </div>
-              ))}
+                <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+                  {deviceData[selectedDevice.label] &&
+                    deviceData[selectedDevice.label].map((entry, entryIndex) => (
+                      <div
+                        key={`${selectedDevice.label}-${entry.questionId}-${entryIndex}`}
+                        style={{ flexGrow: 1, minWidth: "250px", padding: "0 10px", position: "relative" }}
+                      >
+                        <iframe
+                          src={entry.url}
+                          width="100%"
+                          height="400px"
+                          frameBorder="0"
+                          allowTransparency="true"
+                          allowFullScreen
+                        ></iframe>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            ))}
           </div>
         )}
       </div>

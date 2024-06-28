@@ -45,17 +45,6 @@ const Node = ({ data, id, start_step, startStep, item, isSelected, textRef, node
   return (
     <div ref={nodeRef}>
       <div style={{ textAlign: "center" }} className="text-updater-node" >
-        {/* {showNodeMaster && (
-          <Modal
-            show={showNodeMaster}
-            modalTitle={"Save/Update Parameter"}
-            handleClose={handleCloseNodeMaster}
-            maxWidth={"100%"}
-          >
-            {data.comp ? data.comp : <AddFile />}
-          </Modal>
-        )} */}
-
         <div style={{ textAlign: "center" }}>
           {selected ? null : (
             <>

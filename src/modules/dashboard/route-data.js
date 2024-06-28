@@ -27,6 +27,7 @@ import MetabaseComponent from "../metabase/metabaseEmbed";
 import Client_Dashboard from "../masters/client_dashboard";
 import Monitoring from "../../components/Monitoring/monitoring";
 import IOTDashboard from "../../components/iot_dashbaord/iot_dashboard_ui";
+import MetabaseQuestion from "../metabase/metabasequestion";
 
 export const routeConstant = {
   dashboard: "/dashboard",
@@ -54,7 +55,8 @@ export const routeConstant = {
   jobschedule:"/job-schedule",
   client_dashboard:"/client_dashboard",
   monitoring:"/monitoring",
-  iot_dashboard:"/iot_dashboard"
+  iot_dashboard:"/iot_dashboard",
+  question:"/question"
 };
 
 export const routeData = (routes) => [
@@ -217,7 +219,7 @@ export const routeData = (routes) => [
   isUserCanView: routes.includes(routeConstant.usermgmt),
 },
 {
-  routeTo: routeConstant.metabase, // MetaBase Form route
+  routeTo: routeConstant.metabase, // to view the metabase dashboard on MetaBase route
   header: "",
   childComp:MetabaseComponent ,
   data: {},
@@ -226,7 +228,7 @@ export const routeData = (routes) => [
   isUserCanView: routes.includes(routeConstant.metabase),
 },
 {
-  routeTo: routeConstant.client_dashboard, // Client Dashboard Form route
+  routeTo: routeConstant.client_dashboard, // to assign the metabase dashboard on Client Dashboard route
   header: "",
   childComp:Client_Dashboard,
   data: {},
@@ -234,7 +236,7 @@ export const routeData = (routes) => [
   isUserCanView: routes.includes(routeConstant.client_dashboard),
 },
 {
-  routeTo: routeConstant.monitoring, // monitoring Form route
+  routeTo: routeConstant.monitoring, // gcp data jobs details and logs to show on Monitoring route
   header: "",
   childComp:Monitoring,
   data: {},
@@ -242,9 +244,17 @@ export const routeData = (routes) => [
   isUserCanView: true,
 },
 {
-  routeTo: routeConstant.iot_dashboard, // iot_dashboard Form route
+  routeTo: routeConstant.iot_dashboard, //metabase data IOT_dashboard route
   header: "",
   childComp:IOTDashboard,
+  data: {},
+  permissions: true,
+  isUserCanView: true,
+},
+{
+  routeTo: routeConstant.question, // metabase Question data visulis view on Question route
+  header: "",
+  childComp:MetabaseQuestion,
   data: {},
   permissions: true,
   isUserCanView: true,

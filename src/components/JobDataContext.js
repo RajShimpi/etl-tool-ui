@@ -7,6 +7,7 @@ export const UseContextProvider = ({ children }) => {
   const [jobFolder, setJobFolder] = useState(null);
   const [projectID, setProjectID] = useState(null);
   const [dashboardId, setDashboardId] = useState(null);
+  const [questionId, setQuestionId] = useState(null);
   const [jobProjectId, setJobProjectId] = useState();
   const [jobName, setJobName] = useState([]);
 
@@ -29,9 +30,12 @@ export const UseContextProvider = ({ children }) => {
   const setJobNameValue = (data) => {
     setJobName(data);
   };
+  const setQuestionIdValue = (data) => {
+    setQuestionId(data);
+  };
 
   return (
-    <useDataContext.Provider value={{ jobDataId,jobFolder, setJobDataId: setJobDataIdValue ,setJobFolder:setJobFolderValue,projectID, setProjectID: setProjectIDValue,dashboardId, setDashboardId: setDashboardIdValue,jobProjectId, setJobProjectId: setJobProjectIdValue,jobName, setJobName: setJobNameValue}}>
+    <useDataContext.Provider value={{setQuestionId:setQuestionIdValue, questionId,jobDataId, jobFolder, setJobDataId: setJobDataIdValue , setJobFolder:setJobFolderValue, projectID, setProjectID: setProjectIDValue, dashboardId, setDashboardId: setDashboardIdValue, jobProjectId, setJobProjectId: setJobProjectIdValue, jobName, setJobName: setJobNameValue}}>
       {children}
     </useDataContext.Provider>
   );

@@ -17,8 +17,16 @@ export const geClientDashboardFields = (itemData) => {
             name: "dashboard_id",
             options: itemData.options[1],
             control: "select",
-            isRequired: true,
+            // isRequired: true,
             itemVal: itemData.values ? itemData.values["dashboard_id"] : '',
+        }, {
+            id: "input Question Name",
+            label: "Question Name",
+            name: "question_id",
+            options: itemData.options[2],
+            control: "select",
+            // isRequired: true,
+            itemVal: itemData.values ? itemData.values["question_id"] : '',
         }
         ]
     }];

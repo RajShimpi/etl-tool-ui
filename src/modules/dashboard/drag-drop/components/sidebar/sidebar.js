@@ -2,7 +2,6 @@ import React from 'react';
 
 const onDragStart = (event, nodeType, img, name, id) => {
   event.dataTransfer.setData("application/reactflow", nodeType);
-  // event.dataTransfer.setData("content", content);
   event.dataTransfer.setData("img", img);
   event.dataTransfer.setData("name", name);
   event.dataTransfer.setData("id", id);

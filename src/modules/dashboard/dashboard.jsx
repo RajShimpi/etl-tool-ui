@@ -44,11 +44,14 @@ const Dashboard = () => {
   const [selectedChildItem, setSelectedChildItem] = useState(false);
   
   const [selectedChildMenu, setSelectedChildMenu] = useState(false)
-  const { setProjectID,setDashboardId } = useData();
+  const { setProjectID,setDashboardId,setQuestionId } = useData();
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [metabasedashboardData, setMetabaseDashboardData] = useState([]);
-  const [client_dashboard, setClient_Dashboard] = useState([]);
-  const [metabase_DashboardMenu, setMetabase_DashboardMenu] = useState([]);
+  const [metabaseQuestionData, setMetabaseQuestionData] = useState([]);
+  const [clientdashboard, setClientDashboard] = useState([]);
+  const [clientQuestion, setClientQuestion] = useState([]);
+  const [metabaseDashboardMenu, setMetabaseDashboardMenu] = useState([]);
+  const [metabaseQuestionMenu, setMetabaseQuestionMenu] = useState([]);
 
   const toggleMenu = () => {
     setMenuOpen(!isMenuOpen);
@@ -178,22 +181,31 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    axios.getWithCallback("/client-dashboard/json", (data) => setMetabaseDashboardData(data));
-    axios.getWithCallback(`/client-dashboard/${client_id}`, (data) =>setClient_Dashboard(data));
+    axios.getWithCallback("/client-dashboard/dashboard", (data) => setMetabaseDashboardData(data));
+    axios.getWithCallback("/client-dashboard/question", (data) => setMetabaseQuestionData(data));
+    axios.getWithCallback(`/client-dashboard/${client_id}`, (data) =>setClientDashboard(data));
+    axios.getWithCallback(`/client-dashboard/questiondata/${client_id}`, (data) =>setClientQuestion(data));
   }, []);
 
   useEffect(() => {
-    const dash = client_dashboard.map((x) => x.dashboard_id);
+    const dash = clientdashboard.map((x) => x.dashboard_id);
     const filteredDashboardData = metabasedashboardData.filter((item) => {
       return dash.includes(item.id);
     });
 
-    setMetabase_DashboardMenu(filteredDashboardData);
-  }, [client_dashboard, metabasedashboardData]);
+    const question = clientQuestion.map((x) => x.question_id);
+    const filteredQuestiondata = metabaseQuestionData.filter((item) => {
+      return question.includes(item.id);
+    });
+
+    setMetabaseQuestionMenu(filteredQuestiondata)
+    setMetabaseDashboardMenu(filteredDashboardData);
+  }, [clientdashboard, clientQuestion, metabasedashboardData,metabaseQuestionData]);
 
   const onhandelProject = (projectid) => {
     setProjectID(projectid);
   };
+
   const onhandelDashboardId = (id) => {
     setDashboardId(id);
   };
@@ -437,13 +449,63 @@ const Dashboard = () => {
                                         setSelectedChildMenu(false)
                                       }
                                     >
-                                      {metabase_DashboardMenu.map((item) => (
+                                      {metabaseDashboardMenu.map((item) => (
                                         <Link
                                           key={"metabase" + "Link"}
                                           className="dropdown-item"
                                           to={{ pathname: "metabase" }}
                                           onClick={() =>
                                             onhandelDashboardId(item.id)
+                                          }
+                                        >
+                                          <div
+                                            key={item.id}
+                                            style={{
+                                              display: "flex",
+                                              margin: "2px",
+                                              marginRight: "5px",
+                                            }}
+                                          >
+                                            <img src="/assets/images/dashboard1.png" />
+                                            <div style={{ marginLeft: "5px" }}>
+                                              {item.name}
+                                            </div>
+                                          </div>
+                                        </Link>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+                                
+                                {item.menuName
+                                .toLowerCase()
+                                .includes("project") &&
+                                selectedChildMenu === "Question" && (
+                                  <div
+                                    style={{
+                                      position: "absolute",
+                                      left: "100%",
+                                      top: 120,
+                                      minWidth: "200px",
+                                      background: "#fff",
+                                      cursor: "pointer",
+                                      boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+                                      padding: "10px",
+                                      zIndex: 1,
+                                    }}
+                                  >
+                                    <div
+                                      onMouseLeave={() =>
+                                        setSelectedChildMenu(false)
+                                      }
+                                    >
+                                      {metabaseQuestionMenu.map((item) => (
+                                        <Link
+                                          key={"question" + "Link"}
+                                          className="dropdown-item"
+                                          to={{ pathname: "question" }}
+                                          onClick={() =>
+                                            setQuestionId(item.id)
                                           }
                                         >
                                           <div

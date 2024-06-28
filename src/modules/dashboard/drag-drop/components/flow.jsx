@@ -8,9 +8,10 @@ import ReactFlow, {
 } from "reactflow";
 
 // Components
-// import Sidebar from "./sidebar/sidebar";
 import Node from "./custom-node/message-node";
 import { MarkerType } from "reactflow";
+import JobStepParameterMaster from "../../../masters/job-step-param-master";
+import JobParameterMaster from "../../../masters/job-parameter";
 
 // UtilsnullEdges
 import { isAllNodeisConnected } from "../utils";
@@ -25,8 +26,6 @@ import Modal from "../../../components/modal-popup";
 import axios from "../../../services/axios";
 import { useData } from "../../../../components/JobDataContext";
 import DeleteIcon from "@mui/icons-material/Delete";
-import JobStepParameterMaster from "../../../masters/job-step-param-master";
-import JobParameterMaster from "../../../masters/job-parameter";
 import {
   alertInfo,
   confirmAlert,
@@ -261,12 +260,12 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       axios.postWithCallback(`job/publish-job/`, job_id);
       setShouldCallSave(false);
     } else {
-      // const nullErrors = [];
+      // const nullErrors = [];                                         //to give the validation to the error connect uncomment 
       const nullOks = [];
 
       nullEdges.forEach((edge) => {
         const nodeName = getNodeName(edge.source);
-        // if (edge.label === "error") {
+        // if (edge.label === "error") {                                //to give the validation to the error connect uncomment 
         //   nullErrors.push(nodeName);
         // } else
         if (edge.label === "ok") {
@@ -275,7 +274,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
       });
 
       let errorMessage = "You need to connect all the Edges.";
-      // if (nullErrors.length > 0) {
+      // if (nullErrors.length > 0) {                                  //to give the validation to the error connect uncomment 
       //   errorMessage += ` Error : ${nullErrors.join(", ")},`;
       // }
       if (nullOks.length > 0) {
@@ -554,7 +553,6 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
         }
       });
     }
-    // eslint-disable-next-line
   }, [
     nodes,
     data,
@@ -774,7 +772,7 @@ const OverviewFlow = React.forwardRef((props, refs, textColor) => {
     textRef?.current?.focus();
   }, [selectedNode]);
 
-  // const saveHandler = () => {
+  // const saveHandler = () => {                                //to save data call inside the reactflow workplace
   //   if (isAllNodeisConnected(nodes, edges)) {
   //     alert("Congrats its correct");
   //     saveNodeToDatabase();

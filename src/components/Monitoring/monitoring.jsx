@@ -119,48 +119,8 @@ const Monitoring = () => {
 
   const showCallBack = (item) => {
     setShowData(item);
+    setJobDataLogs([]);
   };
-
-  const cardStyle = {
-    flex: "1 1 300px",
-    margin: "10px",
-    padding: "20px",
-    border: "2px solid #ccc",
-    borderRadius: "8px",
-    backgroundColor: "#fff",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-    height: "150px",
-  };
-
-  const cardRoundStyle = {
-    flex: "1 1 300px",
-    margin: "10px",
-    padding: "5px",
-    border: "2px solid #ccc",
-    borderRadius: "8px",
-    backgroundColor: "#fff",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-    height: "200px",
-  };
-
-  const headerStyle = {
-    fontWeight: "bold",
-    fontSize: "1.2em",
-    color: "#333",
-    marginBottom: "15px",
-  };
-
-  const progressBarStyles = buildStyles({
-    textSize: "16px",
-    pathColor: "#4caf50",
-    textColor: "#4caf50",
-    trailColor: "#d6d6d6",
-  });
-
-  const statusStyles = buildStyles({
-    textSize: "16px",
-    trailColor: "#d6d6d6",
-  });
 
   useEffect(() => {
     if (showData && showData.jobId) {
@@ -184,7 +144,7 @@ const Monitoring = () => {
           boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
         }}
       >
-        <h2 style={{color: "#555" }}>Jobs Details</h2>
+        <h2 style={{ color: "#555" }}>Jobs Details</h2>
         <div style={{ display: "flex", gap: "20px" }}>
           <div style={{ minWidth: "300px" }}>
             <CustomSelect
@@ -234,15 +194,53 @@ const Monitoring = () => {
             >
               <div style={{ display: "flex", flexDirection: "column" }}>
                 <div style={{ display: "flex", marginBottom: "10px" }}>
-                  <div style={cardStyle}>
-                    <div style={{ ...headerStyle, marginBottom: "20px" }}>
+                  <div
+                    style={{
+                      flex: "1 1 300px",
+                      margin: "10px",
+                      padding: "20px",
+                      border: "2px solid #ccc",
+                      borderRadius: "8px",
+                      backgroundColor: "#fff",
+                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                      height: "150px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "1.2em",
+                        color: "#333",
+                        marginBottom: "15px",
+                        marginBottom: "20px",
+                      }}
+                    >
                       Job Name
                     </div>
                     <div>{showData.job_name || "N/A"}</div>
                   </div>
 
-                  <div style={cardStyle}>
-                    <div style={{ ...headerStyle, marginBottom: "20px" }}>
+                  <div
+                    style={{
+                      flex: "1 1 300px",
+                      margin: "10px",
+                      padding: "20px",
+                      border: "2px solid #ccc",
+                      borderRadius: "8px",
+                      backgroundColor: "#fff",
+                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                      height: "150px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "1.2em",
+                        color: "#333",
+                        marginBottom: "15px",
+                        marginBottom: "20px",
+                      }}
+                    >
                       Start Time
                     </div>
                     <div>
@@ -253,8 +251,27 @@ const Monitoring = () => {
                     </div>
                   </div>
 
-                  <div style={cardStyle}>
-                    <div style={{ ...headerStyle, marginBottom: "20px" }}>
+                  <div
+                    style={{
+                      flex: "1 1 300px",
+                      margin: "10px",
+                      padding: "20px",
+                      border: "2px solid #ccc",
+                      borderRadius: "8px",
+                      backgroundColor: "#fff",
+                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                      height: "150px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "1.2em",
+                        color: "#333",
+                        marginBottom: "15px",
+                        marginBottom: "20px",
+                      }}
+                    >
                       End Time
                     </div>
                     <div>
@@ -267,7 +284,18 @@ const Monitoring = () => {
                 </div>
 
                 <div style={{ display: "flex" }}>
-                  <div style={cardRoundStyle}>
+                  <div
+                    style={{
+                      flex: "1 1 300px",
+                      margin: "10px",
+                      padding: "5px",
+                      border: "2px solid #ccc",
+                      borderRadius: "8px",
+                      backgroundColor: "#fff",
+                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                      height: "200px",
+                    }}
+                  >
                     <div
                       className="d-flex"
                       style={{
@@ -276,7 +304,16 @@ const Monitoring = () => {
                         justifyContent: "space-around",
                       }}
                     >
-                      <div style={headerStyle}>Progress</div>
+                      <div
+                        style={{
+                          fontWeight: "bold",
+                          fontSize: "1.2em",
+                          color: "#333",
+                          marginBottom: "15px",
+                        }}
+                      >
+                        Progress
+                      </div>
                       <div
                         style={{
                           height: 150,
@@ -288,13 +325,29 @@ const Monitoring = () => {
                         <CircularProgressbar
                           value={showData.progress * 100 || 0}
                           text={`${showData.progress * 100 || 0}%`}
-                          styles={progressBarStyles}
+                          styles={{
+                            textSize: "16px",
+                            pathColor: "#4caf50",
+                            textColor: "#4caf50",
+                            trailColor: "#d6d6d6",
+                          }}
                         />
                       </div>
                     </div>
                   </div>
 
-                  <div style={cardRoundStyle}>
+                  <div
+                    style={{
+                      flex: "1 1 300px",
+                      margin: "10px",
+                      padding: "5px",
+                      border: "2px solid #ccc",
+                      borderRadius: "8px",
+                      backgroundColor: "#fff",
+                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                      height: "200px",
+                    }}
+                  >
                     <div
                       className="d-flex"
                       style={{
@@ -303,7 +356,16 @@ const Monitoring = () => {
                         justifyContent: "space-around",
                       }}
                     >
-                      <div style={headerStyle}>Status</div>
+                      <div
+                        style={{
+                          fontWeight: "bold",
+                          fontSize: "1.2em",
+                          color: "#333",
+                          marginBottom: "15px",
+                        }}
+                      >
+                        Status
+                      </div>
                       <div
                         style={{
                           height: 150,
@@ -321,7 +383,7 @@ const Monitoring = () => {
                               ? "Error"
                               : "Null"
                           }
-                          styles={statusStyles}
+                          styles={{ textSize: "16px", trailColor: "#d6d6d6" }}
                         />
                       </div>
                     </div>
@@ -375,7 +437,6 @@ const Monitoring = () => {
             />
           </div>
         </div>
-        
       </div>
     </>
   );

@@ -147,10 +147,6 @@
   z-index: -2;
 }
 
-/* .right-sidebar li .comIcon:hover::after {
-  transform: scaleX(1); 
-} */
-
 .right-sidebar li .comIcon.link_name {
   /* color: rgba(116, 113, 113, 0.123); */
   font-size: 15px;
@@ -161,11 +157,6 @@
   pointer-events: none;
   opacity: 0;
 }
-
-/* .right-sidebar li .comIcon:hover .link_name,
-.right-sidebar li .comIcon:hover i {
-  transition: all 0.5s ease;
-} */
 
 .right-sidebar.open li a.link_name {
   opacity: 1;

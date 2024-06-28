@@ -95,6 +95,7 @@ const CommonFormWithList = (props) => {
       case "project_id":
       case "job_id":
       case "dashboard_id":
+      case "question_id":
         setData((prevState) => ({ ...prevState, [name]: parseInt(e.value) }));
         break;
       case "TemplateItemId":
@@ -283,6 +284,12 @@ const CommonFormWithList = (props) => {
     }
   };
 
+  const deleteCallback = (item) => {
+    if(props.deleteApi){
+    axios.deleteWithCallback(
+      props.deleteApi.replace(":id", item.id))}
+  };
+
   const processTableParams = (data) => {
     let obj;
     return data?.map((x, index) => {
@@ -309,6 +316,7 @@ const CommonFormWithList = (props) => {
       columns: keys,
       filterColumnName: filterColumnName,
       editCallBack,
+      deleteCallback,
       isEdit: true,
       isDelete: true,
       tableTitle: props.tableTitle ? props.tableTitle : "",
@@ -582,4 +590,5 @@ const CommonFormWithList = (props) => {
     </div>
   );
 };
+
 export default CommonFormWithList;

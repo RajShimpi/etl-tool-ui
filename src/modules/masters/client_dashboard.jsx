@@ -7,13 +7,15 @@ import axios from '../services/axios';
 const Client_Dashboard = () => {
     const [client,setClient]=useState([])
     const [metabaseData,setMetabaseData]=useState([])
+    const [questionData,setQuestionData]=useState([])
 
     useEffect(()=>{
         axios.getWithCallback("/clients",(data)=>setClient(data.map(x => { return { value: x.id, label: x.name } })))
-        axios.getWithCallback("/client-dashboard/json",(data)=>setMetabaseData(data.map(x => { return { value: x.id, label: x.name } })))
+        axios.getWithCallback("/client-dashboard/dashboard",(data)=>setMetabaseData(data.map(x => { return { value: x.id, label: x.name } })))
+        axios.getWithCallback("/client-dashboard/question",(data)=>setQuestionData(data.map(x => { return { value: x.id, label: x.name } })))
     },[])
 
-    let defaultObj = { dashboard_id:"", client_id: "" }
+    let defaultObj = { dashboard_id:null, client_id: "", question_id:null }
     return (
         <>
             <CommonFormWithList
@@ -23,7 +25,7 @@ const Client_Dashboard = () => {
                 updateApi="client-dashboard/:id"
                 deleteApi="client-dashboard/:id"
                 getApi="client-dashboard"
-                options={[client,metabaseData]}
+                options={[client,metabaseData,questionData]}
                 title="Client Dashboard"
                 defaultObj={defaultObj}
                 tableTitle='Client Dashboard'

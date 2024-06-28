@@ -42,7 +42,6 @@
   ],
 
   "MENU_COLUMNS": [
-    "id",
     "menuName",
     "route",
     "menuIcon",
@@ -113,5 +112,5 @@
     "scheduleCron",
     "active"
   ],
-  "Metabase": ["client.name", "dashboard.name"]
+  "Metabase": ["client.name", "dashboard.name","question.name"]
 }

@@ -8,7 +8,7 @@ const MetabaseComponent = () => {
 
   useEffect(() => {
     if (dashboardId) {
-      axios.getWithCallback(`client-dashboard/data/${dashboardId}`, (data)=>{setIframeUrl(data.iframeUrl)})
+      axios.getWithCallback(`client-dashboard/dashboard/${dashboardId}`, (data)=>{setIframeUrl(data.iframeUrl)})
     }
   }, [dashboardId]);
 

@@ -12,9 +12,7 @@ import { TiPin } from "react-icons/ti";
 import { RiUnpinFill } from "react-icons/ri";
 
 function ComponentTool({ textColor }) {
-  
   const [isOpen, setIsOpen] = useState(false);
-  const [apiData, setApiData] = useState([]);
   const [components, setComponents] = useState([]);
   const [fix, setFix] = useState(true);
   const [isPinned, setIsPinned] = useState(true);
@@ -25,10 +23,6 @@ function ComponentTool({ textColor }) {
 
   useEffect(() => {
     axios.getWithCallback('step-type/', (data) => {
-
-      // data.sort((a, b) => a.params.sequence - b.params.sequence);
-  
-      setApiData(data);
       const groupedData = groupDataBy(data, 'group');
       const newComponents = Object.keys(groupedData).map((group) => ({
         name: group,
@@ -41,18 +35,19 @@ function ComponentTool({ textColor }) {
 
   const handleCollapseToggle = (index) => {
     setComponents((prevComponents) =>
-      prevComponents.map((component, i) =>
-        i === index ? { ...component, isCollapseOpen: !component.isCollapseOpen } : component
-      )
+      prevComponents.map((component, i) => ({
+        ...component,
+        isCollapseOpen: i === index ? !component.isCollapseOpen : false,
+      }))
     );
   };
 
   const handleSidebarHover = () => {
     setIsOpen(true);
     if (fix) {
-      setFix(true)
+      setFix(true);
     } else {
-      setFix(false)
+      setFix(false);
     }
   };
 
@@ -69,15 +64,15 @@ function ComponentTool({ textColor }) {
       <div className='logo_details' style={{ textColor }}>
         <div className='logo_name me-2'>Component Tool</div>
         {isOpen && (isPinned ? (
-              <abbr title='Pin' style={{cursor: 'pointer'}}>
-                   <RiUnpinFill size={22} className="pushPinIcon" onClick={() => { setIsPinned(!isPinned); setFix(!fix); }} />
-              </abbr>
-          ) : (
-              <abbr title='UnPin' style={{cursor: 'pointer'}}>
-                   <TiPin size={22} className="pushPinIcon" onClick={() => { setIsPinned(!isPinned); setFix(!fix); }} />
-              </abbr>
-          ))}
-       <DensityMediumIcon className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`} id='btn' onClick={() => { toggleSidebar(); setIsPinned(!isPinned); setFix(!fix); }}/>
+          <abbr title='Pin' style={{ cursor: 'pointer' }}>
+            <RiUnpinFill size={22} className="pushPinIcon" onClick={() => { setIsPinned(!isPinned); setFix(!fix); }} />
+          </abbr>
+        ) : (
+          <abbr title='UnPin' style={{ cursor: 'pointer' }}>
+            <TiPin size={22} className="pushPinIcon" onClick={() => { setIsPinned(!isPinned); setFix(!fix); }} />
+          </abbr>
+        ))}
+        <DensityMediumIcon className={`bx ${isOpen ? 'bx-menu-alt-right' : 'bx-menu'}`} id='btn' onClick={() => { toggleSidebar(); setIsPinned(!isPinned); setFix(!fix); }} />
       </div>
       <ul className='nav-list'>
         {components.map((component, index) => (
@@ -85,9 +80,9 @@ function ComponentTool({ textColor }) {
             <li>
               <div>
                 <div href='#' className='comIcon' onClick={() => handleCollapseToggle(index)} >
-                  {components.isOpen ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='medium' />}
+                  {component.isCollapseOpen ? <FolderOpenIcon fontSize='small' /> : <FolderIcon fontSize='medium' />}
                   <span className='link_name' style={{ marginLeft: '5px' }}>
-                    <div variant='contained' className='comp' >
+                    <div variant='contained' className='comp'>
                       {component.name} {component.isCollapseOpen ? <KeyboardArrowUpIcon fontSize='small' /> : <KeyboardArrowDownIcon fontSize='small' />}
                     </div>
                   </span>
