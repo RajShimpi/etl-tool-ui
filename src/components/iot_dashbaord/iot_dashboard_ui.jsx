@@ -9,8 +9,8 @@ const IOTDashboard = () => {
   const sliderRefs = useRef([]);
 
   useEffect(() => {
-    setSelectedDeviceIds([]);
-    setDeviceData({});
+    setSelectedDeviceIds([]);   
+    setDeviceData({});  
   }, [deviceId]);
 
   useEffect(() => {
